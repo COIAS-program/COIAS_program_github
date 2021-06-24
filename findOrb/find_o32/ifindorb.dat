@@ -1,0 +1,90 @@
+# Si possono aggiungere dei commenti ponendo una '#' all'inizio della riga.
+# FIND_ORB ha tre caselle di dialogo:  la casella "principale", la casella
+# "informazioni", e la casella "effemeridi".  Per ciascuna di esse esiste
+# un titolo e un gruppo di righe relative al testo tradotto.  I numeri
+# all'inizio di ogni riga sono i numeri di identificazione per il testo
+# tradotto.
+
+@main
+w     FIND_ORB Programma per il calcolo orbitale
+105   Passo di &Herget
+106   Passo &completo
+108   Merc.
+109   Venere
+110   Terra
+111   Marte
+112   Giove
+113   Satur.
+114   Urano
+115   Nett.
+116   Plut.
+117   Luna
+118   Asteroidi
+129   &Salva elementi
+136   Soluz. &Autom.
+137   Salva &Residui...
+138   &Effemeride...
+142   A&pri...
+148   Informazioni...
+149   R2:
+150   UA
+151   UA
+153   R1:
+155   Elementi orbitali:
+156   Epoca
+157   Oggetti perturbatori:
+140   Gauss
+141   &Peggiori oss.
+143   &Filtra oss.
+139   Monte Carlo...
+144   Impostazioni...
+@end
+
+@about
+w     Informazioni su FIND_ORB
+153   FIND_ORB PROGRAMMA PER IL CALCOLO ORBITALE
+149   E' un programma gratuito di Project Pluto (c)1997-2009
+150   Aggiornamenti e informazioni circa altri programmi
+152   di astronomia si possono trovare su:
+155   http://www.projectpluto.com
+179   Version 2009 Sep 21
+@end
+
+@ephem
+w     Calcola l'effemeride
+147   &Calcola
+129   &Salva
+153   Giorno
+151   N. passi:
+152   Passo di
+154   Latitud.
+155   Longitud.
+@end
+
+@settings
+w     Impostazioni
+153   Vincoli
+149   Riferimento
+150   Rumore Monte Carlo
+151   Max Residui filtrati
+152   Precisione elementi
+173   Solo orbite eliocentriche
+1     OK
+2     &Annulla
+@end
+
+@messages
+1     Nessuna orbita da ottimizzare!
+2     Non ci sono residui da salvare!
+3     Nessuna orbita di cui calcolare le effemeridi!
+4     Il metodo di Gauss non ha funzionato!
+5     Nessun cambiamento effettuato!
+6     Le effemeridi devono contenere almeno un dato!
+7     Non e' specificata l'ampiezza del passo!
+8     Il mese deve essere compreso tra 1 e 12!
+9     Il giorno deve essere compreso tra 1 e %d!
+10    Non ci sono dati osservativi in questo file!
+11    File non trovato!
+12    La latitudine deve iniziare con una 'N' o una 'S'!
+13    La longitudine deve iniziare con una 'E' o una 'W'!
+@end

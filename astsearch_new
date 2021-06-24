@@ -1,0 +1,12 @@
+#!/bin/bash
+
+#astsearch1K.py
+#I applay cython partially on 2020.5.28
+astsearch1M2.py
+#astsearch1KBK.py
+match2D.py
+mpc1b.py
+mpc2b.py
+cat numbered_disp.txt karifugo_disp.txt unknown_disp.txt > disp.txt
+cat numbered_mpc.txt karifugo_mpc.txt unknown_mpc.txt > mpc.txt
+cat numbered_all.txt karifugo_all.txt unknown_all.txt > all.txt

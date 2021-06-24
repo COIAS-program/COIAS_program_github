@@ -1,0 +1,796 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		AD93A9B325D265BE00459D30 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AD93A99625D265BC00459D30 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AD93A9A125D265BE00459D30;
+			remoteInfo = "findOrbTest (iOS)";
+		};
+		AD93A9BE25D265BE00459D30 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AD93A99625D265BC00459D30 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AD93A9A925D265BE00459D30;
+			remoteInfo = "findOrbTest (macOS)";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		AD93A9A225D265BE00459D30 /* findOrbTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = findOrbTest.app; path = "/Users/sugiuraks/Documents/COIAS/COIAS_workTest_afterCOIAS_20210201/findOrb/findOrbTest/build/Debug-iphoneos/findOrbTest.app"; sourceTree = "<absolute>"; };
+		AD93A9AA25D265BE00459D30 /* findOrbTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = findOrbTest.app; path = /Users/sugiuraks/Documents/COIAS/COIAS_workTest_afterCOIAS_20210201/findOrb/findOrbTest/build/Debug/findOrbTest.app; sourceTree = "<absolute>"; };
+		AD93A9B225D265BE00459D30 /* Tests iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "Tests iOS.xctest"; path = "/Users/sugiuraks/Documents/COIAS/COIAS_workTest_afterCOIAS_20210201/findOrb/findOrbTest/build/Debug-iphoneos/Tests iOS.xctest"; sourceTree = "<absolute>"; };
+		AD93A9BD25D265BE00459D30 /* Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "Tests macOS.xctest"; path = "/Users/sugiuraks/Documents/COIAS/COIAS_workTest_afterCOIAS_20210201/findOrb/findOrbTest/build/Debug/Tests macOS.xctest"; sourceTree = "<absolute>"; };
+		AD93A9EC25D2667F00459D30 /* afuncs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = afuncs.h; path = ../afuncs.h; sourceTree = "<group>"; };
+		AD93A9ED25D2668B00459D30 /* alt_az.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = alt_az.cpp; path = ../alt_az.cpp; sourceTree = "<group>"; };
+		AD93A9EE25D2674700459D30 /* astephem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = astephem.cpp; path = ../astephem.cpp; sourceTree = "<group>"; };
+		AD93A9EF25D2674700459D30 /* astfuncs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = astfuncs.cpp; path = ../astfuncs.cpp; sourceTree = "<group>"; };
+		AD93A9F025D2674700459D30 /* astdebug.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = astdebug.cpp; path = ../astdebug.cpp; sourceTree = "<group>"; };
+		AD93A9F125D2678B00459D30 /* dos_find.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dos_find.cpp; path = ../dos_find.cpp; sourceTree = "<group>"; };
+		AD93A9F225D2678B00459D30 /* classel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = classel.cpp; path = ../classel.cpp; sourceTree = "<group>"; };
+		AD93A9F325D2678B00459D30 /* comets.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = comets.h; path = ../comets.h; sourceTree = "<group>"; };
+		AD93A9F425D2678B00459D30 /* de_plan.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = de_plan.cpp; path = ../de_plan.cpp; sourceTree = "<group>"; };
+		AD93A9F525D2678B00459D30 /* date.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = date.cpp; path = ../date.cpp; sourceTree = "<group>"; };
+		AD93A9F625D2678B00459D30 /* dist_pa.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dist_pa.cpp; path = ../dist_pa.cpp; sourceTree = "<group>"; };
+		AD93A9F725D2678B00459D30 /* dist_pa2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dist_pa2.cpp; path = ../dist_pa2.cpp; sourceTree = "<group>"; };
+		AD93A9F825D2678B00459D30 /* date.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = date.h; path = ../date.h; sourceTree = "<group>"; };
+		AD93A9F925D2678B00459D30 /* collide.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = collide.cpp; path = ../collide.cpp; sourceTree = "<group>"; };
+		AD93A9FA25D2678B00459D30 /* com_file.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = com_file.cpp; path = ../com_file.cpp; sourceTree = "<group>"; };
+		AD93A9FB25D2678B00459D30 /* conv_ele.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = conv_ele.cpp; path = ../conv_ele.cpp; sourceTree = "<group>"; };
+		AD93A9FC25D2678B00459D30 /* colors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = colors.h; path = ../colors.h; sourceTree = "<group>"; };
+		AD93A9FD25D2678B00459D30 /* big_vsop.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = big_vsop.cpp; path = ../big_vsop.cpp; sourceTree = "<group>"; };
+		AD93A9FE25D2678B00459D30 /* desig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = desig.cpp; path = ../desig.cpp; sourceTree = "<group>"; };
+		AD93A9FF25D2678B00459D30 /* delta_t.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = delta_t.cpp; path = ../delta_t.cpp; sourceTree = "<group>"; };
+		AD93AA0025D2678C00459D30 /* bmouse.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bmouse.cpp; path = ../bmouse.cpp; sourceTree = "<group>"; };
+		AD93AA0125D2678C00459D30 /* colors2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = colors2.cpp; path = ../colors2.cpp; sourceTree = "<group>"; };
+		AD93AA0225D2678C00459D30 /* conjunct.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = conjunct.cpp; path = ../conjunct.cpp; sourceTree = "<group>"; };
+		AD93AA0325D2678C00459D30 /* bmouse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = bmouse.h; path = ../bmouse.h; sourceTree = "<group>"; };
+		AD93AA0425D2678C00459D30 /* colors.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = colors.cpp; path = ../colors.cpp; sourceTree = "<group>"; };
+		AD93AA0525D2678C00459D30 /* cospar.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cospar.cpp; path = ../cospar.cpp; sourceTree = "<group>"; };
+		AD93AA0625D2678C00459D30 /* curs_lin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = curs_lin.h; path = ../curs_lin.h; sourceTree = "<group>"; };
+		AD93AA0725D2678C00459D30 /* cospar2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cospar2.cpp; path = ../cospar2.cpp; sourceTree = "<group>"; };
+		AD93AA0825D2681B00459D30 /* eart2000.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = eart2000.cpp; path = ../eart2000.cpp; sourceTree = "<group>"; };
+		AD93AA0925D2681B00459D30 /* jsats.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = jsats.cpp; path = ../jsats.cpp; sourceTree = "<group>"; };
+		AD93AA0A25D2681B00459D30 /* lunar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = lunar.h; path = ../lunar.h; sourceTree = "<group>"; };
+		AD93AA0B25D2681B00459D30 /* elem2tle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = elem2tle.cpp; path = ../elem2tle.cpp; sourceTree = "<group>"; };
+		AD93AA0C25D2681B00459D30 /* gust_ref.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gust_ref.cpp; path = ../gust_ref.cpp; sourceTree = "<group>"; };
+		AD93AA0D25D2681B00459D30 /* lunar2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = lunar2.cpp; path = ../lunar2.cpp; sourceTree = "<group>"; };
+		AD93AA0E25D2681B00459D30 /* monte0.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = monte0.cpp; path = ../monte0.cpp; sourceTree = "<group>"; };
+		AD93AA0F25D2681B00459D30 /* lsquare.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = lsquare.cpp; path = ../lsquare.cpp; sourceTree = "<group>"; };
+		AD93AA1025D2681B00459D30 /* ephem0.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ephem0.cpp; path = ../ephem0.cpp; sourceTree = "<group>"; };
+		AD93AA1125D2681B00459D30 /* jpl_int.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = jpl_int.h; path = ../jpl_int.h; sourceTree = "<group>"; };
+		AD93AA1225D2681B00459D30 /* gust86.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gust86.cpp; path = ../gust86.cpp; sourceTree = "<group>"; };
+		AD93AA1325D2681B00459D30 /* get_time.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = get_time.cpp; path = ../get_time.cpp; sourceTree = "<group>"; };
+		AD93AA1425D2681B00459D30 /* lsquare.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = lsquare.h; path = ../lsquare.h; sourceTree = "<group>"; };
+		AD93AA1525D2681B00459D30 /* miscell.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = miscell.cpp; path = ../miscell.cpp; sourceTree = "<group>"; };
+		AD93AA1625D2681B00459D30 /* elp82dat.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = elp82dat.cpp; path = ../elp82dat.cpp; sourceTree = "<group>"; };
+		AD93AA1725D2681B00459D30 /* jpleph.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = jpleph.h; path = ../jpleph.h; sourceTree = "<group>"; };
+		AD93AA1825D2681B00459D30 /* jpleph.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = jpleph.cpp; path = ../jpleph.cpp; sourceTree = "<group>"; };
+		AD93AA1925D2681B00459D30 /* easter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = easter.cpp; path = ../easter.cpp; sourceTree = "<group>"; };
+		AD93AA1A25D2681B00459D30 /* moid4.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = moid4.cpp; path = ../moid4.cpp; sourceTree = "<group>"; };
+		AD93AA1B25D2681B00459D30 /* getplane.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = getplane.cpp; path = ../getplane.cpp; sourceTree = "<group>"; };
+		AD93AA1C25D2681B00459D30 /* get_pert.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = get_pert.cpp; path = ../get_pert.cpp; sourceTree = "<group>"; };
+		AD93AA1D25D2681C00459D30 /* gust86.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gust86.h; path = ../gust86.h; sourceTree = "<group>"; };
+		AD93AA1E25D2681C00459D30 /* elem_out.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = elem_out.cpp; path = ../elem_out.cpp; sourceTree = "<group>"; };
+		AD93AA1F25D2681C00459D30 /* integrat.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = integrat.cpp; path = ../integrat.cpp; sourceTree = "<group>"; };
+		AD93AA2025D2681C00459D30 /* gauss.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gauss.cpp; path = ../gauss.cpp; sourceTree = "<group>"; };
+		AD93AA2125D2681C00459D30 /* interpol.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = interpol.cpp; path = ../interpol.cpp; sourceTree = "<group>"; };
+		AD93AA2225D2681C00459D30 /* jd.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = jd.cpp; path = ../jd.cpp; sourceTree = "<group>"; };
+		AD93AA2325D2681C00459D30 /* monte0.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = monte0.h; path = ../monte0.h; sourceTree = "<group>"; };
+		AD93AA2425D2681C00459D30 /* mini_dll.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mini_dll.cpp; path = ../mini_dll.cpp; sourceTree = "<group>"; };
+		AD93AA2525D2681C00459D30 /* keptest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = keptest.cpp; path = ../keptest.cpp; sourceTree = "<group>"; };
+		AD93AA2625D2681C00459D30 /* get_test.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = get_test.cpp; path = ../get_test.cpp; sourceTree = "<group>"; };
+		AD93AA2725D2681C00459D30 /* marsuran.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = marsuran.cpp; path = ../marsuran.cpp; sourceTree = "<group>"; };
+		AD93AA2825D2686700459D30 /* watdefs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = watdefs.h; path = ../watdefs.h; sourceTree = "<group>"; };
+		AD93AA2925D2686700459D30 /* rocks.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = rocks.cpp; path = ../rocks.cpp; sourceTree = "<group>"; };
+		AD93AA2A25D2686700459D30 /* stdintvc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = stdintvc.h; path = ../stdintvc.h; sourceTree = "<group>"; };
+		AD93AA2B25D2686700459D30 /* pl_cache.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pl_cache.cpp; path = ../pl_cache.cpp; sourceTree = "<group>"; };
+		AD93AA2C25D2686700459D30 /* pluto.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pluto.cpp; path = ../pluto.cpp; sourceTree = "<group>"; };
+		AD93AA2D25D2686700459D30 /* orb_func.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = orb_func.cpp; path = ../orb_func.cpp; sourceTree = "<group>"; };
+		AD93AA2E25D2686700459D30 /* persian.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = persian.cpp; path = ../persian.cpp; sourceTree = "<group>"; };
+		AD93AA2F25D2686700459D30 /* vislimit.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vislimit.cpp; path = ../vislimit.cpp; sourceTree = "<group>"; };
+		AD93AA3025D2686700459D30 /* refract4.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = refract4.cpp; path = ../refract4.cpp; sourceTree = "<group>"; };
+		AD93AA3125D2686700459D30 /* riseset3.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = riseset3.cpp; path = ../riseset3.cpp; sourceTree = "<group>"; };
+		AD93AA3225D2686700459D30 /* relativi.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = relativi.cpp; path = ../relativi.cpp; sourceTree = "<group>"; };
+		AD93AA3325D2686700459D30 /* mpcorb.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mpcorb.cpp; path = ../mpcorb.cpp; sourceTree = "<group>"; };
+		AD93AA3425D2686700459D30 /* precess.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = precess.cpp; path = ../precess.cpp; sourceTree = "<group>"; };
+		AD93AA3525D2686700459D30 /* tle_out.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tle_out.cpp; path = ../tle_out.cpp; sourceTree = "<group>"; };
+		AD93AA3625D2686700459D30 /* weight.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = weight.cpp; path = ../weight.cpp; sourceTree = "<group>"; };
+		AD93AA3725D2686700459D30 /* norad.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = norad.h; path = ../norad.h; sourceTree = "<group>"; };
+		AD93AA3825D2686700459D30 /* mycurses.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mycurses.cpp; path = ../mycurses.cpp; sourceTree = "<group>"; };
+		AD93AA3925D2686700459D30 /* ssats.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ssats.cpp; path = ../ssats.cpp; sourceTree = "<group>"; };
+		AD93AA3A25D2686700459D30 /* obliquit.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = obliquit.cpp; path = ../obliquit.cpp; sourceTree = "<group>"; };
+		AD93AA3B25D2686700459D30 /* rckin.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = rckin.cpp; path = ../rckin.cpp; sourceTree = "<group>"; };
+		AD93AA3C25D2686700459D30 /* mpc_obs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = mpc_obs.h; path = ../mpc_obs.h; sourceTree = "<group>"; };
+		AD93AA3D25D2686700459D30 /* soho.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = soho.cpp; path = ../soho.cpp; sourceTree = "<group>"; };
+		AD93AA3E25D2686700459D30 /* runge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = runge.cpp; path = ../runge.cpp; sourceTree = "<group>"; };
+		AD93AA3F25D2686700459D30 /* mpc_obs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mpc_obs.cpp; path = ../mpc_obs.cpp; sourceTree = "<group>"; };
+		AD93AA4025D2686700459D30 /* showelem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = showelem.cpp; path = ../showelem.cpp; sourceTree = "<group>"; };
+		AD93AA4125D2686700459D30 /* mycurses.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = mycurses.h; path = ../mycurses.h; sourceTree = "<group>"; };
+		AD93AA4225D2686700459D30 /* sr.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sr.cpp; path = ../sr.cpp; sourceTree = "<group>"; };
+		AD93AA4325D2686700459D30 /* ssattest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ssattest.cpp; path = ../ssattest.cpp; sourceTree = "<group>"; };
+		AD93AA4425D2686700459D30 /* uranus2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = uranus2.cpp; path = ../uranus2.cpp; sourceTree = "<group>"; };
+		AD93AA4525D2686700459D30 /* solseqn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = solseqn.cpp; path = ../solseqn.cpp; sourceTree = "<group>"; };
+		AD93AA4625D2686700459D30 /* sm_vsop.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sm_vsop.cpp; path = ../sm_vsop.cpp; sourceTree = "<group>"; };
+		AD93AA4725D2686700459D30 /* refract.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = refract.cpp; path = ../refract.cpp; sourceTree = "<group>"; };
+		AD93AA4825D2686700459D30 /* vsopson.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vsopson.cpp; path = ../vsopson.cpp; sourceTree = "<group>"; };
+		AD93AA4925D2686700459D30 /* showelem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = showelem.h; path = ../showelem.h; sourceTree = "<group>"; };
+		AD93AA4A25D2686700459D30 /* uranus1.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = uranus1.cpp; path = ../uranus1.cpp; sourceTree = "<group>"; };
+		AD93AA4B25D2686700459D30 /* weight.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = weight.h; path = ../weight.h; sourceTree = "<group>"; };
+		AD93AA4C25D2686700459D30 /* vislimit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = vislimit.h; path = ../vislimit.h; sourceTree = "<group>"; };
+		AD93AA4D25D2686700459D30 /* orb_fun2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = orb_fun2.cpp; path = ../orb_fun2.cpp; sourceTree = "<group>"; };
+		AD93AA4E25D2686700459D30 /* nutation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = nutation.cpp; path = ../nutation.cpp; sourceTree = "<group>"; };
+		AD93AA4F25D2686700459D30 /* roots.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = roots.cpp; path = ../roots.cpp; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AD93A99F25D265BE00459D30 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AD93A9A725D265BE00459D30 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AD93A9AF25D265BE00459D30 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AD93A9BA25D265BE00459D30 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		AD93A99525D265BC00459D30 = {
+			isa = PBXGroup;
+			children = (
+				AD93A9EC25D2667F00459D30 /* afuncs.h */,
+				AD93A9ED25D2668B00459D30 /* alt_az.cpp */,
+				AD93A9F025D2674700459D30 /* astdebug.cpp */,
+				AD93A9EE25D2674700459D30 /* astephem.cpp */,
+				AD93A9EF25D2674700459D30 /* astfuncs.cpp */,
+				AD93A9FD25D2678B00459D30 /* big_vsop.cpp */,
+				AD93AA0025D2678C00459D30 /* bmouse.cpp */,
+				AD93AA0325D2678C00459D30 /* bmouse.h */,
+				AD93A9F225D2678B00459D30 /* classel.cpp */,
+				AD93A9F925D2678B00459D30 /* collide.cpp */,
+				AD93AA0425D2678C00459D30 /* colors.cpp */,
+				AD93A9FC25D2678B00459D30 /* colors.h */,
+				AD93AA0125D2678C00459D30 /* colors2.cpp */,
+				AD93A9FA25D2678B00459D30 /* com_file.cpp */,
+				AD93A9F325D2678B00459D30 /* comets.h */,
+				AD93AA0225D2678C00459D30 /* conjunct.cpp */,
+				AD93A9FB25D2678B00459D30 /* conv_ele.cpp */,
+				AD93AA0525D2678C00459D30 /* cospar.cpp */,
+				AD93AA0725D2678C00459D30 /* cospar2.cpp */,
+				AD93AA0625D2678C00459D30 /* curs_lin.h */,
+				AD93A9F525D2678B00459D30 /* date.cpp */,
+				AD93A9F825D2678B00459D30 /* date.h */,
+				AD93A9F425D2678B00459D30 /* de_plan.cpp */,
+				AD93A9FF25D2678B00459D30 /* delta_t.cpp */,
+				AD93A9FE25D2678B00459D30 /* desig.cpp */,
+				AD93A9F625D2678B00459D30 /* dist_pa.cpp */,
+				AD93A9F725D2678B00459D30 /* dist_pa2.cpp */,
+				AD93A9F125D2678B00459D30 /* dos_find.cpp */,
+				AD93AA0825D2681B00459D30 /* eart2000.cpp */,
+				AD93AA1925D2681B00459D30 /* easter.cpp */,
+				AD93AA1E25D2681C00459D30 /* elem_out.cpp */,
+				AD93AA0B25D2681B00459D30 /* elem2tle.cpp */,
+				AD93AA1625D2681B00459D30 /* elp82dat.cpp */,
+				AD93AA1025D2681B00459D30 /* ephem0.cpp */,
+				AD93AA2025D2681C00459D30 /* gauss.cpp */,
+				AD93AA1C25D2681B00459D30 /* get_pert.cpp */,
+				AD93AA2625D2681C00459D30 /* get_test.cpp */,
+				AD93AA1325D2681B00459D30 /* get_time.cpp */,
+				AD93AA1B25D2681B00459D30 /* getplane.cpp */,
+				AD93AA0C25D2681B00459D30 /* gust_ref.cpp */,
+				AD93AA1225D2681B00459D30 /* gust86.cpp */,
+				AD93AA1D25D2681C00459D30 /* gust86.h */,
+				AD93AA1F25D2681C00459D30 /* integrat.cpp */,
+				AD93AA2125D2681C00459D30 /* interpol.cpp */,
+				AD93AA2225D2681C00459D30 /* jd.cpp */,
+				AD93AA1125D2681B00459D30 /* jpl_int.h */,
+				AD93AA1825D2681B00459D30 /* jpleph.cpp */,
+				AD93AA1725D2681B00459D30 /* jpleph.h */,
+				AD93AA0925D2681B00459D30 /* jsats.cpp */,
+				AD93AA2525D2681C00459D30 /* keptest.cpp */,
+				AD93AA0F25D2681B00459D30 /* lsquare.cpp */,
+				AD93AA1425D2681B00459D30 /* lsquare.h */,
+				AD93AA0A25D2681B00459D30 /* lunar.h */,
+				AD93AA0D25D2681B00459D30 /* lunar2.cpp */,
+				AD93AA2725D2681C00459D30 /* marsuran.cpp */,
+				AD93AA2425D2681C00459D30 /* mini_dll.cpp */,
+				AD93AA1525D2681B00459D30 /* miscell.cpp */,
+				AD93AA1A25D2681B00459D30 /* moid4.cpp */,
+				AD93AA0E25D2681B00459D30 /* monte0.cpp */,
+				AD93AA2325D2681C00459D30 /* monte0.h */,
+				AD93AA3F25D2686700459D30 /* mpc_obs.cpp */,
+				AD93AA3C25D2686700459D30 /* mpc_obs.h */,
+				AD93AA3325D2686700459D30 /* mpcorb.cpp */,
+				AD93AA3825D2686700459D30 /* mycurses.cpp */,
+				AD93AA4125D2686700459D30 /* mycurses.h */,
+				AD93AA3725D2686700459D30 /* norad.h */,
+				AD93AA4E25D2686700459D30 /* nutation.cpp */,
+				AD93AA3A25D2686700459D30 /* obliquit.cpp */,
+				AD93AA4D25D2686700459D30 /* orb_fun2.cpp */,
+				AD93AA2D25D2686700459D30 /* orb_func.cpp */,
+				AD93AA2E25D2686700459D30 /* persian.cpp */,
+				AD93AA2B25D2686700459D30 /* pl_cache.cpp */,
+				AD93AA2C25D2686700459D30 /* pluto.cpp */,
+				AD93AA3425D2686700459D30 /* precess.cpp */,
+				AD93AA3B25D2686700459D30 /* rckin.cpp */,
+				AD93AA4725D2686700459D30 /* refract.cpp */,
+				AD93AA3025D2686700459D30 /* refract4.cpp */,
+				AD93AA3225D2686700459D30 /* relativi.cpp */,
+				AD93AA3125D2686700459D30 /* riseset3.cpp */,
+				AD93AA2925D2686700459D30 /* rocks.cpp */,
+				AD93AA4F25D2686700459D30 /* roots.cpp */,
+				AD93AA3E25D2686700459D30 /* runge.cpp */,
+				AD93AA4025D2686700459D30 /* showelem.cpp */,
+				AD93AA4925D2686700459D30 /* showelem.h */,
+				AD93AA4625D2686700459D30 /* sm_vsop.cpp */,
+				AD93AA3D25D2686700459D30 /* soho.cpp */,
+				AD93AA4525D2686700459D30 /* solseqn.cpp */,
+				AD93AA4225D2686700459D30 /* sr.cpp */,
+				AD93AA3925D2686700459D30 /* ssats.cpp */,
+				AD93AA4325D2686700459D30 /* ssattest.cpp */,
+				AD93AA2A25D2686700459D30 /* stdintvc.h */,
+				AD93AA3525D2686700459D30 /* tle_out.cpp */,
+				AD93AA4A25D2686700459D30 /* uranus1.cpp */,
+				AD93AA4425D2686700459D30 /* uranus2.cpp */,
+				AD93AA2F25D2686700459D30 /* vislimit.cpp */,
+				AD93AA4C25D2686700459D30 /* vislimit.h */,
+				AD93AA4825D2686700459D30 /* vsopson.cpp */,
+				AD93AA2825D2686700459D30 /* watdefs.h */,
+				AD93AA3625D2686700459D30 /* weight.cpp */,
+				AD93AA4B25D2686700459D30 /* weight.h */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AD93A9A125D265BE00459D30 /* findOrbTest (iOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AD93A9CC25D265BE00459D30 /* Build configuration list for PBXNativeTarget "findOrbTest (iOS)" */;
+			buildPhases = (
+				AD93A99E25D265BE00459D30 /* Sources */,
+				AD93A99F25D265BE00459D30 /* Frameworks */,
+				AD93A9A025D265BE00459D30 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "findOrbTest (iOS)";
+			productName = "findOrbTest (iOS)";
+			productReference = AD93A9A225D265BE00459D30 /* findOrbTest.app */;
+			productType = "com.apple.product-type.application";
+		};
+		AD93A9A925D265BE00459D30 /* findOrbTest (macOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AD93A9CF25D265BE00459D30 /* Build configuration list for PBXNativeTarget "findOrbTest (macOS)" */;
+			buildPhases = (
+				AD93A9A625D265BE00459D30 /* Sources */,
+				AD93A9A725D265BE00459D30 /* Frameworks */,
+				AD93A9A825D265BE00459D30 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "findOrbTest (macOS)";
+			productName = "findOrbTest (macOS)";
+			productReference = AD93A9AA25D265BE00459D30 /* findOrbTest.app */;
+			productType = "com.apple.product-type.application";
+		};
+		AD93A9B125D265BE00459D30 /* Tests iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AD93A9D225D265BE00459D30 /* Build configuration list for PBXNativeTarget "Tests iOS" */;
+			buildPhases = (
+				AD93A9AE25D265BE00459D30 /* Sources */,
+				AD93A9AF25D265BE00459D30 /* Frameworks */,
+				AD93A9B025D265BE00459D30 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AD93A9B425D265BE00459D30 /* PBXTargetDependency */,
+			);
+			name = "Tests iOS";
+			productName = "Tests iOS";
+			productReference = AD93A9B225D265BE00459D30 /* Tests iOS.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		AD93A9BC25D265BE00459D30 /* Tests macOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AD93A9D525D265BE00459D30 /* Build configuration list for PBXNativeTarget "Tests macOS" */;
+			buildPhases = (
+				AD93A9B925D265BE00459D30 /* Sources */,
+				AD93A9BA25D265BE00459D30 /* Frameworks */,
+				AD93A9BB25D265BE00459D30 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AD93A9BF25D265BE00459D30 /* PBXTargetDependency */,
+			);
+			name = "Tests macOS";
+			productName = "Tests macOS";
+			productReference = AD93A9BD25D265BE00459D30 /* Tests macOS.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AD93A99625D265BC00459D30 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1240;
+				LastUpgradeCheck = 1240;
+				TargetAttributes = {
+					AD93A9A125D265BE00459D30 = {
+						CreatedOnToolsVersion = 12.4;
+					};
+					AD93A9A925D265BE00459D30 = {
+						CreatedOnToolsVersion = 12.4;
+					};
+					AD93A9B125D265BE00459D30 = {
+						CreatedOnToolsVersion = 12.4;
+						TestTargetID = AD93A9A125D265BE00459D30;
+					};
+					AD93A9BC25D265BE00459D30 = {
+						CreatedOnToolsVersion = 12.4;
+						TestTargetID = AD93A9A925D265BE00459D30;
+					};
+				};
+			};
+			buildConfigurationList = AD93A99925D265BC00459D30 /* Build configuration list for PBXProject "findOrbTest" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = AD93A99525D265BC00459D30;
+			productRefGroup = AD93A99525D265BC00459D30;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AD93A9A125D265BE00459D30 /* findOrbTest (iOS) */,
+				AD93A9A925D265BE00459D30 /* findOrbTest (macOS) */,
+				AD93A9B125D265BE00459D30 /* Tests iOS */,
+				AD93A9BC25D265BE00459D30 /* Tests macOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AD93A9A025D265BE00459D30 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AD93A9A825D265BE00459D30 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AD93A9B025D265BE00459D30 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AD93A9BB25D265BE00459D30 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AD93A99E25D265BE00459D30 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AD93A9A625D265BE00459D30 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AD93A9AE25D265BE00459D30 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AD93A9B925D265BE00459D30 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		AD93A9B425D265BE00459D30 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AD93A9A125D265BE00459D30 /* findOrbTest (iOS) */;
+			targetProxy = AD93A9B325D265BE00459D30 /* PBXContainerItemProxy */;
+		};
+		AD93A9BF25D265BE00459D30 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AD93A9A925D265BE00459D30 /* findOrbTest (macOS) */;
+			targetProxy = AD93A9BE25D265BE00459D30 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		AD93A9CA25D265BE00459D30 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		AD93A9CB25D265BE00459D30 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		AD93A9CD25D265BE00459D30 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = iOS/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = keisuke.findOrbTest;
+				PRODUCT_NAME = findOrbTest;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		AD93A9CE25D265BE00459D30 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = iOS/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = keisuke.findOrbTest;
+				PRODUCT_NAME = findOrbTest;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		AD93A9D025D265BE00459D30 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = macOS/macOS.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = macOS/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				PRODUCT_BUNDLE_IDENTIFIER = keisuke.findOrbTest;
+				PRODUCT_NAME = findOrbTest;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		AD93A9D125D265BE00459D30 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = macOS/macOS.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = macOS/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				PRODUCT_BUNDLE_IDENTIFIER = keisuke.findOrbTest;
+				PRODUCT_NAME = findOrbTest;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		AD93A9D325D265BE00459D30 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = "Tests iOS/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "keisuke.Tests-iOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "findOrbTest (iOS)";
+			};
+			name = Debug;
+		};
+		AD93A9D425D265BE00459D30 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = "Tests iOS/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "keisuke.Tests-iOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "findOrbTest (iOS)";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		AD93A9D625D265BE00459D30 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "Tests macOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				PRODUCT_BUNDLE_IDENTIFIER = "keisuke.Tests-macOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = "findOrbTest (macOS)";
+			};
+			name = Debug;
+		};
+		AD93A9D725D265BE00459D30 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "Tests macOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				PRODUCT_BUNDLE_IDENTIFIER = "keisuke.Tests-macOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = "findOrbTest (macOS)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AD93A99925D265BC00459D30 /* Build configuration list for PBXProject "findOrbTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AD93A9CA25D265BE00459D30 /* Debug */,
+				AD93A9CB25D265BE00459D30 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AD93A9CC25D265BE00459D30 /* Build configuration list for PBXNativeTarget "findOrbTest (iOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AD93A9CD25D265BE00459D30 /* Debug */,
+				AD93A9CE25D265BE00459D30 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AD93A9CF25D265BE00459D30 /* Build configuration list for PBXNativeTarget "findOrbTest (macOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AD93A9D025D265BE00459D30 /* Debug */,
+				AD93A9D125D265BE00459D30 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AD93A9D225D265BE00459D30 /* Build configuration list for PBXNativeTarget "Tests iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AD93A9D325D265BE00459D30 /* Debug */,
+				AD93A9D425D265BE00459D30 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AD93A9D525D265BE00459D30 /* Build configuration list for PBXNativeTarget "Tests macOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AD93A9D625D265BE00459D30 /* Debug */,
+				AD93A9D725D265BE00459D30 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = AD93A99625D265BC00459D30 /* Project object */;
+}

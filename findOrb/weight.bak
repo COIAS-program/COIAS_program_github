@@ -1,0 +1,69 @@
+#   Comments can be added freely as lines starting with '#'
+#
+#   NOTE that one can click on an observation,  or a set of observations,
+# and set their weights.  (Except you then lose all that information when
+# you re-load that object;  there's no way to save it.)  You can also add
+# some lines to a file of observations to set weighting.  See
+#
+# http://www.projectpluto.com/find_orb.htm#weight
+#
+#  for details.
+#
+#   Find_Orb looks through this file from top to bottom.  When it finds
+# a line describing the observation in question,  it assigns it the
+# corresponding weight,  then stops.  That's why there is a final
+# line that will assign a weight to _any_ observation that hasn't
+# already been handled.
+#
+#   Each line says:  "For observations from this code made from date1
+# to date2,  between mag1 and mag2,  assign the following weight."
+# You can omit lower/upper limits on date or magnitude.  Comments can
+# be added after the weight;  I've just listed the station names in
+# that slot.
+#
+#   NOTE that 'weighting' applies to astrometry only.  Sigmas really
+# should be assigned to the RA, dec, time,  and magnitude.  They aren't.
+#
+#   Some comments on how to assign weights are at the bottom of this text.
+# I've noticed that the following stations get unusually good astrometry.
+# In my opinion,  their data should get greater weight than the default:
+#
+#COD  yyyy mm dd yyyy mm dd mag1 mag2 weight
+ 689                                  10   Flagstaff
+ 673                                  10   Table Mountain
+ 422                                   3   Loomberah
+ 413                                   3   Siding Spring
+ E12                                   4   Siding Spring #2
+# SOHO has never done all that well...
+ 249                                  .1   SOHO
+# ...and the STEREO satellites aren't much better:
+ C49                                  .1   STEREO-A
+ C50                                  .1   STEREO-B
+# ...but Hipparcos and HST get incredibly good astrometry:
+ 248                                  100  Hipparcos
+ 250                                  100  HST
+#    (304) Las Campanas is the ASAS All-Sky Automated Survey scope.  It
+# does some wonderful things,  but it was intended for things other than
+# precision astrometry.  So we'll give it lower weight by default:
+ 304                                  .1   ASAS
+#  You must have some final "catchall" lines that assign weights to all
+# observations not otherwise catalogued.  Here,  we'll say that if the
+# observation predates 1993,  we'll assume a weight of .3,  no matter
+# which observatory it came from.  (Older observations are usually
+# photographic,  and reduced with older catalogues such as the SAO;
+# the assumption that they're just a little bit dodgy is usually right.)
+                 1993 01 01           .3
+# ...which will just leave everything after that date,  and we'll
+# assume a default weight for those (more "modern" CCD obs):
+                                      1
+#
+# HOW TO ASSIGN WEIGHTS:  I don't really know of a simple way to do this.
+# The numbers above are somewhat ad hoc.  In general,  though,  they
+# give the inverse of the expected RMS error of the position in arcseconds.
+# That is,  Hipparcos and HST are assumed good to .01 arcsecond,  and SOHO
+# and ASAS to about ten arcseconds.
+#
+#   One _could_,  in theory,  analyze data from an individual observatory
+# and get a feel for what their RMS residuals are,  invert the result,  and
+# assign a weight accordingly.  In practice,  it's not that easy.  Which
+# is why I've stuck to the ad hoc numbers above.  Suggestions are welcome.

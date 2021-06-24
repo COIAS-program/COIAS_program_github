@@ -1,0 +1,10 @@
+#!/bin/bash
+#version 2 /2020.3.27
+#startsearch
+startsearch2R
+#exec one time prempsearchC when you change the FOV
+prempsearchC
+astsearch_new
+fits2png
+#add the difference contrast version if you need
+#fits2png2

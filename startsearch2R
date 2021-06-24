@@ -1,0 +1,5 @@
+#!/bin/bash
+binning2R.py
+subm2.py
+#findsource
+findsource_auto_thresh_correct.py

@@ -1,0 +1,65 @@
+--------------------Configuration: Find_orb - Win32 Release--------------------
+Begining build with project "C:\find_orb\Find_orb.dsp", at root.
+Active configuration is Win32 (x86) Application (based on Win32 (x86) Application)
+
+Project's tools are:
+			"32-bit C/C++ Compiler for 80x86" with flags "/nologo /MT /W3 /GX /O1 /I "\myincl" /D "NDEBUG" /FR"Release/" /Fp"Release/Find_orb.pch" /Yu"STDAFX.H" /Fo"Release/" /Fd"Release/" /FD /c "
+			"OLE Type Library Maker" with flags "/nologo /D "NDEBUG" /mktyplib203 /o NUL /win32 "
+			"Win32 Resource Compiler" with flags "/l 0x409 /fo"Release/Find_orb.res" /d "NDEBUG" "
+			"Browser Database Maker" with flags "/nologo /o"Release/Find_orb.bsc" "
+			"COFF Linker for 80x86" with flags "oldnames.lib \lunar\posttest\lunar.lib /nologo /stack:0x8800 /subsystem:windows /incremental:no /pdb:"Release/Find_orb.pdb" /machine:IX86 /def:".\Find_orb.def" /out:"Release/Find_orb.exe" "
+			"Custom Build" with flags ""
+			"<Component 0xa>" with flags ""
+
+Creating command line "rc.exe /l 0x409 /fo"Release/Find_orb.res" /d "NDEBUG" "C:\find_orb\Find_orb.rc"" 
+Creating temp file "C:\WINDOWS\TEMP\RSPB194.TMP" with contents </nologo /MT /W3 /GX /O1 /I "\myincl" /D "NDEBUG" /FR"Release/" /Fo"Release/" /Fd"Release/" /FD /c 
+"C:\find_orb\Ephem0.cpp"
+>
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSPB194.TMP" 
+Creating temp file "C:\WINDOWS\TEMP\RSPB195.TMP" with contents <oldnames.lib \lunar\posttest\lunar.lib /nologo /stack:0x8800 /subsystem:windows /incremental:no /pdb:"Release/Find_orb.pdb" /machine:IX86 /def:".\Find_orb.def" /out:"Release/Find_orb.exe" 
+.\Release\About.obj
+.\Release\collide.obj
+.\Release\Conv_ele.obj
+.\Release\elem2tle.obj
+.\Release\elem_out.obj
+.\Release\Ephem.obj
+.\Release\Ephem0.obj
+.\Release\Find_orb.obj
+.\Release\Gauss.obj
+.\Release\Generic.obj
+.\Release\Get_pert.obj
+.\Release\Jpleph.obj
+.\Release\Lsquare.obj
+.\Release\moid4.obj
+.\Release\Monte.obj
+.\Release\monte0.obj
+.\Release\Mpc_obs.obj
+.\Release\orb_fun2.obj
+.\Release\Orb_func.obj
+.\Release\Orbitdlg.obj
+.\Release\pl_cache.obj
+.\Release\Roots.obj
+.\Release\Runge.obj
+.\Release\Settings.obj
+.\Release\sm_vsop.obj
+.\Release\Sr.obj
+.\Release\Stdafx.obj
+.\Release\tle_out.obj
+.\Release\weight.obj
+.\Release\Find_orb.res>
+Creating command line "link.exe @C:\WINDOWS\TEMP\RSPB195.TMP" 
+Compiling resources...
+Compiling...
+Ephem0.cpp
+Linking...
+   Creating library Release/Find_orb.lib and object Release/Find_orb.exp
+Creating temp file "C:\WINDOWS\TEMP\RSPB1E5.BAT" with contents <@echo off
+copy release\find_orb.exe find_o32.exe
+>
+Creating command line "C:\WINDOWS\TEMP\RSPB1E5.BAT" 
+
+        1 file(s) copied
+
+
+
+Find_orb.exe - 0 error(s), 0 warning(s)

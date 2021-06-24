@@ -1,0 +1,353 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""res\\find_orb.rc2""  // non-App Studio edited resources\r\n"
+    "\r\n"
+    "#include ""afxres.rc""  // Standard components\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON    DISCARDABLE     "RES\\FIND_ORB.ICO"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_FIND_ORB DIALOG DISCARDABLE  0, 0, 328, 273
+STYLE WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_POPUP | WS_VISIBLE | WS_CAPTION | 
+    WS_SYSMENU | WS_THICKFRAME
+CAPTION "Orbit Determination"
+FONT 8, "MS Sans Serif"
+BEGIN
+    PUSHBUTTON      "&Open....",IDC_OPEN,2,4,50,14
+    LISTBOX         IDC_LIST_ASTEROIDS,2,24,64,45,WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_R1,199,37,50,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_R2,199,52,50,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EPOCH,205,7,61,12,ES_AUTOHSCROLL
+    CONTROL         "Asteroi&ds",IDC_ASTEROIDS,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,115,45,45,10
+    CONTROL         "Merc",IDC_PLANET1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    76,12,30,10
+    CONTROL         "Venu",IDC_PLANET2,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    76,23,30,10
+    CONTROL         "Eart",IDC_PLANET3,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    76,33,30,10
+    CONTROL         "Moon",IDC_PLANET10,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,76,44,30,10
+    CONTROL         "Mars",IDC_PLANET4,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    111,12,30,10
+    CONTROL         "Jupi",IDC_PLANET5,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    111,23,30,10
+    CONTROL         "Satu",IDC_PLANET6,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    111,33,30,10
+    CONTROL         "Uran",IDC_PLANET7,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    146,12,30,10
+    CONTROL         "Nept",IDC_PLANET8,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    146,23,30,10
+    CONTROL         "Plut",IDC_PLANET9,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    146,33,30,10
+    PUSHBUTTON      "&Herget step",IDC_HERGET,269,18,55,14
+    PUSHBUTTON      "&Full step",IDC_FULL_STEP,269,33,55,14
+    PUSHBUTTON      "&Vaisala",IDC_VAISALA,269,48,55,14
+    PUSHBUTTON      "&Auto-solve",IDC_AUTO_SOLVE,269,63,55,14
+    PUSHBUTTON      "Save &Residuals",IDC_SAVE_RESIDS,269,78,55,14
+    DEFPUSHBUTTON   "OK",IDOK,281,239,44,14
+    LISTBOX         IDC_RESIDUALS,0,154,265,76,LBS_USETABSTOPS | 
+                    LBS_EXTENDEDSEL | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "R1:",IDC_STATIC1,"Static",SS_LEFTNOWORDWRAP | WS_GROUP,
+                    184,40,12,15
+    CONTROL         "R2:",IDC_STATIC2,"Static",SS_LEFTNOWORDWRAP | WS_GROUP,
+                    184,55,12,15
+    CONTROL         "AU",IDC_STATIC3,"Static",SS_LEFTNOWORDWRAP | WS_GROUP,
+                    253,40,12,15
+    CONTROL         "AU",IDC_STATIC4,"Static",SS_LEFTNOWORDWRAP | WS_GROUP,
+                    253,55,12,15
+    GROUPBOX        "Orbital elements:",IDC_ORBITAL_ELEMENTS,0,67,265,84,
+                    BS_NOTIFY
+    CONTROL         "",IDC_ORBIT1,"Static",SS_LEFTNOWORDWRAP | WS_GROUP,5,76,
+                    256,74
+    CONTROL         "Epoch",IDC_STATIC8,"Static",SS_LEFTNOWORDWRAP | 
+                    WS_GROUP,183,8,23,12
+    CONTROL         "12",IDC_STATION_INFO,"Static",SS_LEFTNOWORDWRAP | 
+                    WS_GROUP,0,223,278,49
+    GROUPBOX        "Perturbers",IDC_STATIC9,70,1,108,58
+    PUSHBUTTON      "About...",IDC_ABOUT,269,3,54,14
+    PUSHBUTTON      "&Save elements",IDC_SAVE,269,95,55,14
+    PUSHBUTTON      "&Ephemeris...",IDC_MAKE_EPHEMERIS,269,111,55,14
+    PUSHBUTTON      "&Monte Carlo",IDC_MONTE_CARLO,269,142,55,14
+    PUSHBUTTON      "&Gauss",IDC_GAUSS,269,158,55,14
+    PUSHBUTTON      "&Worst Obs",IDC_WORST,269,174,55,14
+    PUSHBUTTON      "F&ilter Obs",IDC_FILTER_OBS,269,190,55,14
+    PUSHBUTTON      "Setti&ngs...",IDC_SETTINGS,269,126,55,14
+    PUSHBUTTON      "&Toggle Obs",IDC_TOGGLE_OBS,269,207,55,14
+    PUSHBUTTON      "Set Weight",IDC_SET_WEIGHT,282,223,42,14
+END
+
+IDD_MAKE_EPHEMERIS DIALOG DISCARDABLE  0, 0, 350, 172
+STYLE WS_MAXIMIZEBOX | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU | 
+    WS_THICKFRAME
+CAPTION "Make Ephemeris"
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_EPHEM_DAY,37,5,108,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EPHEM_NUM_STEPS,57,19,25,13,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EPHEM_STEP,57,34,25,13,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LAT,57,49,40,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LON,155,50,40,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "&Go",IDC_GO,155,5,50,14
+    PUSHBUTTON      "&Save",IDC_SAVE,155,20,50,14
+    DEFPUSHBUTTON   "&Done",IDOK,155,35,50,14
+    RTEXT           "Day",IDC_STATIC1,0,6,34,10
+    RTEXT           "# Steps",IDC_STATIC4,2,21,50,13
+    RTEXT           "Stepsize",IDC_STATIC5,0,35,52,13
+    LISTBOX         IDC_LIST1,0,65,350,125,WS_VSCROLL | WS_TABSTOP
+    RTEXT           "Latitude",IDC_STATIC6,0,51,53,10
+    RTEXT           "Longitude",IDC_STATIC7,112,51,40,13
+    PUSHBUTTON      "&Pseudo-MPEC",IDC_MPEC,211,5,75,14
+    CONTROL         "Show &Motion details",IDC_MOTION,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,213,39,134,10
+    CONTROL         "Show &Alt/az",IDC_ALT_AZ,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,213,52,136,10
+    PUSHBUTTON      "Paste to &Clipboard",IDC_COPY,211,21,75,14
+END
+
+IDD_ABOUT DIALOG DISCARDABLE  0, 0, 185, 98
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "About FIND_ORB"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,125,84,50,14
+    CTEXT           "FIND_ORB Orbital Determination Software",IDC_STATIC1,0,
+                    10,183,7
+    CTEXT           "Copyrighted freeware by Project Pluto (C)1997",
+                    IDC_STATIC2,0,20,185,10
+    CTEXT           "Find updates, and information about other",IDC_STATIC3,
+                    0,30,185,10
+    ICON            IDR_MAINFRAME,IDC_STATIC6,25,78,20,20
+    CTEXT           "12 Apr 2009",IDC_VERSION_INFO,0,68,185,9
+    CTEXT           "astronomical software, at:",IDC_STATIC5,0,40,185,10
+    CTEXT           "http://www.projectpluto.com",IDC_STATIC7,0,55,185,10
+END
+
+IDD_GENERIC_ENTRY DIALOG DISCARDABLE  0, 0, 186, 63
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,16,42,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,121,42,50,14
+    EDITTEXT        IDC_EDIT1,38,22,112,14,ES_AUTOHSCROLL
+    CTEXT           " ",IDC_STATIC1,13,7,159,8
+END
+
+IDD_MONTE_CARLO DIALOG DISCARDABLE  0, 0, 172, 134
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Monte Carlo setup"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,30,110,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,105,110,50,14
+    RTEXT           "Gaussian noise level:",IDC_GAUSS_TEXT,14,9,78,12
+    EDITTEXT        IDC_GAUSSIAN,96,7,40,14,ES_AUTOHSCROLL
+    CONTROL         "Use &statistical ranging:",IDC_STATISTICAL,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,18,27,139,12
+    RTEXT           "Min range:",IDC_MIN_RANGE_TEXT,7,43,62,10
+    RTEXT           "Max range:",IDC_MAX_RANGE_TEXT,7,55,62,10
+    EDITTEXT        IDC_MIN_RANGE,72,41,34,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_MAX_RANGE,72,54,34,12,ES_AUTOHSCROLL
+    RTEXT           "Max eccentricity:",IDC_ECC_TEXT,14,76,65,8
+    RTEXT           "Max inclination:",IDC_INCL_TEXT,14,89,65,8
+    EDITTEXT        IDC_MAX_ECC,82,75,34,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_MAX_INCL,82,88,34,12,ES_AUTOHSCROLL
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_GENERIC_ENTRY, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 179
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 56
+    END
+
+    IDD_MONTE_CARLO, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 165
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 127
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE PRELOAD DISCARDABLE 
+BEGIN
+    IDR_MAINFRAME           "FIND_ORB Windows Application\nFind_o\nFIND_O Document"
+END
+
+STRINGTABLE PRELOAD DISCARDABLE 
+BEGIN
+    AFX_IDS_APP_TITLE       "FIND_ORB Windows Application"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.K.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENG)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_SETTINGS DIALOG DISCARDABLE  0, 0, 167, 161
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Settings"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,15,144,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,89,144,50,14
+    RTEXT           "Constraints:",IDC_STATIC1,0,3,65,8
+    EDITTEXT        IDC_CONSTRAINTS,69,2,91,12,ES_AUTOHSCROLL
+    RTEXT           "Reference:",IDC_STATIC2,0,18,66,8
+    EDITTEXT        IDC_REFERENCE,69,16,91,12,ES_AUTOHSCROLL
+    RTEXT           "Monte Carlo noise:",IDC_STATIC3,0,32,66,8
+    EDITTEXT        IDC_MONTE_NOISE,69,30,91,12,ES_AUTOHSCROLL
+    RTEXT           "Max filtered residual:",IDC_STATIC4,0,45,66,8
+    EDITTEXT        IDC_MAX_RESIDUAL,69,44,91,12,ES_AUTOHSCROLL
+    RTEXT           "Element precision:",IDC_STATIC5,1,59,66,8
+    EDITTEXT        IDC_ELEMENT_PRECISION,69,58,91,12,ES_AUTOHSCROLL
+    CONTROL         "&Heliocentric orbits only",IDC_HELIOCENTRIC,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,6,76,154,10
+    CONTROL         "Include &Solar radiation pressure",IDC_SRP,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,6,89,154,10
+    GROUPBOX        "Comet magnitudes:",IDC_STATIC,7,101,78,36
+    CONTROL         "&Nuclear",IDC_RADIO1,"Button",BS_AUTORADIOBUTTON | 
+                    WS_GROUP,13,112,69,10
+    CONTROL         "&Total",IDC_RADIO2,"Button",BS_AUTORADIOBUTTON,13,124,
+                    68,10
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_SETTINGS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 160
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 154
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_POPUP1 MENU DISCARDABLE 
+BEGIN
+    POPUP ""
+    BEGIN
+        MENUITEM "&Save to file...",            IDM_SAVE_TO_FILE
+        MENUITEM "&Copy to Clipboard",          IDM_COPY_TO_CLIPBOARD
+        MENUITEM "&Open from Clipboard",        IDM_READ_CLIPBOARD
+    END
+END
+
+#endif    // English (U.K.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#include "res\find_orb.rc2"  // non-App Studio edited resources
+
+#include "afxres.rc"  // Standard components
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

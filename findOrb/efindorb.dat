@@ -1,0 +1,89 @@
+# Comments can be added by putting a '#' at the start of a line.
+# FIND_ORB has three dialog boxes:  the "main" box,  the "about" box,
+# and the "ephemeris" box.  For each,  the window title is given,  then
+# a set of lines providing translated text.  The numbers at the start of
+# each line are ID numbers for the text being translated.
+
+@main
+w     FIND_ORB Orbit Determination Software
+105   &Herget step
+106   &Full step
+108   Merc
+109   Venu
+110   Eart
+111   Mars
+112   Jupi
+113   Satu
+114   Uran
+115   Nept
+116   Plut
+117   Moon
+118   Asteroids
+129   &Save elements
+136   &Auto-Solve
+137   Save &Residuals...
+138   &Ephemeris...
+142   &Open...
+148   About...
+149   R2:
+150   AU
+151   AU
+153   R1:
+155   Orbital elements:
+156   Epoch
+157   Perturbers:
+140   Gauss
+141   Worst observation
+143   Filter observations
+139   Monte Carlo...
+144   Settings
+@end
+
+@about
+w     About FIND_ORB
+153   FIND_ORB Orbital Determination Software
+149   Copyrighted freeware by Project Pluto (C)1997-2009
+150   Updates and information about other astronomy
+152   software can be found at:
+155   http://www.projectpluto.com
+179   Version 2009 Sep 21
+@end
+
+@ephem
+w     Make Ephemeris
+147   &Go
+129   &Save
+153   Start:
+151   # steps:
+152   Stepsize
+154   Latitude
+155   Longitude
+@end
+
+@settings
+w     Settings
+153   Constraints:
+149   Reference:
+150   Monte Carlo noise:
+151   Max filtered residual:
+152   Element precision:
+173   &Heliocentric orbits only
+1     OK
+2     Cancel
+@end
+
+@messages
+1     No orbit to improve!
+2     No residuals to save!
+3     No orbit to make an ephemeris!
+4     Method of Gauss failed!
+5     No changes made!
+6     Ephemeris must contain at least one entry!
+7     No step size specified!
+8     Month must be from 1 to 12!
+9     Day must be from 1 to %d!
+10    No observations loaded from that file!
+11    File not found!
+12    Latitude must start with an 'N' or 'S'!
+13    Longitude must start with an 'E' or 'W'!
+@end

@@ -1,0 +1,26 @@
+#!/bin/bash
+#convert to mpd to edb
+#getMPCORB_and_mpc2edb /one time
+# AstMPC.edb /onetime
+sed  s/\'//g ~/.COIAS_param/AstMPC_dim.edb |sed -e '1,51d' > hoge
+#./getinfo_xephem.py > cand.txt
+searchB.py  
+sed -e 's/\\//g' cand.txt > cand2.txt
+awk '$6<30 {print $0}' cand2.txt > cand2b.txt
+awk '$2>2100 {print $2}' cand2b.txt > cand3.txt
+awk '$2<2100 {print $2,$3}' cand2b.txt > cand4.txt
+#getinfo_numbered2B.py
+#getinfo_karifugo2B.py
+#REVISED 2020.1.28
+#REVISED 2020.5.29 2B=>2D 
+getinfo_numbered2D.py
+getinfo_karifugo2D.py
+
+#cat numbered_new2B.txt karifugo_new2B.txt |sort -n >search_astB.txt
+#Revised 2020.2.20
+grep -E "^19|^20" karifugo_new2B.txt > karifugo_new2C.txt 
+cat numbered_new2B.txt karifugo_new2C.txt |sort -n > search_astpre.txt
+#REVISED 2020.2.2
+#Revised 2020.2.20
+sed 's/--/30.0/g;' search_astpre.txt |sed 's/ (1999 19 //g;' |sed 's/ (1981 2 //g;'> search_astB.txt
+

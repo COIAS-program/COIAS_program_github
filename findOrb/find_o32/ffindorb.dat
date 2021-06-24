@@ -1,0 +1,89 @@
+# Des commentaires peuvent ˆtre ajout‚s en mettant un '#' au d‚but de la ligne.
+# FIND_ORB a trois boŒtes de dialogue: la boŒte principale "main", la boŒte au sujet "about",
+# et la boŒte ‚ph‚m‚ride "ephemeris".  Pour chacune,  le titre de la fenˆtre est donn‚, puis,
+# une s‚rie de ligne donnant la traduction du texte.  Les num‚ros au d‚but de chaque ligne
+# sont des num‚ros d'identification du texte traduit
+
+@main
+w     FIND_ORB Logiciel de D‚termination d'Orbites
+105   M‚th. &Herget
+106   ComplŠte &F
+108   Merc.
+109   V‚nus
+110   Terre
+111   Mars
+112   Jupi
+113   Satu
+114   Uran
+115   Nept
+116   Plut
+117   Lune
+118   Asteroids
+129   Enrg. ‚l‚ment&S
+136   &Auto-r‚sout
+137   Enrg. &R‚sidus...
+138   &Eph‚m‚ride...
+142   &Ouvrir...
+148   Au sujet de...
+149   R2:
+150   UA
+151   UA
+153   R1:
+155   El‚ments Orbitaux:
+156   Epoque
+157   Perturbations:
+140   Gauss
+141   Worst observation
+143   Filter observations
+139   Monte Carlo...
+144   Settings
+@end
+
+@about
+w     Au sujet de FIND_ORB
+153   FIND_ORB Logiciel de D‚termination d'Orbites
+149   Copyright freeware de Project Pluto (C)1997-2009
+150   Des mises … jour et des informations sur les autres
+152   logiciels d'astronomie peuvent ˆtre trouv‚es …:
+155   http://www.projectpluto.com
+151   Version 2009 Sep 21
+@end
+
+@ephem
+w     Calculer le ‚ph‚m‚rides
+147   Exec. &G
+129   Enrg. &S
+153   Jour
+151   Nb. pas
+152   Taille pas
+154   Latitude
+155   Longitude
+@end
+
+@settings
+w     Settings
+153   Constraints:
+149   Reference:
+150   Monte Carlo noise:
+151   Max filtered residual:
+152   Element precision:
+173   &Heliocentric orbits only
+1     OK
+2     Cancel
+@end
+
+@messages
+1     No orbit to improve!
+2     No residuals to save!
+3     No orbit to make an ephemeris!
+4     Method of Gauss failed!
+5     No changes made!
+6     Ephemeris must contain at least one entry!
+7     No step size specified!
+8     Month must be from 1 to 12!
+9     Day must be from 1 to %d!
+10    No observations loaded from that file!
+11    File not found!
+12    Latitude must start with an 'N' or 'S'!
+13    Longitude must start with an 'E' or 'W'!
+@end

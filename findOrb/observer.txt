@@ -1,0 +1,57 @@
+; This file is used in generating pseudo-MPECs.  Text from the 'stations'
+; part of the MPEC is searched and substrings replaced.  This allows
+; proper diacritical marks to be inserted,  and links generated
+; to Web sites of the people,  sites,  and telescopes listed below.
+;
+Bedient                                   <a href="http://www.ifa.hawaii.edu/tops/bedient.html">Bedient</a>
+Bell                                      <a href="http://www.corvus.com/adastra2002/bell.htm">Bell</a>
+Beresford                                 <a href="http://www.adam.com.au/dberesford/">Beresford</a>
+Bernardi                                  <a href="http://www.ifa.hawaii.edu/~bernardi/">Bernardi</a>
+Birtwhistle                               <a href="http://ssd.jpl.nasa.gov/sbdb.cgi?ID=a0065100">Birtwhistle</a>
+2.24-m University of Hawaii               <a href="http://www.ifa.hawaii.edu/88inch/">2.24-m University of Hawaii</a>
+Boattini                                  <a href="http://spaceguard.rm.iasf.cnr.it/tumblingstone/issues/num23/eng/boattini.html">Boattini</a>
+Borngren                                  B&ouml;rngren
+Bouma                                     <a href="http://ssd.jpl.nasa.gov/sbdb.cgi?ID=a0009706">Bouma</a>
+Busch                                     <a href="http://www.easysky.de/eng/author/index.htm">Busch</a>
+Garradd                                   <a href="http://members.ozemail.com.au/~loomberah/">Garradd</a>
+Gilmore                                   <a href="http://www.phys.canterbury.ac.nz/people/gilmore.shtml">Gilmore</a>
+Grauer                                    <a href="http://ssd.jpl.nasa.gov/sbdb.cgi?ID=a0018871">Grauer</a>
+Grav                                      <a href="http://web.mac.com/tgrav/iWeb/Family/Welcome.html">Grav</a>
+Hammergren                                <a href="http://www.eccentrix.com/members/ssp2k/ppl/profiles/drhammer.html">Hammergren</a>
+Healy                                     <a title="Remove accent marks from address" href="mailto:healydav&euml;@st&auml;rband.n&eacute;t">Healy</a>
+Hill                                      <a href="http://www.lpl.arizona.edu/~rhill/">Hill</a>
+Hoenig                                    <a href="http://www.mpifr-bonn.mpg.de/staff/shoenig/">H&ouml;nig</a>
+Holvorcem                                 <a href="http://wwwrel.ph.utexas.edu/Members/paulo/welcome.html">Holvorcem</a>
+Hormuth                                   <a href="http://sternwarte-weinheim.de/widm.html#felix">Hormuth</a>
+Kilmartin                                 <a href="http://www.phys.canterbury.ac.nz/people/kilmartin.shtml">Kilmartin</a>
+Klet                                      Kle&#357;
+Korlevic                                  Korlevi&#263;
+Kowalski                                  <a href="http://ssd.jpl.nasa.gov/sbdb.cgi?ID=a0065100">Kowalski</a>
+Kusnirak                                  Ku&#353;nir&aacute;k
+La Canada                                 La Ca&ntilde;ada
+Lowe                                      <a href="http://members.shaw.ca/andrewlowe/">Lowe</a>
+Matson                                    <a href="http://ssd.jpl.nasa.gov/sbdb.cgi?ID=a0073491">Matson</a>
+Mikuz                                     Miku&#382;
+McGaha                                    <a href="http://www.3towers.com/s3towers/AboutUs.asp?section=AboutUs">McGaha</a>
+McNaught                                  <a href="http://www2.abc.net.au/science/week/forum1/mcnaught.htm">McNaught</a>
+Meszaros                                  M&eacute;sz&aacute;ros
+Merida                                    M&eacute;rida
+Ondrejov                                  Ond&#345;ejov
+Ortiz                                     <a href="http://en.wikipedia.org/wiki/Jos%C3%A9_Luis_Ortiz_Moreno">Ortiz</a>
+Pelle                                     <a href="http://chez.mana.pf/~jcpelle/">Pelle</a>
+Piszkesteto                               Piszk&eacute;stet&#337;
+Pittichova                                <a href="http://www.ifa.hawaii.edu/~jana/jana.html">Pittichova</a>
+W. H. Ryan                                <a href="http://infohost.nmt.edu/~bryan/">W. H. Ryan</a>
+Sarneczky                                 S&aacute;rneczky
+Sarounova                                 &#352;arounov&aacute;
+Scotti                                    <a href="http://www.lpl.arizona.edu/~jscotti/">Scotti</a>
+Shelly                                    <a href="http://ssd.jpl.nasa.gov/sbdb.cgi?ID=a0017280">Shelly</a>
+Sherrod                                   <a href="http://www.arksky.org/pubs.htm">Sherrod</a>
+Stoss                                     <a href="http://www.starkenburg-sternwarte.de/asteroiden/namen/7689.htm">Stoss</a>
+Tholen                                    <a href="http://www.ifa.hawaii.edu/faculty/tholen/">Tholen</a>
+Ticha, J                                  Tich&aacute;, J
+Ticha, M                                  Tich&#253;, M
+Veran                                     V&eacute;ran
+Veillet                                   <a href="http://ssd.jpl.nasa.gov/sbdb.cgi?ID=a0065100">Veillet</a>
+Visnjan                                   Vi&#353;njan
+PinPoint                                  <a href="http://pinpoint.dc3.com/">PinPoint</a>

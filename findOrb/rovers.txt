@@ -1,0 +1,45 @@
+     Roving observer file.  This contains "MPC codes" for observers who
+  don't really have MPC codes,  mostly satellite observers.  They could
+  be handled using code 247 (Roving Observer),  but it's more convenient
+  if they have their own codes.
+
+     Locations can be in the MPC standard longitude/rho_cos_phi/rho_sin_phi
+  triplet format,  or as lon/lat/altitude.
+
+     Any line starting with a space is assumed to be a comment.  Negative
+  longitudes (and those between 180 and 360) are in the Western Hemisphere.
+
+MMc 262.1339 0.86573 +0.49912 Mike McCants
+Ber 138.6333 0.82043 -0.56986 Anthony Beresford, Adelaide, South Australia
+GRR  18.5129 -33.94058 10     Greg Roberts, South Africa
+Fet -75.6910 44.6062  100     Kevin Fetter, Brockville, Ontario, Canada
+PGa -98.2161 26.24316  36     Paul Gabriel, McAllen, Texas USA 78504-2940
+GeS -70.73669 -30.24075 2722  Gemini South
+IHN -81.081444 41.547806 300  Indian Hill North
+E20 151.103197 -33.770505 208 Marsfield
+Pav 151.103197 -33.770505 208 Marsfield
+ITE   8.87444 46.178771 210   Marco Iten Gaggiole
+
+   When 2008 TC3 impacted the earth on 7 Oct 2008,  I added the impact point
+   as an "observatory" so I could get impact-centered ephemerides easily:
+
+Sud  33.13003  20.59026 10    Sudan impact site
+     32.84311  20.5983 10     Sudan impact site
+     32.84976  20.59616 10    Sudan alt impact site
+
+    The centers of the Sun,  moon,  and planets are treated as 'rovers'.
+    (Note that right now,  Find_Orb doesn't support observers on the surfaces
+    of other planets.  That might be useful someday;  for example,  Mars-
+    based observations of Deimos and Phobos could be used and the orbits
+    of those objects computed.  But it's not there yet.)
+
+Sun   0.0000 0.00000  0.00000 @00Sun
+Mer   0.0000 0.00000  0.00000 @01Mercury
+Ven   0.0000 0.00000  0.00000 @02Venus
+Mar   0.0000 0.00000  0.00000 @04Mars
+Jup   0.0000 0.00000  0.00000 @05Jupiter
+Sat   0.0000 0.00000  0.00000 @06Saturn
+Ura   0.0000 0.00000  0.00000 @07Uranus
+Nep   0.0000 0.00000  0.00000 @08Neptune
+Plu   0.0000 0.00000  0.00000 @09Pluto
+Lun   0.0000 0.00000  0.00000 @10Luna

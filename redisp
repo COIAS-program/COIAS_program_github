@@ -1,0 +1,4 @@
+#!/bin/bash
+sort -n mpc3.txt |uniq  >  mpc4.txt
+redisp.py
+awk '{print($1,$2,$5,$6)}' predisp.txt > redisp.txt

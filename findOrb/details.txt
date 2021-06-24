@@ -1,0 +1,372 @@
+   Find_Orb uses the following details when none are provided
+with the observations.  It only pays attention to lines beginning
+with COD, OBS, MEA, or TEL.  In some cases,  you'll see a COM or ACK
+or other line;  that just means I copied a header and didn't bother
+to trim out parts irrelevant to Find_Orb.
+
+COD 048
+OBS M. Lekhy
+TEL 0.40-m f/5 reflector + CCD
+
+COD 084
+OBS A. V. Devyatkin, D. L. Gorshanov, V. V. Kouprianov,  M. Yu. Sidorov
+MEA A. V. Devyatkin, G. D. Baturina, A. V. Lemeseva, N. V. Mikhailova
+TEL 0.32-m f/3.2 reflector + CCD
+
+COD 097
+OBS D. Polishook
+TEL 1.0-m f/7 reflector + CCD
+
+COD 118
+OBS S. Gajdos, A. Galad
+NET USNO-SA2.0
+TEL 0.6-m f/5.5 reflector + CCD
+
+COD 127
+OBS N. Ehring
+TEL 0.30-m f/3.2 reflector + CCD
+
+COD 151
+OBS M. Griesser
+TEL 0.40-m f/5.8 Hypergraph + CCD
+
+COD 162
+OBS A. M. Giambersio
+TEL 0.20-m f/6.3 reflector + CCD
+
+COD 170
+OBS J. Manteca
+
+COD 185
+OBS M. Ory
+TEL 0.61-m f/3.88 reflector + CCD
+
+COD 204
+OBS L. Buzzi
+TEL 0.60-m f/4.64 Newtonian + CCD
+
+COD 212
+OBS I. Almendros
+
+COD 213
+OBS R. Naves
+MEA M. Campas
+TEL 0.30-m f/5.5 Schmidt-Cassegrain + CCD
+
+COD 215
+OBS W. Hasubick
+TEL 0.44-m f/4.6 reflector + CCD
+
+COD 232
+OBS E. Reina
+TEL 0.25-m f/6.3 Schmidt-Cassegrain + CCD
+
+COD 235
+OBS R. Ligustri, V. Savani, P. Beltrame, G. Degano
+TEL 0.35-m f/5 reflector + CCD
+
+COD 304
+OBS M. Holman, D. Trilling, W. Fraser
+MEA M. Holman
+TEL 6.5-m Clay reflector + CCD
+
+COD 322
+OBS J. Biggs
+TEL 0.25-m f/4.5 Newtonian + CCD
+
+COD 428
+OBS J. Broughton
+TEL 0.25-m f/7.2 Schmidt-Cassegrain + CCD
+
+COD 333
+OBS W. K. Y. Yeung
+TEL 0.45-m f/3 Schmidt-Cassegrain + CCD
+
+COD 349
+OBS K. Kadota
+TEL 0.25-m f/5.0 reflector + CCD
+
+COD 360
+OBS A. Nakamura
+TEL 0.60-m f/5.8 Ritchey-Chretien + CCD
+
+COD 413
+CON R. H. McNaught
+CON Siding Spring Observatory, Coonabarabran, NSW 2357, Australia
+OBS G. J. Garradd, R. H. McNaught
+MEA R. H. McNaught
+ACK Charon
+TEL 1.0-m f/8 reflector + CCD
+
+COD 422
+OBS G. J. Garradd
+ACK 2002 05 22 observations
+TEL 0.45-m f/5.4 reflector + CCD
+COM Reduction done using Charon
+NET UCAC1
+
+COD 442
+OBS A. Sanchez
+TEL 0.31-m f/3.3 Schmidt-Cassegrain + CCD
+
+COD 445
+OBS M. Camarasa
+TEL 0.20-m f/7.2 Schmidt-Cassegrain + CCD
+
+COD 448 Desert Moon Observatory
+OBS B. L. Stevens
+TEL 0.3-m Schmidt-Cassegrain + CCD
+
+COD 458
+OBS D. Rodriguez
+TEL 0.20-m f/10 Schmidt-Cassegrain + CCD
+
+COD 493
+OBS F. Hormuth
+TEL 1.23-m reflector + CCD
+
+COD 557
+OBS P. Pravec, P. Kusnirak
+TEL 0.65-m f/3.6 reflector + CCD
+NET USNO-SA 2.0
+
+COD 568
+OBS D. C. Jewitt, S. S. Sheppard, J. Kleyna
+MEA S. S. Sheppard
+TEL 8.3-m Subaru reflector + CCD
+
+COD 587
+OBS F. Manca, A. Testa
+MEA F. Manca
+TEL 0.5-m + CCD
+NET USNO-A2.0
+
+COD 595
+OBS L. Bittesini, F. Fabris, E. Pettarin, F. Piani
+MEA E. Pettarin
+TEL 0.30-m f/4.5 reflector + CCD
+
+COD 611
+OBS R. Stoss, M. Busch, L. Kurtze, P. Geffert
+TEL 0.45-m f/4.4 reflector + CCD
+
+COD 616
+OBS M. Lehky, K. Hornoch, D. Hanzl
+TEL 0.62-m f/4.5 reflector + CCD
+
+COD 620
+OBS S. Sanchez, R. Stoss, J. Nomen
+TEL 0.30-m f/9 Schmidt-Cassegrain + CCD
+
+COD 649
+CON Powell Observatory Louisburg, KS USA
+OBS M. Glaze, R. Trentman
+NET USNO-A2.0
+TEL 0.75-m Newtonian + CCD
+
+COD 673
+CON W. M. Owen Jr., Jet Propulsion Laboratory 301-150, Pasadena CA 91109-8099
+OBS W. M. Owen Jr.
+MEA W. M. Owen Jr.
+TEL 0.61-m f/16 reflector + CCD
+NET Tycho-2
+
+COD 678
+CON C. W. Juels, P. O. Box 19960, Fountain Hills, AZ  85269
+CON [cwjuels_nospam_at_cox.net]
+OBS C. W. Juels,  P. R. Holvorcem
+MEA PinPoint Engine
+TEL 0.07-m f/2.8 refractor + CCD
+NET GSC-ACT
+ACK MPC_HJ0110_OBS_050629_061012_A.txt
+
+COD 699
+OBS M. E. Van Ness
+TEL 0.59-m LONEOS Schmidt + CCD
+
+COD 703
+OBS S. Larson, E. Beshore, E. Christensen, R. Hill, S. Howard, D. McLean
+TEL 0.68 m Schmidt + CCD
+NET USNOSA2
+MEA E. Christensen
+
+COD 704
+OBS M. Blythe, F. Shelly, M. Bezpalko, R. Huber, L. Manguso
+OBS S. Adams, D. Torres, T. Brothers, S. Partridge
+MEA J. Stuart, R. Sayer, J. Evans, P. Hopman
+TEL 1.0-m f/2.15 reflector + CCD
+
+COD 715
+OBS D. S. Dixon
+TEL 0.3m SCT + CCD
+
+COD 734
+CON Farpoint Observatory Rte.1 Box 35 C Eskridge, Ks. 66423
+OBS G. Hug
+MEA G. Hug
+NET USNO-SA2.0
+TEL .3 meter s-c + CCD
+
+COD 735
+CON William G. Dillon, 4703 Birkenhead Circle, Missouri City, TX 77459, USA
+OBS A. Cruz, L. Casady, J. Dellinger, W. G. Dillon, T. Hiserodt
+MEA J. Dellinger, W. G. Dillon
+NET GSC-ACT
+BND R
+TEL 0.46m f/4.5 Newtonian + CCD
+
+COD 761
+CON Richard Kowalski
+OBS RA. Kowalski
+MEA RA. Kowalski
+NET USNO-A2.0
+TEL 0.18-m Mak + CCD
+
+COD 785
+OBS J. Maffei
+TEL 0.91-m f/13.6 Cassegrain + CCD
+
+COD 807
+OBS M. Holman, J. Kavelaars, T. Grav, W. Fraser.
+MEA M. Holman
+TEL 4-m Blanco reflector + CCD
+
+COD 834
+OBS R. Mackintosh, R. Caprio, P. Kelis
+MEA R. Mackintosh
+
+COD 854
+OBS J. E. McGaha
+TEL 0.36-m f/10.0 Schmidt-Cassegrain + CCD
+
+COD 938
+OBS R. Goncalves
+MEA R. Goncalves
+NET USNO-A2.0
+TEL LX200 10" SC at f/6.72 + CCD (MX916 2x2)
+ACK MPCReport J002E3
+
+COD 939
+OBS J. Castellano
+TEL 0.20-m f/10 Schmidt-Cassegrain + CCD
+
+COD 941
+OBS R. Ferrando, M. Ferrando
+MEA R. Ferrando
+TEL 0.40-m f/10 Ritchey-Chretien + CCD
+
+COD 945
+OBS J. R. Vidal
+TEL 0.36-m f/3.3 Schmidt-Cassegrain + CCD
+
+COD A02
+OBS J. Salto, A. Salto
+TEL 0.25-m f/3.7 Schmidt-Cassegrain + CCD
+
+COD A18
+OBS B. Brinkmann
+TEL 0.2-m f/5.8 Schmidt-Cassegrain + CCD
+
+COD A32
+OBS H. Denzau
+TEL 0.36-m Schmidt-Cassegrain f/5.5 + CCD
+
+COD A46
+OBS K. Hornoch
+TEL 0.35-m f/4.7 reflector + CCD
+
+COD A60
+OBS N. Loaring, P. Vaisanen, T. Kwiatkowski, M. Polinska
+MEA
+TEL 10.50-m reflector + CCD
+
+COD B04
+OBS A. Carbognani
+TEL 0.81-m f/7.9 reflector + CCD
+
+COD B21
+OBS R. Gierlinger
+MEA R. Gierlinger
+TEL 0.6-m f/3.3 Newtonian reflector + CCD
+
+COD B31
+OBS T. Kwiatkowski, M. Polinska, A. Kryszczynska, M. Polinska, D. Buckley
+OBS P. Charles, E. R. Colmenero, Y. Hashimoto, A. Kniazev, N. Loaring
+OBS D. O'Donoghue, M. Still, P. Vaisanen
+MEA P. Kankiewicz.
+TEL 10-m SALT + CCD
+
+COD E12
+OBS R. H. McNaught, S. Larson, et.al.
+TEL 0.5-m Uppsala Schmidt + CCD
+NET UCAC2
+MEA R. H. McNaught
+
+COD F84
+OBS N. Teamo
+TEL 0.35-m f/2.0 Schmidt + 1392x1040 CCD
+
+COD G96
+MEA E. C. Beshore, A. Boattini, G. J. Garradd, A. R. Gibbs, A. D. Grauer
+MEA R. E. Hill, R. A. Kowalski, S. M. Larson, R. H. McNaught
+TEL 1.5-m reflector + CCD
+
+COD H01
+OBS W. H. Ryan, E. V. Ryan
+MEA W. H. Ryan.
+TEL 2.4-m f/8.9 reflector + CCD
+
+COD H36
+OBS G. Hug
+TEL 0.56-m reflector + CCD
+
+COD H41
+OBS P. C. Sherrod
+TEL 0.41-m f/3.7 Schmidt-Cassegrain + CCD
+
+COD H55
+OBS R. Holmes
+TEL 0.81-m f/4.0 astrograph + CCD
+
+COD H59
+CON J. Mahony, 304 S. 6th #3W, Lafayette IN 47901, U.S.A.
+OBS J. Mahony
+MEA J. Mahony
+NET USNO-SA2.0
+TEL 0.30-m Schmidt Cassegrain + CCD
+ACK MPCReport file updated 2003.05.21 06:59:37
+
+COD H72
+OBS M. Fauerbach, M. Mon
+TEL 0.40-m f/5.3 reflector + CCD
+
+COD I77
+OBS C. Jacques,E. Pimentel
+MEA C. Jacques
+TEL 0.30-m f/3.0 Schmidt-Cassegrain + CCD
+ACK batch_2004_I77_002
+AC2 cjacqueslf_nospam_at_yahoo.com.br
+
+COD J75
+OBS S. Cikota, A. Cikota, J. L. Ortiz, N. Morales, P. Santos-Sanz
+OBS S. Sanchez, J. Nomen, R. Stoss, J. Rodriguez
+TEL 0.36-m f/2 reflector + CCD.
+
+COD J87 La Canada
+OBS J. Lacruz
+TEL 0.30-m f/3.3 Schmidt-Cassegrain + CCD
+
+COD J95
+CON Phlox Cottage, Wantage Road, Gt Shefford
+CON Berkshire England RG17 7DA
+OBS P. Birtwhistle
+NET USNO-SA2.0
+TEL 0.30-m f/6.3 Schmidt-Cassegrain + CCD
+
+COD J97 Alginet
+OBS T. Climent
+TEL 0.25-m f/4 Schmidt-Cassegrain + CCD
+
+COD J77 Stourton Caundle
+OBS R. Miles
+TEL 0.28-m f/10 Schmidt-Cassegrain + CCD

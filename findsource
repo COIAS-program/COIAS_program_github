@@ -1,0 +1,10 @@
+#!/bin/bash
+
+for i in warp[0-5]_bin.fits
+do
+echo $i
+t1=$(echo $i|sed "s/.fits/.dat/g")
+sex $i -c ~/.COIAS_param/default.sex
+echo $t1
+cp test.cat $t1
+done

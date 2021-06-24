@@ -1,0 +1,45 @@
+; Any line beginning with a ';' is assumed to be a comment.  Any other
+; non-blank line is assumed to be a possible JPL ephemeris file.  Find_Orb
+; will attempt to open them,  one by one,  until it finally gets one.
+
+;   This file gives the names of assorted JPL binary ephemerides one can
+; get either from the Web or from the Willmann-Bell CD,  or from the second
+; Guide disk.  Byte order is not a problem;  the software will flip bytes
+; as needed.
+
+; From the Willmann-Bell CD-ROM:
+; -3000 to +3000,  about 200 MBytes:
+unix.406
+
+; From the Willmann-Bell CD-ROM:
+; 1600-2200:  about 56 MBytes:
+unix.405
+
+; http://cococubed.asu.edu/codes/ephem/unxp1600-2200_ppc_mac_xlf.405
+; Same file as above,  I think
+unxp1600-2200_ppc_mac_xlf.405
+
+; http://cococubed.asu.edu/codes/ephem/unxp1600-2200_intel_mac_ifort.405
+; Same file as above,  I think,  except reversed byte order
+unxp1600-2200_intel_mac_ifort.405
+
+; From the second Guide 8.0 disk: 1800-2200,  about 13.3 MBytes:
+sub_de.406
+
+; ftp://ssd.jpl.nasa.gov/pub/eph/planets/unix/de406/unxp1800.406
+; Covers 1800-2100
+unxp1800.406
+
+
+; http://adams.dm.unipi.it/~orbmaint/orbfit/JPLEPH/DE405_win.dat
+; 1960-2020;  about 14 MBytes (file size indicates it may cover more years)
+de405_win.dat
+
+; http://adams.dm.unipi.it/~orbmaint/orbfit/JPLEPH/DE405.dat
+; 1970-2020;  about 4.7 MBytes
+de405.dat
+
+
+; From the Willmann-Bell CD-ROM:
+; 1600-2169:  about 43 MBytes:
+unix.200

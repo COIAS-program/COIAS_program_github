@@ -1,0 +1,5 @@
+#!/bin/bash
+
+./dos_find ./mpc.txt -k  >> /home/urakawa/bin/Asthunter/dosfind.txt
+cd /home/urakawa/bin/Asthunter
+exec bash

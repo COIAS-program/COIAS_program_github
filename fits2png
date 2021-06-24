@@ -1,0 +1,11 @@
+#!/bin/bash
+
+for i in warp?_bin.fits
+do
+echo $i
+t1=$(echo $i|sed "s/.fits/.png/g")
+cp $i test.fits
+#echo $t1
+fits2pngC.py
+cp test.png $t1
+done
