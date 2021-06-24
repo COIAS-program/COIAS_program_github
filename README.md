@@ -1,9 +1,10 @@
 #COIAS_programの使い方
 
 ##下準備
+0. (Readme_COIAS2.pdfも参照してください) 3系のpythonのインストール。anaconda(pythonの統合開発環境)をインストールした方が良い。その上で以下のパッケージなどをインストールする: numpy, scipy, matplotlib, astropy, ephem, cython, pandas, pillow, photutils, SExtractor, astroquery, julian
 1. githubからこのプログラム一式をダウンロードして、任意のディレクトリに置く。本Readmeではこのディレクトリを /COIAS_program_path と呼ぶ。
 2. /COIAS_program_path以下の全てのpythonスクリプトとシェルスクリプトにchmodで実行許可を与えておく。
-3. シェルの環境変数PATHに、このディレクトリへのパス (/COIAS_program_path) とfindOrbへのパス (/COIAS_program_path/findOrb) を追加する。
+3. シェルの環境変数PATHに、このディレクトリへのパス (/COIAS_program_path) とfindOrbへのパス (/COIAS_program_path/findOrb) を追加する。使用するシェルはbashが前提のようなので、bashでパスを通す。
 4. cythonのビルド。/COIAS_program_path にターミナルで移動して、 python setup12.py build_ext --inplace と入力する。
 5. /COIAS_program_path 以下に存在する隠しディレクトリ .COIAS_param をホームディレクトリ以下 (~/) にコピーする。
 6. (たまに実行して最新のMPCのデータベースを取り込んでおく) ターミナルで getMPCORB_and_mpc2edb と打ち込んで同スクリプトを実行することで、 MPCからMPCORB.DATを~/.COIAS_paramにダウンロードし、さらに解析してedb形式に書き換える。
