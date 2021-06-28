@@ -1,6 +1,7 @@
 #!/bin/bash
 #version 2 /2020.3.27
 #startsearch
+preprocess
 startsearch2R
 #exec one time prempsearchC when you change the FOV
 prempsearchC
