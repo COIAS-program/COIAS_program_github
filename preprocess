@@ -5,4 +5,12 @@ if [ ! -d ~/.coias ]; then
     mkdir ~/.coias
     make_default_parameter_files.py
     getMPCORB_and_mpc2edb
+else
+    if [ ! -f ~/.coias/default.conv ]; then
+	make_default_parameter_files.py
+    fi
+
+    if [ ! -f ~/.coias/MPCORB.DAT ]; then
+	getMPCORB_and_mpc2edb
+    fi
 fi
