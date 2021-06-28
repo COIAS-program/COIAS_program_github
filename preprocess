@@ -1,8 +1,8 @@
 #!/bin/bash
 #version 2021.6.28 K.S.
 
-if [ ! -d ~/.coias]; then
-   mkdir ~/.coias
-   make_default_parameter_files.py
-   getMPCORB_and_mpc2edb
+if [ ! -d ~/.coias ]; then
+    mkdir ~/.coias
+    make_default_parameter_files.py
+    getMPCORB_and_mpc2edb
 fi
