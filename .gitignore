@@ -1,3 +1,10 @@
 mktraclet.c
 mktraclet.cpython-38-darwin.so
 build
+findOrb/*.o
+findOrb/dos_find
+findOrb/get_test
+findOrb/astephem
+findOrb/riseset3
+findOrb/jd
+findOrb/*.a
