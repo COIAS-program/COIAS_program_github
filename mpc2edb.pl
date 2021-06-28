@@ -81,9 +81,9 @@ my $dimmag = 15;            # dimmest mag to be saved in "bright" file
 my $MPCSITE = "http://www.minorplanetcenter.net";
 my $MPCFTPDIR = "/iau/MPCORB";
 my $home = $ENV{"HOME"};
-my $MPCFILE = $home . "/.COIAS_param/MPCORB.DAT";
-my $MPCZIPFILE = $home . "/.COIAS_param/MPCORB.DAT.gz";
-my $MPCOUTFILE = $home . "/.COIAS_param/AstMPC";
+my $MPCFILE = $home . "/.coias/MPCORB.DAT";
+my $MPCZIPFILE = $home . "/.coias/MPCORB.DAT.gz";
+my $MPCOUTFILE = $home . "/.coias/AstMPC";
 # immediate output
 $| = 1;
 

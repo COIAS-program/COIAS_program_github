@@ -10,8 +10,8 @@ def calc_mean_detection_number(detect_thresh):
     default_sex_lines = file.readlines()
     default_sex_lines[15]="DETECT_THRESH    " + "{:.2f}".format(detect_thresh) + "          # <sigmas> or <threshold>,<ZP> in mag.arcsec-2\n"
 
-    default_sex_lines[9]="PARAMETERS_NAME  " + expanduser("~") + "/.COIAS_param/default2.param  # name of the file containing catalog contents\n"
-    default_sex_lines[19]="FILTER_NAME      " + expanduser("~") + "/.COIAS_param/default.conv   # name of the file containing the filter\n"
+    default_sex_lines[9]="PARAMETERS_NAME  " + expanduser("~") + "/.coias/default2.param  # name of the file containing catalog contents\n"
+    default_sex_lines[19]="FILTER_NAME      " + expanduser("~") + "/.coias/default.conv   # name of the file containing the filter\n"
     file.close()
 
     file = open(default_sex_file_name, "w")
@@ -39,7 +39,7 @@ def calc_mean_detection_number(detect_thresh):
     return detection_number
 
 #---definition of file and program name------------
-program_path = expanduser("~") + "/.COIAS_param/"
+program_path = expanduser("~") + "/.coias/"
 default_sex_file_name = program_path+"default.sex"
 findsource_file_name = "findsource"
 #--------------------------------------------------

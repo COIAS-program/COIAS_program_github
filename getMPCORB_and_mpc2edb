@@ -1,2 +1,2 @@
-wget -O ~/.COIAS_param/MPCORB.DAT https://www.minorplanetcenter.net/iau/MPCORB/MPCORB.DAT
-mpc2edb.pl ~/.COIAS_param/MPCORB.DAT
+wget -O ~/.coias/MPCORB.DAT https://www.minorplanetcenter.net/iau/MPCORB/MPCORB.DAT
+mpc2edb.pl ~/.coias/MPCORB.DAT
