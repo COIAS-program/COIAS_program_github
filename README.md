@@ -7,13 +7,9 @@
 3. シェルの環境変数PATHに、このディレクトリへのパス (/COIAS_program_path) とfindOrbへのパス (/COIAS_program_path/findOrb) を追加する。使用するシェルはbashが前提のようなので、bashでパスを通す。(以前COIASのプログラム群を使用しており昔のパスが残っている場合は、使用したいプログラム群へのパスのみが環境変数PATHに登録されるように注意する)
 4. cythonのビルド。/COIAS_program_path にターミナルで移動して、 python setup12.py build_ext --inplace と入力する。
 5. findOrbのコンパイル。/COIAS_program_path/findOrb にターミナルで移動して、以下のコマンドを打つことでコンパイルを実行する。デフォルトのコンパイラは g++ なので、無い場合はインストールするか、持っているc++用のコンパイラを linlunar.make, linmake ファイル中の CC=コンパイラ名 に指定する必要がある。
-   1. rm dos_find
-   2. rm lunar.a
-   3. rm *.o (すでにある実行ファイル達を削除する)
-   4. make -f linlunar.mak
-   5. make -f linmake
-6. /COIAS_program_path 以下に存在する隠しディレクトリ .COIAS_param をホームディレクトリ以下 (~/) にコピーする。
-7. (たまに実行して最新のMPCのデータベースを取り込んでおく) ターミナルで getMPCORB_and_mpc2edb と打ち込んで同スクリプトを実行することで、 MPCからMPCORB.DATを~/.COIAS_paramにダウンロードし、さらに解析してedb形式に書き換える。
+   1. もし一度コンパイルしたことがあったら、rm dos_find, rm lunar.a, rm *.o ですでにある実行ファイル達を削除する
+   2. make -f linlunar.mak
+   3. make -f linmake
 
 ##実行方法
 1. 任意の好きなディレクトリに5枚のwarp画像 (warp-*.fits) を用意して、ターミナルでこのディレクトリに移動しておく。ほぼ全ての中間ファイルやpngファイルはこのディレクトリ (カレントディレクトリ) に展開される。
@@ -26,3 +22,6 @@
 8. mpc4.txtを複製してmpcOeg.txtに名前を書き換える。手作業。何回か測定した場合は、複数回の測定でできた複数のmpc4.txtの内容をまとめてmpcOeg.txtに記入しても良い。
 9. AstsearchR_afterReCOIAS と打ち込んで同スクリプトを使用し、重複行の削除、findOrbを用いた軌道測定、誤差が大きいデータの削除、新天体に米印をつける、などを実行する。
 10. 作成されたmpc_reportOeg.txtが完成形で、MPCに送信する報告メールのデータ部分になる。
+
+##たまにすべきこと
+1. (たまに実行して最新のMPCのデータベースを取り込んでおく。 初回はスクリプト中で自動でなされるので、しなくて良い) ターミナルで getMPCORB_and_mpc2edb と打ち込んで同スクリプトを実行することで、 MPCからMPCORB.DATを~/.coiasにダウンロードし、さらに解析してedb形式に書き換える。~/.coiasは初回の実行時に自動で作られる隠しディレクトリ。
