@@ -1,11 +1,11 @@
 #!/bin/bash
-#version 2 /2020.3.27
+# Time-stamp: <2021/07/03 15:29:32 (JST) maeda>
 #startsearch
 preprocess
 startsearch2R
 #exec one time prempsearchC when you change the FOV
 prempsearchC
 astsearch_new
-fits2png
+#fits2png
 #add the difference contrast version if you need
 #fits2png2

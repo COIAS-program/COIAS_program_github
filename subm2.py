@@ -2,96 +2,101 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Mar 26 00:38:58 2020
-
 @author: urakawa
+ Time-stamp: <2021/07/04 11:26:36 (JST) maeda>
 """
 
 import numpy as np
 import pylab
-import matplotlib.pyplot as plt
 from astropy.visualization import astropy_mpl_style
 from astropy.wcs import WCS
 from astropy.io import fits
-from astropy.visualization import (ZScaleInterval,ImageNormalize)
+from astropy.visualization import (ZScaleInterval,ImageNormalize, imshow_norm, HistEqStretch)
 from astropy.time import Time
+import astropy.stats
 import glob
 import os
 import subprocess
+import photutils.datasets
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+from matplotlib import cm
 
-img_list0 = sorted(glob.glob('warp-*bin.fits'))
-img_list = img_list0
-#open warp image
+def fits2png ( hdu, pngname ):
+    cmap = cm.gray              
+    vmin, vmax = ZScaleInterval().get_limits( hdu )
+    plt.imsave( pngname, hdu, vmin=vmin, vmax=vmax, cmap=cmap, origin="lower")
+    plt.close ()
 
-hdu1 = fits.open(img_list[0])
-scidata1 = hdu1[0].data
-#replace nan =>0
-scidata1[np.isnan(scidata1)]=0
-#b is mask image
-scidata1b = hdu1[1].data
+## warp image list to read ##
+img_list = sorted(glob.glob('warp-*bin.fits'))
 
+## make arrays to store output images
+hdutmp = fits.open(img_list[0])
+head_list = []
+scidata  = np.empty((len(img_list), np.shape(hdutmp[0].data)[0], np.shape(hdutmp[0].data)[1]))
+maskdata = np.empty((len(img_list), np.shape(hdutmp[0].data)[0], np.shape(hdutmp[0].data)[1]))
+image_sky_masked = np.empty_like( scidata )
+del hdutmp
 
-#make header with wcs info
-h1head = hdu1[0].header      
+## Loading original fits images
+puttys = []
+for i in range(len(img_list)):
+    hdu = fits.open(img_list[i])
+    scidata[i] = hdu[0].data
 
+    ## Make sky background image to replace NaN region #####
+    # masking NaN
+    nanmask = np.isnan (scidata[i])
+    scidata_maskednan = np.ma.array (scidata[i], mask=nanmask)
+    
+    # sigma-clipping and measuring statistics to make sky
+    rejection = 3.0  # threshold sigma value of sky 
+    sky_mean, sky_median, sky_stddev = astropy.stats.sigma_clipped_stats (scidata_maskednan, sigma=rejection)
+   
+    # make sky background image
+    image_sky = photutils.datasets.make_noise_image ((np.shape(scidata[i])), distribution='gaussian', \
+                                                     mean=sky_mean, stddev=sky_stddev)
+    image_sky_masked[i] = np.ma.array (image_sky, mask=nanmask)
+    
+    # replace nan -> sky background
+    scidata[np.isnan(scidata)] = 0 # replace nan =>0 temporaly
+    ###########################################################
+    
+    ## Mask image of HSC
+    maskdata[i] = hdu[1].data
+    #maskdatalist.append ( maskdata[i] )
 
-hdu2 = fits.open(img_list[1])
-scidata2 = hdu2[0].data
-scidata2[np.isnan(scidata2)]=0
-scidata2b = hdu2[1].data
+    ## make header with wcs info
+    head_list.append(hdu[0].header)
 
-h2head = hdu2[0].header     
-#wcs2 = WCS(hdu2[1].header).celestial
+## make mask images ##
+## median for mask
+stacked_maskdata = np.stack ( maskdata )
+median_maskdata = np.median( stacked_maskdata, axis=0)
 
-hdu3 = fits.open(img_list[2])
-scidata3 = hdu3[0].data
-scidata3[np.isnan(scidata3)]=0
-scidata3b = hdu3[1].data
-
-
-h3head = hdu3[0].header  
-
-hdu4 = fits.open(img_list[3])
-scidata4 = hdu4[0].data
-scidata4[np.isnan(scidata4)]=0
-scidata4b = hdu4[1].data
-h4head = hdu4[0].header     
-
-hdu5 = fits.open(img_list[4])
-scidata5 = hdu5[0].data
-scidata5[np.isnan(scidata5)]=0
-scidata5b = hdu5[1].data
-h5head = hdu5[0].header     
-
-#median for mask
-tmp = np.stack((scidata1b,scidata2b,scidata3b,scidata4b,scidata5b))
-tmp2 = np.median(tmp,axis=0)
-
-#hanten 
-tmp3 = np.where(tmp2==0,1,tmp2) 
-tmp4 = np.where(tmp3>1,0,tmp3)
-
-
-#image * hanten median
-scidata1c = scidata1 * tmp4
-hdunew = fits.PrimaryHDU(scidata1c,h1head)
-hdunew.writeto('warp1_bin.fits',overwrite = True)
-
-scidata2c = scidata2 * tmp4
-hdunew = fits.PrimaryHDU(scidata2c,h2head)
-hdunew.writeto('warp2_bin.fits',overwrite = True)
-
-scidata3c = scidata3 * tmp4
-hdunew = fits.PrimaryHDU(scidata3c,h3head)
-hdunew.writeto('warp3_bin.fits',overwrite = True)
-
-scidata4c = scidata4 * tmp4
-hdunew = fits.PrimaryHDU(scidata4c,h4head)
-hdunew.writeto('warp4_bin.fits',overwrite = True)
-
-scidata5c = scidata5 * tmp4
-hdunew = fits.PrimaryHDU(scidata5c,h5head)
-hdunew.writeto('warp5_bin.fits',overwrite = True)
+## hanten 
+tmp_hanten = np.where( median_maskdata == 0, 1, median_maskdata ) 
+hanten_image = np.where( tmp_hanten > 1, 0, tmp_hanten)
 
 
+## masking and output to fits images ##
+for i in range(len(img_list)):
+    ## masked scidata 
+    ## masking : image * hanten median
+    output_scidata_masked = scidata[i] * hanten_image + image_sky_masked[i]
+    hdunew = fits.PrimaryHDU( output_scidata_masked, head_list[i] )
+    ## output 
+    outfilename = 'warp%s_bin' % str(i+1)
+    hdunew.writeto( outfilename+".fits", overwrite = True ) # output as fits image
+    fits2png ( output_scidata_masked, outfilename+".png" ) # output as png image
 
-
+    ## non-masked scidata
+    ## masking : image * hanten median
+    output_scidata = scidata[i] + image_sky_masked[i]
+    hdunew = fits.PrimaryHDU( output_scidata, head_list[i] )
+    ## output 
+    outfilename = 'warp%s_nonmask_bin' % str(i+1)
+    hdunew.writeto( outfilename+".fits", overwrite = True) # output as fits image
+    fits2png ( output_scidata, outfilename+".png" ) # output as png image
+    
