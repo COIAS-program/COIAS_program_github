@@ -3,7 +3,7 @@
 """
 Created on Thu Mar 26 00:38:58 2020
 @author: urakawa
- Time-stamp: <2021/07/04 11:26:36 (JST) maeda>
+ Time-stamp: <2021/07/05 12:01:58 (JST) maeda>
 """
 
 import numpy as np
@@ -94,9 +94,9 @@ for i in range(len(img_list)):
     ## non-masked scidata
     ## masking : image * hanten median
     output_scidata = scidata[i] + image_sky_masked[i]
-    hdunew = fits.PrimaryHDU( output_scidata, head_list[i] )
+    #hdunew = fits.PrimaryHDU( output_scidata, head_list[i] )  ## comment-out: non-mask image is not needed to fits format
     ## output 
     outfilename = 'warp%s_nonmask_bin' % str(i+1)
-    hdunew.writeto( outfilename+".fits", overwrite = True) # output as fits image
+    #hdunew.writeto( outfilename+".fits", overwrite = True) # output as fits image ## comment-out:non-mask image is not needed to fits format
     fits2png ( output_scidata, outfilename+".png" ) # output as png image
     
