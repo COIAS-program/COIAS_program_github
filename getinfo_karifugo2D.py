@@ -11,28 +11,21 @@ from multiprocessing import Pool
 from multiprocessing import Process
 import re
 from astropy.io import fits
+import glob
+
 path_name = os.getcwd()
 
 #read scidata
-scidata1 = fits.open('warp1_bin.fits')
-scidata2 = fits.open('warp2_bin.fits')
-scidata3 = fits.open('warp3_bin.fits')
-scidata4 = fits.open('warp4_bin.fits')
-scidata5 = fits.open('warp5_bin.fits')
+img_list = sorted(glob.glob('warp[1-5]_bin.fits'))
 
-jd1 = scidata1[0].header['JD']
-jd2 = scidata2[0].header['JD']
-jd3 = scidata3[0].header['JD']
-jd4 = scidata4[0].header['JD']
-jd5 = scidata5[0].header['JD']
+time_list = []
+for i in range(len(img_list)):
+    scidata = fits.open( img_list[i] )
+    jd = scidata[0].header['JD']
+    time_list.append( jd )
 
 #time_list
-time_list =[jd1,jd2,jd3,jd4,jd5]
 time_list2 = [np.round(float(time_list[i]),decimals=8) for i in range(len(time_list))]  
-      
-#file_list
-file_list = ['warp1_bin.png','warp2_bin.png','warp3_bin.png','warp4_bin.png','warp5_bin.png']
-
 
 #karifugo name_list
 tmp2 = str("cand4.txt")
@@ -76,19 +69,21 @@ for i1 in range(nn):
 tmp6 = temporary.reshape(nn*5,5)
 ####################################################
 tmp7 =[]
-for i in range(len(file_list)):
+for i in range(len(img_list)):
     for k in range(len(tmp6)):
 #                print(tmp6[k,1],time_list2[i],i,k)
         if tmp6[k,1] - 0.0000001 <time_list2[i] and tmp6[k,1] +0.000001 > time_list2[i]:
 #                   print(tmp6[k],file_list[i])
             tmp7 = np.append(tmp7,tmp6[k])
-            tmp7 = np.append(tmp7,file_list[i])
+            #tmp7 = np.append(tmp7,file_list[i])
+            tmp7 = np.append(tmp7, str(i)) # NM 2020.07.08
 tmp8 = tmp7.reshape(int(len(tmp7)/6),6)
+
 #remove name and karifugo from numberd
 for l in range(len(tmp8)):
     tmp8[l,0] = tmp8[l,0].replace("(","").replace(")","").replace(" ","")
 np.savetxt('karifugo_new2B.txt',tmp8, fmt='%s')
 t2 = time.time()
 elapsed_time = t2 -t1
-print(elapsed_time)
+print("getinfo karifugo, Elapsed time:", elapsed_time)
 
