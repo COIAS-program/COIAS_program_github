@@ -56,23 +56,20 @@ class Asthunter(tk.Frame):
         self.canvas.config(yscrollcommand = self.yscroll.set)
         self.canvas.config(xscrollcommand = self.xscroll.set)
 
-#   scrollregion (west,north,east,south)
+        #   scrollregion (west,north,east,south)
         self.canvas.config(scrollregion = (0,0,xpix,ypix))
-#set first image (center x,y coord of image)/self.image_on_canvas is tag
+        
+        # set first image (center x,y coord of image)/self.image_on_canvas is tag
         self.image_on_canvas = self.canvas.create_image(xpix/2,ypix/2,image = self.image_data[self.image_number])
-        #set ast coord of the first image/self.coord_on_canvas is tag
-        tmp = str(self.filename[self.image_number])
-        tmp2 = path_name + str("/")
-        filename2 = re.sub(tmp2,'',tmp)
-#        print(tmp2,filename2)
-        self.temp = [ast_xy[i] for i in np.where(ast_xy[:,1] == filename2)]
-#        print(self.temp)        
-        for i in range(len(self.temp[0])):
-#            print(self.temp[0][i][2],self.temp[0][i][3])
-            xpos = int(float(self.temp[0][i][2]))
-            ypos = int(float(self.temp[0][i][3]))
+        
+        # set ast coord of the first image/self.coord_on_canvas is tag
+        self.astdata = [ast_xy[i] for i in np.where(ast_xy[:,1] == str(self.image_number))] # NM 2021.07.08
+        
+        for i in range(len(self.astdata[0])):
+            xpos = int(float(self.astdata[0][i][2]))
+            ypos = int(float(self.astdata[0][i][3]))
             #set moving object personal name
-            name = str(self.temp[0][i][0])
+            name = str(self.astdata[0][i][0])
             
             self.coord_on_canvas = self.canvas.create_rectangle(xpos-20,ypix-ypos+20,xpos+20,ypix-ypos-20,outline='#000000',width=5)
             self.canvas.create_text(xpos-25,ypix-ypos-30,text = name,fill='#000000',font=("Purisa",16))
@@ -227,17 +224,14 @@ class Asthunter(tk.Frame):
         self.yp2 = event.y + yp1
         
 #get asteroids coordinates stored in disp.txt
-        tmp = str(self.filename[self.image_number])
-        tmp2 = path_name + str("/")
-        filename2 = re.sub(tmp2,'',tmp)
-        self.temp = [ast_xy[i] for i in np.where(ast_xy[:,1] == filename2)]
+        self.astdata = [ast_xy[i] for i in np.where(ast_xy[:,1] == str(self.image_number))] # NM 2021.07.08
 #compare asteroids coordinates and clicked coordinates
         self.matchAsteroidNamesStr = []
-        for i in range(len(self.temp[0])):
-            xpos = int(float(self.temp[0][i][2]))
-            ypos = int(float(self.temp[0][i][3]))
+        for i in range(len(self.astdata[0])):
+            xpos = int(float(self.astdata[0][i][2]))
+            ypos = int(float(self.astdata[0][i][3]))
             if xpos-20<self.xp2 and xpos+20>self.xp2 and ypix-(ypos+20)<self.yp2 and ypix-(ypos-20)>self.yp2:
-                asteroidNameStr = self.temp[0][i][0]
+                asteroidNameStr = self.astdata[0][i][0]
                 if len(asteroidNameStr)!=7 or asteroidNameStr[0]!='H':
                     #print("This is not a new object! name=",asteroidNameStr)
                     self.messageBox.delete(0, tk.END)
@@ -284,17 +278,15 @@ class Asthunter(tk.Frame):
         # 表示画像を更新
         self.canvas.delete("all")
         self.image_on_canvas = self.canvas.create_image(xpix/2,ypix/2,image = self.image_data[self.image_number])
-        #refresh new ast coord
-        tmp = str(self.filename[self.image_number])
-        tmp2 = path_name + str("/")
-        filename2 = re.sub(tmp2,'',tmp)
-        self.temp = [ast_xy[i] for i in np.where(ast_xy[:,1] == filename2)]
-        for i in range(len(self.temp[0])):
-            xpos = int(float(self.temp[0][i][2]))
-            ypos = int(float(self.temp[0][i][3]))
+        # refresh new ast coord
+        self.astdata = [ast_xy[i] for i in np.where(ast_xy[:,1] == str(self.image_number))] # NM 2021.07.08
+        
+        for i in range(len(self.astdata[0])):
+            xpos = int(float(self.astdata[0][i][2]))
+            ypos = int(float(self.astdata[0][i][3]))
 
             if self.SqOnOffFlag==1:
-                name = str(self.temp[0][i][0])
+                name = str(self.astdata[0][i][0])
                 matchFlag = 0
                 if name.lstrip("H").isdigit():
                     nameInt = int(name.lstrip("H"))
