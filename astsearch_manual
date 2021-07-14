@@ -5,6 +5,6 @@ astsearch1Q5.py
 match2E.py
 mpc1c.py
 mpc2c.py
-cat numbered_disp_m.txt karifugo_disp_m.txt unknown_disp_m.txt > >disp.txt
+cat numbered_disp_m.txt karifugo_disp_m.txt unknown_disp_m.txt >> disp.txt
 cat numbered_mpc_m.txt karifugo_mpc_m.txt unknown_mpc_m.txt >> mpc.txt
 cat numbered_all_m.txt karifugo_all_m.txt unknown_all_m.txt >> all.txt
