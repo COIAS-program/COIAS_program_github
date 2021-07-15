@@ -1,0 +1,3 @@
+2021-07-15 Natsuho Maeda 
+* Making a file (CHANGES.txt) to record change logs.
+
