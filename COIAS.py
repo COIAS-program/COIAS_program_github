@@ -13,6 +13,9 @@ from time import sleep
 import numpy as np
 import re
 import tkinter.scrolledtext as st
+#SU. revised
+from tkinter import messagebox
+import tkinter.simpledialog as simpledialog
 #input ast data
 
 ast_xy = np.loadtxt("disp.txt",dtype = 'str')
@@ -20,6 +23,9 @@ img = Image.open('warp1_bin.png')
 xpix = img.size[0]
 ypix = img.size[1]
 path_name = os.getcwd()
+
+
+
 #class
 class Asthunter(tk.Frame):
     def __init__(self, master=None):        
@@ -41,6 +47,8 @@ class Asthunter(tk.Frame):
 #second window
     def sub_window(self):
         global image_data
+#        global inputnumber
+#        self.inputnumber = []
         self.file_num = 0
         self.SqOnOffFlag = 1
         self.sub_win = tk.Toplevel(root)
@@ -102,7 +110,9 @@ class Asthunter(tk.Frame):
         self.messageBox = tk.Entry(self.sub_win,font=("", 14), width=50)
         self.messageBox.insert(tk.END,"message:")
         self.messageBox.grid(row=0, column=26, columnspan=42,sticky = tk.W)
-        
+#SU added 2021/7/12
+#set mouse coorinate by rightclick.
+        self.sub_win.bind('<ButtonPress-3>',self.rightClick)
 
 
 # load_file        
@@ -193,9 +203,70 @@ class Asthunter(tk.Frame):
         self.xycoord.delete(0,tk.END)
         self.xycoord.insert(tk.END,("X pix "+str(self.xp2)+", Y pix " +str(self.yp2)))
 
-#--------------------------------------------------------------------
-#    def name(self):
-#        self.ast_xy = np.loadtxt("list3.txt",dtype = 'str',usecols=[0,12,15,16])
+#SU added 2021/07/12  get coordinate by right click --------------------------------------------------------
+    def rightClick(self,event):
+#        print('right click')
+        res = messagebox.askquestion("New number","Same object with a previous image?")
+#        print(res)
+        if res == "no":
+#get the top left coord in image
+            xp = self.xscroll.get()
+            yp = self.yscroll.get()
+#top left coord in image
+            xp1 = int(xp[0]*xpix)
+            yp1 = int(yp[0]*ypix)
+#add the mouse position
+            self.xp2 = event.x + xp1
+            self.yp2 = event.y + yp1
+            self.coord = self.xp2,self.yp2
+            print(self.coord)
+#            comment = str("If you measure (X, Y) = (") + str(self.xp2) + " pix, " + str(self.yp2) + str(" pix), please input temporay number")
+            comment = "Input temporary number"
+            self.inputnumber = simpledialog.askstring("Temporary number",comment)
+
+#get filename(full path)
+            tmp = str(self.filename[self.image_number])
+#only filename
+#       tmp[-13:]
+#change to fits file name
+            tmp2 = tmp[-13:].replace("png","fits")
+#out put file on the current directry
+#coord + filename
+            self.coord = str(self.xp2),str(self.yp2),str(tmp2),str(self.inputnumber)
+#        self.coord2 = list(self.coord)
+#        self.f2=open(tmp4,'a')
+            self.f2 = open('memo2.txt','a')
+            self.f2.writelines(str(self.coord)+'\n')
+            self.f2.close()
+        else:
+#get the top left coord in image
+            xp = self.xscroll.get()
+            yp = self.yscroll.get()
+#top left coord in image
+            xp1 = int(xp[0]*xpix)
+            yp1 = int(yp[0]*ypix)
+#add the mouse position
+            self.xp2 = event.x + xp1
+            self.yp2 = event.y + yp1
+            self.coord = self.xp2,self.yp2
+#            print(self.coord)
+
+#get filename(full path)
+            tmp = str(self.filename[self.image_number])
+#only filename
+#       tmp[-13:]
+#change to fits file name
+            tmp2 = tmp[-13:].replace("png","fits")
+#out put file on the current directry
+#coord + filename
+            self.coord = str(self.xp2),str(self.yp2),str(tmp2),str(self.inputnumber)
+#        self.coord2 = list(self.coord)
+#        self.f2=open(tmp4,'a')
+            self.f2 = open('memo2.txt','a')
+            self.f2.writelines(str(self.coord)+'\n')
+            self.f2.close()
+           
+#------------------------------------------------------------
 
     def output(self):
         self.f=open('memo.txt','w')
