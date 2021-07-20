@@ -81,5 +81,5 @@ for i in img_list[0:5]:
     hdunew  = fits.PrimaryHDU(scidata_bin, h1head)
     hdunew2 = fits.ImageHDU(maskdata_bin, h1head)
     hdul = fits.HDUList([hdunew,hdunew2]) 
-    hdul.writeto(i.replace('.fits','_bin.fits'),overwrite = True)
+    hdul.writeto(i.replace('warp-','warpbin-'),overwrite = True) #K.S. modify 2021/7/20
 

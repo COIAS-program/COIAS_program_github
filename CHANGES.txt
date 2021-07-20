@@ -3,3 +3,6 @@
 
 2021-07-16 Keisuke Sugiura
 * Commit COIAS2.py that includes manual photometry as COIAS.py
+
+2021-07-20 Keisuke Sugiura
+* Change name of binned files warp-*_bin.fits -> warpbin-*.fits

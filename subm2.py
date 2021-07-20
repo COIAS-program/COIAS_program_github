@@ -29,7 +29,7 @@ def fits2png ( hdu, pngname ):
     plt.close ()
 
 ## warp image list to read ##
-img_list = sorted(glob.glob('warp-*bin.fits'))
+img_list = sorted(glob.glob('warpbin-*.fits')) #K.S. modify 2021/7/20
 
 ## make arrays to store output images
 hdutmp = fits.open(img_list[0])
