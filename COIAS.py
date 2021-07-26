@@ -313,11 +313,13 @@ class Asthunter(tk.Frame):
 #put clicked asteroid number that are not yet written on the ScrolledText
         for asteroidNumberStr in self.matchAsteroidNamesStr:
             matchFlag=0
+            rowWrittenNumbers=0
             for num in self.writtenNumbers:
+                rowWrittenNumbers += 1
                 if int(asteroidNumberStr)==num:
-                   #print("This object is already written in the ScrolledText! num=",asteroidNumberStr)
+                   self.t0.delete("{}.0".format(rowWrittenNumbers),"{}.end +1c".format(rowWrittenNumbers)) #KS added 2021/7/25
                    self.messageBox.delete(0, tk.END)
-                   self.messageBox.insert(tk.END,"message: already written in the ScrolledText! name="+asteroidNameStr)
+                   self.messageBox.insert(tk.END,"message:")
                    matchFlag=1
             if matchFlag==0:
                    self.t0.insert(tk.END,asteroidNumberStr+"\n")
