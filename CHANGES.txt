@@ -6,3 +6,6 @@
 
 2021-07-20 Keisuke Sugiura
 * Change name of binned files warp-*_bin.fits -> warpbin-*.fits
+
+2021-07-26 Keisuke Sugiura
+* Modify COIAS.py so that we can cancel the selection of checked object by clicking again
