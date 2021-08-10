@@ -19,7 +19,8 @@ import tkinter.simpledialog as simpledialog
 #input ast data
 
 ast_xy = np.loadtxt("disp.txt",dtype = 'str')
-img = Image.open('warp1_bin.png')
+#img = Image.open('warp1_bin.png')
+img = Image.open('1_disp-coias.png') # NM modified 2021-08-10
 xpix = img.size[0]
 ypix = img.size[1]
 path_name = os.getcwd()
@@ -47,6 +48,7 @@ class Asthunter(tk.Frame):
 #second window
     def sub_window(self):
         global image_data
+        print("filenums",self.filenums)
 #        global inputnumber
 #        self.inputnumber = []
         self.file_num = 0
@@ -71,7 +73,7 @@ class Asthunter(tk.Frame):
         self.image_on_canvas = self.canvas.create_image(xpix/2,ypix/2,image = self.image_data[self.image_number])
         
         # set ast coord of the first image/self.coord_on_canvas is tag
-        self.astdata = [ast_xy[i] for i in np.where(ast_xy[:,1] == str(self.image_number))] # NM 2021.07.08
+        self.astdata = [ast_xy[i] for i in np.where(ast_xy[:,1] == str(self.filenums[self.image_number] - 1))] # NM 2021.08.10
         
         for i in range(len(self.astdata[0])):
             xpos = int(float(self.astdata[0][i][2]))
@@ -118,6 +120,7 @@ class Asthunter(tk.Frame):
 # load_file        
     def load_file(self):
         self.image_data =[]
+        self.filenums = [] # NM added 2021-08-10
 #multi select
         self.filename = fd.askopenfilenames(filetypes = [('Image Files', ('.gif', '.png', '.ppm')),
                                                ('GIF Files', '.gif'),
@@ -127,6 +130,7 @@ class Asthunter(tk.Frame):
         n = len(self.filename)
         for self.i in range(0,n):
             self.image_data.append(tk.PhotoImage(file = self.filename[self.i]))
+            self.filenums.append( int(self.filename[self.i].split('/')[-1][0]) )  # NM added 2021-08-10
         self.image_number = 0
 #make sub_window
         self.sub_window()
@@ -295,7 +299,7 @@ class Asthunter(tk.Frame):
         self.yp2 = event.y + yp1
         
 #get asteroids coordinates stored in disp.txt
-        self.astdata = [ast_xy[i] for i in np.where(ast_xy[:,1] == str(self.image_number))] # NM 2021.07.08
+        self.astdata = [ast_xy[i] for i in np.where(ast_xy[:,1] == str(self.filenums[self.image_number] - 1))] # NM 2021.08.10
 #compare asteroids coordinates and clicked coordinates
         self.matchAsteroidNamesStr = []
         for i in range(len(self.astdata[0])):
@@ -352,7 +356,7 @@ class Asthunter(tk.Frame):
         self.canvas.delete("all")
         self.image_on_canvas = self.canvas.create_image(xpix/2,ypix/2,image = self.image_data[self.image_number])
         # refresh new ast coord
-        self.astdata = [ast_xy[i] for i in np.where(ast_xy[:,1] == str(self.image_number))] # NM 2021.07.08
+        self.astdata = [ast_xy[i] for i in np.where(ast_xy[:,1] == str(self.filenums[self.image_number] - 1))] # NM 2021.08.10
         
         for i in range(len(self.astdata[0])):
             xpos = int(float(self.astdata[0][i][2]))
