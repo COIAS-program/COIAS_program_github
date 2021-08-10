@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# Time-stamp: <2021/07/03 15:50:42 (JST) maeda>
+# Time-stamp: <2021/08/10 17:41:00 (JST) maeda>
 
 import os
 import numpy as np
@@ -43,18 +43,18 @@ for i in img_list[0:5]:
 #make header
 #obs time
     t1 = Time(hdu1[0].header['TIME-MID'],format='isot',scale='utc')  
-    hdu1[0].header['JD'] = t1.jd
+    hdu1[0].header['JD'] = t1.jd 
 #zero_point = 2.5 *np.log10(Fluxmag0), mag = zero_point - 2.5 * np.log10(flux)
     zerop1 = 2.5 * np.log10(hdu1[0].header['FLUXMAG0'])
     hdu1[0].header['Z_P'] = zerop1
     hdu1[0].header['EQUINOX'] = hdu1[1].header['EQUINOX']
     hdu1[0].header['RADESYS'] = hdu1[1].header['RADESYS']
-    hdu1[0].header['CRPIX1'] =  hdu1[1].header['CRPIX1']/2
-    hdu1[0].header['CRPIX2'] =  hdu1[1].header['CRPIX2']/2
-    hdu1[0].header['CD1_1'] =  hdu1[1].header['CD1_1']*2
+    hdu1[0].header['CRPIX1'] =  hdu1[1].header['CRPIX1']/nbin
+    hdu1[0].header['CRPIX2'] =  hdu1[1].header['CRPIX2']/nbin
+    hdu1[0].header['CD1_1'] =  hdu1[1].header['CD1_1']*nbin
     hdu1[0].header['CD1_2'] =  hdu1[1].header['CD1_2']
     hdu1[0].header['CD2_1'] =  hdu1[1].header['CD2_1']
-    hdu1[0].header['CD2_2'] =  hdu1[1].header['CD2_2']*2
+    hdu1[0].header['CD2_2'] =  hdu1[1].header['CD2_2']*nbin
     hdu1[0].header['CRVAL1'] = hdu1[1].header['CRVAL1']
     hdu1[0].header['CRVAL2'] = hdu1[1].header['CRVAL2']
     hdu1[0].header['CUNIT1'] = hdu1[1].header['CUNIT1']
