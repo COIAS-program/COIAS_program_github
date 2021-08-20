@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# Time-stamp: <2021/07/03 15:50:42 (JST) maeda>
 
 import os
 import numpy as np
@@ -11,7 +10,7 @@ from astropy.time import Time
 import subprocess
 import glob
 import sys
-import lsst.afw.image as afwImage
+#import lsst.afw.image as afwImage
 
 ## mode selection ####
 mode = input("Please choose binning mode.\n (2: 2x2 binning, 4: 4x4 binning):")
@@ -43,19 +42,24 @@ for i in img_list[0:5]:
     
 #make header
 #obs time
-#S.U edit
-#    t1 = Time(hdu1[0].header['TIME-MID'],format='isot',scale='utc')  
+#S.U edit 
+#Even if images are processed by hscpipe-8, Fluxmag0 can be calculated without hscpipe-8 enviroment. 
     t1 = Time(hdu1[0].header['DATE-AVG'],format='isot',scale='utc')  
     hdu1[0].header['JD'] = t1.jd
-#zero_point = 2.5 *np.log10(Fluxmag0), mag = zero_point - 2.5 * np.log10(flux)
 #FLUXMAG0ERR is 10^{-4} mag. Negligible"
-    exp = afwImage.ExposureF(i)
-    pc = exp.getPhotoCalib()
-    FLUXMAG0 = pc.getInstFluxAtZeroMagnitude()
+    entryHduIndex = hdu1[0].header["AR_HDU"] - 1
+    entryHdu = hdu1[entryHduIndex]
+    photoCalibId = hdu1[0].header["PHOTOCALIB_ID"]
+    photoCalibEntry, = entryHdu.data[entryHdu.data["id"] == photoCalibId]
+    photoCalibHdu = hdu1[entryHduIndex + photoCalibEntry["cat.archive"]]
+    start = photoCalibEntry["row0"]
+    end = start + photoCalibEntry["nrows"]
+    photoCalib, = photoCalibHdu.data[start:end]
+    calibrationMean = photoCalib["calibrationMean"]
+    calibrationErr = photoCalib["calibrationErr"]
+    FLUXMAG0 = (1.0e+23 * 10**(48.6 / (-2.5)) * 1.0e+9) / calibrationMean
+    fluxmag0err = (1.0e+23 * 10**(48.6 / (-2.5)) * 1.0e+9) / calibrationMean**2 * calibrationErr,
     zerop1 = 2.5 * np.log10(FLUXMAG0)
-#    ref_flux = 1.0e23*1.0e9*10**(-0.4*48.6)
-#    FLUXMAG0ERR = FLUXMAG0 * pc.getCalibrationErr()/pc.getCalibrationMean()
-#    print(FLUXMAG0,zerop1,FLUXMAG0ERR,zero)
     hdu1[0].header['Z_P'] = zerop1
 #    hdu1[0].header['EQUINOX'] = hdu1[1].header['EQUINOX']
     hdu1[0].header['RADESYS'] = hdu1[1].header['RADESYS']
