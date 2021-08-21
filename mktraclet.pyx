@@ -123,7 +123,9 @@ dT9 = (jd5 - jd2)*1440
 cimport numpy as np
 cimport cython
 DOUBLE = np.float64
-DTYPE = np.int
+#S.U edit 2021.8.21
+#DTYPE = np.int
+DTYPE = np.int64
 ctypedef np.int_t DTYPE_t 
 ctypedef np.float64_t DOUBLE_t
 
