@@ -19,9 +19,6 @@ if os.stat("nomatch.txt").st_size == 0:
 else:
     data = np.loadtxt("nomatch.txt",usecols=[0,1,2,3,4,5,6,7])
     fil = np.loadtxt("nomatch.txt",dtype = 'str',usecols=[8,9])
-#Revised S.U 2021/8/27
-    filtmp1 = str(fil[:,0].tolist()).replace('r2','r')
-    filtmp1 = str(fil[:,0].tolist()).replace('i2','i')
 #name change
     tmp = [int(x) for x in data[:,0]] 
     tmp2 = [str(x).zfill(6) for x in tmp]   
