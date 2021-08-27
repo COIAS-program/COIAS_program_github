@@ -134,13 +134,28 @@ else:
                 decm = int(c.dec.dms[1])
                 decs = np.round(c.dec.dms[2],decimals=2)
                 tmp =  int(decd)
-                if tmp > 0:
+#Revised S.U 2021.8.27
+                dec = np.array(c.dec)
+
+                if dec > 0:
                     tmp3 = str(tmp)
                     decd2 = '+' + tmp3
+                elif dec > -1 and dec < 0:
+                    decd2 =  '-0'+"{:01d}".format(tmp)
+                    decm = -1*decm
+                    decs = -1*decs              
                 else:
                     decd2 = "{:03d}".format(tmp)
                     decm = -1*decm
                     decs = -1*decs
+
+#                if tmp > 0:
+#                    tmp3 = str(tmp)
+#                    decd2 = '+' + tmp3
+#                else:
+#                    decd2 = "{:03d}".format(tmp)
+#                    decm = -1*decm
+#                    decs = -1*decs
                 decd3 = ras3+' '+decd2
                 decm2 = "{:02d}".format(decm)
                 decs2 =  "{:.2f}".format(decs) 
@@ -205,13 +220,28 @@ else:
                 decm = int(c.dec.dms[1])
                 decs = np.round(c.dec.dms[2],decimals=2)
                 tmp =  int(decd)
-                if tmp > 0:
+#Revised S.U 2021.8.27
+                dec = np.array(c.dec)
+
+                if dec > 0:
                     tmp3 = str(tmp)
                     decd2 = '+' + tmp3
+                elif dec > -1 and dec < 0:
+                    decd2 =  '-0'+"{:01d}".format(tmp)
+                    decm = -1*decm
+                    decs = -1*decs              
                 else:
                     decd2 = "{:03d}".format(tmp)
                     decm = -1*decm
                     decs = -1*decs
+                
+ #               if tmp > 0:
+ #                   tmp3 = str(tmp)
+ #                   decd2 = '+' + tmp3
+ #               else:
+ #                   decd2 = "{:03d}".format(tmp)
+ #                   decm = -1*decm
+ #                   decs = -1*decs
                 decd3 = ras3+' '+decd2
                 decm2 = "{:02d}".format(decm)
                 decs2 =  "{:.2f}".format(decs) 
@@ -276,13 +306,28 @@ else:
                 decm = int(c.dec.dms[1])
                 decs = np.round(c.dec.dms[2],decimals=2)
                 tmp =  int(decd)
-                if tmp > 0:
+#Revised S.U 2021.8.27
+                dec = np.array(c.dec)
+
+                if dec > 0:
                     tmp3 = str(tmp)
                     decd2 = '+' + tmp3
+                elif dec > -1 and dec < 0:
+                    decd2 =  '-0'+"{:01d}".format(tmp)
+                    decm = -1*decm
+                    decs = -1*decs              
                 else:
                     decd2 = "{:03d}".format(tmp)
                     decm = -1*decm
                     decs = -1*decs
+                
+#                if tmp > 0:
+#                    tmp3 = str(tmp)
+#                    decd2 = '+' + tmp3
+#                else:
+#                    decd2 = "{:03d}".format(tmp)
+#                    decm = -1*decm
+#                    decs = -1*decs
                 decd3 = ras3+' '+decd2
                 decm2 = "{:02d}".format(decm)
                 decs2 =  "{:.2f}".format(decs) 
@@ -345,13 +390,28 @@ else:
                 decm = int(c.dec.dms[1])
                 decs = np.round(c.dec.dms[2],decimals=2)
                 tmp =  int(decd)
-                if tmp > 0:
+#Revised S.U 2021.8.27
+                dec = np.array(c.dec)
+
+                if dec > 0:
                     tmp3 = str(tmp)
                     decd2 = '+' + tmp3
+                elif dec > -1 and dec < 0:
+                    decd2 =  '-0'+"{:01d}".format(tmp)
+                    decm = -1*decm
+                    decs = -1*decs              
                 else:
                     decd2 = "{:03d}".format(tmp)
                     decm = -1*decm
                     decs = -1*decs
+                
+#                if tmp > 0:
+#                    tmp3 = str(tmp)
+#                    decd2 = '+' + tmp3
+#                else:
+#                    decd2 = "{:03d}".format(tmp)
+#                    decm = -1*decm
+#                    decs = -1*decs
                 decd3 = ras3+decd2
                 decm2 = "{:02d}".format(decm)
                 decs2 =  "{:.2f}".format(decs) 

@@ -70,14 +70,27 @@ else:
     decd = c.dec.dms[0]
     tmp = [int(x) for x in decd]
     decd2 = []
+#Revised S.U 2021.8.27
     for i in range(len(tmp)):
-        if tmp[i] > 0:
+        if dec[i] >= 0:
             tmp3 = str(tmp[i])
             tmp2 = '+'+tmp3
+            decd2.append(tmp2)
+        elif dec[i] > -1 and dec[i] < 0:
+            tmp2 = '-0'+"{:01d}".format(tmp[i])
             decd2.append(tmp2)
         else:
             tmp2 = "{:03d}".format(tmp[i])
             decd2.append(tmp2)
+            
+#    for i in range(len(tmp)):
+#        if tmp[i] > 0:
+#            tmp3 = str(tmp[i])
+#            tmp2 = '+'+tmp3
+#            decd2.append(tmp2)
+#        else:
+#            tmp2 = "{:03d}".format(tmp[i])
+#            decd2.append(tmp2)
     decd3 = []
     for i in range(len(ras3)):
         tmp5 = ras3[i]+' '+decd2[i]
@@ -239,13 +252,28 @@ else:
             decm = int(c.dec.dms[1])
             decs = np.round(c.dec.dms[2],decimals=2)
             tmp =  int(decd)
-            if tmp > 0:
+#Revised S.U 2021.8.27
+            dec = np.array(c.dec)
+
+            if dec > 0:
                 tmp3 = str(tmp)
                 decd2 = '+' + tmp3
+            elif dec > -1 and dec < 0:
+                decd2 =  '-0'+"{:01d}".format(tmp)
+                decm = -1*decm
+                decs = -1*decs              
             else:
                 decd2 = "{:03d}".format(tmp)
                 decm = -1*decm
                 decs = -1*decs
+            
+#            if tmp > 0:
+#                tmp3 = str(tmp)
+#                decd2 = '+' + tmp3
+#            else:
+#                decd2 = "{:03d}".format(tmp)
+#                decm = -1*decm
+#                decs = -1*decs
 #        decd3 = ras3+decd2
             decd3 = ras3+' '+decd2
             decm2 = "{:02d}".format(decm)

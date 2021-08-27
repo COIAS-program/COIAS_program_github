@@ -10,3 +10,11 @@ mpc2b.py
 cat numbered_disp.txt karifugo_disp.txt unknown_disp.txt > disp.txt
 cat numbered_mpc.txt karifugo_mpc.txt unknown_mpc.txt > mpc.txt
 cat numbered_all.txt karifugo_all.txt unknown_all.txt > all.txt
+#revised S.U 2021.8.27
+sed 's/r2     /r     /g;' mpc.txt > tmpmpc1.txt
+sed 's/i2     /i     /g;' tmpmpc1.txt > tmpmpc2.txt
+sed 's/r2     /r     /g;' all.txt > tmpall1.txt
+sed 's/i2     /i     /g;' tmpall1.txt > tmpall2.txt
+rm tmpmpc1.txt tmpall1.txt
+mv tmpmpc2.txt mpc.txt
+mv tmpall2.txt all.txt
