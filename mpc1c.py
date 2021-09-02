@@ -70,13 +70,15 @@ else:
     decd = c.dec.dms[0]
     tmp = [int(x) for x in decd]
     decd2 = []
+#Revised S.U 2021.9.2
+    tmpdec = np.array(c.dec)
 #Revised S.U 2021.8.27
     for i in range(len(tmp)):
-        if dec[i] >= 0:
+        if tmpdec[i] >= 0:
             tmp3 = str(tmp[i])
             tmp2 = '+'+tmp3
             decd2.append(tmp2)
-        elif dec[i] > -1 and dec[i] < 0:
+        elif tmpdec[i] > -1 and tmpdec[i] < 0:
             tmp2 = '-0'+"{:01d}".format(tmp[i])
             decd2.append(tmp2)
         else:
@@ -96,9 +98,9 @@ else:
         tmp5 = ras3[i]+' '+decd2[i]
         decd3.append(tmp5)
 
-    decm = [int(x) for x in c.dec.dms[1]]
+    decm = [int(abs(x)) for x in c.dec.dms[1]]
     decm2 = ["{:02d}".format(x) for x in decm]     
-    decs = np.round(c.dec.dms[2],decimals=2)
+    decs = abs(np.round(c.dec.dms[2],decimals=2))
     decs2 =  ["{:.2f}".format(x) for x in decs]  
     decs3 = [x.rjust(5,'0') for x in decs2]  
     filobs = [x+'      568' for x in fil[:,0]]
