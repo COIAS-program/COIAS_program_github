@@ -148,8 +148,8 @@ def traclet1(np.ndarray[DOUBLE_t,ndim =2] radec1,np.ndarray[DOUBLE_t,ndim =2] ra
             vel = np.sqrt(tmp1*tmp1+tmp2*tmp2)*3600/dT1
     #MBA ra decrease along with time.
     #        if tmp1 < 0 and vel > 0.2 and vel<1:
-    #revised 2020.5.22
-            if tmp1 < 0 and vel > 0.04 and vel<1.0:
+    #revised 2021.9.2. selection of less than 1.5 aresec/min 
+            if vel < 1.5:
     #             print(radec1[i,0],radec2[j,0])
                 list1.append([radec1b[i],radec2b[j]])
     #trac1
@@ -170,8 +170,8 @@ def traclet2(np.ndarray[DOUBLE_t,ndim =2] radec1,np.ndarray[DOUBLE_t,ndim =2] ra
             vel = np.sqrt(tmp1*tmp1+tmp2*tmp2)*3600/dT3
     #MBA ra decrease along with time.
     #        if tmp1 < 0 and vel > 0.2 and vel<1:
-    #revised 2020.5.22
-            if tmp1 < 0 and vel > 0.04 and vel<1.0:
+    #revised 2021.9.2
+            if vel < 1.5:
     #             print(radec1[i,0],radec2[j,0])
                 list1.append([radec1b[i],radec3b[j]])
     #trac1
@@ -193,7 +193,7 @@ def traclet3(np.ndarray[DOUBLE_t,ndim =2] radec2,np.ndarray[DOUBLE_t,ndim =2] ra
     #MBA ra decrease along with time.
     #        if tmp1 < 0 and vel > 0.2 and vel<1:
     #revised 2020.5.22
-            if tmp1 < 0 and vel > 0.04 and vel<1.0:
+            if  vel < 1.5:
     #             print(radec1[i,0],radec2[j,0])
                 list1.append([radec2b[i],radec3b[j]])
     #trac1
@@ -215,7 +215,7 @@ def traclet4(np.ndarray[DOUBLE_t,ndim =2] radec1,np.ndarray[DOUBLE_t,ndim =2] ra
     #MBA ra decrease along with time.
     #        if tmp1 < 0 and vel > 0.2 and vel<1:
     #revised 2020.5.22
-            if tmp1 < 0 and vel > 0.04 and vel<1.0:
+            if  vel < 1.5:
     #             print(radec1[i,0],radec2[j,0])
                 list1.append([radec1b[i],radec4b[j]])
     #trac1
@@ -238,7 +238,7 @@ def traclet5(np.ndarray[DOUBLE_t,ndim =2] radec2,np.ndarray[DOUBLE_t,ndim =2] ra
     #MBA ra decrease along with time.
     #        if tmp1 < 0 and vel > 0.2 and vel<1:
     #revised 2020.5.22
-            if tmp1 < 0 and vel > 0.04 and vel<1.0:
+            if  vel < 1.5:
     #             print(radec1[i,0],radec2[j,0])
                 list1.append([radec2b[i],radec4b[j]])
     #trac1
@@ -260,7 +260,7 @@ def traclet6(np.ndarray[DOUBLE_t,ndim =2] radec3,np.ndarray[DOUBLE_t,ndim =2] ra
     #MBA ra decrease along with time.
     #        if tmp1 < 0 and vel > 0.2 and vel<1:
     #revised 2020.5.22
-            if tmp1 < 0 and vel > 0.04 and vel<1.0:
+            if vel < 1.5:  
     #             print(radec1[i,0],radec2[j,0])
                 list1.append([radec3b[i],radec4b[j]])
     #trac1
