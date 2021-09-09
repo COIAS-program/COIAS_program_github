@@ -19,7 +19,8 @@ import tkinter.simpledialog as simpledialog
 #input ast data
 
 ast_xy = np.loadtxt("disp.txt",dtype = 'str')
-img = Image.open('warp1_bin.png')
+#img = Image.open('warp1_bin.png')
+img = Image.open('1_disp-coias.png') # NM modified 2021-08-10
 xpix = img.size[0]
 ypix = img.size[1]
 path_name = os.getcwd()
@@ -47,6 +48,7 @@ class Asthunter(tk.Frame):
 #second window
     def sub_window(self):
         global image_data
+        print("filenums",self.filenums)
 #        global inputnumber
 #        self.inputnumber = []
         self.file_num = 0
@@ -71,7 +73,7 @@ class Asthunter(tk.Frame):
         self.image_on_canvas = self.canvas.create_image(xpix/2,ypix/2,image = self.image_data[self.image_number])
         
         # set ast coord of the first image/self.coord_on_canvas is tag
-        self.astdata = [ast_xy[i] for i in np.where(ast_xy[:,1] == str(self.image_number))] # NM 2021.07.08
+        self.astdata = [ast_xy[i] for i in np.where(ast_xy[:,1] == str(self.filenums[self.image_number] - 1))] # NM 2021.08.10
         
         for i in range(len(self.astdata[0])):
             xpos = int(float(self.astdata[0][i][2]))
@@ -111,13 +113,14 @@ class Asthunter(tk.Frame):
         self.messageBox.insert(tk.END,"message:")
         self.messageBox.grid(row=0, column=26, columnspan=42,sticky = tk.W)
 #SU added 2021/7/12
-#set mouse coorinate by rightclick.
-        self.sub_win.bind('<ButtonPress-3>',self.rightClick)
+#set mouse coorinate by rightclick.=> by spacebar (S.U 2021/9/9 )
+        self.sub_win.bind('<space>',self.spacebar)
 
 
 # load_file        
     def load_file(self):
         self.image_data =[]
+        self.filenums = [] # NM added 2021-08-10
 #multi select
         self.filename = fd.askopenfilenames(filetypes = [('Image Files', ('.gif', '.png', '.ppm')),
                                                ('GIF Files', '.gif'),
@@ -127,6 +130,7 @@ class Asthunter(tk.Frame):
         n = len(self.filename)
         for self.i in range(0,n):
             self.image_data.append(tk.PhotoImage(file = self.filename[self.i]))
+            self.filenums.append( int(self.filename[self.i].split('/')[-1][0]) )  # NM added 2021-08-10
         self.image_number = 0
 #make sub_window
         self.sub_window()
@@ -203,8 +207,8 @@ class Asthunter(tk.Frame):
         self.xycoord.delete(0,tk.END)
         self.xycoord.insert(tk.END,("X pix "+str(self.xp2)+", Y pix " +str(self.yp2)))
 
-#SU added 2021/07/12  get coordinate by right click --------------------------------------------------------
-    def rightClick(self,event):
+#SU added 2021/07/12  get coordinate by right click => by spacebar(2021/9/9)--------------------------------------------------------
+    def spacebar(self,event):
 #        print('right click')
         res = messagebox.askquestion("New number","Same object with a previous image?")
 #        print(res)
@@ -229,7 +233,12 @@ class Asthunter(tk.Frame):
 #only filename
 #       tmp[-13:]
 #change to fits file name
-            tmp2 = tmp[-13:].replace("png","fits")
+            if ('nonmask' in tmp):
+                tmp2 = 'warp'+tmp[-24]+'_bin.fits'
+#                print(tmp2)
+            else:
+                tmp2 = 'warp'+tmp[-16]+'_bin.fits'
+#                print(tmp2)
 #out put file on the current directry
 #coord + filename
             self.coord = str(self.xp2),str(self.yp2),str(tmp2),str(self.inputnumber)
@@ -253,10 +262,13 @@ class Asthunter(tk.Frame):
 
 #get filename(full path)
             tmp = str(self.filename[self.image_number])
-#only filename
-#       tmp[-13:]
+
 #change to fits file name
-            tmp2 = tmp[-13:].replace("png","fits")
+            if ('nonmask' in tmp):
+#                tmp2 = tmp[-24:].replace("png","fits")
+                tmp2 = 'warp'+tmp[-24]+'_bin.fits'
+            else:
+                tmp2 = 'warp'+tmp[-16]+'_bin.fits'
 #out put file on the current directry
 #coord + filename
             self.coord = str(self.xp2),str(self.yp2),str(tmp2),str(self.inputnumber)
@@ -295,7 +307,7 @@ class Asthunter(tk.Frame):
         self.yp2 = event.y + yp1
         
 #get asteroids coordinates stored in disp.txt
-        self.astdata = [ast_xy[i] for i in np.where(ast_xy[:,1] == str(self.image_number))] # NM 2021.07.08
+        self.astdata = [ast_xy[i] for i in np.where(ast_xy[:,1] == str(self.filenums[self.image_number] - 1))] # NM 2021.08.10
 #compare asteroids coordinates and clicked coordinates
         self.matchAsteroidNamesStr = []
         for i in range(len(self.astdata[0])):
@@ -313,11 +325,13 @@ class Asthunter(tk.Frame):
 #put clicked asteroid number that are not yet written on the ScrolledText
         for asteroidNumberStr in self.matchAsteroidNamesStr:
             matchFlag=0
+            rowWrittenNumbers=0
             for num in self.writtenNumbers:
+                rowWrittenNumbers += 1
                 if int(asteroidNumberStr)==num:
-                   #print("This object is already written in the ScrolledText! num=",asteroidNumberStr)
+                   self.t0.delete("{}.0".format(rowWrittenNumbers),"{}.end +1c".format(rowWrittenNumbers)) #KS added 2021/7/25
                    self.messageBox.delete(0, tk.END)
-                   self.messageBox.insert(tk.END,"message: already written in the ScrolledText! name="+asteroidNameStr)
+                   self.messageBox.insert(tk.END,"message:")
                    matchFlag=1
             if matchFlag==0:
                    self.t0.insert(tk.END,asteroidNumberStr+"\n")
@@ -350,7 +364,7 @@ class Asthunter(tk.Frame):
         self.canvas.delete("all")
         self.image_on_canvas = self.canvas.create_image(xpix/2,ypix/2,image = self.image_data[self.image_number])
         # refresh new ast coord
-        self.astdata = [ast_xy[i] for i in np.where(ast_xy[:,1] == str(self.image_number))] # NM 2021.07.08
+        self.astdata = [ast_xy[i] for i in np.where(ast_xy[:,1] == str(self.filenums[self.image_number] - 1))] # NM 2021.08.10
         
         for i in range(len(self.astdata[0])):
             xpos = int(float(self.astdata[0][i][2]))
