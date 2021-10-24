@@ -113,8 +113,8 @@ class Asthunter(tk.Frame):
         self.messageBox.insert(tk.END,"message:")
         self.messageBox.grid(row=0, column=26, columnspan=42,sticky = tk.W)
 #SU added 2021/7/12
-#set mouse coorinate by rightclick.
-        self.sub_win.bind('<ButtonPress-3>',self.rightClick)
+#set mouse coorinate by rightclick.=> by spacebar (S.U 2021/9/9 )
+        self.sub_win.bind('<space>',self.spacebar)
 
 
 # load_file        
@@ -207,8 +207,8 @@ class Asthunter(tk.Frame):
         self.xycoord.delete(0,tk.END)
         self.xycoord.insert(tk.END,("X pix "+str(self.xp2)+", Y pix " +str(self.yp2)))
 
-#SU added 2021/07/12  get coordinate by right click --------------------------------------------------------
-    def rightClick(self,event):
+#SU added 2021/07/12  get coordinate by right click => by spacebar(2021/9/9)--------------------------------------------------------
+    def spacebar(self,event):
 #        print('right click')
         res = messagebox.askquestion("New number","Same object with a previous image?")
 #        print(res)
@@ -233,7 +233,12 @@ class Asthunter(tk.Frame):
 #only filename
 #       tmp[-13:]
 #change to fits file name
-            tmp2 = tmp[-13:].replace("png","fits")
+            if ('nonmask' in tmp):
+                tmp2 = 'warp'+tmp[-24]+'_bin.fits'
+#                print(tmp2)
+            else:
+                tmp2 = 'warp'+tmp[-16]+'_bin.fits'
+#                print(tmp2)
 #out put file on the current directry
 #coord + filename
             self.coord = str(self.xp2),str(self.yp2),str(tmp2),str(self.inputnumber)
@@ -257,10 +262,13 @@ class Asthunter(tk.Frame):
 
 #get filename(full path)
             tmp = str(self.filename[self.image_number])
-#only filename
-#       tmp[-13:]
+
 #change to fits file name
-            tmp2 = tmp[-13:].replace("png","fits")
+            if ('nonmask' in tmp):
+#                tmp2 = tmp[-24:].replace("png","fits")
+                tmp2 = 'warp'+tmp[-24]+'_bin.fits'
+            else:
+                tmp2 = 'warp'+tmp[-16]+'_bin.fits'
 #out put file on the current directry
 #coord + filename
             self.coord = str(self.xp2),str(self.yp2),str(tmp2),str(self.inputnumber)
