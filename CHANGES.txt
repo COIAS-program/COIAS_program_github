@@ -14,3 +14,11 @@
 * Modify header copy part in binning2R.py. Modifyed correction factor of 2 to nbin for keywords "CRPIX1", "CRPIX2", "CD1_1", "CD1_2", "CD2_1", "CD2_2".
 * Modify name of images which are displayed on COIAS. Before: warp[1-5]_bin.png  After: [1-5]_disp-coias.png. Modyfied scripts: subm2.py, COIAS.py (## Only for .png name. Not changed for .fits and .dat file name.)
 * Modify the number shift between asteroid coordinates and image number at COIAS.py
+
+2021-8-22 Seitaro Urakawa
+*Modify mktraclet.pyx
+
+2021-8-28 Seitaro Urakawa
+*Fix bugs of mpc format. Modify mpc1b.py, mpc2b.py, mpc1c.py, mpc2c.py, astsearch_new,and astsearch_manual.
+
+
