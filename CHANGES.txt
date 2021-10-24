@@ -21,4 +21,13 @@
 2021-8-28 Seitaro Urakawa
 *Fix bugs of mpc format. Modify mpc1b.py, mpc2b.py, mpc1c.py, mpc2c.py, astsearch_new,and astsearch_manual.
 
+2021-10-19 Seitaro Urakawa
+*Commit and push COAS4.py(+manual measurements version)
 
+2021-10-20 Seitaro Urakawa
+*cp COIAS4.py COIAS_m.py
+
+2021-10-24 Seitaro Urakawa
+mv COIAS.py COIAS_211024.py
+mv COIAS_m.py COIAS.py
+*Commit and push COIAS_211024.py (previous without manual mode version) and COIAS.py (+ manual mode. latest version)
