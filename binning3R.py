@@ -44,8 +44,12 @@ for i in img_list[0:5]:
 #obs time
 #S.U edit 
 #Even if images are processed by hscpipe-8, Fluxmag0 can be calculated without hscpipe-8 enviroment. 
-    t1 = Time(hdu1[0].header['DATE-AVG'],format='isot',scale='utc')  
-    hdu1[0].header['JD'] = t1.jd
+#S.U modify 2021/10/28 Correspondence both fits header keyword 'TIME-MID' and 'DATE-AVG')
+    if 'TIME-MID' in hdu1[0].header:
+        t1 = Time(hdu1[0].header['TIME-MID'],format='isot',scale='utc')
+    else:
+        t1 = Time(hdu1[0].header['DATE-AVG'],format='isot',scale='utc')
+    hdu1[0].header['JD'] = t1.jd 
 #FLUXMAG0ERR is 10^{-4} mag. Negligible"
     entryHduIndex = hdu1[0].header["AR_HDU"] - 1
     entryHdu = hdu1[entryHduIndex]
@@ -66,8 +70,8 @@ for i in img_list[0:5]:
     hdu1[0].header['CRPIX1'] =  hdu1[1].header['CRPIX1']/nbin
     hdu1[0].header['CRPIX2'] =  hdu1[1].header['CRPIX2']/nbin
     hdu1[0].header['CD1_1'] =  hdu1[1].header['CD1_1']*nbin
-    hdu1[0].header['CD1_2'] =  hdu1[1].header['CD1_2']
-    hdu1[0].header['CD2_1'] =  hdu1[1].header['CD2_1']
+#    hdu1[0].header['CD1_2'] =  hdu1[1].header['CD1_2']
+#    hdu1[0].header['CD2_1'] =  hdu1[1].header['CD2_1']
     hdu1[0].header['CD2_2'] =  hdu1[1].header['CD2_2']*nbin
     hdu1[0].header['CRVAL1'] = hdu1[1].header['CRVAL1']
     hdu1[0].header['CRVAL2'] = hdu1[1].header['CRVAL2']
