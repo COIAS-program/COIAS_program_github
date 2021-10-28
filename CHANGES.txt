@@ -31,3 +31,13 @@
 mv COIAS.py COIAS_211024.py
 mv COIAS_m.py COIAS.py
 *Commit and push COIAS_211024.py (previous without manual mode version) and COIAS.py (+ manual mode. latest version)
+
+2021-10-28 Seitaro Urakawa
+Fix bug of manual mode. Revised version COIAS_211026.py
+cp COIAS_211026.py COIAS.py
+Revised ReCOIAS.py
+*Commit and push COIAS_211026.py (backup of COIAS.py), COIAS.py (+latest version), and ReCOIAS.py
+
+Revised binnig2R.py and binning3R.py (Correspondence both fits header keyword 'TIME-MID' and 'DATE-AVG')
+Add the execution permission (mpc1c.py, mpc2c.py, match2E.py, astsearch1Q5.py, astsearch_manual, binning3R.py, and ReCOIAS.py)
+*Commit and push mpc1c.py, mpc2c.py, match2E.py, astsearch1Q5.py, astsearch_manual, binning3R.py, and ReCOIAS.py
