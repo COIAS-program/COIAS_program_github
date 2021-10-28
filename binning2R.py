@@ -42,30 +42,34 @@ for i in img_list[0:5]:
     
 #make header
 #obs time
-    t1 = Time(hdu1[0].header['TIME-MID'],format='isot',scale='utc')  
+#S.U modify 2021/10/26
+    if 'TIME-MID' in hdu1[0].header:
+        t1 = Time(hdu1[0].header['TIME-MID'],format='isot',scale='utc')
+    else:
+        t1 = Time(hdu1[0].header['DATE-AVG'],format='isot',scale='utc')
     hdu1[0].header['JD'] = t1.jd 
 #zero_point = 2.5 *np.log10(Fluxmag0), mag = zero_point - 2.5 * np.log10(flux)
     zerop1 = 2.5 * np.log10(hdu1[0].header['FLUXMAG0'])
     hdu1[0].header['Z_P'] = zerop1
-    hdu1[0].header['EQUINOX'] = hdu1[1].header['EQUINOX']
+#    hdu1[0].header['EQUINOX'] = hdu1[1].header['EQUINOX']
     hdu1[0].header['RADESYS'] = hdu1[1].header['RADESYS']
     hdu1[0].header['CRPIX1'] =  hdu1[1].header['CRPIX1']/nbin
     hdu1[0].header['CRPIX2'] =  hdu1[1].header['CRPIX2']/nbin
     hdu1[0].header['CD1_1'] =  hdu1[1].header['CD1_1']*nbin
-    hdu1[0].header['CD1_2'] =  hdu1[1].header['CD1_2']
-    hdu1[0].header['CD2_1'] =  hdu1[1].header['CD2_1']
+#    hdu1[0].header['CD1_2'] =  hdu1[1].header['CD1_2']
+#    hdu1[0].header['CD2_1'] =  hdu1[1].header['CD2_1']
     hdu1[0].header['CD2_2'] =  hdu1[1].header['CD2_2']*nbin
     hdu1[0].header['CRVAL1'] = hdu1[1].header['CRVAL1']
     hdu1[0].header['CRVAL2'] = hdu1[1].header['CRVAL2']
-    hdu1[0].header['CUNIT1'] = hdu1[1].header['CUNIT1']
-    hdu1[0].header['CUNIT2'] = hdu1[1].header['CUNIT2']
+#    hdu1[0].header['CUNIT1'] = hdu1[1].header['CUNIT1']
+#    hdu1[0].header['CUNIT2'] = hdu1[1].header['CUNIT2']
     hdu1[0].header['CTYPE1'] = hdu1[1].header['CTYPE1']
     hdu1[0].header['CTYPE2'] = hdu1[1].header['CTYPE2']
     hdu1[0].header['LTV1'] = hdu1[1].header['LTV1']
     hdu1[0].header['LTV2'] = hdu1[1].header['LTV2']
     hdu1[0].header['INHERIT'] = hdu1[1].header['INHERIT']
     hdu1[0].header['EXTTYPE'] = hdu1[1].header['EXTTYPE']
-    hdu1[0].header['EXTNAME'] = hdu1[1].header['EXTNAME']
+#    hdu1[0].header['EXTNAME'] = hdu1[1].header['EXTNAME']
     hdu1[0].header['CRVAL1A'] = hdu1[1].header['CRVAL1A']
     hdu1[0].header['CRVAL2A'] = hdu1[1].header['CRVAL2A']
     hdu1[0].header['CRPIX1A'] = hdu1[1].header['CRPIX1A']
