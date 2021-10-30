@@ -207,7 +207,7 @@ for j in range(len(textfile3)):
 #Noise in ADU
         mage1 = np.round(1.0857/SNR1,decimals=3)
 
-        result.append([number,radec1b[0,0],radec1b[0,1],radec1b[0,2],mag1,mage1,xy1[0,0],xy1[0,1],fil1])
+        result.append([number,radec1b[0,0],radec1b[0,1],radec1b[0,2],mag1,mage1,xy1[0,0],ypix-xy1[0,1],fil1])
 
 result2 = np.array(result,dtype='object') #revised by S.U 2021.10.28
 #np.savetxt("/home/urakawa/bin/Asthunter/listb2.txt",result2,fmt="%d %.9f %.7f %.7f %.3f %.3f %.2f %.2f %s")
