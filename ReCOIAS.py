@@ -103,7 +103,7 @@ class Asthunter(tk.Frame):
         self.message_num.grid(row=0, column=4,sticky = tk.W)
 #print coord & set entry
         self.canvas.bind('<Motion>', self.mousecoord)
-        self.xycoord = tk.Entry(self.sub_win,font=("",14),width=20)
+        self.xycoord = tk.Entry(self.sub_win,font=("",14),width=25)
         self.xycoord.insert(tk.END,("X pix, Y pix:"))
         self.xycoord.grid(row=0, column=5, columnspan=20,sticky = tk.W)
 #set mouse coordinate at click. If the coordinate is included in the range of new objects, print those numbers to the ScrolledText
