@@ -19,3 +19,5 @@ sed 's/i2     /i     /g;' tmpall1_m.txt > tmpall2.txt
 rm tmpmpc1_m.txt tmpall1_m.txt
 cat tmpmpc2.txt >>mpc.txt
 cat tmpall2.txt >>all.txt
+N=`awk '{print $4}' memo2.txt |sed -e "s/'//g" | sed -e "s/)//g" |uniq `
+printf "%06d\n" $N >> memo.txt
