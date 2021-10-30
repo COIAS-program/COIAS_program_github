@@ -41,3 +41,8 @@ Revised ReCOIAS.py
 Revised binnig2R.py and binning3R.py (Correspondence both fits header keyword 'TIME-MID' and 'DATE-AVG')
 Add the execution permission (mpc1c.py, mpc2c.py, match2E.py, astsearch1Q5.py, astsearch_manual, binning3R.py, and ReCOIAS.py)
 *Commit and push mpc1c.py, mpc2c.py, match2E.py, astsearch1Q5.py, astsearch_manual, binning3R.py, and ReCOIAS.py
+
+2021-10-30 Seitaro Urakawa
+Modify astserch_manual for display of  manual detection object, and astsearch1Q5.py
+Modify ReCOIAS.py(window of x,y pixel is widen.)
+Push "How_to_use_manual_mode.pdf"
