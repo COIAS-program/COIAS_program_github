@@ -46,3 +46,7 @@ Add the execution permission (mpc1c.py, mpc2c.py, match2E.py, astsearch1Q5.py, a
 Modify astserch_manual for display of  manual detection object, and astsearch1Q5.py
 Modify ReCOIAS.py(window of x,y pixel is widen.)
 Push "How_to_use_manual_mode.pdf"
+
+2021-11-9 Seitaro Urakaw
+Fix bug of match2E.py (add correct time information).
+Modify Astsearch_afterReCOIAS and komejirushi.py. Change output file name from mpcOeg.txt to send_mpc.txt
