@@ -23,12 +23,17 @@ else:
     tmp1 = str("listb3.txt")
     data1 = np.loadtxt(tmp1,usecols = [0,1,2,3,4,5,6,7])
     data1b = np.loadtxt(tmp1,dtype ='str')
+#S.U edited 2021.11.9
+    tmp7 = str("listb2.txt")
+    data7 = np.loadtxt(tmp7,usecols = [0,1,2,3,4,5,6,7])
+    data7b = np.loadtxt(tmp7,dtype ='str')
+     
 #search list
     tmp2 = str("search_astB.txt")
     data2 = np.loadtxt(tmp2,usecols=[1,2,3,4])
     data2b = np.loadtxt(tmp2,dtype ='str',usecols=[0,5])
 # time list
-    time_list = np.unique(data1[:,1])
+    time_list = np.unique(data7[:,1])
 #file_list
     file_list = np.unique(data2b[:,1])
 
