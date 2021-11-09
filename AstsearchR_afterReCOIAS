@@ -1,6 +1,6 @@
 #!/bin/bash
 #version 2021.6.17
-cp mpcOeg.txt hoge2.txt
+cp send_mpc.txt hoge2.txt
 deldaburi4.py
 dos_find mpc7.txt -k > result.txt
 delLargeZansa_and_modPrecision.py 1

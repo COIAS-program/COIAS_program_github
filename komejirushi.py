@@ -8,7 +8,7 @@ import pandas as pd
 #path_name = os.getcwd()
 #detect list
 tmp1 = "pre_repo.txt"
-tmp2 = "mpc_reportOeg.txt"
+tmp2 = "send_mpc.txt"
 data1 = open(tmp1,"r")
 
 

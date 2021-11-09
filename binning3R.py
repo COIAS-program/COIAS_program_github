@@ -43,7 +43,7 @@ for i in img_list[0:5]:
 #make header
 #obs time
 #S.U edit 
-#Even if images are processed by hscpipe-8, Fluxmag0 can be calculated without hscpipe-8 enviroment. 
+#Even if images are processed by hscpipe-8, Fluxmag0 can be calculated.
 #S.U modify 2021/10/28 Correspondence both fits header keyword 'TIME-MID' and 'DATE-AVG')
     if 'TIME-MID' in hdu1[0].header:
         t1 = Time(hdu1[0].header['TIME-MID'],format='isot',scale='utc')
