@@ -50,3 +50,6 @@ Push "How_to_use_manual_mode.pdf"
 2021-11-9 Seitaro Urakaw
 Fix bug of match2E.py (add correct time information).
 Modify Astsearch_afterReCOIAS and komejirushi.py. Change output file name from mpcOeg.txt to send_mpc.txt
+
+2021-12-05 Natsuho Maeda
+Fix bug of getinfo_numbered2D.py (bug that occurs when the asteroid name contains "'".)
