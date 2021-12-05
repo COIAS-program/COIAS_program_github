@@ -73,17 +73,18 @@ tmp6 = temporary.reshape(nn*5,5)
 tmp7 =[]
 for i in range(len(img_list)):
     for k in range(len(tmp6)):
-#                print(tmp6[k,1],time_list2[i],i,k)
+#        print(tmp6[k,1],time_list2[i],i,k)
         if tmp6[k,1] - 0.0000001 <time_list2[i] and tmp6[k,1] +0.000001 > time_list2[i]:
 #                   print(tmp6[k],file_list[i])
             tmp7 = np.append(tmp7,tmp6[k])
             #tmp7 = np.append(tmp7,file_list[i])
             tmp7 = np.append(tmp7, str(i)) # NM 2021.07.08
 tmp8 = tmp7.reshape(int(len(tmp7)/6),6)
+
 #remove name and karifugo from numberd
 for l in range(len(tmp8)):
-    tmp9 = re.sub(r"\(.+?\)","",tmp8[l,0]) 
-    tmp11 = re.sub(r"[a-zA-Z]","",tmp9) 
+    tmp9 = re.sub(r"\(.+?\)","",tmp8[l,0]) # remove karifugo
+    tmp11 = re.sub(r"[a-zA-Z\']","",tmp9) # remove name
     tmp12 = tmp11.rstrip()
     tmp8[l,0] = tmp12
 np.savetxt('numbered_new2B.txt',tmp8, fmt='%s')
