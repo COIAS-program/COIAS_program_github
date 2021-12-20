@@ -5,10 +5,19 @@
 sed  s/\'//g ~/.coias/AstMPC_dim.edb |sed -e '1,51d' > hoge
 #./getinfo_xephem.py > cand.txt
 searchB.py  
-sed -e 's/\\//g' cand.txt > cand2.txt
+## remove a character "\" from cand.txt
+sed -e 's/\\//g' cand.txt > cand2.txt  
+## remove the asteroids whose magnitude is less than 30 mag
 awk '$6<30 {print $0}' cand2.txt > cand2b.txt
-awk '$2>2100 {print $2}' cand2b.txt > cand3.txt
-awk '$2<2100 {print $2,$3}' cand2b.txt > cand4.txt
+
+## classify asteroids into two groups, numbered asteroids and those only having karifugo
+## numbered (named) asteroids (2021.12.20 NM)
+awk -F" " '$2 ~ /^[1-9]/ && $3 ~ /^[A-Z]/ && $3 !~ /[A-Z][A-Z][0-9]*/ {print $2}' cand2b.txt > cand3.txt
+## numbered (unnamed) asteroids (2021.12.20 NM)
+awk -F" " '$2 ~ /^[1-9]/ && $3 ~ /^[1-2]/ {print $2}' cand2b.txt >> cand3.txt
+## karifugo asteroids (2021.12.20 NM)
+awk -F" " '$2 ~ /^[1-2]/ && $3 ~ /[A-Z][A-Z][0-9]*/ {print $2}' cand2b.txt > cand4.txt
+
 #getinfo_numbered2B.py
 #getinfo_karifugo2B.py
 #REVISED 2020.1.28
