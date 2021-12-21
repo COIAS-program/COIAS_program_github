@@ -16,7 +16,7 @@ awk -F" " '$2 ~ /^[1-9]/ && $3 ~ /^[A-Z]/ && $3 !~ /[A-Z][A-Z][0-9]*/ {print $2}
 ## numbered (unnamed) asteroids (2021.12.20 NM)
 awk -F" " '$2 ~ /^[1-9]/ && $3 ~ /^[1-2]/ {print $2}' cand2b.txt >> cand3.txt
 ## karifugo asteroids (2021.12.20 NM)
-awk -F" " '$2 ~ /^[1-2]/ && $3 ~ /[A-Z][A-Z][0-9]*/ {print $2}' cand2b.txt > cand4.txt
+awk -F" " '$2 ~ /^[1-2]/ && $3 ~ /[A-Z][A-Z][0-9]*/ {print $2,$3}' cand2b.txt > cand4.txt
 
 #getinfo_numbered2B.py
 #getinfo_karifugo2B.py
