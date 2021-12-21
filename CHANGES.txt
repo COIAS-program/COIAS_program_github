@@ -53,3 +53,6 @@ Modify Astsearch_afterReCOIAS and komejirushi.py. Change output file name from m
 
 2021-12-05 Natsuho Maeda
 Fix bug of getinfo_numbered2D.py (bug that occurs when the asteroid name contains "'".)
+
+2021-12-21 Natsuho Maeda
+Modify prempsearchC (Change the criteria of division into numbered or karifugo.)
