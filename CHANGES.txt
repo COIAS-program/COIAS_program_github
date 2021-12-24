@@ -56,3 +56,6 @@ Fix bug of getinfo_numbered2D.py (bug that occurs when the asteroid name contain
 
 2021-12-21 Natsuho Maeda
 Modify prempsearchC (Change the criteria of division into numbered or karifugo.)
+
+2021-12-24 Natsuho Maeda
+Combine binning2R.py and binng3R.py to binning.py. Add a function to check existence of FLUXMAG0 in header.
