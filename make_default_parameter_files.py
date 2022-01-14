@@ -5,10 +5,11 @@ from os.path import expanduser
 
 directory_path = expanduser("~") + "/.coias/"
 
-#---make default.conv-------------------------------------------------------------
+
+# ---make default.conv-------------------------------------------------------------
 def make_default_conv():
     filename = directory_path + "default.conv"
-    file = open(filename,"w")
+    file = open(filename, "w")
 
     file.write("CONV NORM\n")
     file.write("# 3x3 ``all-ground'' convolution mask with FWHM = 2 pixels.\n")
@@ -17,12 +18,14 @@ def make_default_conv():
     file.write("1 2 1\n")
 
     file.close()
-#---------------------------------------------------------------------------------
 
-#---make default.sex--------------------------------------------------------------
+
+# ---------------------------------------------------------------------------------
+
+# ---make default.sex--------------------------------------------------------------
 def make_default_sex():
     filename = directory_path + "default.sex"
-    file = open(filename,"w")
+    file = open(filename, "w")
 
     file.write("# Default configuration file for SExtractor 2.5.0\n")
     file.write("# EB 2007-02-23\n")
@@ -33,7 +36,8 @@ def make_default_sex():
     file.write("CATALOG_NAME     test.cat       # name of the output catalog\n")
     file.write("CATALOG_TYPE     ASCII_HEAD     # NONE,ASCII,ASCII_HEAD, ASCII_SKYCAT,\n")
     file.write("                                # ASCII_VOTABLE, FITS_1.0 or FITS_LDAC\n")
-    file.write("PARAMETERS_NAME  /Users/sugiuraks/.coias/default2.param  # name of the file containing catalog contents\n")
+    file.write(
+        "PARAMETERS_NAME  /Users/sugiuraks/.coias/default2.param  # name of the file containing catalog contents\n")
     file.write("\n")
     file.write("#------------------------------- Extraction ----------------------------------\n")
     file.write("\n")
@@ -99,14 +103,16 @@ def make_default_sex():
     file.write("VERBOSE_TYPE     NORMAL         # can be QUIET, NORMAL or FULL\n")
     file.write("WRITE_XML        N              # Write XML file (Y/N)?\n")
     file.write("XML_NAME         sex.xml        # Filename for XML output\n")
-    
-    file.close()
-#--------------------------------------------------------------------------------
 
-#---make default2.param----------------------------------------------------------
+    file.close()
+
+
+# --------------------------------------------------------------------------------
+
+# ---make default2.param----------------------------------------------------------
 def make_default2_param():
     filename = directory_path + "default2.param"
-    file = open(filename,"w")
+    file = open(filename, "w")
 
     file.write("X_IMAGE\n")
     file.write("Y_IMAGE\n")
@@ -129,12 +135,14 @@ def make_default2_param():
     file.write("#YMAX_IMAGE\n")
 
     file.close()
-#---------------------------------------------------------------------------------
 
-#---make ObsCodes.htm-------------------------------------------------------------
+
+# ---------------------------------------------------------------------------------
+
+# ---make ObsCodes.htm-------------------------------------------------------------
 def make_ObsCodes_htm():
     filename = directory_path + "ObsCodes.htm"
-    file = open(filename,"w")
+    file = open(filename, "w")
 
     file.write("<pre>\n")
     file.write("Code  Long.   cos      sin    Name\n")
@@ -1626,14 +1634,16 @@ def make_ObsCodes_htm():
     file.write("J98 359.5344 0.77275 +0.63259 Observatorio Manises\n")
     file.write("J99 359.578080.772589+0.632790Burjassot\n")
     file.write("</pre>\n")
-    
-    file.close()
-#---------------------------------------------------------------------------------
 
-#---make options.txt-------------------------------------------------------------
+    file.close()
+
+
+# ---------------------------------------------------------------------------------
+
+# ---make options.txt-------------------------------------------------------------
 def make_options_txt():
     filename = directory_path + "options.txt"
-    file = open(filename,"w")
+    file = open(filename, "w")
 
     file.write("500 0 15 35 1\n")
     file.write("help Full Herget epheM Vaisa resiD Gauss constr New Quit\n")
@@ -1641,14 +1651,16 @@ def make_options_txt():
     file.write("now\n")
     file.write("1\n")
     file.write("10 oct 2010\n")
-    
-    file.close()
-#---------------------------------------------------------------------------------
 
-#---make rovers.txt---------------------------------------------------------------
+    file.close()
+
+
+# ---------------------------------------------------------------------------------
+
+# ---make rovers.txt---------------------------------------------------------------
 def make_rovers_txt():
     filename = directory_path + "rovers.txt"
-    file = open(filename,"w")
+    file = open(filename, "w")
 
     file.write("     Roving observer file.  This contains \"MPC codes\" for observers who\n")
     file.write("  don't really have MPC codes,  mostly satellite observers.  They could\n")
@@ -1695,14 +1707,16 @@ def make_rovers_txt():
     file.write("Nep   0.0000 0.00000  0.00000 @08Neptune\n")
     file.write("Plu   0.0000 0.00000  0.00000 @09Pluto\n")
     file.write("Lun   0.0000 0.00000  0.00000 @10Luna\n")
-    
-    file.close()
-#---------------------------------------------------------------------------------
 
-#---make xdesig.txt---------------------------------------------------------------
+    file.close()
+
+
+# ---------------------------------------------------------------------------------
+
+# ---make xdesig.txt---------------------------------------------------------------
 def make_xdesig_txt():
     filename = directory_path + "xdesig.txt"
-    file = open(filename,"w")
+    file = open(filename, "w")
 
     file.write("; Used in the xref_designation() function in 'mpc_obs.cpp'.  The idea\n")
     file.write("; is that if you've an object listed under two different designations,\n")
@@ -1824,9 +1838,11 @@ def make_xdesig_txt():
     file.write("HPO3         2009-026C    Booster\n")
     file.write("HPO4         2009-026E    object5\n")
     file.write("HPO5         2009-026F    object6 (the accelerating one)\n")
-    
+
     file.close()
-#---------------------------------------------------------------------------------
+
+
+# ---------------------------------------------------------------------------------
 
 
 make_default_conv()
