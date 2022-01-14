@@ -70,7 +70,9 @@ for i1 in range(nn):
                 
 tmp6 = temporary.reshape(nn*5,5)
 ####################################################
-tmp7 =[]
+#tmp7 =[]
+tmp7 = np.empty(0)
+
 for i in range(len(img_list)):
     for k in range(len(tmp6)):
 #        print(tmp6[k,1],time_list2[i],i,k)
