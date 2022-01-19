@@ -122,6 +122,13 @@ source .zshrc
 ```https://github.com/Mizunanari/COIAS_program_github.git```をcloneしたファイルpathを```/COIAS_program_path```と記述している。
 
 1. cythonのビルド。/COIAS_program_path にターミナルで移動して、 python setup12.py build_ext --inplace と入力する。
+
+もし既に一度コンパイルしたことがあったら、実行ファイル達を削除する
+
+```
+rm mktraclet.c mktraclet.cpython-39-darwin.so
+```
+
 2. findOrbのコンパイル。/COIAS_program_path/findOrb にターミナルで移動して、以下のコマンドを打つことでコンパイルを実行する。デフォルトのコンパイラは g++ なので、無い場合はインストールするか、持っているc++用のコンパイラを linlunar.make, linmake ファイル中の CC=コンパイラ名 に指定する必要がある。
 
 もし既に一度コンパイルしたことがあったら、実行ファイル達を削除する
