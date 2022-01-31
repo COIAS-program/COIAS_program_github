@@ -24,7 +24,6 @@ RUN mkdir test && cd test && bash && \
     make -f linlunar.mak &&\
     make -f linmake
 
-
 # CMD
 # Container を run するたびに実行する Linux コマンドを定義
 CMD ["echo", "now runnnig ..."]
