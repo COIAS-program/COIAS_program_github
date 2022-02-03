@@ -6,7 +6,7 @@ WORKDIR /opt
 LABEL author="Haruki Anbai" 
 
 #必要なパッケージをubuntuにインストール
-RUN apt update && apt-get install -y \
+RUN apt update && apt install -y \
     git \
     wget \
     build-essential \
