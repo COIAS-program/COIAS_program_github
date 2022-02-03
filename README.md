@@ -1,9 +1,35 @@
 # 環境の構築方法
 
+## 目次
+- [検証したPC](#検証したPC)
+  - [Dockerを使用した場合](#Dockerを使用した場合)
+  - [PyCharmを利用した場合](#PyCharmを利用した場合)
+- [実行方法](#実行方法)
+
 ## 検証したPC
   
 機種ID:	MacBookPro11,3
 プロセッサ名:	クアッドコアIntel Core i7
+
+# Dockerを使用した場合
+
+## 手順
+### 1. Docker Desktopのインストール
+   - <a href="https://www.docker.com/products/docker-desktop">Mac</a>
+   - <a href="https://docs.docker.com/desktop/windows/install/">Windows</a>
+### 2. 任意のディレクトリ(この場合は~/dev）配下にテスト画像の入ったディレクトリ(SubaruHSC)を配置する
+### 3. ~/devの中で以下のコマンドを打つ
+```
+git clone https://github.com/Mizunanari/COIAS_program_github.git
+cd COIAS_program_github
+```
+### 4. Dockerfileをビルド、実行する
+```
+docker build -t test-coias-image .
+docker run -it test-coias-image 
+```
+
+# PyCharmを利用した場合
 
 ## IDE
   
@@ -145,7 +171,7 @@ make -f linlunar.mak
 make -f linmake
 ```
 
-## 実行方法
+# 実行方法
 
 1. 任意の好きなディレクトリに5枚のwarp画像 (warp-*.fits) を用意して、ターミナルでこのディレクトリに移動しておく。ほぼ全ての中間ファイルやpngファイルはこのディレクトリ (カレントディレクトリ) に展開される。
 
