@@ -32,8 +32,8 @@ RUN git clone https://github.com/Mizunanari/COIAS_program_github.git &&\
 RUN . ~/.bashrc &&\
     conda activate COIAS_program_github &&\
     cd COIAS_program_github &&\
-    chmod 705 ./* &&\
-    chmod 705 ./findOrb/* &&\
+    chmod 700 ./* &&\
+    chmod 700 ./findOrb/* &&\
     python setup12.py build_ext --inplace &&\
     cd findOrb &&\
     make -f linlunar.mak &&\
