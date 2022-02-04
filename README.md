@@ -25,8 +25,8 @@ cd COIAS_program_github
 ```
 ### 4. Dockerfileをビルド、実行する
 ```
-docker build -t test-coias-image .
-docker run -it test-coias-image 
+docker build -t coias .
+docker run -it --name coias --mount type=bind,source="$(pwd)"/data,target=/root/.coias coias /bin/bash
 ```
 
 ### 5. コマンドラインで以下を実行
