@@ -18,8 +18,7 @@ RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh &
     chmod +x ./Miniconda3-latest-Linux-x86_64.sh && \
     bash ./Miniconda3-latest-Linux-x86_64.sh -b && \
     ~/miniconda3/bin/conda init bash &&\
-    rm ./Miniconda3-latest-Linux-x86_64.sh &&\
-    . ~/.bashrc
+    rm ./Miniconda3-latest-Linux-x86_64.sh
 
 #miniconda3のPATHを通す
 ENV PATH $PATH:/root/miniconda3/bin
@@ -33,6 +32,8 @@ RUN git clone https://github.com/Mizunanari/COIAS_program_github.git &&\
 RUN . ~/.bashrc &&\
     conda activate COIAS_program_github &&\
     cd COIAS_program_github &&\
+    chmod 705 ./* &&\
+    chmod 705 ./findOrb/* &&\
     python setup12.py build_ext --inplace &&\
     cd findOrb &&\
     make -f linlunar.mak &&\
