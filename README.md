@@ -2,6 +2,7 @@
 
 ## 目次
 - [検証したPC](#検証したPC)
+- 環境構築
   - [Dockerを使用した場合](#Dockerを使用した場合)
   - [PyCharmを利用した場合](#PyCharmを利用した場合)
 - [実行方法](#実行方法)
@@ -10,10 +11,9 @@
   
 機種ID:	MacBookPro11,3
 プロセッサ名:	クアッドコアIntel Core i7
+# 環境構築
+## Dockerを使用した場合
 
-# Dockerを使用した場合
-
-## 手順
 ### 1. Docker Desktopのインストール
    - <a href="https://www.docker.com/products/docker-desktop">Mac</a>
    - <a href="https://docs.docker.com/desktop/windows/install/">Windows</a>
@@ -36,7 +36,7 @@ coias activate COIAS_program_github
 
 ### 6.　[実行方法](#実行方法)へ進む
 
-# PyCharmを利用した場合
+## PyCharmを利用した場合
 
 ## IDE
   
