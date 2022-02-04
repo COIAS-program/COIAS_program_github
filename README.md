@@ -29,6 +29,13 @@ docker build -t test-coias-image .
 docker run -it test-coias-image 
 ```
 
+### 5. コマンドラインで以下を実行
+```
+coias activate COIAS_program_github
+```
+
+### 6.　[実行方法](#実行方法)へ進む
+
 # PyCharmを利用した場合
 
 ## IDE
@@ -147,7 +154,10 @@ source .zshrc
 
 ```https://github.com/Mizunanari/COIAS_program_github.git```をcloneしたファイルpathを```/COIAS_program_path```と記述している。
 
-1. cythonのビルド。/COIAS_program_path にターミナルで移動して、 python setup12.py build_ext --inplace と入力する。
+1. cythonのビルド。/COIAS_program_pathにターミナルで移動し、下のコマンドを実行
+```
+python setup12.py build_ext --inplace
+```
 
 もし既に一度コンパイルしたことがあったら、実行ファイル達を削除する
 
