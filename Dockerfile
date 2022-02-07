@@ -17,26 +17,26 @@ RUN apt update && apt install -y \
 RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
     chmod +x ./Miniconda3-latest-Linux-x86_64.sh && \
     bash ./Miniconda3-latest-Linux-x86_64.sh -b && \
-    ~/miniconda3/bin/conda init bash &&\
+    ~/miniconda3/bin/conda init bash && \
     rm ./Miniconda3-latest-Linux-x86_64.sh
 
 #miniconda3のPATHを通す
 ENV PATH $PATH:/root/miniconda3/bin
 
 #クローンをして、COIASのための環境構築（この処理には500秒前後かかる）
-RUN git clone https://github.com/Mizunanari/COIAS_program_github.git &&\
-    cd COIAS_program_github &&\    
+RUN git clone https://github.com/Mizunanari/COIAS_program_github.git && \
+    cd COIAS_program_github && \    
     conda env create -f env.yml
 
 #condaのCOIAS_program_github環境下で、ビルド
-RUN . ~/.bashrc &&\
-    conda activate COIAS_program_github &&\
-    cd COIAS_program_github &&\
-    chmod 700 ./* &&\
-    chmod 700 ./findOrb/* &&\
-    python setup12.py build_ext --inplace &&\
-    cd findOrb &&\
-    make -f linlunar.mak &&\
+RUN . ~/.bashrc && \
+    conda activate COIAS_program_github && \
+    cd COIAS_program_github && \
+    chmod 700 ./* && \
+    chmod 700 ./findOrb/* && \
+    python setup12.py build_ext --inplace && \
+    cd findOrb && \
+    make -f linlunar.mak && \
     make -f linmake
     
 #ローカルディレクトリ内のテスト画像をUbuntuへコピー

@@ -34,7 +34,7 @@ docker run -it --name coias --mount type=bind,source="$(pwd)"/data,target=/root/
 coias activate COIAS_program_github
 ```
 
-### 6.　[実行方法](#実行方法)へ進む
+### 6. [実行方法](#実行方法)へ進む
 
 ## PyCharmを利用した場合
 
