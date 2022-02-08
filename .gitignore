@@ -10,6 +10,6 @@ findOrb/jd
 findOrb/*.a
 
 data/
-!/data/.gitkeep
+!data/.gitkeep
 SubaruHSC/
-!/SubaruHSC/.gitkeep
+!SubaruHSC/.gitkeep
