@@ -9,7 +9,7 @@ findOrb/riseset3
 findOrb/jd
 findOrb/*.a
 
-data/
+data/*
 !data/.gitkeep
-SubaruHSC/
+SubaruHSC/*
 !SubaruHSC/.gitkeep
