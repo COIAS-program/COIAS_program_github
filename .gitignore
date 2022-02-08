@@ -8,3 +8,8 @@ findOrb/astephem
 findOrb/riseset3
 findOrb/jd
 findOrb/*.a
+
+data/
+!/data/.gitkeep
+SubaruHSC/
+!/SubaruHSC/.gitkeep
