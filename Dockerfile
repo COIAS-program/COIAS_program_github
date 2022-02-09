@@ -15,7 +15,7 @@ RUN apt update && apt install -y \
 
 #miniconda3をインストール
 RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
-    chmod +x ./Miniconda3-latest-Linux-x86_64.sh && \
+    chmod 700 ./Miniconda3-latest-Linux-x86_64.sh && \
     bash ./Miniconda3-latest-Linux-x86_64.sh -b && \
     ~/miniconda3/bin/conda init bash && \
     rm ./Miniconda3-latest-Linux-x86_64.sh && \
@@ -46,4 +46,7 @@ COPY ./SubaruHSC /opt/SubaruHSC
 ENV PATH $PATH:/opt/COIAS_program_github
 ENV PATH $PATH:/opt/COIAS_program_github/findOrb
 
-CMD ["/bin/bash"]
+#APIを作業ディレクトリとする
+WORKDIR /opt/COIAS_program_github/API
+
+ENTRYPOINT /root/miniconda3/envs/COIAS_program_github/bin/uvicorn main:app --reload
