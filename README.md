@@ -5,6 +5,7 @@
 - 環境構築
   - [Dockerを使用した場合](#Dockerを使用した場合)
   - [PyCharmを利用した場合](#PyCharmを利用した場合)
+- [conda環境のymlへの書き出し方](#conda環境のymlへの書き出し方)
 - [実行方法](#実行方法)
 
 ## 検証したPC
@@ -12,6 +13,7 @@
 機種ID:	MacBookPro11,3
 プロセッサ名:	クアッドコアIntel Core i7
 # 環境構築
+
 ## Dockerを使用した場合
 
 ### 1. Docker Desktopのインストール
@@ -180,6 +182,24 @@ rm *.o
 make -f linlunar.mak
 make -f linmake
 ```
+
+## conda環境のymlへの書き出し方
+
+```
+conda activate COIAS_program_github
+conda env export --no-builds > env.yml
+```
+
+### ResolvePackageNotFoundが出た時の対処法
+
+例）
+```
+ResolvePackageNotFound : 
+      - xxxxxxx=12.0.0
+      - xxxxxxx=14.0.0
+```
+
+この場合、'=12.0.0'と'=14.0.0'を消すと対応するversionを見つけて補完してくれる
 
 # 実行方法
 
