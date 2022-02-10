@@ -14,4 +14,4 @@ data/*
 SubaruHSC/*
 !SubaruHSC/.gitkeep
 
-API/__pychache__/
+API/__pycache__/
