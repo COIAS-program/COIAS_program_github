@@ -11,7 +11,7 @@ def run_AstsearchR(size:int = 4):
     else:
         size = str(size)
         
-    os.chdir('../SubaruHSC')
-    subprocess.run(['../AstsearchR'],input=size,encoding='UTF-8')
+    os.chdir('/opt/SubaruHSC')
+    subprocess.run(['AstsearchR'],input=size,encoding='UTF-8')
     
     return{"status_code": 200}
