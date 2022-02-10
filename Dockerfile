@@ -49,4 +49,4 @@ ENV PATH $PATH:/opt/COIAS_program_github/findOrb
 #APIを作業ディレクトリとする
 WORKDIR /opt/COIAS_program_github/API
 
-ENTRYPOINT /root/miniconda3/envs/COIAS_program_github/bin/uvicorn main:app --reload
+ENTRYPOINT /root/miniconda3/envs/COIAS_program_github/bin/uvicorn main:app --host 0.0.0.0 --reload
