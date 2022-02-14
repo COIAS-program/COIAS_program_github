@@ -1,9 +1,11 @@
 FROM ubuntu:20.04
 
+LABEL author="Haruki Anbai" 
+
+SHELL ["/bin/bash", "-c"]
+
 #optを作業ディレクトリとする
 WORKDIR /opt
-
-LABEL author="Haruki Anbai" 
 
 #必要なパッケージをubuntuにインストール
 RUN apt update && apt install -y \
@@ -29,22 +31,28 @@ RUN git clone https://github.com/Mizunanari/COIAS_program_github.git && \
     cd COIAS_program_github && \    
     conda env create -f env.yml
 
+# conda activate COIAS_program_githubと同じ
+ENV CONDA_DEFAULT_ENV COIAS_program_github
+
 #condaのCOIAS_program_github環境下で、ビルド
-RUN bash &&\
-    . ~/.bashrc &&\
-    cd /opt/COIAS_program_github && \
-    chmod 700 ./* && \
-    chmod 700 ./findOrb/* && \
-    python setup12.py build_ext --inplace && \
-    cd findOrb && \
-    make -f linlunar.mak && \
+WORKDIR /opt/COIAS_program_github
+RUN chmod 700 ./* && \
+    chmod 700 ./findOrb/*
+
+# todo errorを握りつぶし ; exit 0
+RUN python setup12.py build_ext --inplace; exit 0
+
+# Cythonのビルド
+WORKDIR /opt/COIAS_program_github/findOrb
+RUN make -f linlunar.mak && \
     make -f linmake
     
-#COIAS_program_githubとfindOrbのPATHを通す
+# COIAS_program_githubとfindOrbのPATHを通す
 ENV PATH $PATH:/opt/COIAS_program_github
 ENV PATH $PATH:/opt/COIAS_program_github/findOrb
 
-#APIを作業ディレクトリとする
+# APIを作業ディレクトリとする
 WORKDIR /opt/COIAS_program_github/API
 
+# API server を開始
 ENTRYPOINT /root/miniconda3/envs/COIAS_program_github/bin/uvicorn main:app --host 0.0.0.0 --reload

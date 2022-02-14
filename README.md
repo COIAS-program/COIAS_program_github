@@ -37,7 +37,7 @@ docker run -it --name coias \
 -p 8000:8000 coias /bin/bash
 ```
 
-※ コードを変更した場合はキャッシュを使用しない
+※ Dockerfile以外のコードを変更した場合はキャッシュを使用しない
 
 ```
 docker build -t coias . --no-cache
