@@ -40,8 +40,6 @@ RUN . ~/.bashrc && \
     make -f linlunar.mak && \
     make -f linmake
     
-#ローカルディレクトリ内のテスト画像をUbuntuへコピー
-COPY ./SubaruHSC /opt/SubaruHSC
 #COIAS_program_githubとfindOrbのPATHを通す
 ENV PATH $PATH:/opt/COIAS_program_github
 ENV PATH $PATH:/opt/COIAS_program_github/findOrb
