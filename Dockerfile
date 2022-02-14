@@ -5,6 +5,8 @@ WORKDIR /opt
 
 LABEL author="Haruki Anbai" 
 
+SHELL ["bash"]
+
 #必要なパッケージをubuntuにインストール
 RUN apt update && apt install -y \
     git \
@@ -19,7 +21,7 @@ RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh &
     bash ./Miniconda3-latest-Linux-x86_64.sh -b && \
     ~/miniconda3/bin/conda init bash && \
     rm ./Miniconda3-latest-Linux-x86_64.sh && \
-    echo "conda activate COIAS_program_github" >> ~/.bashrc
+    echo "conda activate COIAS_program_github" >> ~/.bash_profile
 
 #miniconda3のPATHを通す
 ENV PATH $PATH:/root/miniconda3/bin
