@@ -35,7 +35,7 @@ RUN conda init bash && \
     exec bash -l
 
 #condaのCOIAS_program_github環境下で、ビルド
-RUN cd COIAS_program_github && \
+RUN cd /opt/COIAS_program_github && \
     chmod 700 ./* && \
     chmod 700 ./findOrb/* && \
     python setup12.py build_ext --inplace && \
