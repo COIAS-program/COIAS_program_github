@@ -5,7 +5,7 @@ WORKDIR /opt
 
 LABEL author="Haruki Anbai" 
 
-SHELL ["bash"]
+SHELL ["/bin/bash", "-l", "-c"]
 
 #必要なパッケージをubuntuにインストール
 RUN apt update && apt install -y \
