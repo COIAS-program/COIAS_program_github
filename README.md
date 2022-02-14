@@ -27,8 +27,20 @@ cd COIAS_program_github
 ```
 ### 4. Dockerfileをビルド、実行する
 ```
+cd COIAS_program_github
+
 docker build -t coias .
-docker run -it --name coias --mount type=bind,source="$(pwd)"/data,target=/root/.coias coias /bin/bash
+
+docker run -it --name coias \
+--mount type=bind,source="$(pwd)"/data,target=/root/.coias \
+--mount type=bind,source="$(pwd)"/SubaruHSC,target=/opt/SubaruHSC \
+-p 8000:8000 coias /bin/bash
+```
+
+※ コードを変更した場合はキャッシュを使用しない
+
+```
+docker build -t coias . --no-cache
 ```
 
 ### 5. コマンドラインで以下を実行
