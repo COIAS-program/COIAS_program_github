@@ -36,11 +36,8 @@ ENV CONDA_DEFAULT_ENV COIAS_program_github
 
 #condaのCOIAS_program_github環境下で、ビルド
 WORKDIR /opt/COIAS_program_github
-RUN chmod 700 ./* && \
-    chmod 700 ./findOrb/*
-
-# todo errorを握りつぶし ; exit 0
-RUN python setup12.py build_ext --inplace; exit 0
+RUN chmod -R 700  ./* \
+    python setup12.py build_ext --inplace
 
 # Cythonのビルド
 WORKDIR /opt/COIAS_program_github/findOrb
