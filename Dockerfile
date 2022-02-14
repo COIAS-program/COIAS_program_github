@@ -34,10 +34,16 @@ RUN git clone https://github.com/Mizunanari/COIAS_program_github.git && \
 # conda activate COIAS_program_githubと同じ
 ENV CONDA_DEFAULT_ENV COIAS_program_github
 
-#condaのCOIAS_program_github環境下で、ビルド
+# condaのCOIAS_program_github環境下で、ビルド
 WORKDIR /opt/COIAS_program_github
-RUN chmod -R 700  ./* \
-    python setup12.py build_ext --inplace
+
+# todo debug moduleを見る
+RUN conda list | grep numpy >> /root/log.txt
+
+RUN chmod -R 700  ./* && \
+    python setup12.py build_ext --inplace 2>> /root/log.txt ; exit 0
+
+    # todo errorを握りつぶす
 
 # Cythonのビルド
 WORKDIR /opt/COIAS_program_github/findOrb
