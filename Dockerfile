@@ -33,6 +33,7 @@ RUN git clone https://github.com/Mizunanari/COIAS_program_github.git && \
 
 #condaのCOIAS_program_github環境下で、ビルド
 RUN . ~/.bashrc && \
+    conda init bash && \
     conda activate COIAS_program_github && \
     cd COIAS_program_github && \
     chmod 700 ./* && \
