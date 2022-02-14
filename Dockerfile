@@ -37,13 +37,8 @@ ENV CONDA_DEFAULT_ENV COIAS_program_github
 # condaのCOIAS_program_github環境下で、ビルド
 WORKDIR /opt/COIAS_program_github
 
-# todo debug moduleを見る
-RUN conda list | grep numpy >> /root/log.txt
-
 RUN chmod -R 700  ./* && \
-    python setup12.py build_ext --inplace 2>> /root/log.txt ; exit 0
-
-    # todo errorを握りつぶす
+    /root/miniconda3/envs/COIAS_program_github/bin/python setup12.py build_ext --inplace
 
 # Cythonのビルド
 WORKDIR /opt/COIAS_program_github/findOrb
