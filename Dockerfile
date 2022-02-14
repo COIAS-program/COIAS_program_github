@@ -29,12 +29,9 @@ RUN git clone https://github.com/Mizunanari/COIAS_program_github.git && \
     cd COIAS_program_github && \    
     conda env create -f env.yml
 
-RUN conda init bash && \
-    exec bash -l
-
 #condaのCOIAS_program_github環境下で、ビルド
-RUN /bin/bash && \
-    cd /opt/COIAS_program_github && \
+RUN . ~/.bashrc && \
+    conda activate COIAS_program_github && \
     chmod 700 ./* && \
     chmod 700 ./findOrb/* && \
     python setup12.py build_ext --inplace && \
