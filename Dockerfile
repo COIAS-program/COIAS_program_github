@@ -32,7 +32,7 @@ RUN git clone https://github.com/Mizunanari/COIAS_program_github.git && \
     conda env create -f env.yml
 
 RUN conda init /bin/bash && \
-    exec bash -l -c
+    exec bash -l
 
 #condaのCOIAS_program_github環境下で、ビルド
 RUN cd COIAS_program_github && \
