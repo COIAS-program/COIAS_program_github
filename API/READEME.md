@@ -2,16 +2,10 @@
 
 [FastAPI](https://fastapi.tiangolo.com/ja/)
 
-## install
-
-```
-uvicorn main:app --host 0.0.0.0 --reload
-```
-
 ## uvicornの起動
 
 ```
-uvicorn main:app --reload
+uvicorn main:app --host 0.0.0.0 --reload
 ```
 
 ## アクセス
