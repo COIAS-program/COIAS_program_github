@@ -6,5 +6,5 @@
 	"service": "back-app",
 	"settings": {},
 	"runArgs": ["--entrypoint=\"\""],
-	// "extensions": ["ms-python.python","ms-azuretools.vscode-docker"],
+	"extensions": ["ms-python.python","ms-azuretools.vscode-docker"],
 }
