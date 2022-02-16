@@ -25,10 +25,6 @@ def run_AstsearchR(size:int = 4):
 @app.get("/disp")
 def get_disp():
 
-    res = ""
-    tmp_id = ""
-    tmp_data = []
-
     with open("/opt/SubaruHSC/disp.txt") as f:
 
         l = f.readline().split()
