@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -eu
 
 cd /opt/COIAS_program_github
 conda env create -f env.yml
