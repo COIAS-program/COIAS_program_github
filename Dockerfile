@@ -13,7 +13,16 @@ RUN apt update && apt install -y \
     wget \
     build-essential \
     libncurses-dev \
-    unzip
+    unzip \
+    language-pack-ja-base\
+    language-pack-ja\
+    locales
+
+#localeを日本語設定に変更
+RUN locale-gen ja_JP.UTF-8
+
+#言語を日本語に設定
+ENV LANG ja_JP.UTF-8
 
 #miniconda3をインストール
 RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && \

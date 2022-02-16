@@ -6,6 +6,5 @@
 	"service": "back-app",
 	"settings": {},
 	"extensions": ["ms-python.python,ms-azuretools.vscode-docker"],
-	"runArgs": ["--entrypoint=\"\""],
-	"onCreateCommand": ["apt install -y language-pack-ja-base language-pack-ja locales && locale-gen ja_JP.UTF-8 && echo \"export LANG=ja_JP.UTF-8\" >> ~/.bashrc && source ~/.bashrc"]
+	"runArgs": ["--entrypoint=\"\""]
 }
