@@ -5,6 +5,6 @@
 	"workspaceFolder": "/opt/COIAS_program_github",
 	"service": "back-app",
 	"settings": {},
-	"extensions": ["ms-python.python","ms-azuretools.vscode-docker"],
-	"runArgs": ["--entrypoint=\"\""]
+	"runArgs": ["--entrypoint=\"\""],
+	// "extensions": ["ms-python.python","ms-azuretools.vscode-docker"],
 }
