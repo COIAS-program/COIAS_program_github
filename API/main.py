@@ -27,7 +27,9 @@ def get_disp():
 
     with open("/opt/SubaruHSC/disp.txt") as f:
 
-        l = f.readline().split()
+        l = f.read().split()
+        # l = f.readline().split()
+        # l = f.readlines()
 
     return{"result":l}
 
