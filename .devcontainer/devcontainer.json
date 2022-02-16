@@ -1,15 +1,10 @@
 {
 	"name": "COIAS_program_github",
-
 	"context": "..",
-
 	"dockerComposeFile": "../../docker-compose.yml",
-	
 	"workspaceFolder": "/opt/COIAS_program_github",
-	
 	"service": "back-app",
-
 	"settings": {},
-	
-	"extensions": ["ms-python.python"]
+	"extensions": ["ms-python.python"],
+	"runArgs": ["--entorypoint=\"\""]
 }

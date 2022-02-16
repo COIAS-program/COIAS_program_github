@@ -5,7 +5,7 @@
 ## install
 
 ```
-conda install -c conda-forge fastapi uvicorn
+uvicorn main:app --host 0.0.0.0 --reload
 ```
 
 ## uvicornの起動
