@@ -22,9 +22,16 @@ def run_AstsearchR(size:int = 4):
     
     return{"status_code": 200}
 
-# @app.get("/disp")
-# def get_disp():
-#      with open(/opt/SubaruHSC/disp.txt) as f:
-#      l = f.readlines()
-#      print(type(l))
-#      print(l)
+@app.get("/disp")
+def get_disp():
+
+    res = ""
+    tmp_id = ""
+    tmp_data = []
+
+    with open("/opt/SubaruHSC/disp.txt") as f:
+
+        l = f.readline().split()
+
+    return{"result":l}
+
