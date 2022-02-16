@@ -1,3 +1,4 @@
+from unittest import result
 from fastapi import FastAPI,HTTPException
 import os
 import subprocess
@@ -26,10 +27,20 @@ def run_AstsearchR(size:int = 4):
 def get_disp():
 
     with open("/opt/SubaruHSC/disp.txt") as f:
-
         l = f.read().split()
-        # l = f.readline().split()
-        # l = f.readlines()
+
+    l = split_list(l,4)
 
     return{"result":l}
 
+
+def split_list(l, n):
+    """
+    リストをサブリストに分割する
+    :param l: リスト
+    :param n: サブリストの要素数
+    :return: 
+    """
+    for idx in range(0, len(l), n):
+        yield l[idx:idx + n]
+ 
