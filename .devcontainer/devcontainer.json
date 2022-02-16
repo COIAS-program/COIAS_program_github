@@ -6,5 +6,5 @@
 	"service": "back-app",
 	"settings": {},
 	"extensions": ["ms-python.python"],
-	"runArgs": ["--entorypoint=\"\""]
+	"runArgs": ["--entrypoint=\"\""]
 }
