@@ -20,14 +20,11 @@ dockerを使用することで、アプリ環境を自動でホストPCに増や
 ### Linux(例：ubuntu)の場合
 
 * docker engine
-* docker compose
 
 ubuntuの場合は下記のスクリプトが使用できる。
 dockerを使用する際に`sudo`が必要になる。
 
 [UbuntuにDockerEngineをインストールする| Dockerドキュメント](https://docs.docker.com/engine/install/ubuntu/#upgrade-docker-after-using-the-convenience-script)
-
-[Docker Compose のインストール — Docker-docs-ja 19.03 ドキュメント](https://docs.docker.jp/compose/install.html#linux-compose)
 
 ### 2. 任意のディレクトリで以下のコマンドを打つ
 
