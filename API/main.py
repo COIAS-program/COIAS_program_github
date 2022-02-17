@@ -1,15 +1,11 @@
-from unittest import result
-from fastapi import FastAPI,HTTPException
+from fastapi import FastAPI,HTTPException,UploadFile,File,Form
+from fastapi.responses import HTMLResponse
 import os
 import subprocess
+import shutil
+import pathlib
 
 app = FastAPI()
-
-@app.get("/test")
-def test():
-    print("test")
-
-    return{"hello": "world"}
 
 @app.put("/AstsearchR")
 def run_AstsearchR(size:int = 4):
@@ -43,4 +39,48 @@ def split_list(l, n):
     """
     for idx in range(0, len(l), n):
         yield l[idx:idx + n]
- 
+
+"""
+fastAPIのチュートリアルから
+
+https://fastapi.tiangolo.com/tutorial/request-files/#uploadfile
+https://anaconda.org/conda-forge/python-multipart
+"""
+
+@app.post("/uploadfiles/")
+async def create_upload_files(files: list[UploadFile]):
+
+    # pathlibでpathの操作
+    image_path = pathlib.Path("/opt/tmp_images")
+
+    # ディレクトリがなければつくる
+    image_path.mkdir(exist_ok=True)
+
+    # fileを保存
+    for file in files:
+
+        tmp_path = image_path/file.filename
+
+        try:
+            with tmp_path.open("wb") as buffer:
+                shutil.copyfileobj(file.file, buffer)
+                print(tmp_path)
+
+        finally:
+            file.file.close()
+
+    return {"tmp_folder":image_path.iterdir()}
+
+# ファイルアップロード確認用
+@app.get("/")
+async def main():
+    content = """
+<body>
+</form>
+<form action="/uploadfiles/" enctype="multipart/form-data" method="post">
+<input name="files" type="file" multiple>
+<input type="submit">
+</form>
+</body>
+    """
+    return HTMLResponse(content=content)
