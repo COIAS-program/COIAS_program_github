@@ -2,7 +2,7 @@
 	"name": "COIAS_program_github",
 	"context": "..",
 	"dockerComposeFile": "../../docker-compose.dev.yml",
-	"workspaceFolder": "/opt",
+	"workspaceFolder": "/opt/COIAS_program_github",
 	"service": "back-dev-app",
 	"settings": {},
 	"extensions": ["ms-python.python","ms-azuretools.vscode-docker"]
