@@ -9,9 +9,25 @@ dockerを使用することで、アプリ環境を自動でホストPCに増や
 
 [Docker](https://www.docker.com/)
 
-### 1. Docker Desktopのインストール
-   - <a href="https://www.docker.com/products/docker-desktop">Mac</a>
-   - <a href="https://docs.docker.com/desktop/windows/install/">Windows</a>
+### 1. Dockerのインストール
+
+### mac windownの場合
+
+* docker desktop
+
+[Docker Desktop for Mac and Windows | Docker](https://www.docker.com/products/docker-desktop)
+
+### Linux(例：ubuntu)の場合
+
+* docker engine
+* docker compose
+
+ubuntuの場合は下記のスクリプトが使用できる。
+dockerを使用する際に`sudo`が必要になる。
+
+[UbuntuにDockerEngineをインストールする| Dockerドキュメント](https://docs.docker.com/engine/install/ubuntu/#upgrade-docker-after-using-the-convenience-script)
+
+[Docker Compose のインストール — Docker-docs-ja 19.03 ドキュメント](https://docs.docker.jp/compose/install.html#linux-compose)
 
 ### 2. 任意のディレクトリで以下のコマンドを打つ
 
