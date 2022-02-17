@@ -1,34 +1,32 @@
-# 環境の構築方法
+# 環境構築手順
 
-## 目次
-- [検証したPC](#検証したPC)
-- 環境構築
-  - [Dockerを使用した場合](#Dockerを使用した場合)
-  - [PyCharmを利用した場合](#PyCharmを利用した場合)
-- [conda環境のymlへの書き出し方](#conda環境のymlへの書き出し方)
-- [実行方法](#実行方法)
+Dockerを使用し環境を構築する。
+ここではdocker-composeを使用しないが、特に理由のない場合は[aizulab/coias-docker-compose](https://github.com/aizulab/coias-docker-compose)を使用するとよい。
 
-## 検証したPC
-  
-機種ID:	MacBookPro11,3
-プロセッサ名:	クアッドコアIntel Core i7
-# 環境構築
+## dockerについて
 
-## Dockerを使用した場合
+dockerを使用することで、アプリ環境を自動でホストPCに増やせる。
+
+[Docker](https://www.docker.com/)
 
 ### 1. Docker Desktopのインストール
    - <a href="https://www.docker.com/products/docker-desktop">Mac</a>
    - <a href="https://docs.docker.com/desktop/windows/install/">Windows</a>
-### 2. 任意のディレクトリ(この場合は~/dev）配下にテスト画像の入ったディレクトリ(SubaruHSC)を配置する
-### 3. ~/devの中で以下のコマンドを打つ
+
+### 2. 任意のディレクトリで以下のコマンドを打つ
+
 ```
 git clone https://github.com/Mizunanari/COIAS_program_github.git
 cd COIAS_program_github
 ```
-### 4. Dockerfileをビルド、実行する
-```
-cd COIAS_program_github
 
+### 3. テスト画像の入ったディレクトリ(SubaruHSC)を配置する
+
+COIAS_program_github/SubaruHSCにテストようの画像などを配置する。
+
+### 4. Dockerfileをビルド、実行する
+
+```
 docker build -t coias .
 
 docker run -it --name coias \
@@ -37,181 +35,11 @@ docker run -it --name coias \
 -p 8000:8000 coias /bin/bash
 ```
 
-※ Dockerfile以外のコードを変更した場合はキャッシュを使用しない
-
-```
-docker build -t coias . --no-cache
-```
-
 ### 5. コマンドラインで以下を実行
+
 ```
 coias activate COIAS_program_github
 ```
-
-### 6. [実行方法](#実行方法)へ進む
-
-## PyCharmを利用した場合
-
-## IDE
-  
-[ダウンロード PyCharm：JetBrainsによるプロの開発者向けのPython IDE](https://www.jetbrains.com/ja-jp/pycharm/download/)
-
-## パッケージ管理
-  
-* [Miniconda — Conda documentation](https://docs.conda.io/en/latest/miniconda.html)
-
-* [Homebrew](https://brew.sh/index_ja)
-
-## 手順
-
-構築した手順。
-
-### brewを使用してwgetをインストール
-
-[Homebrew](https://brew.sh/index_ja)
-
-```brew install wget```
-
-### PyCharmをインストール
-
-[JetBrains Toolbox App](https://www.jetbrains.com/ja-jp/toolbox-app/)
-
-[PyCharm をインストールする | PyCharm](https://pleiades.io/help/pycharm/installation-guide.html)
-
-### minicondaをインストール
-
-[Miniconda — Conda documentation](https://docs.conda.io/en/latest/miniconda.html)
-
-### インストールされたパスを調べる
-
-```which conda```
-
-### プロジェクトを作成
-
-PyCharmよりconda環境にてプロジェクトを作成する
-
-```https://github.com/Mizunanari/COIAS_program_github.git```
-
-[Git リポジトリの設定 | PyCharm](https://pleiades.io/help/pycharm/set-up-a-git-repository.html#clone-repo)
-
-[Python プロジェクトを作成する | PyCharm](https://pleiades.io/help/pycharm/creating-empty-project.html)
-
-[Conda 仮想環境を構成する | PyCharm](https://pleiades.io/help/pycharm/conda-support-creating-conda-virtual-environment.html)
-
-/COIAS_program_path以下の全てのpythonスクリプトとシェルスクリプトにchmodで実行許可を与えておく。
-
-### パッケージのインストール
-
-パッケージ依存関係の解決を行う。
-
-### condaにチャンネルを追加
-
-condaのインストールに使用するチャンネルを追加する。
-tarminalから操作する。
-
-```zsh
-# 環境一覧
-conda info -e
-
-# 環境の切り替え
-conda activate COIAS_program_github
-
-# チャンネルの追加
-conda config --append channels conda-forge
-```
-
-環境の切り替えを行うことで、terminalの表示が(base)から(COIAS_program_github)に変わる。
-
-pythonのコード上で不足しているパッケージをインストール
-
-[パッケージのインストール、アンインストール、アップグレード | PyCharm](https://pleiades.io/help/pycharm/installing-uninstalling-and-upgrading-packages.html)
-
-pythonファイルのimportに赤下線が表示されているパッケージについて、カーソルをあわせパッケージをインストールする。
-これをすべてのpythonファイルで行う。
-
-下記はPyCharmからインストールできない。
-
-* Julia
-* PIL ([Pillow :: Anaconda.org](https://anaconda.org/anaconda/pillow))
-
-代わりにPillowをインストール。
-
-```conda install pillow```
-
-### condaにないパッケージ
-
-pipを使用してインストール
-
-```pip install julian```
-
-### EXtractorのインストール
-
-```conda install -c conda-forge astromatic-source-extractor```
-
-### AstsearchRをグローバルに設定
-
-~/.zshrcにprojectのpathを追記。環境によって異なる。
-
-```zsh
-# coias pj
-export PATH=$PATH:/Users/usuki/project/22/coias/COIAS_program_github
-export PATH=$PATH:/Users/usuki/project/22/coias/COIAS_program_github/findOrb
-```
-
-設定の読み込み
-
-```
-source .zshrc
-```
-
-### Cython等のビルド
-
-```https://github.com/Mizunanari/COIAS_program_github.git```をcloneしたファイルpathを```/COIAS_program_path```と記述している。
-
-1. cythonのビルド。/COIAS_program_pathにターミナルで移動し、下のコマンドを実行
-```
-python setup12.py build_ext --inplace
-```
-
-もし既に一度コンパイルしたことがあったら、実行ファイル達を削除する
-
-```
-rm mktraclet.c mktraclet.cpython-39-darwin.so
-```
-
-2. findOrbのコンパイル。/COIAS_program_path/findOrb にターミナルで移動して、以下のコマンドを打つことでコンパイルを実行する。デフォルトのコンパイラは g++ なので、無い場合はインストールするか、持っているc++用のコンパイラを linlunar.make, linmake ファイル中の CC=コンパイラ名 に指定する必要がある。
-
-もし既に一度コンパイルしたことがあったら、実行ファイル達を削除する
-
-```
-rm dos_findrm lunar.a
-rm *.o
-```
-
-3. make
-
-```
-make -f linlunar.mak
-make -f linmake
-```
-
-## conda環境のymlへの書き出し方
-
-```
-conda activate COIAS_program_github
-conda env export --no-builds > env.yml
-```
-
-### ResolvePackageNotFoundが出た時の対処法
-
-例）
-```
-ResolvePackageNotFound : 
-      - xxxxxxx=12.0.0
-      - xxxxxxx=14.0.0
-```
-
-この場合、'=12.0.0'と'=14.0.0'を消すと対応するversionを見つけて補完してくれる
 
 # 実行方法
 
@@ -244,3 +72,35 @@ ResolvePackageNotFound :
 ターミナルで```getMPCORB_and_mpc2edb```と打ち込んで同スクリプトを実行することで、 MPCからMPCORB.DATを~/.coiasにダウンロードし、さらに解析してedb形式に書き換える。
 
 ~/.coiasは初回の実行時に自動で作られる隠しディレクトリ。
+
+# 備考
+
+## コード変更時
+
+* docker build
+
+今後もしDockerfile以外のコードを変更した場合はキャッシュを使用しないでビルドを行う
+
+```
+docker build -t coias . --no-cache
+```
+
+## conda関係
+
+* conda環境のymlへの書き出し方
+
+```
+conda activate COIAS_program_github
+conda env export --no-builds > env.yml
+```
+
+* ResolvePackageNotFoundが出た時の対処法
+
+例）
+```
+ResolvePackageNotFound : 
+      - xxxxxxx=12.0.0
+      - xxxxxxx=14.0.0
+```
+
+この場合、'=12.0.0'と'=14.0.0'を消すと対応するversionを見つけて補完してくれる
