@@ -2,11 +2,17 @@
 
 [FastAPI](https://fastapi.tiangolo.com/ja/)
 
-## uvicornの起動
+## uvicornの起動コマンド
+
+### 手動実行
 
 ```
-uvicorn main:app --host 0.0.0.0 --reload
+uvicorn API.main:app --host 0.0.0.0 --reload
 ```
+
+### 開発コンテナの場合
+
+vscode「実行とデバック」より「Python:FastAPI」を実行
 
 ## アクセス
 
