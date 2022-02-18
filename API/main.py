@@ -76,7 +76,6 @@ async def create_upload_files(files: list[UploadFile]):
 async def main():
     content = """
 <body>
-</form>
 <form action="/uploadfiles/" enctype="multipart/form-data" method="post">
 <input name="files" type="file" multiple>
 <input type="submit">
