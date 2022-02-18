@@ -7,6 +7,4 @@
 	"settings": {},
 	"extensions": ["ms-python.python","ms-azuretools.vscode-docker"],
 	"onCreateCommand": "bash /opt/COIAS_program_github/Docker/setup.sh", //bind後にbuildなどを実行
-	"updateContentCommand": "apt install -y bash-completion", //vscodeで接続時にだけtab補完がほしかったので
-	"postCreateCommand": "echo \". /etc/bash_completion\" >> ~/.bashrc"
 }

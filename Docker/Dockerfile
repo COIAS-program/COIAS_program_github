@@ -8,21 +8,12 @@ SHELL ["/bin/bash", "-c"]
 WORKDIR /opt
 
 #必要なパッケージをubuntuにインストール
-RUN apt update && apt install -y \
-    git \
-    wget \
-    build-essential \
-    libncurses-dev \
-    unzip \
-    language-pack-ja-base\
-    language-pack-ja\
-    locales
-
-#localeを日本語設定に変更
-RUN locale-gen ja_JP.UTF-8
-
-#言語を日本語に設定
-ENV LANG ja_JP.UTF-8
+RUN apt update && apt install -y\
+    git\
+    wget\
+    build-essential\
+    libncurses-dev\
+    unzip
 
 #miniconda3をインストール
 RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
