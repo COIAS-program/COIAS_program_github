@@ -1,0 +1,41 @@
+name: base
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - brotlipy=0.7.0
+  - ca-certificates=2021.10.26
+  - certifi=2021.10.8
+  - cffi=1.15.0
+  - charset-normalizer=2.0.4
+  - conda=4.11.0
+  - conda-content-trust=0.1.1
+  - conda-package-handling=1.7.3
+  - cryptography=36.0.0
+  - idna=3.3
+  - libcxx=12.0.0
+  - libffi=3.3
+  - ncurses=6.3
+  - openssl=1.1.1m
+  - pip=21.2.4
+  - pycosat=0.6.3
+  - pycparser=2.21
+  - pyopenssl=21.0.0
+  - pysocks=1.7.1
+  - python=3.9.7
+  - python.app=3
+  - readline=8.1.2
+  - requests=2.27.1
+  - ruamel_yaml=0.15.100
+  - setuptools=58.0.4
+  - six=1.16.0
+  - sqlite=3.37.0
+  - tk=8.6.11
+  - tqdm=4.62.3
+  - tzdata=2021e
+  - urllib3=1.26.7
+  - wheel=0.37.1
+  - xz=5.2.5
+  - yaml=0.2.5
+  - zlib=1.2.11
+prefix: /Users/usuki/opt/miniconda3
