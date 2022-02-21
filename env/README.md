@@ -31,7 +31,19 @@ conda activate coias
 
 パソコン内の環境を一覧表示
 
-
 ```
 conda info -e
+```
+
+パッケージの確認
+
+```
+conda list
+```
+
+パッケージの書き出し
+
+```
+conda env export --no-builds > ./env/mac_env.yml
+conda env export --no-builds > ./env/ubuntu_env.yml
 ```
