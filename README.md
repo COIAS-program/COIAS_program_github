@@ -37,38 +37,4 @@ condaのパッケージを保管
 
 * findOrb
 
-Cプログラム
-
-# 備考
-
-## コマンド
-
-## コード変更時
-
-* docker build
-
-キャッシュを使用しないでビルドを行うコマンド
-
-```
-docker build -t coias . --no-cache
-```
-
-## conda関係
-
-* conda環境のymlへの書き出し方
-
-```
-conda activate COIAS_program_github
-conda env export --no-builds > env.yml
-```
-
-* ResolvePackageNotFoundが出た時の対処法
-
-例）
-```
-ResolvePackageNotFound : 
-      - xxxxxxx=12.0.0
-      - xxxxxxx=14.0.0
-```
-
-この場合、'=12.0.0'と'=14.0.0'を消すと対応するversionを見つけて補完してくれる
+天体処理に関するCプログラム群
