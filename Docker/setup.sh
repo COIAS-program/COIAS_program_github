@@ -4,7 +4,7 @@
 # 設定は.devcontainer/devcontainer.jsonに記載
 
 cd /opt/COIAS_program_github
-conda env create -n coias -f ./env/ubuntu.yml
+conda env create -n coias -f ./env/ubuntu_env.yml
 conda activate coias
 
 # condaのCOIAS_program_github環境下で、ビルド
