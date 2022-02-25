@@ -87,7 +87,7 @@ async def create_upload_files(files: list[UploadFile]):
         finally:
             file.file.close()
 
-    return {"tmp_folder":image_path.iterdir()}
+    return{"status_code": 200}
 
 # ファイルアップロード確認用
 @app.get("/")
