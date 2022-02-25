@@ -1,4 +1,4 @@
-from fastapi import FastAPI,HTTPException,UploadFile,File,Form
+from fastapi import FastAPI, HTTPException, UploadFile, File, Form
 from fastapi.responses import HTMLResponse
 import os
 import subprocess
@@ -26,16 +26,17 @@ app.add_middleware(
 
 
 @app.put("/AstsearchR")
-def run_AstsearchR(size:int = 4):
-    if (size != 2 and size != 4):
+def run_AstsearchR(size: int = 4):
+    if size != 2 and size != 4:
         raise HTTPException(status_code=400)
     else:
         size = str(size)
-        
-    os.chdir('/opt/SubaruHSC')
-    subprocess.run(['AstsearchR'],input=size,encoding='UTF-8')
-    
-    return{"status_code": 200}
+
+    os.chdir("/opt/SubaruHSC")
+    subprocess.run(["AstsearchR"], input=size, encoding="UTF-8")
+
+    return {"status_code": 200}
+
 
 @app.get("/disp")
 def get_disp():
@@ -43,9 +44,9 @@ def get_disp():
     with open("/opt/SubaruHSC/disp.txt") as f:
         l = f.read().split()
 
-    l = split_list(l,4)
+    l = split_list(l, 4)
 
-    return{"result":l}
+    return {"result": l}
 
 
 def split_list(l, n):
@@ -56,7 +57,8 @@ def split_list(l, n):
     :return: 
     """
     for idx in range(0, len(l), n):
-        yield l[idx:idx + n]
+        yield l[idx : idx + n]
+
 
 """
 fastAPIのチュートリアルから
@@ -64,6 +66,7 @@ fastAPIのチュートリアルから
 https://fastapi.tiangolo.com/tutorial/request-files/#uploadfile
 https://anaconda.org/conda-forge/python-multipart
 """
+
 
 @app.post("/uploadfiles/")
 async def create_upload_files(files: list[UploadFile]):
@@ -77,7 +80,7 @@ async def create_upload_files(files: list[UploadFile]):
     # fileを保存
     for file in files:
 
-        tmp_path = image_path/file.filename
+        tmp_path = image_path / file.filename
 
         try:
             with tmp_path.open("wb") as buffer:
@@ -87,7 +90,8 @@ async def create_upload_files(files: list[UploadFile]):
         finally:
             file.file.close()
 
-    return{"status_code": 200}
+    return {"status_code": 200}
+
 
 # ファイルアップロード確認用
 @app.get("/")

@@ -1,3 +1,5 @@
 {
-    "python.defaultInterpreterPath": "/root/miniconda3/envs/coias/bin/python"
+    "python.defaultInterpreterPath": "/root/miniconda3/envs/coias/bin/python",
+    "python.formatting.provider": "black",
+    "editor.formatOnSave": true
 }

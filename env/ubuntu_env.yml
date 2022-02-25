@@ -1,4 +1,4 @@
-name: COIAS_program_github
+name: coias
 channels:
   - conda-forge
   - defaults
@@ -207,3 +207,4 @@ dependencies:
   - zstd=1.4.9
   - pip:
     - julian==0.14
+prefix: /root/miniconda3/envs/coias
