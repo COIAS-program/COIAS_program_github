@@ -7,7 +7,7 @@ cd /opt/COIAS_program_github
 conda env create -n coias -f ./env/ubuntu_env.yml
 
 # coiasをデフォルトに設定
-echo "conda activate coias" >> ~/.bashrc
+sed -i "1iexport CONDA_DEFAULT_ENV=coias" ~/.bashrc
 . ~/.bashrc
 
 # condaのCOIAS_program_github環境下で、ビルド
