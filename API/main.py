@@ -4,11 +4,11 @@ import os
 import subprocess
 import shutil
 import pathlib
-
-
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+IMAGE_PATH = pathlib.Path("/opt/tmp_images")
 
 origins = [
     "http://localhost",
@@ -32,7 +32,7 @@ def run_AstsearchR(size: int = 4):
     else:
         size = str(size)
 
-    os.chdir("/opt/SubaruHSC")
+    os.chdir(IMAGE_PATH.as_posix())
     subprocess.run(["AstsearchR"], input=size, encoding="UTF-8")
 
     return {"status_code": 200}
@@ -40,10 +40,9 @@ def run_AstsearchR(size: int = 4):
 
 @app.get("/disp")
 def get_disp():
-
-    with open("/opt/SubaruHSC/disp.txt") as f:
+    disp_path = IMAGE_PATH / "disp.txt"
+    with disp_path.open as f:
         l = f.read().split()
-
     l = split_list(l, 4)
 
     return {"result": l}
