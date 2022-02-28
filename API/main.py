@@ -22,10 +22,26 @@ app.add_middleware(
 )
 
 
+@app.get("/", summary="ファイルアップロード確認用")
+async def main():
+    """
+    [localhost](http://localhost:8000/)
+    """
+    content = """
+<body>
+<form action="/uploadfiles/" enctype="multipart/form-data" method="post">
+<input name="files" type="file" multiple>
+<input type="submit">
+</form>
+</body>
+    """
+    return HTMLResponse(content=content)
+
+
 @app.get("/disp", summary="disp.txtを配列で取得")
 def get_disp():
     disp_path = IMAGE_PATH / "disp.txt"
-    with disp_path.open as f:
+    with disp_path.open() as f:
         l = f.read().split()
     l = split_list(l, 4)
 
@@ -143,5 +159,41 @@ def run_AstsearchR(size: int = 4):
 
     os.chdir(IMAGE_PATH.as_posix())
     subprocess.run(["AstsearchR"], input=size, encoding="UTF-8")
+
+    return {"status_code": 200}
+
+
+@app.put("/prempedit", summary="出力ファイル整形1", tags=["command"])
+def run_prempedit():
+
+    os.chdir(IMAGE_PATH.as_posix())
+    subprocess.run(["prempedit"])
+
+    return {"status_code": 200}
+
+
+@app.put("/prempedit3", summary="出力ファイル整形2", tags=["command"])
+def run_prempedit3():
+
+    os.chdir(IMAGE_PATH.as_posix())
+    subprocess.run(["python", "prempedit3.py"])
+
+    return {"status_code": 200}
+
+
+@app.put("/redisp", summary="再描画による確認作業", tags=["command"])
+def run_redisp():
+
+    os.chdir(IMAGE_PATH.as_posix())
+    subprocess.run(["redisp"])
+
+    return {"status_code": 200}
+
+
+@app.put("/Astsearch_afterReCOIAS", summary="再描画による確認作業", tags=["command"])
+def run_Astsearch_afterReCOIAS():
+
+    os.chdir(IMAGE_PATH.as_posix())
+    subprocess.run(["Astsearch_afterReCOIAS"])
 
     return {"status_code": 200}
