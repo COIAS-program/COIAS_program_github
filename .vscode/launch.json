@@ -1,7 +1,7 @@
 {
     "configurations": [
         {
-            "name": "Python: FastAPI",
+            "name": "COIAS FastAPI",
             "type": "python",
             "request": "launch",
             "module": "uvicorn",
@@ -12,6 +12,13 @@
                 "--reload"
             ],
             "jinja": true
-        }
+        },
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
     ]
 }

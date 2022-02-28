@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, UploadFile
+from fastapi import FastAPI, HTTPException, UploadFile, status
 from fastapi.responses import HTMLResponse
 import os
 import subprocess
@@ -38,12 +38,48 @@ async def main():
     return HTMLResponse(content=content)
 
 
-@app.get("/disp", summary="disp.txtを配列で取得")
+@app.get(
+    "/disp",
+    summary="disp.txtを配列で取得",
+    tags=["disp"],
+    status_code=status.HTTP_404_NOT_FOUND,
+)
 def get_disp():
     disp_path = IMAGE_PATH / "disp.txt"
+
+    if disp_path.is_file:
+        raise HTTPException(status_code=404)
+
     with disp_path.open() as f:
-        l = f.read().split()
-    l = split_list(l, 4)
+        l = f.read()
+
+    if l == "":
+        raise HTTPException(status_code=404)
+
+    l = split_list(l.split(), 4)
+
+    return {"result": l}
+
+
+@app.get(
+    "/redisp",
+    summary="redisp.txtを配列で取得",
+    tags=["disp"],
+    status_code=status.HTTP_404_NOT_FOUND,
+)
+def get_redisp():
+    redisp_path = IMAGE_PATH / "redisp.txt"
+
+    if redisp_path.is_file:
+        raise HTTPException(status_code=404)
+
+    with redisp_path.open() as f:
+        l = f.read()
+
+    if l == "":
+        raise HTTPException(status_code=404)
+
+    l = split_list(l.split(), 4)
 
     return {"result": l}
 
@@ -106,10 +142,15 @@ def run_preprocess():
 
 
 @app.put("/startsearch2R", summary="ビギニング&マスク", tags=["command"])
-def run_startsearch2R():
+def run_startsearch2R(binning: int = 4):
+
+    if binning != 2 and binning != 4:
+        raise HTTPException(status_code=400)
+    else:
+        binning = str(binning)
 
     os.chdir(IMAGE_PATH.as_posix())
-    subprocess.run(["startsearch2R"])
+    subprocess.run(["startsearch2R"], input=binning, encoding="UTF-8")
 
     return {"status_code": 200}
 
@@ -149,16 +190,21 @@ def run_astsearch_new():
     return {"status_code": 200}
 
 
-@app.put("/AstsearchR", summary="全自動処理", tags=["command"])
-def run_AstsearchR(size: int = 4):
+@app.put(
+    "/AstsearchR",
+    summary="全自動処理",
+    tags=["command"],
+    status_code=status.HTTP_400_BAD_REQUEST,
+)
+def run_AstsearchR(binning: int = 4):
 
-    if size != 2 and size != 4:
+    if binning != 2 and binning != 4:
         raise HTTPException(status_code=400)
     else:
-        size = str(size)
+        binning = str(binning)
 
     os.chdir(IMAGE_PATH.as_posix())
-    subprocess.run(["AstsearchR"], input=size, encoding="UTF-8")
+    subprocess.run(["AstsearchR"], input=binning, encoding="UTF-8")
 
     return {"status_code": 200}
 
