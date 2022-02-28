@@ -22,9 +22,8 @@ app.add_middleware(
 )
 
 
-@app.get("/disp")
+@app.get("/disp", summary="disp.txtを配列で取得")
 def get_disp():
-    """disp.txtを配列で取得"""
     disp_path = IMAGE_PATH / "disp.txt"
     with disp_path.open as f:
         l = f.read().split()
@@ -44,16 +43,12 @@ def split_list(l, n):
         yield l[idx : idx + n]
 
 
-@app.post("/uploadfiles/")
+@app.post("/uploadfiles/", summary="fileアップロード", tags=["files"])
 async def create_upload_files(files: list[UploadFile]):
     """
-    fileアップロード
-
-    fastAPIのチュートリアルから
-
-    https://fastapi.tiangolo.com/tutorial/request-files/#uploadfile
-
-    https://anaconda.org/conda-forge/python-multipart
+    __参考__
+    - [Request Files - FastAPI](https://fastapi.tiangolo.com/tutorial/request-files/#uploadfile)
+    - [フォーム – React](https://ja.reactjs.org/docs/forms.html)
     """
 
     # pathlibでpathの操作
@@ -78,36 +73,41 @@ async def create_upload_files(files: list[UploadFile]):
     return {"status_code": 200}
 
 
-@app.put("/preprocess")
+@app.delete("/deletefiles", summary="imageディレクトリ削除", tags=["files"])
+def run_deletefiles():
+
+    shutil.rmtree(IMAGE_PATH)
+
+    return {"status_code": 200}
+
+
+@app.put("/preprocess", summary="最新のMPCデータを取得", tags=["command"])
 def run_preprocess():
-    """最新のMPCデータを取得"""
 
     subprocess.run(["preprocess"])
 
     return {"status_code": 200}
 
 
-@app.put("/startsearch2R")
+@app.put("/startsearch2R", summary="ビギニング&マスク", tags=["command"])
 def run_startsearch2R():
-    """ビギニング&マスク"""
+
     os.chdir(IMAGE_PATH.as_posix())
     subprocess.run(["startsearch2R"])
 
     return {"status_code": 200}
 
 
-@app.put("/fits2png")
+@app.put("/fits2png", summary="画像変換", tags=["command"])
 def run_fits2png():
-    """画像変換"""
     os.chdir(IMAGE_PATH.as_posix())
     subprocess.run(["fits2png"])
 
     return {"status_code": 200}
 
 
-@app.put("/findsource")
+@app.put("/findsource", summary="光源検出", tags=["command"])
 def run_findsource():
-    """光源検出"""
 
     os.chdir(IMAGE_PATH.as_posix())
     subprocess.run(["findsource"])
@@ -115,27 +115,27 @@ def run_findsource():
     return {"status_code": 200}
 
 
-@app.put("/prempsearchC")
+@app.put("/prempsearchC", summary="精密軌道取得", tags=["command"])
 def run_prempsearchC():
-    """精密軌道取得"""
+
     os.chdir(IMAGE_PATH.as_posix())
     subprocess.run(["prempsearchC"])
 
     return {"status_code": 200}
 
 
-@app.put("/astsearch_new")
+@app.put("/astsearch_new", summary="自動検出", tags=["command"])
 def run_astsearch_new():
-    """自動検出"""
+
     os.chdir(IMAGE_PATH.as_posix())
     subprocess.run(["astsearch_new"])
 
     return {"status_code": 200}
 
 
-@app.put("/AstsearchR")
+@app.put("/AstsearchR", summary="全自動処理", tags=["command"])
 def run_AstsearchR(size: int = 4):
-    """全自動処理"""
+
     if size != 2 and size != 4:
         raise HTTPException(status_code=400)
     else:
