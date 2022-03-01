@@ -16,7 +16,7 @@ coias実行手順のまとめ
 * マスク画像引き
 * 高原検出
 * 視野周辺の測地小惑星取得
-* い動点対検出
+* 移動天体検出
 * 測光
 * pngファイル生成
 
@@ -72,7 +72,8 @@ mpc4.txtを複製 -> rename「send_mpc.txt」
 
 ## 最新MPCデータの取得
 
-* getMPCORB_and_mpc2edb
+* preprocess
+* ~~getMPCORB_and_mpc2edb~~
 
  たまに実行して最新のMPCのデータベースを取り込んでおく。 初回はスクリプト中で自動で実行されるので、しなくて良い。
  
