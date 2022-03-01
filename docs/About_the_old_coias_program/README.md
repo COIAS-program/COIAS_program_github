@@ -72,7 +72,8 @@ mpc4.txtを複製 -> rename「send_mpc.txt」
 
 ## 最新MPCデータの取得
 
-* getMPCORB_and_mpc2edb
+* preprocessz
+~~* getMPCORB_and_mpc2edb~~
 
  たまに実行して最新のMPCのデータベースを取り込んでおく。 初回はスクリプト中で自動で実行されるので、しなくて良い。
  
