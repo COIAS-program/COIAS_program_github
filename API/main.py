@@ -1,13 +1,23 @@
 from fastapi import FastAPI, HTTPException, UploadFile, status
 from fastapi.responses import HTMLResponse
+from fastapi.middleware.cors import CORSMiddleware
 import os
 import subprocess
 import shutil
 import pathlib
-from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI()
-IMAGE_PATH = pathlib.Path("/opt/tmp_images")
+tags_metadata = [
+    {"name": "disp", "description": "disp.txt及びredisp.txtを取得します。"},
+    {"name": "command", "description": "backendで実行されるコマンドAPIです。"},
+    {"name": "files", "description": "backendに送信する*.fitsファイル操作APIです。"},
+]
+app = FastAPI(
+    title="COIAS API",
+    description="coiasフロントアプリからアクセスされるAPIです。",
+    version="1.0",
+    openapi_tags=tags_metadata,
+)
+
 origins = [
     "http://localhost",
     "http://127.0.0.1:3000",
@@ -20,6 +30,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+IMAGE_PATH = pathlib.Path("/opt/tmp_images")
 
 
 @app.get("/", summary="ファイルアップロード確認用")
@@ -219,10 +231,10 @@ def run_prempedit():
 
 
 @app.put("/prempedit3", summary="出力ファイル整形2", tags=["command"])
-def run_prempedit3():
+def run_prempedit3(num: int):
 
     os.chdir(IMAGE_PATH.as_posix())
-    subprocess.run(["python", "prempedit3.py"])
+    subprocess.run(["prempedit3.py", str(num)])
 
     return {"status_code": 200}
 
@@ -241,5 +253,24 @@ def run_Astsearch_afterReCOIAS():
 
     os.chdir(IMAGE_PATH.as_posix())
     subprocess.run(["Astsearch_afterReCOIAS"])
+
+    return {"status_code": 200}
+
+
+@app.put("/prempedit", summary="MPCフォーマットに再整形", tags=["command"])
+def run_prempedit():
+
+    os.chdir(IMAGE_PATH.as_posix())
+    subprocess.run(["prempedit"])
+
+    return {"status_code": 200}
+
+
+@app.put("/rename", summary="「mpc4.txt」の複製と「send_mpc.txt」へrename", tags=["command"])
+def run_rename():
+
+    from_path = IMAGE_PATH / "mpc4.txt"
+    to_path = IMAGE_PATH / "send_mpc.txt"
+    shutil.copy(from_path, to_path)
 
     return {"status_code": 200}
