@@ -26,7 +26,7 @@ RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh &
 ENV PATH $PATH:/root/miniconda3/bin
 
 #クローンをして、COIASのための環境構築
-RUN git clone https://github.com/Mizunanari/COIAS_program_github.git --depth 1
+RUN git clone https://github.com/aizulab/COIAS_program_github.git --depth 1
 
 # condaのCOIAS_program_github環境下で、ビルド
 WORKDIR /opt/COIAS_program_github

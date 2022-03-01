@@ -70,7 +70,7 @@ PyCharmを利用します。
 
 PyCharmよりconda環境にてプロジェクトを作成する
 
-```https://github.com/Mizunanari/COIAS_program_github.git```
+```https://github.com/aizulab/COIAS_program_github.git```
 
 [Git リポジトリの設定 | PyCharm](https://pleiades.io/help/pycharm/set-up-a-git-repository.html#clone-repo)
 
@@ -146,7 +146,7 @@ source .zshrc
 
 ### Cython等のビルド
 
-```https://github.com/Mizunanari/COIAS_program_github.git```をcloneしたファイルpathを```/COIAS_program_path```と記述している。
+```https://github.com/aizulab/COIAS_program_github.git```をcloneしたファイルpathを```/COIAS_program_path```と記述している。
 
 1. cythonのビルド。/COIAS_program_pathにターミナルで移動し、下のコマンドを実行
 ```
