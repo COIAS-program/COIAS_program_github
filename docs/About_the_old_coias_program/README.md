@@ -22,9 +22,7 @@ coias実行手順のまとめ
 
 2. COIAS.py
 
-guiアプリの実行。
-disp.txtを読み込む。
-output
+guiアプリが実行。disp.txtを読み込む。outputで下記が出力される
 
 -> memo.txt
 

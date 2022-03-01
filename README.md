@@ -1,5 +1,3 @@
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-
 # COIAS_program_github
 
 ```
@@ -40,3 +38,9 @@ condaのパッケージを保管
 * findOrb
 
 天体処理に関するCプログラム群
+
+## コードフォーマッタとlint
+
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
+[PyCQA/flake8](https://github.com/PyCQA/flake8)

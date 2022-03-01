@@ -1,15 +1,16 @@
-from fastapi import FastAPI, HTTPException, UploadFile, status
-from fastapi.responses import HTMLResponse
-from fastapi.middleware.cors import CORSMiddleware
 import os
 import subprocess
 import shutil
 import pathlib
+from fastapi import FastAPI, HTTPException, UploadFile, status
+from fastapi.responses import HTMLResponse
+from fastapi.middleware.cors import CORSMiddleware
+
 
 tags_metadata = [
     {"name": "disp", "description": "disp.txt及びredisp.txtを取得します。"},
     {"name": "command", "description": "backendで実行されるコマンドAPIです。"},
-    {"name": "files", "description": "backendに送信する*.fitsファイル操作APIです。"},
+    {"name": "files", "description": "backendに送信するファイルの操作APIです。"},
 ]
 app = FastAPI(
     title="COIAS API",
@@ -59,18 +60,18 @@ async def main():
 def get_disp():
     disp_path = IMAGE_PATH / "disp.txt"
 
-    if disp_path.is_file:
+    if not disp_path.is_file():
         raise HTTPException(status_code=404)
 
     with disp_path.open() as f:
-        l = f.read()
+        result = f.read()
 
-    if l == "":
+    if result == "":
         raise HTTPException(status_code=404)
 
-    l = split_list(l.split(), 4)
+    result = split_list(result.split(), 4)
 
-    return {"result": l}
+    return {"result": result}
 
 
 @app.get(
@@ -81,39 +82,42 @@ def get_disp():
 )
 def get_redisp():
     redisp_path = IMAGE_PATH / "redisp.txt"
-
-    if redisp_path.is_file:
+    if not redisp_path.is_file():
         raise HTTPException(status_code=404)
 
     with redisp_path.open() as f:
-        l = f.read()
+        result = f.read()
 
-    if l == "":
+    if result == "":
         raise HTTPException(status_code=404)
 
-    l = split_list(l.split(), 4)
+    result = split_list(result.split(), 4)
 
-    return {"result": l}
+    return {"result": result}
 
 
-def split_list(l, n):
+def split_list(list, n):
     """
     リストをサブリストに分割する
     :param l: リスト
     :param n: サブリストの要素数
-    :return: 
+    :return:
     """
-    for idx in range(0, len(l), n):
-        yield l[idx : idx + n]
+    for idx in range(0, len(list), n):
+        yield list[idx : idx + n]
 
 
 @app.post("/uploadfiles/", summary="fileアップロード", tags=["files"])
 async def create_upload_files(files: list[UploadFile]):
     """
+    複数のファイルをアップロードする場合はこちらのページを使用すると良い
+
+    [localhost:8000](http://localhost:8000/)
+
     __参考__
     - [Request Files - FastAPI](https://fastapi.tiangolo.com/tutorial/request-files/#uploadfile)
-    - [フォーム – React](https://ja.reactjs.org/docs/forms.html)
-    """
+    - [フォーム - React](https://ja.reactjs.org/docs/forms.html)
+    """  # noqa:E501
 
     # pathlibでpathの操作
     image_path = pathlib.Path("/opt/tmp_images")
@@ -221,16 +225,16 @@ def run_AstsearchR(binning: int = 4):
     return {"status_code": 200}
 
 
-@app.put("/prempedit", summary="出力ファイル整形1", tags=["command"])
+@app.put("/prempedit", summary="MPCフォーマットに再整形", tags=["command"])
 def run_prempedit():
-
+    """"""
     os.chdir(IMAGE_PATH.as_posix())
     subprocess.run(["prempedit"])
 
     return {"status_code": 200}
 
 
-@app.put("/prempedit3", summary="出力ファイル整形2", tags=["command"])
+@app.put("/prempedit3", summary="出力ファイル整形", tags=["command"])
 def run_prempedit3(num: int):
 
     os.chdir(IMAGE_PATH.as_posix())
@@ -253,15 +257,6 @@ def run_Astsearch_afterReCOIAS():
 
     os.chdir(IMAGE_PATH.as_posix())
     subprocess.run(["Astsearch_afterReCOIAS"])
-
-    return {"status_code": 200}
-
-
-@app.put("/prempedit", summary="MPCフォーマットに再整形", tags=["command"])
-def run_prempedit():
-
-    os.chdir(IMAGE_PATH.as_posix())
-    subprocess.run(["prempedit"])
 
     return {"status_code": 200}
 
