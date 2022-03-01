@@ -11,6 +11,7 @@ tags_metadata = [
     {"name": "disp", "description": "disp.txt及びredisp.txtを取得します。"},
     {"name": "command", "description": "backendで実行されるコマンドAPIです。"},
     {"name": "files", "description": "backendに送信するファイルの操作APIです。"},
+    {"name": "test", "description": "test用に用意されたAPIです。"},
 ]
 app = FastAPI(
     title="COIAS API",
@@ -33,9 +34,10 @@ app.add_middleware(
 )
 
 IMAGE_PATH = pathlib.Path("/opt/tmp_images")
+SUBARU_PATH = pathlib.Path("/opt/SubaruHSC")
 
 
-@app.get("/", summary="ファイルアップロード確認用")
+@app.get("/", summary="ファイルアップロード確認用", tags=["test"])
 async def main():
     """
     [localhost](http://localhost:8000/)
@@ -49,6 +51,20 @@ async def main():
 </body>
     """
     return HTMLResponse(content=content)
+
+
+@app.post("/subaru_hsc_copy", summary="テストデータの準備", tags=["test"])
+def run_subaru_hsc_copy():
+    """
+    __テスト画像アップロード時間短縮用__
+
+    tmp_imagesを削除した後、SubaruHSCの中身をtmp_imagesにコピーします。  
+    あらかじめSubaruHSCにデータ(*.fits)を用意しておく必要があります。
+    """
+
+    if IMAGE_PATH.is_file():
+        shutil.rmtree(IMAGE_PATH)
+    shutil.copytree(SUBARU_PATH, IMAGE_PATH)
 
 
 @app.get(
@@ -119,16 +135,13 @@ async def create_upload_files(files: list[UploadFile]):
     - [フォーム - React](https://ja.reactjs.org/docs/forms.html)
     """  # noqa:E501
 
-    # pathlibでpathの操作
-    image_path = pathlib.Path("/opt/tmp_images")
-
     # ディレクトリがなければつくる
-    image_path.mkdir(exist_ok=True)
+    IMAGE_PATH.mkdir(exist_ok=True)
 
     # fileを保存
     for file in files:
 
-        tmp_path = image_path / file.filename
+        tmp_path = IMAGE_PATH / file.filename
 
         try:
             with tmp_path.open("wb") as buffer:
@@ -144,7 +157,8 @@ async def create_upload_files(files: list[UploadFile]):
 @app.delete("/deletefiles", summary="imageディレクトリ削除", tags=["files"])
 def run_deletefiles():
 
-    shutil.rmtree(IMAGE_PATH)
+    if not IMAGE_PATH.is_file():
+        shutil.rmtree(IMAGE_PATH)
 
     return {"status_code": 200}
 
@@ -173,6 +187,7 @@ def run_startsearch2R(binning: int = 4):
 
 @app.put("/fits2png", summary="画像変換", tags=["command"])
 def run_fits2png():
+    """未実装？"""
     os.chdir(IMAGE_PATH.as_posix())
     subprocess.run(["fits2png"])
 
