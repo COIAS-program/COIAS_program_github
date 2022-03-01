@@ -59,3 +59,6 @@ Modify prempsearchC (Change the criteria of division into numbered or karifugo.)
 
 2021-12-24 Natsuho Maeda
 Combine binning2R.py and binng3R.py to binning.py. Add a function to check existence of FLUXMAG0 in header.
+
+2022-1-14 Natsuho Maeda
+Modify getinfo_numbered2D.py (change data type of tmp7 into numpy.ndarray when declaring)

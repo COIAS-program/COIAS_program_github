@@ -14,12 +14,12 @@ from astroquery.jplhorizons import Horizons
 path_name = os.getcwd()
 
 # read scidata
-img_list = sorted(glob.glob('warp[1-5]_bin.fits'))
+img_list = sorted(glob.glob("warp[1-5]_bin.fits"))
 
 time_list = []
 for i in range(len(img_list)):
     scidata = fits.open(img_list[i])
-    jd = scidata[0].header['JD']
+    jd = scidata[0].header["JD"]
     time_list.append(jd)
 
 # time_list
@@ -31,7 +31,7 @@ tmp4 = open(tmp2, "r")
 name1 = tmp4.readlines()
 name_list = []
 for i in name1:
-    name_list.append(i.rstrip('\n'))
+    name_list.append(i.rstrip("\n"))
 # time
 # time1 = time_list[0]
 t1 = time.time()
@@ -44,8 +44,11 @@ nn = len(name_list)
 def getinfo(x):
     #    print(name_list[x])
     radec = []
-    radec.append(Horizons(id=name_list[x], location='568', epochs=time_list2[0:5]).ephemerides()[
-                     'targetname', 'datetime_jd', 'RA', 'DEC', 'V'])
+    radec.append(
+        Horizons(id=name_list[x], location="568", epochs=time_list2[0:5]).ephemerides()[
+            "targetname", "datetime_jd", "RA", "DEC", "V"
+        ]
+    )
     return radec
 
 
@@ -67,11 +70,16 @@ for i1 in range(nn):
 
 tmp6 = temporary.reshape(nn * 5, 5)
 ####################################################
-tmp7 = []
+# tmp7 =[]
+tmp7 = np.empty(0)
+
 for i in range(len(img_list)):
     for k in range(len(tmp6)):
         #        print(tmp6[k,1],time_list2[i],i,k)
-        if tmp6[k, 1] - 0.0000001 < time_list2[i] and tmp6[k, 1] + 0.000001 > time_list2[i]:
+        if (
+            tmp6[k, 1] - 0.0000001 < time_list2[i]
+            and tmp6[k, 1] + 0.000001 > time_list2[i]
+        ):
             #                   print(tmp6[k],file_list[i])
             tmp7 = np.append(tmp7, tmp6[k])
             # tmp7 = np.append(tmp7,file_list[i])
@@ -84,7 +92,7 @@ for l in range(len(tmp8)):
     tmp11 = re.sub(r"[a-zA-Z\']", "", tmp9)  # remove name
     tmp12 = tmp11.rstrip()
     tmp8[l, 0] = tmp12
-np.savetxt('numbered_new2B.txt', tmp8, fmt='%s')
+np.savetxt("numbered_new2B.txt", tmp8, fmt="%s")
 t2 = time.time()
 elapsed_time = t2 - t1
 print("getinfo numbered, Elapsed time:", elapsed_time)
