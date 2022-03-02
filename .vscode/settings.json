@@ -6,7 +6,7 @@
     //flake8の設定
     "python.linting.pylintEnabled": false,
     "python.linting.enabled": true,
-    "python.linting.flake8Path": "/root/miniconda3/bin/flake8",
+    "python.linting.flake8Path": "/root/miniconda3/envs/coias/bin/flake8",
     "python.linting.flake8Enabled": true,
     "python.linting.flake8Args": [
         "--max-line-length",
