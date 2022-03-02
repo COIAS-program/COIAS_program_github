@@ -33,8 +33,7 @@ WORKDIR /opt/COIAS_program_github
 RUN conda env create -n coias -f ./env/ubuntu_env.yml
 
 # conda activate coiasと同じ
-ENV CONDA_DEFAULT_ENV coias
-RUN . ~/.bashrc
+SHELL ["conda", "run", "-n", "coias", "/bin/bash", "-c"]
 
 RUN chmod -R 700  ./* && \
     /root/miniconda3/envs/COIAS_program_github/bin/python setup12.py build_ext --inplace

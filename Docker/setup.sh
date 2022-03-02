@@ -3,12 +3,13 @@
 # Dockerfile.devの実行後、コンテナ起動直後に実行される（bind後に処理を行うため）
 # 設定は.devcontainer/devcontainer.jsonに記載
 
+conda activate coias
+
 cd /opt/COIAS_program_github
 conda env create -n coias -f ./env/ubuntu_env.yml
 
 # coiasをデフォルトに設定
-sed -i "1iexport CONDA_DEFAULT_ENV=coias" ~/.bashrc
-. ~/.bashrc
+echo "conda activate coias" >> ~/.bashrc
 
 # condaのCOIAS_program_github環境下で、ビルド
 chmod -R 700 /opt/COIAS_program_github
