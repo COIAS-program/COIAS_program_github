@@ -6,3 +6,5 @@ do
     echo $var
     git update-index --assume-unchanged $var
 done
+
+# https://qiita.com/yakimeron/items/f308368c5949b485e50f
