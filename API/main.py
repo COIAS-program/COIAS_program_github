@@ -135,7 +135,7 @@ async def create_upload_files(files: list[UploadFile]):
     return JSONResponse(status_code=status.HTTP_200_OK)
 
 
-@app.delete("/deletefiles", summary="tmp_filesディレクトリおよびtmp_image/*の削除", tags=["files"])
+@app.delete("/deletefiles", summary="tmp_filesおよびtmp_imageの中身を削除", tags=["files"])
 def run_deletefiles():
 
     for f in FILES_PATH.glob("*"):
