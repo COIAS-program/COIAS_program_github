@@ -157,9 +157,11 @@ def run_deletefiles():
     return {"status_code": 200}
 
 
-@app.put("/copy", summary="tmp_filesからtmp_imageへ、png画像コピー", tags=["files"])
+@app.put("/copy", summary="「tmp_files」から「tmp_image」へpng画像コピー", tags=["files"])
 def run_copy():
-
+    """
+    「tmp_image」にあるpng画像はnginxによって配信されます。
+    """
     for p in FILES_PATH.glob("*.png"):
         if p.is_file():
             shutil.copy(p, IMAGES_PATH)
