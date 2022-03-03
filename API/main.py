@@ -33,7 +33,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-IMAGE_PATH = pathlib.Path("/opt/tmp_images")
+IMAGES_PATH = pathlib.Path("/opt/tmp_images")
+FILES_PATH = pathlib.Path("/opt/tmp_files")
 SUBARU_PATH = pathlib.Path("/opt/SubaruHSC")
 
 
@@ -56,15 +57,15 @@ async def main():
 @app.post("/subaru_hsc_copy", summary="テストデータの準備", tags=["test"])
 def run_subaru_hsc_copy():
     """
-    __テスト画像アップロード時間短縮用__
+    __テストデータアップロード時間短縮用__
 
-    tmp_imagesを削除した後、SubaruHSCの中身をtmp_imagesにコピーします。  
+    tmp_filesを削除した後、SubaruHSCの中身をtmp_filesにコピーします。  
     あらかじめSubaruHSCにデータ(*.fits)を用意しておく必要があります。
     """  # noqa:W291
 
-    if IMAGE_PATH.is_file():
-        shutil.rmtree(IMAGE_PATH)
-    shutil.copytree(SUBARU_PATH, IMAGE_PATH)
+    if FILES_PATH.is_file():
+        shutil.rmtree(FILES_PATH)
+    shutil.copytree(SUBARU_PATH, FILES_PATH)
 
 
 @app.get(
@@ -74,7 +75,7 @@ def run_subaru_hsc_copy():
     status_code=status.HTTP_404_NOT_FOUND,
 )
 def get_disp():
-    disp_path = IMAGE_PATH / "disp.txt"
+    disp_path = FILES_PATH / "disp.txt"
 
     if not disp_path.is_file():
         raise HTTPException(status_code=404)
@@ -97,7 +98,7 @@ def get_disp():
     status_code=status.HTTP_404_NOT_FOUND,
 )
 def get_redisp():
-    redisp_path = IMAGE_PATH / "redisp.txt"
+    redisp_path = FILES_PATH / "redisp.txt"
     if not redisp_path.is_file():
         raise HTTPException(status_code=404)
 
@@ -110,17 +111,6 @@ def get_redisp():
     result = split_list(result.split(), 4)
 
     return {"result": result}
-
-
-def split_list(list, n):
-    """
-    リストをサブリストに分割する
-    :param l: リスト
-    :param n: サブリストの要素数
-    :return:
-    """
-    for idx in range(0, len(list), n):
-        yield list[idx : idx + n]
 
 
 @app.post("/uploadfiles/", summary="fileアップロード", tags=["files"])
@@ -136,12 +126,12 @@ async def create_upload_files(files: list[UploadFile]):
     """  # noqa:E501
 
     # ディレクトリがなければつくる
-    IMAGE_PATH.mkdir(exist_ok=True)
+    FILES_PATH.mkdir(exist_ok=True)
 
     # fileを保存
     for file in files:
 
-        tmp_path = IMAGE_PATH / file.filename
+        tmp_path = FILES_PATH / file.filename
 
         try:
             with tmp_path.open("wb") as buffer:
@@ -154,11 +144,25 @@ async def create_upload_files(files: list[UploadFile]):
     return {"status_code": 200}
 
 
-@app.delete("/deletefiles", summary="imageディレクトリ削除", tags=["files"])
+@app.delete("/deletefiles", summary="tmp_filesディレクトリおよびtmp_image/*の削除", tags=["files"])
 def run_deletefiles():
 
-    if not IMAGE_PATH.is_file():
-        shutil.rmtree(IMAGE_PATH)
+    if FILES_PATH.is_file():
+        shutil.rmtree(FILES_PATH)
+
+    for f in IMAGES_PATH.glob("*"):
+        if f.is_file:
+            f.unlink()
+
+    return {"status_code": 200}
+
+
+@app.put("/copy", summary="tmp_filesからtmp_imageへ、png画像コピー", tags=["files"])
+def run_copy():
+
+    for p in FILES_PATH.glob("*.png"):
+        if p.is_file():
+            shutil.copy(p, IMAGES_PATH)
 
     return {"status_code": 200}
 
@@ -179,7 +183,7 @@ def run_startsearch2R(binning: int = 4):
     else:
         binning = str(binning)
 
-    os.chdir(IMAGE_PATH.as_posix())
+    os.chdir(FILES_PATH.as_posix())
     subprocess.run(["startsearch2R"], input=binning, encoding="UTF-8")
 
     return {"status_code": 200}
@@ -188,7 +192,7 @@ def run_startsearch2R(binning: int = 4):
 @app.put("/fits2png", summary="画像変換", tags=["command"])
 def run_fits2png():
     """未実装？"""
-    os.chdir(IMAGE_PATH.as_posix())
+    os.chdir(FILES_PATH.as_posix())
     subprocess.run(["fits2png"])
 
     return {"status_code": 200}
@@ -197,7 +201,7 @@ def run_fits2png():
 @app.put("/findsource", summary="光源検出", tags=["command"])
 def run_findsource():
 
-    os.chdir(IMAGE_PATH.as_posix())
+    os.chdir(FILES_PATH.as_posix())
     subprocess.run(["findsource"])
 
     return {"status_code": 200}
@@ -206,7 +210,7 @@ def run_findsource():
 @app.put("/prempsearchC", summary="精密軌道取得", tags=["command"])
 def run_prempsearchC():
 
-    os.chdir(IMAGE_PATH.as_posix())
+    os.chdir(FILES_PATH.as_posix())
     subprocess.run(["prempsearchC"])
 
     return {"status_code": 200}
@@ -215,7 +219,7 @@ def run_prempsearchC():
 @app.put("/astsearch_new", summary="自動検出", tags=["command"])
 def run_astsearch_new():
 
-    os.chdir(IMAGE_PATH.as_posix())
+    os.chdir(FILES_PATH.as_posix())
     subprocess.run(["astsearch_new"])
 
     return {"status_code": 200}
@@ -234,7 +238,7 @@ def run_AstsearchR(binning: int = 4):
     else:
         binning = str(binning)
 
-    os.chdir(IMAGE_PATH.as_posix())
+    os.chdir(FILES_PATH.as_posix())
     subprocess.run(["AstsearchR"], input=binning, encoding="UTF-8")
 
     return {"status_code": 200}
@@ -243,7 +247,7 @@ def run_AstsearchR(binning: int = 4):
 @app.put("/prempedit", summary="MPCフォーマットに再整形", tags=["command"])
 def run_prempedit():
     """"""
-    os.chdir(IMAGE_PATH.as_posix())
+    os.chdir(FILES_PATH.as_posix())
     subprocess.run(["prempedit"])
 
     return {"status_code": 200}
@@ -252,7 +256,7 @@ def run_prempedit():
 @app.put("/prempedit3", summary="出力ファイル整形", tags=["command"])
 def run_prempedit3(num: int):
 
-    os.chdir(IMAGE_PATH.as_posix())
+    os.chdir(FILES_PATH.as_posix())
     subprocess.run(["prempedit3.py", str(num)])
 
     return {"status_code": 200}
@@ -261,7 +265,7 @@ def run_prempedit3(num: int):
 @app.put("/redisp", summary="再描画による確認作業", tags=["command"])
 def run_redisp():
 
-    os.chdir(IMAGE_PATH.as_posix())
+    os.chdir(FILES_PATH.as_posix())
     subprocess.run(["redisp"])
 
     return {"status_code": 200}
@@ -270,7 +274,7 @@ def run_redisp():
 @app.put("/Astsearch_afterReCOIAS", summary="再描画による確認作業", tags=["command"])
 def run_Astsearch_afterReCOIAS():
 
-    os.chdir(IMAGE_PATH.as_posix())
+    os.chdir(FILES_PATH.as_posix())
     subprocess.run(["Astsearch_afterReCOIAS"])
 
     return {"status_code": 200}
@@ -279,8 +283,19 @@ def run_Astsearch_afterReCOIAS():
 @app.put("/rename", summary="「mpc4.txt」の複製と「send_mpc.txt」へrename", tags=["command"])
 def run_rename():
 
-    from_path = IMAGE_PATH / "mpc4.txt"
-    to_path = IMAGE_PATH / "send_mpc.txt"
+    from_path = FILES_PATH / "mpc4.txt"
+    to_path = FILES_PATH / "send_mpc.txt"
     shutil.copy(from_path, to_path)
 
     return {"status_code": 200}
+
+
+def split_list(list, n):
+    """
+    リストをサブリストに分割する
+    :param l: リスト
+    :param n: サブリストの要素数
+    :return:
+    """
+    for idx in range(0, len(list), n):
+        yield list[idx : idx + n]
