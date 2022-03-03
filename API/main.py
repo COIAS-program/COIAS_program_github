@@ -3,7 +3,7 @@ import subprocess
 import shutil
 import pathlib
 from fastapi import FastAPI, HTTPException, UploadFile, status
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 
@@ -16,7 +16,7 @@ tags_metadata = [
 app = FastAPI(
     title="COIAS API",
     description="coiasフロントアプリからアクセスされるAPIです。",
-    version="1.0",
+    version="0.2.0",
     openapi_tags=tags_metadata,
 )
 
@@ -33,9 +33,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-IMAGES_PATH = pathlib.Path("/opt/tmp_images")
-FILES_PATH = pathlib.Path("/opt/tmp_files")
-SUBARU_PATH = pathlib.Path("/opt/SubaruHSC")
+IMAGES_PATH = pathlib.Path("/opt/tmp_images/")
+FILES_PATH = pathlib.Path("/opt/tmp_files/")
+SUBARU_PATH = pathlib.Path("/opt/COIAS_program_github/SubaruHSC/")
 
 
 @app.get("/", summary="ファイルアップロード確認用", tags=["test"])
@@ -63,17 +63,14 @@ def run_subaru_hsc_copy():
     あらかじめSubaruHSCにデータ(*.fits)を用意しておく必要があります。
     """  # noqa:W291
 
-    if FILES_PATH.is_file():
+    if FILES_PATH.is_dir():
         shutil.rmtree(FILES_PATH)
     shutil.copytree(SUBARU_PATH, FILES_PATH)
 
+    return JSONResponse(status_code=status.HTTP_200_OK)
 
-@app.get(
-    "/disp",
-    summary="disp.txtを配列で取得",
-    tags=["disp"],
-    status_code=status.HTTP_404_NOT_FOUND,
-)
+
+@app.get("/disp", summary="disp.txtを配列で取得", tags=["disp"])
 def get_disp():
     disp_path = FILES_PATH / "disp.txt"
 
@@ -91,12 +88,7 @@ def get_disp():
     return {"result": result}
 
 
-@app.get(
-    "/redisp",
-    summary="redisp.txtを配列で取得",
-    tags=["disp"],
-    status_code=status.HTTP_404_NOT_FOUND,
-)
+@app.get("/redisp", summary="redisp.txtを配列で取得", tags=["disp"])
 def get_redisp():
     redisp_path = FILES_PATH / "redisp.txt"
     if not redisp_path.is_file():
@@ -110,7 +102,7 @@ def get_redisp():
 
     result = split_list(result.split(), 4)
 
-    return {"result": result}
+    return JSONResponse(status_code=status.HTTP_200_OK)
 
 
 @app.post("/uploadfiles/", summary="fileアップロード", tags=["files"])
@@ -136,25 +128,25 @@ async def create_upload_files(files: list[UploadFile]):
         try:
             with tmp_path.open("wb") as buffer:
                 shutil.copyfileobj(file.file, buffer)
-                print(tmp_path)
 
         finally:
             file.file.close()
 
-    return {"status_code": 200}
+    return JSONResponse(status_code=status.HTTP_200_OK)
 
 
 @app.delete("/deletefiles", summary="tmp_filesディレクトリおよびtmp_image/*の削除", tags=["files"])
 def run_deletefiles():
 
-    if FILES_PATH.is_file():
-        shutil.rmtree(FILES_PATH)
-
-    for f in IMAGES_PATH.glob("*"):
+    for f in FILES_PATH.glob("*"):
         if f.is_file:
             f.unlink()
 
-    return {"status_code": 200}
+    for f in IMAGES_PATH.glob("*.png"):
+        if f.is_file:
+            f.unlink()
+
+    return JSONResponse(status_code=status.HTTP_200_OK)
 
 
 @app.put("/copy", summary="「tmp_files」から「tmp_image」へpng画像コピー", tags=["files"])
@@ -166,7 +158,7 @@ def run_copy():
         if p.is_file():
             shutil.copy(p, IMAGES_PATH)
 
-    return {"status_code": 200}
+    return JSONResponse(status_code=status.HTTP_200_OK)
 
 
 @app.put("/preprocess", summary="最新のMPCデータを取得", tags=["command"])
@@ -174,7 +166,7 @@ def run_preprocess():
 
     subprocess.run(["preprocess"])
 
-    return {"status_code": 200}
+    return JSONResponse(status_code=status.HTTP_200_OK)
 
 
 @app.put("/startsearch2R", summary="ビギニング&マスク", tags=["command"])
@@ -188,7 +180,7 @@ def run_startsearch2R(binning: int = 4):
     os.chdir(FILES_PATH.as_posix())
     subprocess.run(["startsearch2R"], input=binning, encoding="UTF-8")
 
-    return {"status_code": 200}
+    return JSONResponse(status_code=status.HTTP_200_OK)
 
 
 @app.put("/fits2png", summary="画像変換", tags=["command"])
@@ -197,7 +189,7 @@ def run_fits2png():
     os.chdir(FILES_PATH.as_posix())
     subprocess.run(["fits2png"])
 
-    return {"status_code": 200}
+    return JSONResponse(status_code=status.HTTP_200_OK)
 
 
 @app.put("/findsource", summary="光源検出", tags=["command"])
@@ -206,7 +198,7 @@ def run_findsource():
     os.chdir(FILES_PATH.as_posix())
     subprocess.run(["findsource"])
 
-    return {"status_code": 200}
+    return JSONResponse(status_code=status.HTTP_200_OK)
 
 
 @app.put("/prempsearchC", summary="精密軌道取得", tags=["command"])
@@ -215,7 +207,7 @@ def run_prempsearchC():
     os.chdir(FILES_PATH.as_posix())
     subprocess.run(["prempsearchC"])
 
-    return {"status_code": 200}
+    return JSONResponse(status_code=status.HTTP_200_OK)
 
 
 @app.put("/astsearch_new", summary="自動検出", tags=["command"])
@@ -224,7 +216,7 @@ def run_astsearch_new():
     os.chdir(FILES_PATH.as_posix())
     subprocess.run(["astsearch_new"])
 
-    return {"status_code": 200}
+    return JSONResponse(status_code=status.HTTP_200_OK)
 
 
 @app.put(
@@ -243,7 +235,7 @@ def run_AstsearchR(binning: int = 4):
     os.chdir(FILES_PATH.as_posix())
     subprocess.run(["AstsearchR"], input=binning, encoding="UTF-8")
 
-    return {"status_code": 200}
+    return JSONResponse(status_code=status.HTTP_200_OK)
 
 
 @app.put("/prempedit", summary="MPCフォーマットに再整形", tags=["command"])
@@ -252,7 +244,7 @@ def run_prempedit():
     os.chdir(FILES_PATH.as_posix())
     subprocess.run(["prempedit"])
 
-    return {"status_code": 200}
+    return JSONResponse(status_code=status.HTTP_200_OK)
 
 
 @app.put("/prempedit3", summary="出力ファイル整形", tags=["command"])
@@ -261,7 +253,7 @@ def run_prempedit3(num: int):
     os.chdir(FILES_PATH.as_posix())
     subprocess.run(["prempedit3.py", str(num)])
 
-    return {"status_code": 200}
+    return JSONResponse(status_code=status.HTTP_200_OK)
 
 
 @app.put("/redisp", summary="再描画による確認作業", tags=["command"])
@@ -270,7 +262,7 @@ def run_redisp():
     os.chdir(FILES_PATH.as_posix())
     subprocess.run(["redisp"])
 
-    return {"status_code": 200}
+    return JSONResponse(status_code=status.HTTP_200_OK)
 
 
 @app.put("/Astsearch_afterReCOIAS", summary="再描画による確認作業", tags=["command"])
@@ -279,7 +271,7 @@ def run_Astsearch_afterReCOIAS():
     os.chdir(FILES_PATH.as_posix())
     subprocess.run(["Astsearch_afterReCOIAS"])
 
-    return {"status_code": 200}
+    return JSONResponse(status_code=status.HTTP_200_OK)
 
 
 @app.put("/rename", summary="「mpc4.txt」の複製と「send_mpc.txt」へrename", tags=["command"])
@@ -289,7 +281,7 @@ def run_rename():
     to_path = FILES_PATH / "send_mpc.txt"
     shutil.copy(from_path, to_path)
 
-    return {"status_code": 200}
+    return JSONResponse(status_code=status.HTTP_200_OK)
 
 
 def split_list(list, n):
