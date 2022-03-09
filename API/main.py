@@ -161,6 +161,18 @@ def run_copy():
     return JSONResponse(status_code=status.HTTP_200_OK)
 
 
+@app.get("/public_images", summary="nginxにbindされたディレクトリに存在するpngのリスト", tags=["files"])
+def run_public_images():
+    """
+    ファイルのリストを配列で返却する。
+    """
+    file_list = []
+    for p in IMAGES_PATH.glob("*.png"):
+        file_list.append(p.name)
+
+    return {"result": file_list}
+
+
 @app.put("/preprocess", summary="最新のMPCデータを取得", tags=["command"])
 def run_preprocess():
 
