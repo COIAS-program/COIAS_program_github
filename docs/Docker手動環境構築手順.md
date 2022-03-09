@@ -40,7 +40,7 @@ COIAS_program_github/SubaruHSCにテストようの画像などを配置する�
 ### 4. Dockerfileをビルド、実行する
 
 ```
-docker build -t coias ./Docker
+docker build -t coias -f Dockerfile.dev . 
 
 docker run -it --name coias \
 --mount type=bind,source="$(pwd)"/data,target=/root/.coias \
