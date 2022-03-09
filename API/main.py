@@ -59,7 +59,7 @@ def run_subaru_hsc_copy():
     """
     __テストデータアップロード時間短縮用__
 
-    tmp_filesを削除した後、SubaruHSCの中身をtmp_filesにコピーします。  
+    tmp_filesを削除した後、SubaruHSCの中身をtmp_filesにコピーします。
     あらかじめSubaruHSCにデータ(*.fits)を用意しておく必要があります。
     """  # noqa:W291
 
@@ -151,24 +151,39 @@ def run_deletefiles():
 
 @app.put("/copy", summary="「tmp_files」から「tmp_image」へpng画像コピー", tags=["files"])
 def run_copy():
+    # fmt: off
     """
-    「tmp_image」にあるpng画像はnginxによって配信されます。
-    """
-    for p in FILES_PATH.glob("*.png"):
-        if p.is_file():
-            shutil.copy(p, IMAGES_PATH)
+    「tmp_image」にあるpng画像はnginxによって配信されます。  
+    配信されているpng画像のリストを配列で返却します。
 
-    return JSONResponse(status_code=status.HTTP_200_OK)
+    __res__
 
+    ```JSON
+    {
+        "result": [
+            "1_disp-coias.png",
+            "1_disp-coias_nonmask.png",
+            "2_disp-coias.png",
+            "2_disp-coias_nonmask.png",
+            "3_disp-coias.png",
+            "3_disp-coias_nonmask.png",
+            "4_disp-coias.png",
+            "4_disp-coias_nonmask.png",
+            "5_disp-coias.png",
+            "5_disp-coias_nonmask.png",
+        ]
+    }
+    ```
+    """ # noqa
+    # fmt: on
+    for f in FILES_PATH.glob("*.png"):
+        if f.is_file():
+            shutil.copy(f, IMAGES_PATH)
 
-@app.get("/public_images", summary="nginxにbindされたディレクトリに存在するpngのリスト", tags=["files"])
-def run_public_images():
-    """
-    ファイルのリストを配列で返却する。
-    """
     file_list = []
-    for p in IMAGES_PATH.glob("*.png"):
-        file_list.append(p.name)
+    for i in IMAGES_PATH.glob("*.png"):
+        file_list.append(i.name)
+    file_list.sort()
 
     return {"result": file_list}
 
