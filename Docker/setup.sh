@@ -8,7 +8,9 @@ conda env create -n coias -f ./env/env.yml
 
 # coiasをデフォルトに設定
 echo "conda activate coias" >> ~/.bashrc
-. ~/.bashrc
+
+source ~/anaconda3/etc/profile.d/conda.sh
+conda activate coias
 
 # condaのCOIAS_program_github環境下で、ビルド
 chmod -R 700 /opt/COIAS_program_github
