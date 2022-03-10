@@ -1,4 +1,5 @@
 import os
+import string
 import subprocess
 import shutil
 import pathlib
@@ -186,6 +187,43 @@ def run_copy():
     file_list.sort()
 
     return {"result": file_list}
+
+
+@app.put("/memo", summary="outputを出力", tags=["files"])
+def run_memo(output_list: list):
+    # fmt: off
+    """
+    bodyの配列からmemo.txtを出力します。
+
+    __body__
+
+    ```JSON
+    [
+        "test0",
+        "test1",
+        "test2",
+        "test3"
+    ]
+    ```
+    """ # noqa
+    # fmt: on
+
+    memo: string = ""
+    result: string = ""
+    memo_path = FILES_PATH / "memo.txt"
+
+    for i, list in enumerate(output_list):
+        memo = memo + str(list)
+        if not i == (len(output_list) - 1):
+            memo = memo + "\n"
+
+    with memo_path.open(mode="w") as f:
+        f.write(memo)
+
+    with memo_path.open(mode="r") as f:
+        result = f.read()
+
+    return {"memo.txt": result}
 
 
 @app.put("/preprocess", summary="最新のMPCデータを取得", tags=["command"])
