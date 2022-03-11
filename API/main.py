@@ -9,7 +9,6 @@ from fastapi.middleware.cors import CORSMiddleware
 
 
 tags_metadata = [
-    {"name": "disp", "description": "disp.txt及びredisp.txtを取得します。"},
     {"name": "command", "description": "backendで実行されるコマンドAPIです。"},
     {"name": "files", "description": "backendに送信するファイルの操作APIです。"},
     {"name": "test", "description": "test用に用意されたAPIです。"},
@@ -71,7 +70,7 @@ def run_subaru_hsc_copy():
     return JSONResponse(status_code=status.HTTP_200_OK)
 
 
-@app.get("/disp", summary="disp.txtを配列で取得", tags=["disp"])
+@app.get("/disp", summary="disp.txtを配列で取得", tags=["files"])
 def get_disp():
     disp_path = FILES_PATH / "disp.txt"
 
@@ -87,23 +86,6 @@ def get_disp():
     result = split_list(result.split(), 4)
 
     return {"result": result}
-
-
-@app.get("/redisp", summary="redisp.txtを配列で取得", tags=["disp"])
-def get_redisp():
-    redisp_path = FILES_PATH / "redisp.txt"
-    if not redisp_path.is_file():
-        raise HTTPException(status_code=404)
-
-    with redisp_path.open() as f:
-        result = f.read()
-
-    if result == "":
-        raise HTTPException(status_code=404)
-
-    result = split_list(result.split(), 4)
-
-    return JSONResponse(status_code=status.HTTP_200_OK)
 
 
 @app.post("/uploadfiles/", summary="fileアップロード", tags=["files"])
@@ -199,10 +181,17 @@ def run_memo(output_list: list):
 
     ```JSON
     [
-        "test0",
-        "test1",
-        "test2",
-        "test3"
+        "000001",
+        "000010",
+        "000013",
+        "000012",
+        "000005",
+        "000003",
+        "000004",
+        "000009",
+        "000000",
+        "000006",
+        "000014"
     ]
     ```
     """ # noqa
@@ -323,11 +312,49 @@ def run_prempedit3(num: int):
 
 @app.put("/redisp", summary="再描画による確認作業", tags=["command"])
 def run_redisp():
+    """
+    redispが動作し、redisp.txtを配列で取得
+
+    __res__
+
+    ```JSON
+    {
+        "result": [
+            [
+            "w7794",
+            "3",
+            "1965.52",
+            "424.56"
+            ],
+            [
+            "w7794",
+            "2",
+            "1927.21",
+            "416.32"
+            ]
+        ]
+    }
+    ```
+
+    """  # noqa
 
     os.chdir(FILES_PATH.as_posix())
     subprocess.run(["redisp"])
 
-    return JSONResponse(status_code=status.HTTP_200_OK)
+    redisp_path = FILES_PATH / "redisp.txt"
+
+    if not redisp_path.is_file():
+        raise HTTPException(status_code=404)
+
+    with redisp_path.open() as f:
+        result = f.read()
+
+    if result == "":
+        raise HTTPException(status_code=404)
+
+    result = split_list(result.split(), 4)
+
+    return {"result": result}
 
 
 @app.put("/Astsearch_afterReCOIAS", summary="再描画による確認作業", tags=["command"])
