@@ -11,7 +11,7 @@ ENV TZ=Asia/Tokyo\
 WORKDIR /opt
 
 #必要なパッケージをubuntuにインストール
-RUN apt update && apt install -y\
+RUN apt-get update && apt-get install -y\
     git\
     wget\
     build-essential\
@@ -20,7 +20,8 @@ RUN apt update && apt install -y\
     language-pack-ja-base\
     language-pack-ja\
     locales\
-    bash-completion
+    bash-completion\
+    && rm -rf /var/lib/apt/lists/*
 
 #localeを日本語設定に変更
 RUN locale-gen ja_JP.UTF-8
@@ -35,11 +36,21 @@ RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh &
     ~/miniconda3/bin/conda init bash && \
     rm ./Miniconda3-latest-Linux-x86_64.sh
 
+# RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-aarch64.sh && \
+#     chmod 700 ./Miniconda3-latest-Linux-aarch64.sh && \
+#     bash ./Miniconda3-latest-Linux-aarch64.sh -b && \
+#     ~/miniconda3/bin/conda init bash && \
+#     rm ./Miniconda3-latest-Linux-aarch64.sh
+
 #miniconda3のPATHを通す
 ENV PATH $PATH:/root/miniconda3/bin
-    
+
 # COIAS_program_githubとfindOrbのPATHを通す
 ENV PATH $PATH:/opt/COIAS_program_github
 ENV PATH $PATH:/opt/COIAS_program_github/findOrb
 
 RUN echo ". /etc/bash_completion" >> ~/.bashrc
+
+# source-extractorのエイリアスを設定
+RUN printf '#!/bin/bash\nsource-extractor' > /usr/bin/sex &&\
+    chmod +x /usr/bin/sex
