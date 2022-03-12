@@ -9,7 +9,6 @@ dependencies:
   - appdirs=1.4.4
   - asdf=2.9.2
   - asgiref=3.5.0
-  - astromatic-source-extractor=2.25.0
   - astropy=5.0.1
   - astroquery=0.4.5
   - attrs=21.4.0
