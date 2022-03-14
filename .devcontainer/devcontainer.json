@@ -9,6 +9,6 @@
 		"ms-python.python",
 		"ms-azuretools.vscode-docker"
 	],
-	"onCreateCommand": "bash /opt/COIAS_program_github/Docker/setup.sh", //bind後にbuildなどを実行
+	// "onCreateCommand": "bash /opt/COIAS_program_github/Docker/setup.sh", //bind後にbuildなどを実行
 	"updateContentCommand": "bash /opt/COIAS_program_github/.devcontainer/assume-unchanged.sh findOrb", //findOrbの生成ファイルをローカルでgit追跡を無視するスクリプト
 }

@@ -5,18 +5,23 @@
 
 cd /opt/COIAS_program_github
 conda env create -n coias -f ./env/env.yml
+conda config --set auto_activate_base false
 
-# coiasをデフォルトに設定
-echo "conda activate coias" >> ~/.bashrc
-
-source ~/miniconda3/etc/profile.d/conda.sh
-conda activate coias
+echo -en "# coiasに切り替え\nconda activate coias" >> ~/.bashrc
 
 # condaのCOIAS_program_github環境下で、ビルド
+. /opt/COIAS_program_github/Docker/a_coias.sh
+
+# 環境の出力
+conda info -e
+
+# 権限の付与
 chmod -R 700 /opt/COIAS_program_github
-/root/miniconda3/envs/coias/bin/python setup12.py build_ext --inplace
 
 # Cythonのビルド
+cythonize mktraclet.pyx
+
+# C++のビルド
 cd /opt/COIAS_program_github/findOrb
 make -f linlunar.mak
 make -f linmake
