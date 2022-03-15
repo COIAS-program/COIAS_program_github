@@ -357,11 +357,11 @@ def run_redisp():
     return {"result": result}
 
 
-@app.put("/Astsearch_afterReCOIAS", summary="再描画による確認作業", tags=["command"])
+@app.put("/AstsearchR_afterReCOIAS", summary="再描画による確認作業", tags=["command"])
 def run_Astsearch_afterReCOIAS():
 
     os.chdir(FILES_PATH.as_posix())
-    subprocess.run(["Astsearch_afterReCOIAS"])
+    subprocess.run(["AstsearchR_afterReCOIAS"])
 
     return JSONResponse(status_code=status.HTTP_200_OK)
 
