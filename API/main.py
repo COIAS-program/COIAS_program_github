@@ -363,7 +363,21 @@ def run_Astsearch_afterReCOIAS():
     os.chdir(FILES_PATH.as_posix())
     subprocess.run(["AstsearchR_afterReCOIAS"])
 
-    return JSONResponse(status_code=status.HTTP_200_OK)
+    send_path = FILES_PATH / "send_mpc.txt"
+    result: string = ""
+
+    with send_path.open(mode="r") as f:
+        result = f.read()
+
+    if not send_path.is_file():
+        raise HTTPException(status_code=404)
+
+    if result == "":
+        raise HTTPException(status_code=404)
+
+    # result = split_list(result.split(), 13)
+
+    return {"result": result}
 
 
 @app.put("/rename", summary="「mpc4.txt」の複製と「send_mpc.txt」へrename", tags=["command"])
