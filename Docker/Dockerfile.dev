@@ -29,6 +29,9 @@ RUN locale-gen ja_JP.UTF-8
 #言語を日本語に設定
 ENV LANG ja_JP.UTF-8
 
+# bash_completionsを有効化
+RUN echo -en "\n# bash_completion\n. /usr/share/bash-completion/bash_completion\n" >> ~/.bashrc
+
 #miniconda3をインストール
 RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
     chmod 700 ./Miniconda3-latest-Linux-x86_64.sh && \
@@ -42,5 +45,3 @@ ENV PATH $PATH:/root/miniconda3/bin
 # COIAS_program_githubとfindOrbのPATHを通す
 ENV PATH $PATH:/opt/COIAS_program_github
 ENV PATH $PATH:/opt/COIAS_program_github/findOrb
-
-RUN echo ". /etc/bash_completion" >> ~/.bashrc
