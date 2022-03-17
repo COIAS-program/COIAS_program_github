@@ -6,7 +6,10 @@ import pathlib
 from fastapi import FastAPI, HTTPException, UploadFile, status
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
+COIAS_DES = 'coiasフロントアプリからアクセスされるAPIです。\
+    \n\n<img src="/static/icon.png" alt="drawing" width="200"/>'
 
 tags_metadata = [
     {"name": "command", "description": "backendで実行されるコマンドAPIです。"},
@@ -15,8 +18,8 @@ tags_metadata = [
 ]
 app = FastAPI(
     title="COIAS API",
-    description="coiasフロントアプリからアクセスされるAPIです。",
-    version="0.2.0",
+    description=COIAS_DES,
+    version="0.2.1",
     openapi_tags=tags_metadata,
 )
 
@@ -33,9 +36,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+API_PATH = pathlib.Path("/opt/COIAS_program_github/API")
 IMAGES_PATH = pathlib.Path("/opt/tmp_images/")
 FILES_PATH = pathlib.Path("/opt/tmp_files/")
 SUBARU_PATH = pathlib.Path("/opt/COIAS_program_github/SubaruHSC/")
+
+app.mount("/static", StaticFiles(directory=API_PATH), name="favicon.png")
 
 
 @app.get("/", summary="ファイルアップロード確認用", tags=["test"])
