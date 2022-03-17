@@ -41,6 +41,7 @@ IMAGES_PATH = pathlib.Path("/opt/tmp_images/")
 FILES_PATH = pathlib.Path("/opt/tmp_files/")
 SUBARU_PATH = pathlib.Path("/opt/COIAS_program_github/SubaruHSC/")
 
+# https://fastapi.tiangolo.com/ja/tutorial/static-files/
 app.mount("/static", StaticFiles(directory=API_PATH), name="favicon.png")
 
 
