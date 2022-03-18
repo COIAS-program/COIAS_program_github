@@ -400,9 +400,7 @@ def run_Astsearch_afterReCOIAS():
     if result == "":
         raise HTTPException(status_code=404)
 
-    # result = split_list(result.split(), 13)
-
-    return {"result": result}
+    return {"send_mpc": result}
 
 
 @app.put("/rename", summary="「mpc4.txt」の複製と「send_mpc.txt」へrename", tags=["command"])
