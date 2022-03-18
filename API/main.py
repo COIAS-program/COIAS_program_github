@@ -282,9 +282,26 @@ def run_findsource():
     return JSONResponse(status_code=status.HTTP_200_OK)
 
 
-@app.put("/prempsearchC", summary="精密軌道取得", tags=["command"])
-def run_prempsearchC():
+@app.put("/prempsearchC_before", summary="精密軌道取得 前処理", tags=["command"])
+def run_prempsearchC_before():
 
+    premp = PROGRAM_PATH / "prempsearchC"
+    script = ""
+
+    with premp.open(mode="r") as f:
+        for i in range(25):
+            script = script + f.readline()
+
+    os.chdir(FILES_PATH.as_posix())
+    subprocess.run([premp])
+
+    return JSONResponse(status_code=status.HTTP_200_OK)
+
+
+@app.put("/prempsearchC_after", summary="精密軌道取得 後処理", tags=["command"])
+def run_prempsearchC_after():
+
+    # todo 実装
     os.chdir(FILES_PATH.as_posix())
     subprocess.run(["prempsearchC"])
 
