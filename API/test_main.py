@@ -1,5 +1,6 @@
 from main import app
 
+import pathlib
 from fastapi.testclient import TestClient
 
 client = TestClient(app)
@@ -7,7 +8,11 @@ client = TestClient(app)
 
 def test_get_unknown_disp():
 
-    with open("/opt/tmp_files/unknown_disp.txt", mode="w") as f:
+    OPT_PATH = pathlib.Path("/opt")
+    FILES_PATH = OPT_PATH / "tmp_files"
+    FILES_PATH.mkdir(exist_ok=True)
+
+    with open("/opt/tmp_files/unknown_disp.txt", mode="w+",) as f:
         # fmt: off
         f.write(
             """
