@@ -249,7 +249,7 @@ def run_preprocess():
 
 
 @app.put("/startsearch2R", summary="ビギニング&マスク", tags=["command"])
-def run_startsearch2R(binning: int = 4):
+def run_startsearch2R(binning: int = 2):
 
     if binning != 2 and binning != 4:
         raise HTTPException(status_code=400)
@@ -304,7 +304,7 @@ def run_astsearch_new():
     tags=["command"],
     status_code=status.HTTP_400_BAD_REQUEST,
 )
-def run_AstsearchR(binning: int = 4):
+def run_AstsearchR(binning: int = 2):
 
     if binning != 2 and binning != 4:
         raise HTTPException(status_code=400)
