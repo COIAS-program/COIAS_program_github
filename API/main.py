@@ -95,6 +95,24 @@ def get_disp():
     return {"result": result}
 
 
+@app.get("/unknown_disp", summary="unknown_disp.txtを配列で取得", tags=["files"])
+def get_unknown_disp():
+    disp_path = FILES_PATH / "unknown_disp.txt"
+
+    if not disp_path.is_file():
+        raise HTTPException(status_code=404)
+
+    with disp_path.open() as f:
+        result = f.read()
+
+    if result == "":
+        raise HTTPException(status_code=404)
+
+    result = split_list(result.split(), 4)
+
+    return {"result": result}
+
+
 @app.post("/uploadfiles/", summary="fileアップロード", tags=["files"])
 async def create_upload_files(files: list[UploadFile]):
     """
