@@ -36,13 +36,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-API_PATH = pathlib.Path("/opt/COIAS_program_github/API")
-IMAGES_PATH = pathlib.Path("/opt/tmp_images/")
-FILES_PATH = pathlib.Path("/opt/tmp_files/")
-SUBARU_PATH = pathlib.Path("/opt/COIAS_program_github/SubaruHSC/")
+OPT_PATH = pathlib.Path("/opt")
+PROGRAM_PATH = OPT_PATH / "COIAS_program_github"
+IMAGES_PATH = OPT_PATH / "tmp_images"
+FILES_PATH = OPT_PATH / "tmp_files"
+SUBARU_PATH = PROGRAM_PATH / "SubaruHSC"
+DOC_IMAGE_PATH = PROGRAM_PATH / "docs/image"
 
 # https://fastapi.tiangolo.com/ja/tutorial/static-files/
-app.mount("/static", StaticFiles(directory=API_PATH), name="icon")
+app.mount("/static", StaticFiles(directory=DOC_IMAGE_PATH), name="icon")
 
 
 @app.get("/", summary="ファイルアップロード確認用", tags=["test"])
