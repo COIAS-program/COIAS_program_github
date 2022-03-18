@@ -282,7 +282,7 @@ def run_findsource():
     return JSONResponse(status_code=status.HTTP_200_OK)
 
 
-@app.put("/prempsearchC_before", summary="精密軌道取得 前処理", tags=["command"])
+@app.put("/prempsearchC-before", summary="精密軌道取得 前処理", tags=["command"])
 def run_prempsearchC_before():
 
     premp = PROGRAM_PATH / "prempsearchC"
@@ -298,7 +298,7 @@ def run_prempsearchC_before():
     return JSONResponse(status_code=status.HTTP_200_OK)
 
 
-@app.put("/prempsearchC_after", summary="精密軌道取得 後処理", tags=["command"])
+@app.put("/prempsearchC-after", summary="精密軌道取得 後処理", tags=["command"])
 def run_prempsearchC_after():
 
     # todo 実装
