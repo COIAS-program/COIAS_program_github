@@ -1,6 +1,5 @@
 {
 	"name": "COIAS_program_github",
-	"context": "..",
 	"dockerComposeFile": "../../docker-compose.dev.yml",
 	"workspaceFolder": "/opt/COIAS_program_github",
 	"service": "back-dev-app",
