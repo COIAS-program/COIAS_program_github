@@ -21,6 +21,7 @@ RUN apt-get update && apt-get install -y\
     language-pack-ja\
     locales\
     bash-completion\
+    source-extractor\
     && rm -rf /var/lib/apt/lists/*
 
 #localeを日本語設定に変更
