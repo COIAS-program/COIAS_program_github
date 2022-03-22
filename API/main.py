@@ -70,7 +70,7 @@ def run_subaru_hsc_copy():
 
     tmp_filesを削除した後、SubaruHSCの中身をtmp_filesにコピーします。
     あらかじめSubaruHSCにデータ(*.fits)を用意しておく必要があります。
-    """  # noqa:W291
+    """
 
     if FILES_PATH.is_dir():
         shutil.rmtree(FILES_PATH)
