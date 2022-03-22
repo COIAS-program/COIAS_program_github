@@ -365,8 +365,6 @@ def run_AstsearchR(binning: int = 2):
     else:
         binning = str(binning)
 
-    # todo timeoutの可能性あり
-
     os.chdir(FILES_PATH.as_posix())
     subprocess.run(["AstsearchR"], input=binning, encoding="UTF-8")
 
