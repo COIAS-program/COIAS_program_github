@@ -282,28 +282,63 @@ def run_findsource():
     return JSONResponse(status_code=status.HTTP_200_OK)
 
 
+"""
+prempsearchCを25行目で分割し、それぞれ別のAPIで動作させます。
+連続して実行するとサーバーから情報を取得できないことがあるためです。
+"""
+P_C_SPLIT_LINE = 25
+
+
 @app.put("/prempsearchC-before", summary="精密軌道取得 前処理", tags=["command"])
 def run_prempsearchC_before():
+    """
+    prempsearchCを編集した場合、動かなくなります。
+    """
 
     premp = PROGRAM_PATH / "prempsearchC"
     script = ""
 
+    # prempsearchCの<P_C_SPLIT_LINE>行より上を実行
     with premp.open(mode="r") as f:
-        for i in range(25):
-            script = script + f.readline()
+        script = script + f.readline(P_C_SPLIT_LINE)
+
+    script = script + "\necho 前処理が完了"
+
+    print(script)
 
     os.chdir(FILES_PATH.as_posix())
-    subprocess.run([premp])
+    subprocess.run([script], shell=True)
 
     return JSONResponse(status_code=status.HTTP_200_OK)
 
 
 @app.put("/prempsearchC-after", summary="精密軌道取得 後処理", tags=["command"])
 def run_prempsearchC_after():
+    """
+    prempsearchCを編集した場合、動かなくなります。
+    """
 
-    # todo 実装
+    premp = PROGRAM_PATH / "prempsearchC"
+    script = "#!/bin/bash\n"
+    count = 0
+
+    # prempsearchCの<P_C_SPLIT_LINE>行より下を実行
+    with premp.open(mode="r") as f:
+        while True:
+            count = count + 1
+            data = f.readline()
+
+            if count > P_C_SPLIT_LINE:
+
+                if data == "":
+                    break
+                else:
+                    script = script + data
+
+    script = script + "\necho 後処理が完了"
+
     os.chdir(FILES_PATH.as_posix())
-    subprocess.run(["prempsearchC"])
+    subprocess.run([script], shell=True)
 
     return JSONResponse(status_code=status.HTTP_200_OK)
 
