@@ -1,9 +1,9 @@
 {
     "python.defaultInterpreterPath": "/root/miniconda3/envs/coias/bin/python",
     "editor.formatOnSave": true,
-    //blackフォーマッタの設定
+    //　blackフォーマッタの設定
     "python.formatting.provider": "black",
-    //flake8の設定
+    //　flake8の設定
     "python.linting.pylintEnabled": false,
     "python.linting.enabled": true,
     "python.linting.flake8Path": "/root/miniconda3/envs/coias/bin/flake8",
@@ -13,6 +13,7 @@
         "88",
         "--ignore=E203,W503,W504"
     ],
+    // pytestの設定
     "python.testing.pytestArgs": [
         "API"
     ],
