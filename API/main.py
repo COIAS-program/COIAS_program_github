@@ -85,7 +85,8 @@ def run_subaru_hsc_dl():
     __テストデータ取得用API__
 
     サーバーのfitsファイルをSubaruHSCにダウンロードします。  
-    その後、tmp_filesを削除し、SubaruHSCの中身をtmp_filesにコピーします。
+    その後、tmp_filesを削除し、SubaruHSCの中身をtmp_filesにコピーします。  
+    ファイルのサイズが大きいため、15分以上かかります。
     """  # noqa
 
     subprocess.run(["/opt/COIAS_program_github/script/fits-dl"])
