@@ -19,7 +19,7 @@ tags_metadata = [
 app = FastAPI(
     title="COIAS API",
     description=COIAS_DES,
-    version="0.2.1",
+    version="0.3.0",
     openapi_tags=tags_metadata,
 )
 
@@ -63,14 +63,32 @@ async def main():
     return HTMLResponse(content=content)
 
 
-@app.post("/subaru_hsc_copy", summary="テストデータの準備", tags=["test"])
+@app.post("/subaru_hsc_copy", summary="テストデータのローカルコピー", tags=["test"])
 def run_subaru_hsc_copy():
     """
     __テストデータアップロード時間短縮用__
 
-    tmp_filesを削除した後、SubaruHSCの中身をtmp_filesにコピーします。
+    tmp_filesを削除した後、SubaruHSCの中身をtmp_filesにコピーします。  
     あらかじめSubaruHSCにデータ(*.fits)を用意しておく必要があります。
+    """  # noqa
+
+    if FILES_PATH.is_dir():
+        shutil.rmtree(FILES_PATH)
+    shutil.copytree(SUBARU_PATH, FILES_PATH)
+
+    return JSONResponse(status_code=status.HTTP_200_OK)
+
+
+@app.post("/subaru_hsc_dl", summary="テストデータのダウンロード", tags=["test"])
+def run_subaru_hsc_dl():
     """
+    __テストデータ取得用API__
+
+    サーバーのfitsファイルをSubaruHSCにダウンロードします。  
+    その後、tmp_filesを削除し、SubaruHSCの中身をtmp_filesにコピーします。
+    """  # noqa
+
+    subprocess.run(["/opt/COIAS_program_github/script/fits-dl"])
 
     if FILES_PATH.is_dir():
         shutil.rmtree(FILES_PATH)

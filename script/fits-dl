@@ -1,0 +1,9 @@
+#!/bin/bash
+
+cd /opt/COIAS_program_github/SubaruHSC
+
+wget https://www.spaceguard.or.jp/TMP/COIAS/warp-HSC-R-2-2,2-22032.fits 
+wget https://www.spaceguard.or.jp/TMP/COIAS/warp-HSC-R-2-2,2-22062.fits
+wget https://www.spaceguard.or.jp/TMP/COIAS/warp-HSC-R-2-2,2-22080.fits
+wget https://www.spaceguard.or.jp/TMP/COIAS/warp-HSC-R-2-2,2-22100.fits
+wget https://www.spaceguard.or.jp/TMP/COIAS/warp-HSC-R-2-2,2-22118.fits
