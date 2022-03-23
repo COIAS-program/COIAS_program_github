@@ -10,7 +10,7 @@ conda config --set auto_activate_base false
 echo -en "# coiasに切り替え\nconda activate coias" >> ~/.bashrc
 
 # condaのCOIAS_program_github環境下で、ビルド
-. /opt/COIAS_program_github/Docker/a_coias.sh
+. /opt/COIAS_program_github/script/a_coias.sh
 
 # 環境の出力
 conda info -e

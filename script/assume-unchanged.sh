@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 array=(`ls -ald $(find "$1") | awk '$1 !~ /d/ {print $9 }'`)
 for var in ${array[@]}
 do
