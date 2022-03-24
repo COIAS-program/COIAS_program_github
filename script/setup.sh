@@ -19,8 +19,7 @@ conda info -e
 chmod -R 700 /opt/COIAS_program_github
 
 # Cythonのビルド
-# cythonize mktraclet.pyx
-/root/miniconda3/envs/COIAS_program_github/bin/python setup12.py build_ext --inplace
+python setup12.py build_ext --inplace
 
 # C++のビルド
 cd /opt/COIAS_program_github/findOrb
