@@ -17,6 +17,7 @@ COIAS_DES = 'coiasフロントアプリからアクセスされるAPIです。\
 tags_metadata = [
     {"name": "command", "description": "backendで実行されるコマンドAPIです。"},
     {"name": "files", "description": "backendに送信するファイルの操作APIです。"},
+    {"name": "test", "description": "テスト用のAPIです。"},
 ]
 app = FastAPI(
     title="COIAS API",
@@ -63,25 +64,6 @@ async def main():
 </body>
     """
     return HTMLResponse(content=content)
-
-
-@app.get("/disp", summary="disp.txtを配列で取得", tags=["files"])
-def get_disp(pj: int = -1):
-
-    disp_path = pj_path(pj) / "disp.txt"
-
-    if not disp_path.is_file():
-        raise HTTPException(status_code=404)
-
-    with disp_path.open() as f:
-        result = f.read()
-
-    if result == "":
-        raise HTTPException(status_code=404)
-
-    result = split_list(result.split(), 4)
-
-    return {"result": result}
 
 
 @app.get("/unknown_disp", summary="unknown_disp.txtを配列で取得", tags=["files"])
@@ -174,6 +156,125 @@ async def create_upload_files(files: list[UploadFile]):
     return {"tmp_files_projects": files_dir, "project_files": project_files, "log": log}
 
 
+@app.get("/project-list", summary="projectのリストを返却します", tags=["files"])
+def run_get_project_list():
+    # fmt:off
+    """
+    projectのリストを返却します。  
+    projectはファイルがアップロードされるたびに、作成されます。
+
+    __res__
+
+    ```
+    {
+        "tmp_files_projects": [
+            "1",
+            "2"
+        ],
+        "log": {
+            "file_list": [
+                1,
+                2
+            ],
+            "create_time": [
+                "2022-03-25 07:33:34.558611",
+                "2022-03-25 08:03:34.850662"
+            ],
+            "zip_upload": [
+                false,
+                false
+            ]
+        }
+    }
+    ```
+
+    tmp_files_projects  
+    実際にtmpフォルダーに配置されている、プロジェクトフォルダー。
+
+    log  
+    project作成時に更新される、プロジェクトの詳細情報。
+
+    """  # noqa
+    # fmt:on
+    log_path = FILES_PATH / "log"
+
+    # logファイルがあれば読み込み
+    if log_path.is_file():
+
+        with log_path.open(mode="r") as conf:
+            conf_json = conf.read()
+
+        if not conf_json == "":
+            log = json.loads(conf_json)
+
+    else:
+        return JSONResponse(status_code=status.HTTP_204_NO_CONTENT)
+
+    # プロジェクトディレクトリpathを作成
+    file_name = str(log["file_list"][-1])
+    current_project_folder_path = FILES_PATH / file_name
+
+    # プロジェクトディレクトリの内容を取得
+    files_dir = [fd.name for fd in FILES_PATH.iterdir() if fd.is_dir()]
+    project_files = [pf.name for pf in current_project_folder_path.iterdir()]
+
+    files_dir.sort(key=int)
+    project_files.sort()
+
+    return {"tmp_files_projects": files_dir, "log": log}
+
+
+@app.get("/project", summary="projectのフォルダ内容を返却します", tags=["files"])
+def run_get_project(pj: int = -1):
+    # fmt:off
+    """
+    projectのフォルダ内容を返却します。  
+
+    __res__
+
+    ```
+    {
+        "project_files": [
+            "1_disp-coias.png",
+            "1_disp-coias_nonmask.png",
+            "2_disp-coias.png",
+            "2_disp-coias_nonmask.png",
+                    ・
+                    ・
+                    ・
+        ]
+    }
+    ```
+
+
+    """  # noqa
+    # fmt:on
+
+    log_path = FILES_PATH / "log"
+
+    # logファイルがあれば読み込み
+    if log_path.is_file():
+
+        with log_path.open(mode="r") as conf:
+            conf_json = conf.read()
+
+        if not conf_json == "":
+            log = json.loads(conf_json)
+
+    else:
+        return JSONResponse(status_code=status.HTTP_204_NO_CONTENT)
+
+    # プロジェクトディレクトリを作成
+    file_name = str(log["file_list"][-1])
+    current_project_folder_path = FILES_PATH / file_name
+
+    # プロジェクトディレクトリの内容を取得
+    project_files = [pf.name for pf in current_project_folder_path.iterdir()]
+    project_files.sort()
+
+    return {"project_files": project_files}
+
+
 @app.delete("/deletefiles", summary="tmp_imageの中身を削除", tags=["files"])
 def run_deletefiles():
 
@@ -184,7 +285,7 @@ def run_deletefiles():
     return JSONResponse(status_code=status.HTTP_200_OK)
 
 
-@app.put("/copy", summary="「tmp_files」から「tmp_image」へpng画像コピー", tags=["files"])
+@app.put("/copy", summary="プロジェクトから「tmp_image」へpng画像コピー", tags=["files"])
 def run_copy(pj: int = -1):
     # fmt: off
     """
