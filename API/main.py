@@ -51,6 +51,7 @@ app.mount("/static", StaticFiles(directory=DOC_IMAGE_PATH), name="icon")
 # ディレクトリがなければつくる
 FILES_PATH.mkdir(exist_ok=True)
 
+
 @app.get("/", summary="ファイルアップロード確認用", tags=["test"])
 async def main():
     """
