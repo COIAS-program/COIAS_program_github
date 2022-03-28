@@ -428,11 +428,11 @@ def run_prempsearchC_before(pj: int = -1):
 
     # prempsearchCの<P_C_SPLIT_LINE>行より上を実行
     with premp.open(mode="r") as f:
-        script = script + f.readline(P_C_SPLIT_LINE)
+
+        for i in range(P_C_SPLIT_LINE):
+            script = script + f.readline()
 
     script = script + "\necho 前処理が完了"
-
-    print(script)
 
     os.chdir(pj_path(pj).as_posix())
     subprocess.run([script], shell=True)
