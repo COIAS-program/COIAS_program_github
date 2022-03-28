@@ -9,7 +9,6 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-# todo projectのリストを表示する
 
 COIAS_DES = 'coiasフロントアプリからアクセスされるAPIです。\
     \n\n<img src="/static/icon.png" alt="drawing" width="200"/>'
@@ -49,6 +48,8 @@ DOC_IMAGE_PATH = PROGRAM_PATH / "docs/image"
 # https://fastapi.tiangolo.com/ja/tutorial/static-files/
 app.mount("/static", StaticFiles(directory=DOC_IMAGE_PATH), name="icon")
 
+# ディレクトリがなければつくる
+FILES_PATH.mkdir(exist_ok=True)
 
 @app.get("/", summary="ファイルアップロード確認用", tags=["test"])
 async def main():
