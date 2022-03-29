@@ -53,8 +53,5 @@ RUN make -f linlunar.mak && \
 ENV PATH $PATH:/opt/COIAS_program_github
 ENV PATH $PATH:/opt/COIAS_program_github/findOrb
 
-# APIを作業ディレクトリとする
-WORKDIR /opt/COIAS_program_github/API
-
 # API server を開始
-ENTRYPOINT /root/miniconda3/envs/coias/bin/uvicorn main:app --host 0.0.0.0 --reload
+ENTRYPOINT [ "bash", "/opt/COIAS_program_github/script/startup.sh" ]
