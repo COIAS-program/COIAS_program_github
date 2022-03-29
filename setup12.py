@@ -1,15 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from distutils.core import setup
-from distutils.extension import Extension
+from distutils.core import setup, Extension
+from Cython.Build import cythonize
 
 import numpy
-from Cython.Distutils import build_ext
 
 ext_modules = [
-    Extension("mktraclet", ["mktraclet.pyx"], include_dirs=[numpy.get_include()])
+    Extension(
+        "mktraclet", sources=["mktraclet.pyx"], include_dirs=[".", numpy.get_include()]
+    )
 ]
 
-setup(cmdclass={"build_ext": build_ext}, ext_modules=ext_modules)
+setup(name="mktraclet", ext_modules=cythonize(ext_modules))
 
 # python setup12.py build_ext --inplace

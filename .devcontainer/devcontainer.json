@@ -1,6 +1,5 @@
 {
 	"name": "COIAS_program_github",
-	"context": "..",
 	"dockerComposeFile": "../../docker-compose.dev.yml",
 	"workspaceFolder": "/opt/COIAS_program_github",
 	"service": "back-dev-app",
@@ -9,6 +8,7 @@
 		"ms-python.python",
 		"ms-azuretools.vscode-docker"
 	],
-	"onCreateCommand": "bash /opt/COIAS_program_github/Docker/setup.sh", //bind後にbuildなどを実行
-	"updateContentCommand": "bash /opt/COIAS_program_github/.devcontainer/assume-unchanged.sh findOrb", //findOrbの生成ファイルをローカルでgit追跡を無視するスクリプト
+	"onCreateCommand": "bash /opt/COIAS_program_github/script/setup.sh", //bind後にbuildなどを実行
+	"updateContentCommand": "bash /opt/COIAS_program_github/script/assume-unchanged.sh findOrb", //findOrbの生成ファイルをローカルでgit追跡を無視するスクリプト
+	"postCreateCommand": "echo コンテナの起動完了",
 }

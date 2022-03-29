@@ -4,6 +4,9 @@ LABEL author="Haruki Anbai"
 
 SHELL ["/bin/bash", "-c"]
 
+ENV TZ=Asia/Tokyo\
+    DEBIAN_FRONTEND=noninteractive
+
 #optを作業ディレクトリとする
 WORKDIR /opt
 
@@ -13,7 +16,9 @@ RUN apt update && apt install -y\
     wget\
     build-essential\
     libncurses-dev\
-    unzip
+    unzip\
+    source-extractor\
+    && rm -rf /var/lib/apt/lists/*
 
 #miniconda3をインストール
 RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
@@ -30,13 +35,14 @@ RUN git clone https://github.com/aizulab/COIAS_program_github.git --depth 1
 
 # condaのCOIAS_program_github環境下で、ビルド
 WORKDIR /opt/COIAS_program_github
-RUN conda env create -n coias -f ./env/ubuntu_env.yml
+RUN conda env create -n coias -f ./env/env.yml
+RUN conda config --set auto_activate_base false
 
 # conda activate coiasと同じ
 SHELL ["conda", "run", "-n", "coias", "/bin/bash", "-c"]
 
 RUN chmod -R 700  ./* && \
-    /root/miniconda3/envs/COIAS_program_github/bin/python setup12.py build_ext --inplace
+    /root/miniconda3/envs/coias/bin/python setup12.py build_ext --inplace
 
 # Cythonのビルド
 WORKDIR /opt/COIAS_program_github/findOrb
@@ -51,4 +57,4 @@ ENV PATH $PATH:/opt/COIAS_program_github/findOrb
 WORKDIR /opt/COIAS_program_github/API
 
 # API server を開始
-ENTRYPOINT /root/miniconda3/envs/COIAS_program_github/bin/uvicorn main:app --host 0.0.0.0 --reload
+ENTRYPOINT /root/miniconda3/envs/coias/bin/uvicorn main:app --host 0.0.0.0 --reload
