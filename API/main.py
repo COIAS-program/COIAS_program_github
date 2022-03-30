@@ -21,7 +21,7 @@ tags_metadata = [
 app = FastAPI(
     title="COIAS API",
     description=COIAS_DES,
-    version="0.3.0",
+    version="0.3.1",
     openapi_tags=tags_metadata,
 )
 
@@ -370,6 +370,42 @@ def run_memo(output_list: list, pj: int = -1):
     return {"memo.txt": result}
 
 
+@app.get("/memo2", summary="memo2.txtを取得", tags=["files"])
+def get_memo2(pj: int = -1):
+    memo_path = pj_path(pj) / "memo2.txt"
+
+    if not memo_path.is_file():
+        raise HTTPException(status_code=404)
+
+    with memo_path.open() as f:
+        result = f.read()
+
+    if result == "":
+        raise HTTPException(status_code=404)
+
+    return {"memo2": result}
+
+
+@app.put("/listb3.txt", summary="listb3を書き込み", tags=["files"])
+def write_listb3(text: str, pj: int = -1):
+    # fmt: off
+    """
+    textの文字列をlistb3.txtに書き込みます。  
+    listb3の内容を返却します。
+    """ # noqa
+    # fmt: on
+
+    text_path = pj_path(pj) / "listb3.txt"
+
+    with text_path.open(mode="w") as f:
+        f.write(text)
+
+    with text_path.open(mode="r") as f:
+        result = f.read()
+
+    return {"listb3.txt": result}
+
+
 @app.put("/preprocess", summary="最新のMPCデータを取得", tags=["command"])
 def run_preprocess():
 
@@ -591,6 +627,39 @@ def run_rename(pj: int = -1):
     from_path = pj_path(pj) / "mpc4.txt"
     to_path = pj_path(pj) / "send_mpc.txt"
     shutil.copy(from_path, to_path)
+
+    return JSONResponse(status_code=status.HTTP_200_OK)
+
+
+@app.put("/astsearch_manual", summary="手動再測定モード", tags=["command"])
+def run_astsearch_manual(pj: int = -1):
+    """
+    4行目を飛ばしてastsearch_manualを実行
+    """
+
+    astsearch = PROGRAM_PATH / "astsearch_manual"
+    script = ""
+    count = 1
+
+    with astsearch.open(mode="r") as f:
+        while True:
+
+            data = f.readline()
+
+            if not count == 4:
+                script = script + data
+            else:
+                print("Skip loading : " + data)
+
+            if data == "":
+                break
+
+            count += 1
+
+    script = script + "\necho astsearch_manualが完了"
+
+    os.chdir(pj_path(pj).as_posix())
+    subprocess.run([script], shell=True)
 
     return JSONResponse(status_code=status.HTTP_200_OK)
 
