@@ -41,10 +41,11 @@ RUN conda config --set auto_activate_base false
 # conda activate coiasと同じ
 SHELL ["conda", "run", "-n", "coias", "/bin/bash", "-c"]
 
-RUN chmod -R 700  ./* && \
+# Cythonのビルド
+RUN chmod -R 700 ./* && \
     /root/miniconda3/envs/coias/bin/python setup12.py build_ext --inplace
 
-# Cythonのビルド
+# C++のビルド
 WORKDIR /opt/COIAS_program_github/findOrb
 RUN make -f linlunar.mak && \
     make -f linmake
