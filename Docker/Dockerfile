@@ -54,4 +54,5 @@ ENV PATH $PATH:/opt/COIAS_program_github
 ENV PATH $PATH:/opt/COIAS_program_github/findOrb
 
 # API server を開始
+WORKDIR /opt/COIAS_program_github
 ENTRYPOINT [ "bash", "/opt/COIAS_program_github/script/startup.sh" ]
