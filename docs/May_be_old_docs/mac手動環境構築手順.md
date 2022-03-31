@@ -70,7 +70,7 @@ PyCharmを利用します。
 
 PyCharmよりconda環境にてプロジェクトを作成する
 
-```https://github.com/aizulab/COIAS_program_github.git```
+```https://github.com/coias/coias-back-app.git.git```
 
 [Git リポジトリの設定 | PyCharm](https://pleiades.io/help/pycharm/set-up-a-git-repository.html#clone-repo)
 
@@ -94,13 +94,13 @@ tarminalから操作する。
 conda info -e
 
 # 環境の切り替え
-conda activate COIAS_program_github
+conda activate coias-back-app
 
 # チャンネルの追加
 conda config --append channels conda-forge
 ```
 
-環境の切り替えを行うことで、terminalの表示が(base)から(COIAS_program_github)に変わる。
+環境の切り替えを行うことで、terminalの表示が(base)から(coias-back-app)に変わる。
 
 pythonのコード上で不足しているパッケージをインストール
 
@@ -134,8 +134,8 @@ pipを使用してインストール
 
 ```zsh
 # coias pj
-export PATH=$PATH:/Users/usuki/project/22/coias/COIAS_program_github
-export PATH=$PATH:/Users/usuki/project/22/coias/COIAS_program_github/findOrb
+export PATH=$PATH:/Users/usuki/project/22/coias/coias-back-app
+export PATH=$PATH:/Users/usuki/project/22/coias/coias-back-app/findOrb
 ```
 
 設定の読み込み
@@ -146,7 +146,7 @@ source .zshrc
 
 ### Cython等のビルド
 
-```https://github.com/aizulab/COIAS_program_github.git```をcloneしたファイルpathを```/COIAS_program_path```と記述している。
+```https://github.com/coias/coias-back-app.git.git```をcloneしたファイルpathを```/COIAS_program_path```と記述している。
 
 1. cythonのビルド。/COIAS_program_pathにターミナルで移動し、下のコマンドを実行
 ```

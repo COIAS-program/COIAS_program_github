@@ -29,13 +29,13 @@ dockerを使用する際に`sudo`が必要になる。
 ### 2. 任意のディレクトリで以下のコマンドを打つ
 
 ```
-git clone https://github.com/aizulab/COIAS_program_github.git
-cd COIAS_program_github
+git clone https://github.com/coias/coias-back-app.git.git
+cd coias-back-app
 ```
 
 ### 3. テスト画像の入ったディレクトリ(SubaruHSC)を配置する
 
-COIAS_program_github/SubaruHSCにテストようの画像などを配置する。
+coias-back-app/SubaruHSCにテストようの画像などを配置する。
 
 ### 4. Dockerfileをビルド、実行する
 
@@ -51,7 +51,7 @@ docker run -it --name coias \
 ### 5. コマンドラインで以下を実行
 
 ```
-coias activate COIAS_program_github
+coias activate coias-back-app
 ```
 
 # 実行方法
