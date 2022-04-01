@@ -29,7 +29,7 @@ dockerを使用する際に`sudo`が必要になる。
 ### 2. 任意のディレクトリで以下のコマンドを打つ
 
 ```
-git clone https://github.com/coias/coias-back-app.git.git
+git clone https://github.com/coias/coias-back-app.git
 cd coias-back-app
 ```
 

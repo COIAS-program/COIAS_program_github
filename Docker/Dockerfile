@@ -31,7 +31,7 @@ RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh &
 ENV PATH $PATH:/root/miniconda3/bin
 
 #クローンをして、COIASのための環境構築
-RUN git clone https://github.com/coias/coias-back-app.git.git --depth 1
+RUN git clone https://github.com/coias/coias-back-app.git --depth 1
 
 # condaのcoias-back-app環境下で、ビルド
 WORKDIR /opt/coias-back-app
