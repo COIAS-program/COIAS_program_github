@@ -1,7 +1,7 @@
 # 環境構築手順
 
 Dockerを使用し環境を構築する。
-ここではdocker-composeを使用しないが、特に理由のない場合は[aizulab/coias-docker-compose](https://github.com/aizulab/coias-docker-compose)を使用するとよい。
+ここではdocker-composeを使用しないが、特に理由のない場合は[coias/coias-docker-compose](https://github.com/coias/coias-docker-compose.git)を使用するとよい。
 
 ## dockerについて
 
