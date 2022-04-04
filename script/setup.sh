@@ -4,7 +4,7 @@
 # 設定は.devcontainer/devcontainer.jsonに記載
 
 cd /opt/coias-back-app
-conda env create -n coias -f ./env/env.yml
+conda env create -n coias -f ./env/ubuntu_env.yml
 conda config --set auto_activate_base false
 
 echo -en "# coiasに切り替え\nconda activate coias" >> ~/.bashrc

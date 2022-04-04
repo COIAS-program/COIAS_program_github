@@ -35,7 +35,7 @@ RUN git clone https://github.com/coias/coias-back-app.git --depth 1
 
 # condaのcoias-back-app環境下で、ビルド
 WORKDIR /opt/coias-back-app
-RUN conda env create -n coias -f ./env/env.yml
+RUN conda env create -n coias -f ./env/ubuntu_env.yml
 RUN conda config --set auto_activate_base false
 
 # conda activate coiasと同じ
