@@ -6,7 +6,6 @@
 	"settings": {},
 	"extensions": [
 		"ms-python.python",
-		"ms-azuretools.vscode-docker",
 		"ms-ceintl.vscode-language-pack-ja"
 	],
 	"onCreateCommand": "bash /opt/coias-back-app/script/setup.sh", //bind後にbuildなどを実行
