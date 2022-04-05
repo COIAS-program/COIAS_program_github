@@ -1,14 +1,14 @@
 {
-	"name": "COIAS_program_github",
+	"name": "coias-back-app",
 	"dockerComposeFile": "../../docker-compose.dev.yml",
-	"workspaceFolder": "/opt/COIAS_program_github",
+	"workspaceFolder": "/opt/coias-back-app",
 	"service": "back-dev-app",
 	"settings": {},
 	"extensions": [
 		"ms-python.python",
-		"ms-azuretools.vscode-docker"
+		"ms-ceintl.vscode-language-pack-ja"
 	],
-	"onCreateCommand": "bash /opt/COIAS_program_github/script/setup.sh", //bind後にbuildなどを実行
-	"updateContentCommand": "bash /opt/COIAS_program_github/script/assume-unchanged.sh findOrb", //findOrbの生成ファイルをローカルでgit追跡を無視するスクリプト
+	"onCreateCommand": "bash /opt/coias-back-app/script/setup.sh", //bind後にbuildなどを実行
+	"updateContentCommand": "bash /opt/coias-back-app/script/assume-unchanged.sh findOrb", //findOrbの生成ファイルをローカルでgit追跡を無視するスクリプト
 	"postCreateCommand": "echo コンテナの起動完了",
 }

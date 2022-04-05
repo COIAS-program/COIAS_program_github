@@ -39,7 +39,7 @@ app.add_middleware(
 )
 
 OPT_PATH = pathlib.Path("/opt")
-PROGRAM_PATH = OPT_PATH / "COIAS_program_github"
+PROGRAM_PATH = OPT_PATH / "coias-back-app"
 IMAGES_PATH = OPT_PATH / "tmp_images"
 FILES_PATH = OPT_PATH / "tmp_files"
 SUBARU_PATH = PROGRAM_PATH / "SubaruHSC"

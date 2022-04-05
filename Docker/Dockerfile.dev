@@ -43,6 +43,6 @@ RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh &
 #miniconda3のPATHを通す
 ENV PATH $PATH:/root/miniconda3/bin
 
-# COIAS_program_githubとfindOrbのPATHを通す
-ENV PATH $PATH:/opt/COIAS_program_github
-ENV PATH $PATH:/opt/COIAS_program_github/findOrb
+# coias-back-appとfindOrbのPATHを通す
+ENV PATH $PATH:/opt/coias-back-app
+ENV PATH $PATH:/opt/coias-back-app/findOrb

@@ -31,11 +31,11 @@ RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh &
 ENV PATH $PATH:/root/miniconda3/bin
 
 #クローンをして、COIASのための環境構築
-RUN git clone https://github.com/aizulab/COIAS_program_github.git --depth 1
+RUN git clone https://github.com/coias/coias-back-app.git --depth 1
 
-# condaのCOIAS_program_github環境下で、ビルド
-WORKDIR /opt/COIAS_program_github
-RUN conda env create -n coias -f ./env/env.yml
+# condaのcoias-back-app環境下で、ビルド
+WORKDIR /opt/coias-back-app
+RUN conda env create -n coias -f ./env/ubuntu_env.yml
 RUN conda config --set auto_activate_base false
 
 # conda activate coiasと同じ
@@ -46,14 +46,14 @@ RUN chmod -R 700 ./* && \
     /root/miniconda3/envs/coias/bin/python setup12.py build_ext --inplace
 
 # C++のビルド
-WORKDIR /opt/COIAS_program_github/findOrb
+WORKDIR /opt/coias-back-app/findOrb
 RUN make -f linlunar.mak && \
     make -f linmake
 
-# COIAS_program_githubとfindOrbのPATHを通す
-ENV PATH $PATH:/opt/COIAS_program_github
-ENV PATH $PATH:/opt/COIAS_program_github/findOrb
+# coias-back-appとfindOrbのPATHを通す
+ENV PATH $PATH:/opt/coias-back-app
+ENV PATH $PATH:/opt/coias-back-app/findOrb
 
 # API server を開始
-WORKDIR /opt/COIAS_program_github
-ENTRYPOINT [ "bash", "/opt/COIAS_program_github/script/startup.sh" ]
+WORKDIR /opt/coias-back-app
+ENTRYPOINT [ "bash", "/opt/coias-back-app/script/startup.sh" ]
