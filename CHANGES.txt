@@ -62,3 +62,6 @@ Combine binning2R.py and binng3R.py to binning.py. Add a function to check exist
 
 2022-1-14 Natsuho Maeda
 Modify getinfo_numbered2D.py (change data type of tmp7 into numpy.ndarray when declaring)
+
+2022-4-6 Keisuke Sugiura
+Add env_setting.sh that was produced by Maeda-san and modify README.md
