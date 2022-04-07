@@ -27,8 +27,8 @@ app = FastAPI(
 
 origins = [
     "http://localhost",
-    "http://127.0.0.1:3000",
     "http://localhost:3000",
+    "http://localhost:3001",
 ]
 app.add_middleware(
     CORSMiddleware,
@@ -370,6 +370,26 @@ def run_memo(output_list: list, pj: int = -1):
     return {"memo.txt": result}
 
 
+@app.put("/memo2", summary="memo2を書き込み", tags=["files"])
+def write_memo2(text: str, pj: int = -1):
+    # fmt: off
+    """
+    textの文字列をmemo2.txtに書き込みます。  
+    memo2.txtの内容を返却します。
+    """ # noqa
+    # fmt: on
+
+    text_path = pj_path(pj) / "memo2.txt"
+
+    with text_path.open(mode="w") as f:
+        f.write(text)
+
+    with text_path.open(mode="r") as f:
+        result = f.read()
+
+    return {"memo2.txt": result}
+
+
 @app.get("/memo2", summary="memo2.txtを取得", tags=["files"])
 def get_memo2(pj: int = -1):
     memo_path = pj_path(pj) / "memo2.txt"
@@ -386,7 +406,7 @@ def get_memo2(pj: int = -1):
     return {"memo2": result}
 
 
-@app.put("/listb3.txt", summary="listb3を書き込み", tags=["files"])
+@app.put("/listb3", summary="listb3を書き込み", tags=["files"])
 def write_listb3(text: str, pj: int = -1):
     # fmt: off
     """
