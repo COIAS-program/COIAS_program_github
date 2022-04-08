@@ -86,6 +86,42 @@ def get_unknown_disp(pj: int = -1):
     return {"result": result}
 
 
+@app.get("/karifugo_disp", summary="karifugo_disp.txtを配列で取得", tags=["files"])
+def get_karifugo_disp(pj: int = -1):
+    disp_path = pj_path(pj) / "karifugo_disp.txt"
+
+    if not disp_path.is_file():
+        raise HTTPException(status_code=404)
+
+    with disp_path.open() as f:
+        result = f.read()
+
+    if result == "":
+        raise HTTPException(status_code=404)
+
+    result = split_list(result.split(), 4)
+
+    return {"result": result}
+
+
+@app.get("/numbered_disp", summary="numbered_disp.txtを配列で取得", tags=["files"])
+def get_numbered_disp(pj: int = -1):
+    disp_path = pj_path(pj) / "numbered_disp.txt"
+
+    if not disp_path.is_file():
+        raise HTTPException(status_code=404)
+
+    with disp_path.open() as f:
+        result = f.read()
+
+    if result == "":
+        raise HTTPException(status_code=404)
+
+    result = split_list(result.split(), 4)
+
+    return {"result": result}
+
+
 @app.post("/uploadfiles/", summary="fileアップロード", tags=["files"])
 async def create_upload_files(files: list[UploadFile]):
     """
