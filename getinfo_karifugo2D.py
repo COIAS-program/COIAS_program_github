@@ -41,11 +41,25 @@ t1 = time.time()
 #number of name
 nn = len(name_list)
 
+##number of asteroids we cannot get information from JPL (2022.4.8 KS)########
+NLoseAsteroids=0
+###############################################################################
+
 #get info from jpl horizons
 def getinfo(x):
 #    print(name_list[x])
     radec =[]
-    radec.append(Horizons(id=name_list[x],location='568',epochs=time_list2[0:5]).ephemerides()['targetname','datetime_jd','RA','DEC','V'])
+    #tentative prevention of error (2022.4.8 KS)################################
+    try:
+        objRadec = Horizons(id=name_list[x],location='568',epochs=time_list2[0:5]).ephemerides()['targetname','datetime_jd','RA','DEC','V']
+    except ValueError:
+        print("We cannot get information of id="+name_list[x]+" from JPL.")
+        global NLoseAsteroids
+        NLoseAsteroids += 1
+    else:
+        radec.append(objRadec)
+    ############################################################################
+        
     return radec
 
 #if __name__ == "__main__":
@@ -54,10 +68,22 @@ def getinfo(x):
 #        print(p.map(f,range(nn)))
 #        tmp10 = p.map(getinfo,range(nn))
 
-tmp10 = list(map(getinfo,range(nn)))  
+##tentative treatment (2022.4.8 KS)#############################################
+#tmp10 = list(map(getinfo,range(nn)))
 
-
+tmp10 = []
+for i in range(nn):
+    recvRadec = getinfo(i)
+    if len(recvRadec)!=0:
+        tmp10.append(recvRadec)
+        
+nn = nn - NLoseAsteroids
 tmp5 = np.array(tmp10)
+tmp5.reshape(nn,1,5)
+
+#tmp5 = np.array(tmp10)
+################################################################################
+
 #K.S. modifies 2020/12/7############################
 temporary = np.ndarray((nn, 1, 5, 5),dtype=object)
 for i1 in range(nn):

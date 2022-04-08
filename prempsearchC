@@ -4,10 +4,10 @@
 # AstMPC.edb /onetime
 sed  s/\'//g ~/.coias/param/AstMPC_dim.edb |sed -e '1,51d' > hoge
 #./getinfo_xephem.py > cand.txt
-searchB.py  
+searchB.py
 ## remove a character "\" from cand.txt
 sed -e 's/\\//g' cand.txt > cand2.txt  
-## remove the asteroids whose magnitude is less than 30 mag
+## remove the asteroids whose magnitudes are larger than 30 mag (very faint asteroids)
 awk '$6<30 {print $0}' cand2.txt > cand2b.txt
 
 ## classify asteroids into two groups, numbered asteroids and those only having karifugo
