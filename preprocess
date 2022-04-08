@@ -3,14 +3,16 @@
 
 if [ ! -d ~/.coias ]; then
     mkdir ~/.coias
+    mkdir ~/.coias/param
+    mkdir ~/.coias/orbit_data
     make_default_parameter_files.py
     getMPCORB_and_mpc2edb
 else
-    if [ ! -f ~/.coias/default.conv ]; then
+    if [ ! -f ~/.coias/param/default.conv ]; then
 	make_default_parameter_files.py
     fi
-
-    if [ ! -f ~/.coias/MPCORB.DAT ]; then
+    
+    if [ ! -f ~/.coias/param/MPCORB.DAT ]; then
 	getMPCORB_and_mpc2edb
     fi
 fi

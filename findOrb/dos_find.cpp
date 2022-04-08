@@ -1361,7 +1361,7 @@ int main( const int argc, const char **argv)
    mypath = (char*)malloc(sizeof(char)*256);
    char home[256];
    strcpy(home, getenv("HOME"));
-   sprintf(mypath,"%s/.coias",home);
+   sprintf(mypath,"%s/.coias/param",home);
    
    char option_filename[256];
    const char *option_filename_org = "options.txt";
