@@ -65,3 +65,6 @@ Modify getinfo_numbered2D.py (change data type of tmp7 into numpy.ndarray when d
 
 2022-4-6 Keisuke Sugiura
 Add env_setting.sh that was produced by Maeda-san and modify README.md
+
+2022-4-7 Keisuke Sugiura
+change place of all files in .coias/ to .coias/param/
