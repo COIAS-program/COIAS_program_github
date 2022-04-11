@@ -1,18 +1,22 @@
 #!/bin/bash
-#version 2021.6.28 K.S.
+#version 2022.4.12 K.S.
 
 if [ ! -d ~/.coias ]; then
     mkdir ~/.coias
+fi
+
+if [ ! -d ~/.coias/param ]; then
     mkdir ~/.coias/param
+fi
+
+if [ ! -d ~/.coias/orbit_data ]; then
     mkdir ~/.coias/orbit_data
-    make_default_parameter_files.py
-    getMPCORB_and_mpc2edb
-else
-    if [ ! -f ~/.coias/param/default.conv ]; then
-	make_default_parameter_files.py
-    fi
+fi
     
-    if [ ! -f ~/.coias/param/MPCORB.DAT ]; then
-	getMPCORB_and_mpc2edb
-    fi
+if [ ! -f ~/.coias/param/default.conv ]; then
+    make_default_parameter_files.py
+fi
+
+if [ ! -f ~/.coias/param/MPCORB.DAT ]; then
+    getMPCORB_and_mpc2edb
 fi
