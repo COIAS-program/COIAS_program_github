@@ -4,7 +4,7 @@ for i in warp[0-5]_bin.fits
 do
 echo $i
 t1=$(echo $i|sed "s/.fits/.dat/g")
-sex $i -c ~/.coias/param/default.sex
+source-extractor $i -c ~/.coias/param/default.sex
 echo $t1
 cp test.cat $t1
 done
