@@ -11,6 +11,7 @@ fi
 
 if [ ! -d ~/.coias/orbit_data ]; then
     mkdir ~/.coias/orbit_data
+    echo 0 > ~/.coias/orbit_data/log.txt
 fi
     
 if [ ! -f ~/.coias/param/default.conv ]; then
