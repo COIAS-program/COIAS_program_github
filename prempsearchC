@@ -4,7 +4,7 @@
 #getMPCORB_and_mpc2edb /one time
 # AstMPC.edb /onetime
 
-haveAllPreciseOrbits=$(<./have_all_precise_orbits.txt)
+haveAllPreciseOrbits=$(cat have_all_precise_orbits.txt )
 if [ "$haveAllPreciseOrbits" = "0" ]; then
     sed  s/\'//g ~/.coias/param/AstMPC_dim.edb |sed -e '1,51d' > hoge
     #./getinfo_xephem.py > cand.txt
