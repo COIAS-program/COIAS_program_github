@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#REVISE 2022.4.12 KS, we collect search_astB.txt in each necessary directory to search_astB.txt in the current directory
+make_gathered_search_astB.py
 #astsearch1K.py
 #I applay cython partially on 2020.5.28
 astsearch1M2.py
