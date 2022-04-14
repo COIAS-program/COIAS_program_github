@@ -28,6 +28,11 @@ fi
 #REVISED 2020.1.28
 #REVISED 2020.5.29 2B=>2D 
 getinfo_numbered2D.py
+
+
+
+
+
 getinfo_karifugo2D.py
 
 #(cat numbered_new2B.txt karifugo_new2B.txt |sort -n >search_astB.txt) <- old statement, we did not use this from 2020/12
