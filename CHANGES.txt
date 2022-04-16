@@ -68,3 +68,6 @@ Add env_setting.sh that was produced by Maeda-san and modify README.md
 
 2022-4-7 Keisuke Sugiura
 change place of all files in .coias/ to .coias/param/
+
+2022-4-14 Keisuke Sugiura
+Modify some scripts so that we store all precise orbits of known bodies and reuse them
