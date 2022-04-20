@@ -71,3 +71,9 @@ change place of all files in .coias/ to .coias/param/
 
 2022-4-14 Keisuke Sugiura
 Modify some scripts so that we store all precise orbits of known bodies and reuse them
+
+2022-4-20 Keisuke Sugiura
+Modify some scripts regarding changing data to MPC format
+
+2022-4-20 Keisuke Sugiura
+Modify some scripts so that we include bright known asteroids to the list of known asteroids
