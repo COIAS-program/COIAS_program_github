@@ -47,3 +47,8 @@ for i in range(Ndata):
 command = command + "|sort -n > search_astB.txt"
 subprocess.run(command, shell=True)
 #--------------------------------------------------------------------------------------------------------------------
+
+#---copy asteroid name list stored in ~/.coias/orbit_data to the current directory-----------------------------------
+subprocess.run("cp {0}/bright_asteroid_MPC_names_in_the_field.txt ./".format(directoryNames[0]),shell=True)
+subprocess.run("cp {0}/name_conversion_list_in_the_field.txt ./".format(directoryNames[0]),shell=True)
+#--------------------------------------------------------------------------------------------------------------------

@@ -24,7 +24,7 @@ from multiprocessing import Process
 #path_name = os.getcwd()
 #ast list
 #tmp1 = path_name+str("/hoge")
-tmp1 = str("hoge")
+tmp1 = str("AstMPC_tmp.edb")
 data1 = np.loadtxt(tmp1,delimiter = ',',dtype='str')
 
 #read scidata
@@ -91,8 +91,16 @@ if __name__ == "__main__":
         tmp10 = p.map(search,range(len(data1)))
         tmp11 = [l for l in tmp10 if l]
         tmp12 = np.array(tmp11)
-        tmp12 = tmp12.reshape(len(tmp12),5)  
-        np.savetxt('cand_dim.txt',tmp12,fmt='%s')
+        tmp12 = tmp12.reshape(len(tmp12),5)
+        np.savetxt('cand_bright.txt',tmp12,fmt='%s')
+
+        #---save name of bright asteroids in the field------
+        fileBrightAsteriods = open("bright_asteroid_raw_names_in_the_field.txt","w")
+        for i in range(len(tmp12)):
+            fileBrightAsteriods.write(tmp12[i][1]+"\n")
+        fileBrightAsteriods.close()
+        #---------------------------------------------------
+            
         t2 = time.time()
         elapsed_time = t2 -t1
 #        print(elapsed_time)
