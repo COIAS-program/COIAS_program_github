@@ -22,7 +22,7 @@ def getinfo(x):
     radec =[]
     #tentative prevention of error (2022.4.8 KS)################################
     try:
-        objRadec = Horizons(id=name_list[x],location='568',epochs=time_list2[0:5]).ephemerides()['targetname','datetime_jd','RA','DEC','V']
+        objRadec = Horizons(id=name_list[x],location='568',epochs=time_list2[0:5],id_type="smallbody").ephemerides()['targetname','datetime_jd','RA','DEC','V']
     except ValueError:
         print("We cannot get information of id="+name_list[x]+" from JPL.")
         global NLoseAsteroids

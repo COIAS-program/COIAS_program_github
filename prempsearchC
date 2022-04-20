@@ -38,7 +38,7 @@ fi
 getinfo_numbered2D.py
 
 
-
+#---P_L_SPLIT_LINE here for GUI COIAS----------------------
 
 
 getinfo_karifugo2D.py
