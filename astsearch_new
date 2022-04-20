@@ -7,8 +7,10 @@ make_gathered_search_astB.py
 astsearch1M2.py
 #astsearch1KBK.py
 match2D.py
-mpc1b.py
-mpc2b.py
+#mpc1b.py
+#mpc2b.py
+#I merged mpc1b.py and mpc2b.py to change_data_to_mpc_format.py 2022.4.20 K.S.
+change_data_to_mpc_format.py
 cat numbered_disp.txt karifugo_disp.txt unknown_disp.txt > disp.txt
 cat numbered_mpc.txt karifugo_mpc.txt unknown_mpc.txt > mpc.txt
 cat numbered_all.txt karifugo_all.txt unknown_all.txt > all.txt
