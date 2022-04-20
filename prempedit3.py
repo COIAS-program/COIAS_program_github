@@ -57,6 +57,9 @@ else:
         if re.match('\w',lines2[l]):
 #        print(lines[l])
             new_list3.append(lines2[l])
+        elif re.match('~',lines2[l]):
+#        print(lines[l])
+            new_list3.append(lines2[l])
         elif re.match('^     K',lines2[l]):
 #        print(lines[l])
             new_list3.append(lines2[l])

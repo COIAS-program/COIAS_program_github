@@ -44,6 +44,9 @@ for l in range(len(lines)):
     if re.match('\w',lines[l]):
 #        print(lines[l])
         new_list3.append(lines[l])
+    elif re.match('~',lines[l]):
+#        print(lines[l])
+        new_list3.append(lines[l])
     elif re.match('^     K',lines[l]):
 #        print(lines[l])
         new_list3.append(lines[l])
