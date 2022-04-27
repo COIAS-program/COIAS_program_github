@@ -10,14 +10,14 @@ for l in range(len(lines)):
 fileBrightKnownAsteroids.close()
 #-------------------------------------------------------
 
-#---get data in send_mpc.txt----------------------------
-inputfileSendMpc = open("send_mpc.txt","r")
+#---get data in pre_repo.txt----------------------------
+inputfileSendMpc = open("pre_repo.txt","r")
 lines = inputfileSendMpc.readlines()
 inputfileSendMpc.close()
 #-------------------------------------------------------
 
-#---compare names in send_mpc.txt and reject bright known asteroids---
-outputfileSendMpc = open("send_mpc.txt","w",newline="\n")
+#---compare names in pre_repo.txt and reject bright known asteroids---
+outputfileSendMpc = open("pre_repo.txt","w",newline="\n")
 for l in range(len(lines)):
     oneLineList = lines[l].split()
     flag = 0

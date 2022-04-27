@@ -45,10 +45,15 @@ else:
             if re.search(Hlist1[m],lines2[n]):
                 tmp = lines2[n].replace(Hlist1[m],Hlist2[m])
                 Hlist3.append(tmp)
-
+    
 #        tmp = lines2[n].replace(Hlist1[m],Hlist2[m])
 #    Hlist3.append()
-    
+
+#output H conversion list 2022.4.27 K.S.
+    fileHConversionList = open("H_conversion_list.txt","w",newline="\n")
+    for l in range(len(Hlist1)):
+        fileHConversionList.write(Hlist1[l] + ' ' + Hlist2[l] + '\n')
+    fileHConversionList.close()
 
 
 #kokokara Jan.22.2020
