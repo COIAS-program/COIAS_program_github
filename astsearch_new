@@ -1,24 +1,28 @@
 #!/bin/bash
 
+echo astsearch_new begins 2>&1 | tee log.txt
+
 #REVISE 2022.4.12 KS, we collect search_astB.txt in each necessary directory to search_astB.txt in the current directory
-make_gathered_search_astB.py
+make_gathered_search_astB.py 2>&1 | tee -a log.txt
 #astsearch1K.py
 #I applay cython partially on 2020.5.28
-astsearch1M2.py
+astsearch1M2.py 2>&1 | tee -a log.txt
 #astsearch1KBK.py
-match2D.py
+match2D.py 2>&1 | tee -a log.txt
 #mpc1b.py
 #mpc2b.py
 #I merged mpc1b.py and mpc2b.py to change_data_to_mpc_format.py 2022.4.20 K.S.
-change_data_to_mpc_format.py
-cat numbered_disp.txt karifugo_disp.txt unknown_disp.txt > disp.txt
-cat numbered_mpc.txt karifugo_mpc.txt unknown_mpc.txt > mpc.txt
-cat numbered_all.txt karifugo_all.txt unknown_all.txt > all.txt
+change_data_to_mpc_format.py 2>&1 | tee -a log.txt
+cat numbered_disp.txt karifugo_disp.txt unknown_disp.txt > disp.txt 2>&1 | tee -a log.txt
+cat numbered_mpc.txt karifugo_mpc.txt unknown_mpc.txt > mpc.txt 2>&1 | tee -a log.txt
+cat numbered_all.txt karifugo_all.txt unknown_all.txt > all.txt 2>&1 | tee -a log.txt
 #revised S.U 2021.8.27
-sed 's/r2     /r     /g;' mpc.txt > tmpmpc1.txt
-sed 's/i2     /i     /g;' tmpmpc1.txt > tmpmpc2.txt
-sed 's/r2     /r     /g;' all.txt > tmpall1.txt
-sed 's/i2     /i     /g;' tmpall1.txt > tmpall2.txt
-rm tmpmpc1.txt tmpall1.txt
-mv tmpmpc2.txt mpc.txt
-mv tmpall2.txt all.txt
+sed 's/r2     /r     /g;' mpc.txt > tmpmpc1.txt 2>&1 | tee -a log.txt
+sed 's/i2     /i     /g;' tmpmpc1.txt > tmpmpc2.txt 2>&1 | tee -a log.txt
+sed 's/r2     /r     /g;' all.txt > tmpall1.txt 2>&1 | tee -a log.txt
+sed 's/i2     /i     /g;' tmpall1.txt > tmpall2.txt 2>&1 | tee -a log.txt
+rm tmpmpc1.txt tmpall1.txt 2>&1 | tee -a log.txt
+mv tmpmpc2.txt mpc.txt 2>&1 | tee -a log.txt
+mv tmpall2.txt all.txt 2>&1 | tee -a log.txt
+
+echo astsearch_new ends 2>&1 | tee -a log.txt

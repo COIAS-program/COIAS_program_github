@@ -1,9 +1,14 @@
 #!/bin/bash
-#version 2021.6.17
-cp send_mpc.txt hoge2.txt
-deldaburi4.py
-dos_find mpc7.txt -k > result.txt
-delLargeZansa_and_modPrecision.py 1
-reject_bright_known_asteroids_from_report.py
-make_final_all.py
-komejirushi.py
+#version 2022.4.28
+
+echo AstsearchR_afterReCOIAS begins 2>&1 | tee log.txt
+
+cp send_mpc.txt hoge2.txt 2>&1 | tee -a log.txt
+deldaburi4.py 2>&1 | tee -a log.txt
+dos_find mpc7.txt -k > result.txt 2>&1 | tee -a log.txt
+delLargeZansa_and_modPrecision.py 1 2>&1 | tee -a log.txt
+reject_bright_known_asteroids_from_report.py 2>&1 | tee -a log.txt
+make_final_all.py 2>&1 | tee -a log.txt
+komejirushi.py 2>&1 | tee -a log.txt
+
+echo AstsearchR_afterReCOIAS ends 2>&1 | tee -a log.txt

@@ -1,23 +1,27 @@
 #!/bin/bash
-#version 2022.4.12 K.S.
+#version 2022.4.28 K.S.
+
+echo preprocess begins 2>&1 | tee log.txt
 
 if [ ! -d ~/.coias ]; then
-    mkdir ~/.coias
+    mkdir ~/.coias 2>&1 | tee -a log.txt
 fi
 
 if [ ! -d ~/.coias/param ]; then
-    mkdir ~/.coias/param
+    mkdir ~/.coias/param 2>&1 | tee -a log.txt
 fi
 
 if [ ! -d ~/.coias/orbit_data ]; then
-    mkdir ~/.coias/orbit_data
-    echo 0 > ~/.coias/orbit_data/log.txt
+    mkdir ~/.coias/orbit_data 2>&1 | tee -a log.txt
+    echo 0 > ~/.coias/orbit_data/log.txt 2>&1 | tee -a log.txt
 fi
     
 if [ ! -f ~/.coias/param/default.conv ]; then
-    make_default_parameter_files.py
+    make_default_parameter_files.py 2>&1 | tee -a log.txt
 fi
 
 if [ ! -f ~/.coias/param/MPCORB.DAT ]; then
-    getMPCORB_and_mpc2edb
+    getMPCORB_and_mpc2edb 2>&1 | tee -a log.txt
 fi
+
+echo preprocess ends 2>&1 | tee -a log.txt

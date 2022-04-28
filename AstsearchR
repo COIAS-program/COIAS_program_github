@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: <2021/07/03 15:29:32 (JST) maeda>
+# Time-stamp: <2022/04/28 13:37:00 (JST) sugiura>
 #startsearch
 preprocess
 startsearch2R
