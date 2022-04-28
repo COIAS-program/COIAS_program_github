@@ -42,8 +42,8 @@ for fileName in filesInOrbitDataDir:
         try:
             raDecJdTimeFile = open(fileName+"/ra_dec_jd_time.txt","r")
         except FileNotFoundError:
-            print("The directory "+fileName+" does not have ra_dec_jd_time.txt\n")
-            print("Remove the directory.\n")
+            print("The directory "+fileName+" does not have ra_dec_jd_time.txt")
+            print("Remove the directory.")
             shutil.rmtree(fileName)
         else:
             line = raDecJdTimeFile.readline()

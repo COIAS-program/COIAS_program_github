@@ -4,7 +4,8 @@
 preprocess
 startsearch2R
 #exec one time prempsearchC when you change the FOV
-prempsearchC
+prempsearchC-before
+prempsearchC-after
 astsearch_new
 #fits2png
 #add the difference contrast version if you need
