@@ -1026,8 +1026,8 @@ else:
                 final_sum = 1
             mag = np.round(zm[j] - 2.5*np.log10(final_sum),decimals=3)
 #error
-            sigma_ron =  4.5 #read out noise of HSC
-            gain = 3.0 # HSC
+            sigma_ron =  4.5*nbin[j]*nbin[j] #read out noise of HSC /nobining :4.5e S.U modified 2022/5/4
+            gain = 3.0 / nbin[j] # gain of HSC/nobining :3.0  S.U modified 2022/5/4
             S_star = gain * final_sum    
             effective_area = ap.area * ((1+ap.area)/sap.area)
 #            N2 = S_star + effective_area * (gain * bkg_mean + sigma_ron)
@@ -1106,8 +1106,8 @@ else:
             #mag = np.round(zm[j] - 2.5*np.log10(final_sum),decimals=3)
             mag = np.round(zm[m] - 2.5*np.log10(final_sum),decimals=3) #2021/5/24 K.S. modify
 #error
-            sigma_ron =  4.5 #read out noise of HSC
-            gain = 3.0 # HSC
+            sigma_ron =  4.5*nbin[m]*nbin[m]  #read out noise of HSC /nobining :4.5e  S.U modified 2022/5/4
+            gain = 3.0 / nbin[m] #gain of HSC/nobining :3.0  S.U modified 2022/5/4
             S_star = gain * final_sum    
             effective_area = ap.area * ((1+ap.area)/sap.area)
 #            N2 = S_star + effective_area * (gain * bkg_mean + sigma_ron)
