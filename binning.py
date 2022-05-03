@@ -102,6 +102,7 @@ for i in img_list[0:5]:
     hdu1[0].header['CTYPE2A'] = hdu1[1].header['CTYPE2A']
     hdu1[0].header['CUNIT1A'] = hdu1[1].header['CUNIT1A']
     hdu1[0].header['CUNIT2A'] = hdu1[1].header['CUNIT2A']
+    hdu1[0].header['NBIN'] = nbin #K.S. added 2022/5/3
 
 
 #h1head = hdu1[0].header + hdu1[1].header

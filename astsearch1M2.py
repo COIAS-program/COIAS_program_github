@@ -65,6 +65,14 @@ zm4 = scidata4[0].header['Z_P']
 zm5 = scidata5[0].header['Z_P']
 zm = [zm1,zm2,zm3,zm4,zm5]
 
+#nbin(K.S. added 2022/5/2)
+nbin1 = scidata1[0].header['NBIN']
+nbin2 = scidata2[0].header['NBIN']
+nbin3 = scidata3[0].header['NBIN']
+nbin4 = scidata4[0].header['NBIN']
+nbin5 = scidata5[0].header['NBIN']
+nbin = [nbin1, nbin2, nbin3, nbin4, nbin5]
+
 #X,Y pix
 xpix = scidata1[0].header['NAXIS1']
 ypix = scidata1[0].header['NAXIS2']
@@ -1012,7 +1020,8 @@ else:
 #2020.11.25 revised
             bkg_mean =  bkgflux_table['aperture_sum'] / sap.area
             bkg_sum = bkg_mean * ap.area
-            final_sum = 4.0*(rawflux_table['aperture_sum'] - bkg_sum)
+            final_sum = nbin[j]*nbin[j]*(rawflux_table['aperture_sum'] - bkg_sum) #K.S. modified 2022/5/3
+            #final_sum = 4.0*(rawflux_table['aperture_sum'] - bkg_sum)
             if final_sum <= 0:
                 final_sum = 1
             mag = np.round(zm[j] - 2.5*np.log10(final_sum),decimals=3)
@@ -1088,8 +1097,9 @@ else:
             bkg_mean =  bkgflux_table['aperture_sum']/sap.area
 #            bkg_mean = 10
             bkg_sum = bkg_mean * ap.area
-            final_sum = 4.0*(rawflux_table['aperture_sum'] - bkg_sum)        
- #           final_sum = 4.0*(rawflux_table['aperture_sum'])
+            final_sum = nbin[m]*nbin[m]*(rawflux_table['aperture_sum'] - bkg_sum) #K.S. modified 2022/5/3
+            #final_sum = 4.0*(rawflux_table['aperture_sum'] - bkg_sum)        
+            #final_sum = 4.0*(rawflux_table['aperture_sum'])
 # bug edit 2019.11.7
             if final_sum <=0:
                 final_sum = 1
