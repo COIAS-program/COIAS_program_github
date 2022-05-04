@@ -4,7 +4,7 @@
 
 0.0. (Readme_COIAS2.pdfも参照してください) 3系のpythonのインストール。anaconda(pythonの統合開発環境)をインストールした方が良い。その上で以下のパッケージなどをインストールする: numpy, scipy, matplotlib, astropy, ephem, cython, pandas, pillow, photutils, SExtractor, astroquery, julian
 
-0.1. より簡単な方法: 3系のpythonがインストールされたanacondaをインストールしたのち, $bash env_setting.sh でほぼ環境構築が終わる. ただし環境によってはうまくインストールできない or 使えないパッケージがあったりするので, それらは手でインストールする. coiasという仮想環境上に環境を構築するので, シェルを開き直した後は $source activate coias で環境を切り替えれば使用可能. => この方法でインストールした人は下準備5.までの全ての準備をスキップして実行方法から開始できる.
+0.1. より簡単な方法: 3系のpythonがインストールされたanacondaをインストールしたのち, $bash env_setting.sh でほぼ環境構築が終わる. ただし環境によってはうまくインストールできない or 使えないパッケージがあったりするので, それらは手でインストールする. coiasという仮想環境上に環境を構築するので, シェルを開き直した後は $source activate coias で環境を切り替えれば使用可能. => この方法でインストールした人は下準備6.までの全ての準備をスキップして実行方法から開始できる.
 
 1. githubからこのプログラム一式をダウンロードして、任意のディレクトリに置く。本Readmeではこのディレクトリを /COIAS_program_path と呼ぶ。
 2. /COIAS_program_path以下の全てのpythonスクリプトとシェルスクリプトにchmodで実行許可を与えておく。
