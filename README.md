@@ -8,9 +8,10 @@
 
 1. githubからこのプログラム一式をダウンロードして、任意のディレクトリに置く。本Readmeではこのディレクトリを /COIAS_program_path と呼ぶ。
 2. /COIAS_program_path以下の全てのpythonスクリプトとシェルスクリプトにchmodで実行許可を与えておく。
-3. シェルの環境変数PATHに、このディレクトリへのパス (/COIAS_program_path) とfindOrbへのパス (/COIAS_program_path/findOrb) を追加する。使用するシェルはbashが前提のようなので、bashでパスを通す。(以前COIASのプログラム群を使用しており昔のパスが残っている場合は、使用したいプログラム群へのパスのみが環境変数PATHに登録されるように注意する)
-4. cythonのビルド。/COIAS_program_path にターミナルで移動して、 python setup12.py build_ext --inplace と入力する。
-5. findOrbのコンパイル。/COIAS_program_path/findOrb にターミナルで移動して、以下のコマンドを打つことでコンパイルを実行する。デフォルトのコンパイラは g++ なので、無い場合はインストールするか、持っているc++用のコンパイラを linlunar.make, linmake ファイル中の CC=コンパイラ名 に指定する必要がある。
+3. シェルの環境変数PATHに、このディレクトリへのパス (/COIAS_program_path) とfindOrbへのパス (/COIAS_program_path/findOrb) とソースファイルへのパス (/COIAS_program_path/COIASlibs および /COIAS_program_path/src1_preprocess から /COIAS_program_path/src8_astsearch_manual までの8つのディレクトリ) を追加する。使用するシェルはbashが前提のようなので、bashでパスを通す。(以前COIASのプログラム群を使用しており昔のパスが残っている場合は、使用したいプログラム群へのパスのみが環境変数PATHに登録されるように注意する)
+4. シェルの環境変数PYTHONPATHに、/COIAS_program_path/COIASlibs を追加する。
+5. cythonのビルド。/COIAS_program_path/src5_astsearch_new にターミナルで移動して、 python setup12.py build_ext --inplace と入力する。
+6. findOrbのコンパイル。/COIAS_program_path/findOrb にターミナルで移動して、以下のコマンドを打つことでコンパイルを実行する。デフォルトのコンパイラは g++ なので、無い場合はインストールするか、持っているc++用のコンパイラを linlunar.make, linmake ファイル中の CC=コンパイラ名 に指定する必要がある。
    1. もし一度コンパイルしたことがあったら、rm dos_find, rm lunar.a, rm *.o ですでにある実行ファイル達を削除する
    2. make -f linlunar.mak
    3. make -f linmake

@@ -56,11 +56,21 @@ git clone https://github.com/COIAS-program/COIAS_program_github $COIAS_PATH
 echo "Making PATH..."
 echo export PATH="$COIAS_PATH:$PATH" >> ~/.bashrc
 echo export PATH="$COIAS_PATH/findOrb:$PATH" >> ~/.bashrc
+echo export PATH="$COIAS_PATH/COIASlibs:$PATH" >> ~/.bashrc
+echo export PATH="$COIAS_PATH/src1_preprocess:$PATH" >> ~/.bashrc
+echo export PATH="$COIAS_PATH/src2_startsearch2R:$PATH" >> ~/.bashrc
+echo export PATH="$COIAS_PATH/src3_prempsearchC-before:$PATH" >> ~/.bashrc
+echo export PATH="$COIAS_PATH/src4_prempsearchC-after:$PATH" >> ~/.bashrc
+echo export PATH="$COIAS_PATH/src5_astsearch_new:$PATH" >> ~/.bashrc
+echo export PATH="$COIAS_PATH/src6_between_COIAS_and_ReCOIAS:$PATH" >> ~/.bashrc
+echo export PATH="$COIAS_PATH/src7_AstsearchR_afterReCOIAS:$PATH" >> ~/.bashrc
+echo export PATH="$COIAS_PATH/src8_astsearch_manual:$PATH" >> ~/.bashrc
+echo export PYTHONPATH="$COIAS_PATH/COIASlibs:$PYTHONPATH" >> ~/.bashrc
 source ~/.bashrc
 
 ## Build cython
 echo "Building cython..."
-cd $COIAS_PATH
+cd $COIAS_PATH/src5_astsearch_new
 python setup12.py build_ext --inplace
 
 ## Compile findOrb

@@ -77,3 +77,6 @@ Modify some scripts regarding changing data to MPC format
 
 2022-4-20 Keisuke Sugiura
 Modify some scripts so that we include bright known asteroids to the list of known asteroids
+
+2022-5-4 Keisuke Sugiura
+Largely modify the structure of directories
