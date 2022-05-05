@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
 import os
-import sys
 import subprocess
 
 #---read precise_orbit_directories.txt---------------------------------------

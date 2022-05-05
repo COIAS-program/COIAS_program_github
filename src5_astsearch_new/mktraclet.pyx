@@ -1,26 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #cython: boundscheck=False
-import os
 import numpy as np
 #cimport numpy as np
 #cimport cython
-import re
-import time
 from astropy.io import fits,ascii
 from astropy.wcs import wcs
-import scipy.spatial as ss
-    #read catalog
-    
-import glob
-    #from makedata6 import makedata6
-    #from deldaburi2 import deldaburi2
-    
-    #multiprocessing
-from multiprocessing import Pool
-from multiprocessing import Process
-
-start = time.time()
+#from makedata6 import makedata6
+#from deldaburi2 import deldaburi2
 
 #input all point source after find.sh
 text_fnames1 = ascii.read('warp1_bin.dat')
