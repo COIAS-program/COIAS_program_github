@@ -28,14 +28,14 @@ preRepoLines = preRepoFile.readlines()
 for l in range(len(preRepoLines)):
     preRepoOneLine = preRepoLines[l]
     preRepoOneLineList = preRepoOneLine.split()
-    #search H old name########################
+    # search H old name########################
     HPreRepo = preRepoOneLineList[0]
     flag=0
     for l2 in range(len(HNew)):
         if HNew[l2]==HPreRepo:
             HPreRepoOld = HOld[l2]
             flag=1
-    #search the same line in all.txt##########
+    # search the same line in all.txt##########
     if flag==1:
         preRepoOneLine = preRepoOneLine.replace(HPreRepo,HPreRepoOld)
     allFile = open("all.txt","r")
