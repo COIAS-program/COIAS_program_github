@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
 import os
-import sys
 import glob
 import time
 import shutil
@@ -56,11 +55,11 @@ for fileName in filesInOrbitDataDir:
 
             for i in range(Ndata):
                 if abs(ra-raList[i])<0.01 and abs(dec-decList[i])<0.01 and abs(jd-jdList[i])<0.00001 and abs(fileTime-presentTimeStamp)<preciseOrbitFleshTime:
-                    #known objects in this file were already searched recently
+                    # known objects in this file were already searched recently
                     isCorrectDirectory[i] = 1
                     directoryNames[i] = fileName
                 elif abs(ra-raList[i])<0.01 and abs(dec-decList[i])<0.01 and abs(jd-jdList[i])<0.00001 and abs(fileTime-presentTimeStamp)>preciseOrbitFleshTime:
-                    #known objects in this file were searched but long ago
+                    # known objects in this file were searched but long ago
                     isCorrectDirectory[i] = 0
                     directoryNames[i] = fileName
 #-----------------------------------------------
