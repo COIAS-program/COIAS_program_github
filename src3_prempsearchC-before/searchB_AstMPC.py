@@ -1,33 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
-
-import os
 import numpy as np
-import re
 
-from astropy.io import fits,ascii
-from astropy.wcs import wcs
-import scipy.spatial as ss
+from astropy.io import fits
 import ephem
 import julian
 import time
-#read catalog
 
-import glob
-#from makedata6 import makedata6
-#from deldaburi2 import deldaburi2
-
-#multiprocessing
+# multiprocessing
 from multiprocessing import Pool
-from multiprocessing import Process
 
-#path_name = os.getcwd()
-#ast list
-#tmp1 = path_name+str("/hoge")
+# ast list
 tmp1 = str("AstMPC_tmp.edb")
 data1 = np.loadtxt(tmp1,delimiter = ',',dtype='str')
 
-#read scidata
+# read scidata
 scidata1 = fits.open('warp1_bin.fits')
 scidata2 = fits.open('warp2_bin.fits')
 scidata3 = fits.open('warp3_bin.fits')
@@ -41,17 +28,17 @@ jd4 = scidata4[0].header['JD']
 jd5 = scidata5[0].header['JD']
 
 
-#ra dec
+# ra dec
 ra = scidata1[0].header['CRVAL1']
 dec = scidata1[0].header['CRVAL2']
-#search region
-#search region 2 =>1.5 2020.5.29
+# search region
+# search region 2 =>1.5 2020.5.29
 ra_min = ra-1.8
 ra_max = ra+1.8
 dec_min =  dec-1.8
 dec_max =  dec+1.8
 
-#site information
+# site information
 subaru = ephem.Observer()
 subaru.lon =  '-155.4767'
 subaru.lat = '19.8256'
@@ -65,7 +52,7 @@ t1 = time.time()
 
 
 
-#mp.ra value is radian
+# mp.ra value is radian
 
 def search(i):
     tmp4 = []
@@ -75,15 +62,15 @@ def search(i):
     ra2 = mp.ra*180/np.pi
     dec2 = mp.dec*180/np.pi
     if ra2 > ra_min and ra2 < ra_max and dec2 > dec_min and dec2 < dec_max:
-#        print(subaru.date,mp.name,mp.ra,mp.dec,mp.mag)  
-#        print(mp.mag)
+        # print(subaru.date,mp.name,mp.ra,mp.dec,mp.mag)  
+        # print(mp.mag)
         tmp5 = [jd1,mp.name,ra2,dec2,mp.mag]
-#        tmp5 = str([subaru.date,mp.mag])
+        # tmp5 = str([subaru.date,mp.mag])
         tmp4.append(tmp5)
-#        np.append(tmp5,tmp5)
-#        print(tmp5)
-#        return tmp5
-#    print(tmp4)
+        # np.append(tmp5,tmp5)
+        # print(tmp5)
+        # return tmp5
+        # print(tmp4)
     return tmp4
 
 if __name__ == "__main__":
@@ -103,4 +90,4 @@ if __name__ == "__main__":
             
         t2 = time.time()
         elapsed_time = t2 -t1
-#        print(elapsed_time)
+        # print(elapsed_time)

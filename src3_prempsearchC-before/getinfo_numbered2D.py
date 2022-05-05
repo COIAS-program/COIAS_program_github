@@ -4,23 +4,17 @@
 
 import numpy as np
 from astroquery.jplhorizons import Horizons
-import os
 import time
-from astropy.io import ascii
-from astropy.table import Table,vstack
-import itertools
-from multiprocessing import Pool
-from multiprocessing import Process
 import re
 from astropy.io import fits
 import glob
 
 #--function----------------------------------------------------------------------------
-#get info from jpl horizons
+# get info from jpl horizons
 def getinfo(x):
-    #    print(name_list[x])
+    # print(name_list[x])
     radec =[]
-    #tentative prevention of error (2022.4.8 KS)################################
+    # tentative prevention of error (2022.4.8 KS)################################
     try:
         objRadec = Horizons(id=name_list[x],location='568',epochs=time_list2[0:5],id_type="smallbody").ephemerides()['targetname','datetime_jd','RA','DEC','V']
     except ValueError:
@@ -38,8 +32,8 @@ def getinfo(x):
 
 #---main--------------------------------------------------------------------------------
 t1 = time.time()
-#if have_all_precise_orbits.txt has 1, then known objects in all warp files were already searched,
-#so we skip all process in this script
+# if have_all_precise_orbits.txt has 1, then known objects in all warp files were already searched,
+# so we skip all process in this script
 haveAllPreciseOrbitsFile = open("have_all_precise_orbits.txt","r")
 haveAllPreciseOrbits = int(haveAllPreciseOrbitsFile.readline().rstrip("\n"))
 haveAllPreciseOrbitsFile.close()
@@ -60,7 +54,7 @@ if(haveAllPreciseOrbits==0):
     preciseOrbitDirectoriesFile.close()
     #----------------------------------------------------------------------------
     
-    #read scidata
+    # read scidata
     img_list = sorted(glob.glob('warp[1-5]_bin.fits'))
     
     time_list = []
@@ -69,23 +63,23 @@ if(haveAllPreciseOrbits==0):
         jd = scidata[0].header['JD']
         time_list.append( jd )
         
-    #time_list
+    # time_list
     time_list2 = [np.round(float(time_list[i]),decimals=8) for i in range(len(time_list))]  
         
-    #numbered name_list
+    # numbered name_list
     tmp2 = str("cand3.txt")
     tmp4 = open(tmp2,"r")
     name1 = tmp4.readlines()
     name_list =[]
     for i in name1:
         name_list.append(i.rstrip('\n'))
-    #time
-    #time1 = time_list[0]
+    # time
+    # time1 = time_list[0]
             
-    #number of name
+    # number of name
     nn = len(name_list)
             
-    ##number of asteroids we cannot get information from JPL (2022.4.8 KS)#########
+    ## number of asteroids we cannot get information from JPL (2022.4.8 KS)########
     NLoseAsteroids = 0
     ###############################################################################
 
@@ -95,8 +89,8 @@ if(haveAllPreciseOrbits==0):
     #        print(p.map(f,range(nn)))
     #        tmp10 = p.map(getinfo,range(nn))
     
-    ##tentative treatment (2022.4.8 KS)#############################################
-    #tmp10 = list(map(getinfo,range(nn)))
+    ## tentative treatment (2022.4.8 KS)############################################
+    # tmp10 = list(map(getinfo,range(nn)))
             
     tmp10 = []
     for i in range(nn):
@@ -108,10 +102,10 @@ if(haveAllPreciseOrbits==0):
     tmp5 = np.array(tmp10)
     tmp5.reshape(nn,1,NShouldGetPreciseOrbit)
                     
-    #tmp5 = np.array(tmp10)
+    # tmp5 = np.array(tmp10)
     ################################################################################
                     
-    #K.S. modifies 2022/4/13############################
+    # K.S. modifies 2022/4/13###########################
     temporary = np.ndarray((nn, NShouldGetPreciseOrbit, 5),dtype=object)
     for i1 in range(nn):
         for i2 in range (NShouldGetPreciseOrbit):
@@ -120,7 +114,7 @@ if(haveAllPreciseOrbits==0):
                                     
     tmp6 = temporary.reshape(nn*NShouldGetPreciseOrbit,5)
     ####################################################
-    #tmp7 =[]
+    # tmp7 =[]
     tmp7 = np.empty(0)
                                     
     for i in range(len(img_list)):
@@ -133,7 +127,7 @@ if(haveAllPreciseOrbits==0):
                 tmp7 = np.append(tmp7, str(i)) # NM 2021.07.08
     tmp8 = tmp7.reshape(int(len(tmp7)/6),6)
                                                 
-    #remove name and karifugo from numberd
+    # remove name and karifugo from numberd
     for l in range(len(tmp8)):
         tmp9 = re.sub(r"\(.+?\)","",tmp8[l,0]) # remove karifugo
         tmp11 = re.sub(r"[a-zA-Z\']","",tmp9) # remove name
