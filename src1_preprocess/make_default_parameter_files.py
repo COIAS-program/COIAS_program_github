@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from os.path import expanduser
+import traceback
 
 directory_path = expanduser("~") + "/.coias/param/"
 
@@ -1828,11 +1829,21 @@ def make_xdesig_txt():
     file.close()
 #---------------------------------------------------------------------------------
 
-
-make_default_conv()
-make_default_sex()
-make_default2_param()
-make_ObsCodes_htm()
-make_options_txt()
-make_rovers_txt()
-make_xdesig_txt()
+try:
+    make_default_conv()
+    make_default_sex()
+    make_default2_param()
+    make_ObsCodes_htm()
+    make_options_txt()
+    make_rovers_txt()
+    make_xdesig_txt()
+except Exception:
+    print("some errors occur in make_default_parameter_files.py!")
+    print(traceback.format_exc())
+    error = 1
+else:
+    error = 0
+finally:
+    errorFile = open("error.txt","a")
+    errorFile.write("{0:d} 15 106 \n".format(error))
+    errorFile.close()

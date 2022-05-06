@@ -1,2 +1,5 @@
 wget -O ~/.coias/param/MPCORB.DAT https://www.minorplanetcenter.net/iau/MPCORB/MPCORB.DAT
+echo $? 12 107 >> error.txt
+
 mpc2edb.pl ~/.coias/param/MPCORB.DAT
+echo $? 15 108 >> error.txt
