@@ -8,3 +8,4 @@ findOrb/astephem
 findOrb/riseset3
 findOrb/jd
 findOrb/*.a
+__pycache__
