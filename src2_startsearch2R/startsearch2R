@@ -1,6 +1,9 @@
 #!/bin/bash
+#version 2022.5.6 K.S.
 
+set -o pipefail
 echo startsearch2R begins 2>&1 | tee log.txt
+echo $? 25 201 > error.txt
 
 #binning2R.py
 binning.py 2>&1 | tee -a log.txt
@@ -10,3 +13,6 @@ findsource_auto_thresh_correct.py 2>&1 | tee -a log.txt
 search_precise_orbit_directories.py 2>&1 | tee -a log.txt
 
 echo startsearch2R ends 2>&1 | tee -a log.txt
+
+error_handling.py | tee -a log.txt
+exit $?
