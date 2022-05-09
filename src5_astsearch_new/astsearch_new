@@ -1,6 +1,9 @@
 #!/bin/bash
+#version 2022.5.6 K.S.
 
+set -o pipefail
 echo astsearch_new begins 2>&1 | tee log.txt
+echo $? 55 501 > error.txt
 
 #REVISE 2022.4.12 KS, we collect search_astB.txt in each necessary directory to search_astB.txt in the current directory
 make_gathered_search_astB.py 2>&1 | tee -a log.txt
@@ -13,16 +16,30 @@ match2D.py 2>&1 | tee -a log.txt
 #mpc2b.py
 #I merged mpc1b.py and mpc2b.py to change_data_to_mpc_format.py 2022.4.20 K.S.
 change_data_to_mpc_format.py 2>&1 | tee -a log.txt
+
 cat numbered_disp.txt karifugo_disp.txt unknown_disp.txt > disp.txt 2>&1 | tee -a log.txt
+echo $? 54 506 >> error.txt
 cat numbered_mpc.txt karifugo_mpc.txt unknown_mpc.txt > mpc.txt 2>&1 | tee -a log.txt
+echo $? 54 507 >> error.txt
 cat numbered_all.txt karifugo_all.txt unknown_all.txt > all.txt 2>&1 | tee -a log.txt
+echo $? 54 508 >> error.txt
 #revised S.U 2021.8.27
 sed 's/r2     /r     /g;' mpc.txt > tmpmpc1.txt 2>&1 | tee -a log.txt
+echo $? 54 509 >> error.txt
 sed 's/i2     /i     /g;' tmpmpc1.txt > tmpmpc2.txt 2>&1 | tee -a log.txt
+echo $? 54 510 >> error.txt
 sed 's/r2     /r     /g;' all.txt > tmpall1.txt 2>&1 | tee -a log.txt
+echo $? 54 511 >> error.txt
 sed 's/i2     /i     /g;' tmpall1.txt > tmpall2.txt 2>&1 | tee -a log.txt
+echo $? 54 512 >> error.txt
 rm tmpmpc1.txt tmpall1.txt 2>&1 | tee -a log.txt
+echo $? 55 513 >> error.txt
 mv tmpmpc2.txt mpc.txt 2>&1 | tee -a log.txt
+echo $? 55 514 >> error.txt
 mv tmpall2.txt all.txt 2>&1 | tee -a log.txt
+echo $? 55 515 >> error.txt
 
 echo astsearch_new ends 2>&1 | tee -a log.txt
+
+error_handling.py | tee -a log.txt
+exit $?
