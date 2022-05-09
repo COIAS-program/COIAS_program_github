@@ -1,14 +1,27 @@
 #!/bin/bash
-#version 2022.4.28
+#version 2022.5.6 K.S.
 
+set -o pipefail
 echo AstsearchR_afterReCOIAS begins 2>&1 | tee log.txt
+echo $? 75 701 > error.txt
 
 cp send_mpc.txt hoge2.txt 2>&1 | tee -a log.txt
+echo $? 74 702 >> error.txt
+
 deldaburi4.py 2>&1 | tee -a log.txt
+
 dos_find mpc7.txt -k > result.txt 2>&1 | tee -a log.txt
+echo $? 75 704 >> error.txt
+
 delLargeZansa_and_modPrecision.py 1 2>&1 | tee -a log.txt
+
 reject_bright_known_asteroids_from_report.py 2>&1 | tee -a log.txt
+
 make_final_all.py 2>&1 | tee -a log.txt
+
 komejirushi.py 2>&1 | tee -a log.txt
 
 echo AstsearchR_afterReCOIAS ends 2>&1 | tee -a log.txt
+
+error_handling.py | tee -a log.txt
+exit $?

@@ -1369,7 +1369,7 @@ int main( const int argc, const char **argv)
    FILE *option_file = fopen( option_filename, "rb");
    if( option_file == NULL ){
      fprintf(stderr,"cannot open options.txt file! \n");
-     exit(0);
+     exit(1);
    }
    ////////////////////////////////////////////////
 
@@ -1378,7 +1378,7 @@ int main( const int argc, const char **argv)
    FILE *fpOrbitalElement = fopen(orbitalElementFilename, "w");
    if( fpOrbitalElement == NULL ){
      fprintf(stderr,"cannot open orbital_elements_summary.txt file! \n");
-     exit(0);
+     exit(1);
    }
    ////////////////////////////////////////////////
    double noise_in_arcseconds = 1.;

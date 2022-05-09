@@ -166,16 +166,26 @@ static char **load_mpc_stations( int *n_stations)
          {
          FILE *ifile;
 
-         if( loop)
+         if( loop){
 	   //K.S. 2021/2/15//////////////////////////
 	   ifile = fopen( rovers_filename, "rb");
+	   if(ifile==NULL){
+	     fprintf(stderr,"cannot open rovers.txt file! \n");
+	     exit(1);
+	   }
+	 }
          else
             {
 	      //K.S. 2021/2/15//////////////////////////
 	      ifile = fopen( ObsCodesHtml_filename, "rb");
-	      if( !ifile)
+	      if( !ifile){
 		//K.S. 2021/2/15//////////////////////////
 		ifile = fopen( ObsCodesHtm_filename, "rb");
+		if(ifile==NULL){
+		  fprintf(stderr,"cannot open ObsCodes.html and htm files! \n");
+		  exit(1);
+		}
+	      }
             }
          if( ifile)
             {
@@ -924,6 +934,10 @@ static int xref_designation( char *desig)
 	char xdesig_filename[256];
 	sprintf(xdesig_filename,"%s/%s",mypath,xdesig_filename_org);
 	FILE *ifile = fopen( xdesig_filename, "rb");
+	if(ifile==NULL){
+	  fprintf(stderr,"cannot open xdesig.txt file! \n");
+	  exit(1);
+	}
 	////////////////////////////////////////////////////////
       char buff[100];
       int j;
