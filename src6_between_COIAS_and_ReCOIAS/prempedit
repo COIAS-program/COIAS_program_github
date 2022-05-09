@@ -1,8 +1,9 @@
 #!/bin/bash
 
-echo prempedit begins 2>&1 | tee log.txt
+echo prempedit begins 2>&1 | tee -a log.txt
 
 prempedit2.py 2>&1 | tee -a log.txt
 makeHlist 2>&1 | tee -a log.txt
+echo $? 64 603 >> error.txt
 
 echo prempedit ends 2>&1 | tee -a log.txt

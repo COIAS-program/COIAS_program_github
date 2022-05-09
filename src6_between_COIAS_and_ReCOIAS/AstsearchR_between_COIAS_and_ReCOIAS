@@ -1,0 +1,15 @@
+#!/bin/bash
+#version 2022.5.6 K.S.
+
+set -o pipefail
+echo AstsearchR_between_COIAS_and_ReCOIAS begins 2>&1 | tee log.txt
+echo $? 65 601 > error.txt
+
+prempedit
+prempedit3.py $1
+redisp
+
+echo AstsearchR_between_COIAS_and_ReCOIAS ends 2>&1 | tee -a log.txt
+
+error_handling.py | tee -a log.txt
+exit $?

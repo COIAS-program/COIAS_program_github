@@ -1,2 +1,5 @@
 #!/bin/bash
+
+set -o pipefail
 cut -b 6-12 mpc2.txt |grep ^H |uniq > Hlist.txt
+exit $?
