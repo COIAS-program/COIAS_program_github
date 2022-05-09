@@ -1,0 +1,23 @@
+#!/bin/bash
+#version 2022.5.6 K.S.
+
+set -o pipefail
+echo getMPCORB_and_mpc2edb_for_button begins 2>&1 | tee log.txt
+echo $? 15 111 > error.txt
+
+if [ ! -d ~/.coias ]; then
+    mkdir ~/.coias 2>&1 | tee -a log.txt
+    echo $? 15 112 >> error.txt
+fi
+
+if [ ! -d ~/.coias/param ]; then
+    mkdir ~/.coias/param 2>&1 | tee -a log.txt
+    echo $? 15 113 >> error.txt
+fi
+
+getMPCORB_and_mpc2edb 2>&1 | tee -a log.txt
+
+echo getMPCORB_and_mpc2edb_for_button ends 2>&1 | tee -a log.txt
+
+error_handling.py | tee -a log.txt
+exit $?
