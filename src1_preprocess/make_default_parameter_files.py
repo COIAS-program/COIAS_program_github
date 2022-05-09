@@ -1837,12 +1837,15 @@ try:
     make_options_txt()
     make_rovers_txt()
     make_xdesig_txt()
+    
 except Exception:
-    print("some errors occur in make_default_parameter_files.py!")
+    print("Some errors occur in make_default_parameter_files.py!")
     print(traceback.format_exc())
     error = 1
+    
 else:
     error = 0
+    
 finally:
     errorFile = open("error.txt","a")
     errorFile.write("{0:d} 15 106 \n".format(error))

@@ -6,10 +6,12 @@ import traceback
 
 try:
     errorFile = open("error.txt","r")
+    
 except FileNotFoundError:
     print("error.txt does not exist!")
     print(traceback.format_exc())
     sys.exit(15)
+    
 else:
     lines = errorFile.readlines()
     errorFile.close()
