@@ -7,10 +7,10 @@ import numpy
 
 ext_modules = [
     Extension(
-        "mktracklet_opt", sources=["mktracklet_opt.pyx"], include_dirs=[".", numpy.get_include()]
+        "mktraclet", sources=["mktraclet.pyx"], include_dirs=[".", numpy.get_include()]
     )
 ]
 
-setup(name="mktracklet_opt", ext_modules=cythonize(ext_modules))
+setup(name="mktraclet", ext_modules=cythonize(ext_modules))
 
 # python setup12.py build_ext --inplace

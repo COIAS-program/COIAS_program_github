@@ -9,7 +9,7 @@ echo $? 55 501 > error.txt
 make_gathered_search_astB.py 2>&1 | tee -a log.txt
 #astsearch1K.py
 #I applay cython partially on 2020.5.28
-astsearch1M2.py 2>&1 | tee -a log.txt
+astsearch1M2_optimized.py 2>&1 | tee -a log.txt
 #astsearch1KBK.py
 match2D.py 2>&1 | tee -a log.txt
 #mpc1b.py
