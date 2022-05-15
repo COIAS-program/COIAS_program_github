@@ -113,6 +113,7 @@ def detect_points_from_tracklets(trackletClassList, imageIdTrac1, imageIdTrac2, 
                 trackletClassList[k].add_data(imageIdPredict, radecbList[imageIdPredict][ref])
             elif mode == "DestructDetected":
                 del trackletClassList[k]
+                continue
 
         #If the maximum detection number for this tracklet in this stage is smaller than N_DETECT_THRESH,
         #this tracklet has no future and delete this.
