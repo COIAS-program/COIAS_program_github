@@ -40,17 +40,7 @@ try:
 
     # read scidata
     scidata1 = fits.open('warp1_bin.fits')
-    scidata2 = fits.open('warp2_bin.fits')
-    scidata3 = fits.open('warp3_bin.fits')
-    scidata4 = fits.open('warp4_bin.fits')
-    scidata5 = fits.open('warp5_bin.fits')
-
     jd1 = scidata1[0].header['JD']
-    jd2 = scidata2[0].header['JD']
-    jd3 = scidata3[0].header['JD']
-    jd4 = scidata4[0].header['JD']
-    jd5 = scidata5[0].header['JD']
-
 
     # ra dec
     ra = scidata1[0].header['CRVAL1']

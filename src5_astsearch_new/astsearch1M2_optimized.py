@@ -142,12 +142,13 @@ try:
     jdList = []
     zmList = []
     nbinList = []
+    filList = []
     for f in range(NImage):
         scidataList.append(fits.open(warpFileNames[f]))
         jdList.append(scidataList[f][0].header['JD'])
         zmList.append(scidataList[f][0].header['Z_P'])
         nbinList.append(scidataList[f][0].header['NBIN'])
-    fil = scidataList[0][0].header['FILTER']
+        filList.append(scidataList[f][0].header['FILTER'])
     #--------------------------------------------------
 
     #---read ascii source list-------------------------
@@ -249,7 +250,7 @@ try:
                 # Noise in ADU
                 mage = np.round(1.0857 / SNR, decimals=3)
 
-                result.append([idTracklet, trackletListAll[p][k].data[image][0], trackletListAll[p][k].data[image][1], trackletListAll[p][k].data[image][2], mag, mage, xypix[0], xypix[1], fil])
+                result.append([idTracklet, trackletListAll[p][k].data[image][0], trackletListAll[p][k].data[image][1], trackletListAll[p][k].data[image][2], mag, mage, xypix[0], xypix[1], filList[image]])
 
             idTracklet += 1
 

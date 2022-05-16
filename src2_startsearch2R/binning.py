@@ -30,7 +30,7 @@ try:
     if len(img_list)==0:
         raise FileNotFoundError
 
-    for i in img_list[0:5]:
+    for i in img_list:
         hdu1 = fits.open(i)
         xpix = hdu1[1].header['NAXIS1']
         ypix = hdu1[1].header['NAXIS2']

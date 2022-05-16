@@ -4,6 +4,7 @@
 import subprocess
 from os.path import expanduser
 import traceback
+import glob
 
 ### function #####################################################
 def calc_mean_detection_number(detect_thresh):
@@ -27,10 +28,10 @@ def calc_mean_detection_number(detect_thresh):
 
     #---calc mean detection number----------------
     detection_number = 0
-    file_number = 5
-    for i in range(file_number):
-        detect_file_name = "warp"+str(i+1)+"_bin.dat"
-        file = open(detect_file_name, "r")
+    fileNameList = sorted(glob.glob('warp*_bin.dat'))
+    file_number = len(fileNameList)
+    for fileName in fileNameList:
+        file = open(fileName, "r")
         detect_lines = file.readlines()
         detection_number += len(detect_lines)-5
         file.close

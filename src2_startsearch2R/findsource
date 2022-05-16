@@ -3,7 +3,7 @@
 
 set -o pipefail
 
-for i in warp[0-5]_bin.fits
+for i in warp*_bin.fits
 do
 echo $i
 t1=$(echo $i|sed "s/.fits/.dat/g")

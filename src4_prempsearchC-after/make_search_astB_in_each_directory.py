@@ -5,12 +5,13 @@ import traceback
 
 try:
     #---read precise_orbit_directories.txt---------------------------------------
-    Ndata = 5
     directoryNames = []
     isCorrectDirectory = []
     preciseOrbitDirectoriesFile = open("precise_orbit_directories.txt","r")
-    for i in range(Ndata):
-        content = preciseOrbitDirectoriesFile.readline().split()
+    lines = preciseOrbitDirectoriesFile.readlines()
+    Ndata = len(lines)
+    for line in lines:
+        content = line.split()
         directoryNames.append(content[0])
         isCorrectDirectory.append(int(content[1]))
     preciseOrbitDirectoriesFile.close()

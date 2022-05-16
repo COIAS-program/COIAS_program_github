@@ -9,7 +9,8 @@ import traceback
 
 try:
     #---variables--------------------------------
-    Ndata = 5
+    fitsFileNameList = sorted(glob.glob('warp*_bin.fits'))
+    Ndata = len(fitsFileNameList)
     presentTimeStamp = time.time()
     isCorrectDirectory = [0] * Ndata
     directoryNames = ['a'] * Ndata

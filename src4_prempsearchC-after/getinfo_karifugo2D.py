@@ -17,7 +17,7 @@ def getinfo(x):
     radec =[]
     # tentative prevention of error (2022.4.8 KS)###############################
     try:
-        objRadec = Horizons(id=name_list[x],location='568',epochs=time_list2[0:5],id_type="smallbody").ephemerides()['targetname','datetime_jd','RA','DEC','V']
+        objRadec = Horizons(id=name_list[x],location='568',epochs=time_list2[0:Ndata],id_type="smallbody").ephemerides()['targetname','datetime_jd','RA','DEC','V']
     except ValueError:
         print("We cannot get information of id="+name_list[x]+" from JPL.")
         global NLoseAsteroids
@@ -42,22 +42,30 @@ try:
 
     if(haveAllPreciseOrbits==0):
         #---read precise_orbit_directories.txt---------------------------------------
-        Ndata = 5
         NShouldGetPreciseOrbit = 0
         directoryNames = []
         isCorrectDirectory = []
         preciseOrbitDirectoriesFile = open("precise_orbit_directories.txt","r")
-        for i in range(Ndata):
-            content = preciseOrbitDirectoriesFile.readline().split()
+        lines = preciseOrbitDirectoriesFile.readlines()
+        Ndata = len(lines)
+        i = 0
+        for line in lines:
+            content = line.split()
             directoryNames.append(content[0])
             isCorrectDirectory.append(int(content[1]))
             if isCorrectDirectory[i]==0:
                 NShouldGetPreciseOrbit += 1
+            i += 1
         preciseOrbitDirectoriesFile.close()
         #----------------------------------------------------------------------------
     
         # read scidata
-        img_list = sorted(glob.glob('warp[1-5]_bin.fits'))
+        img_list = sorted(glob.glob('warp*_bin.fits'))
+        if len(img_list)==0:
+            raise FileNotFoundError
+        if len(img_list)!=Ndata:
+            print("something wrong! len(img_list)={0:d} Ndata={1:d}".format(len(img_list), Ndata))
+            raise Exception
 
         presentTimeStamp = time.time()
         time_list = []
@@ -140,7 +148,7 @@ try:
         for l in range(len(tmp8)):
             tmp8[l,0] = tmp8[l,0].replace("(","").replace(")","").replace(" ","")
         
-        fList = np.ndarray((5),dtype=object)
+        fList = np.ndarray((Ndata),dtype=object)
         for i in range(Ndata):
             if isCorrectDirectory[i]==0:
                 fList[i] = open(directoryNames[i]+"/karifugo_new2B.txt","w",newline="\n")
