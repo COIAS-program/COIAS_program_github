@@ -3,7 +3,7 @@
 """
 Created on Thu Mar 26 00:38:58 2020
 @author: urakawa
- Time-stamp: <2022/05/9 10:00:00 (JST) sugiura>
+ Time-stamp: <2022/05/20 9:00:00 (JST) sugiura>
 """
 
 import glob
@@ -35,11 +35,12 @@ try:
     head_list = []
     scidata = np.empty((len(img_list), np.shape(hdutmp[0].data)[0], np.shape(hdutmp[0].data)[1]))
     maskdata = np.empty((len(img_list), np.shape(hdutmp[0].data)[0], np.shape(hdutmp[0].data)[1]))
-    image_sky_masked = np.empty_like(scidata)
+    image_sky_nan_mask = np.empty_like(scidata)
+    image_sky_nan = np.empty_like(scidata)
     del hdutmp
 
     ## Loading original fits images
-    puttys = []
+    nanmaskList = []
     for i in range(len(img_list)):
         hdu = fits.open(img_list[i])
         scidata[i] = hdu[0].data
@@ -47,6 +48,7 @@ try:
         ## Make sky background image to replace NaN region #####
         # masking NaN
         nanmask = np.isnan(scidata[i])
+        nanmaskList.append(nanmask)
         scidata_maskednan = np.ma.array(scidata[i], mask=nanmask)
 
         # sigma-clipping and measuring statistics to make sky
@@ -55,10 +57,9 @@ try:
 
         # make sky background image
         image_sky = photutils.datasets.make_noise_image((np.shape(scidata[i])), distribution='gaussian', mean=sky_mean, stddev=sky_stddev)
-        image_sky_masked[i] = np.ma.array(image_sky, mask=nanmask)
 
         # replace nan -> sky background
-        scidata[np.isnan(scidata)] = 0  # replace nan =>0 temporaly
+        scidata[i][nanmask] = 0  # replace nan =>0 temporaly
         ###########################################################
 
         ## Mask image of HSC
@@ -77,11 +78,17 @@ try:
     tmp_hanten = np.where(median_maskdata == 0, 1, median_maskdata)
     hanten_image = np.where(tmp_hanten > 1, 0, tmp_hanten)
 
+    ## make sky masked (K.S. 2022/5/20) ###
+    for i in range(len(img_list)):
+        image_sky_nan_mask[i]  = np.where( (nanmaskList[i]) | (hanten_image == 0), image_sky, 0)
+        image_sky_nan[i]  = np.where(nanmaskList[i], image_sky, 0)
+    #######################################
+
     ## masking and output to fits images ##
     for i in range(len(img_list)):
         ## masked scidata 
         ## masking : image * hanten median
-        output_scidata_masked = scidata[i] * hanten_image + image_sky_masked[i]
+        output_scidata_masked = scidata[i] * hanten_image + image_sky_nan_mask[i]
         hdunew = fits.PrimaryHDU(output_scidata_masked, head_list[i])
         ## output 
         fitsname = 'warp%s_bin' % str(i + 1)
@@ -91,7 +98,7 @@ try:
 
         ## non-masked scidata
         ## masking : image * hanten median
-        output_scidata = scidata[i] + image_sky_masked[i]
+        output_scidata = scidata[i] + image_sky_nan[i]
         # hdunew = fits.PrimaryHDU( output_scidata, head_list[i] )  ## comment-out: non-mask image is not needed to fits format
         ## output 
         pngname = '%s_disp-coias_nonmask' % str(i + 1)  # NM added 2021-08-10
