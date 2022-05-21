@@ -12,7 +12,7 @@ ctypedef np.float64_t DOUBLE_t
 ### input: two-dimensional numpy arrays, first-dim: point id, second-dim: jd, ra, dec#####################
 ### input: delta t of two images in the unit of "minits" #################################################
 ### output: three-dimensional list, first-dim: tracklet id, second-dim: image id, third-dim: jd, ra, dec##
-def make_tracklet(np.ndarray[DOUBLE_t,ndim =2] radec1b, np.ndarray[DOUBLE_t,ndim =2] radec2b, double dt):
+def make_tracklet(np.ndarray[DOUBLE_t,ndim =2] radec1b, np.ndarray[DOUBLE_t,ndim =2] radec2b, double dt, double velThresh):
     cdef int i,j,num1,num2
     cdef double raDelta, decDelta, vel
     with  boundscheck(False), wraparound(False):
@@ -27,7 +27,7 @@ def make_tracklet(np.ndarray[DOUBLE_t,ndim =2] radec1b, np.ndarray[DOUBLE_t,ndim
                 #arcsec/min
                 vel = np.sqrt(raDelta*raDelta + decDelta*decDelta)*3600/dt
                 #revised 2021.9.2. selection of less than 1.5 aresec/min 
-                if vel < 1.5:
+                if vel < velThresh:
                     tracList.append([radec1b[i],radec2b[j]])
                     
     return tracList

@@ -10,6 +10,7 @@ from astropy.io import fits, ascii
 from astropy.wcs import wcs
 import traceback
 import mktracklet_opt
+import readparam
 
 from photutils import CircularAperture
 from photutils import CircularAnnulus
@@ -122,20 +123,25 @@ def detect_points_from_tracklets(trackletClassList, imageIdTrac1, imageIdTrac2, 
 ##########################################################
 
 
-### DEVEOPER DEFINE PARAMETER ############################
-"""
-検出数がこの値を越えたら移動天体候補と見做します
-"""
-N_DETECT_THRESH = 4
-##########################################################
-
 try:
     print("astsearch1M2.py starts")
     start = time.time()
+
+    ### read parameters ######################################
+    params = readparam.readparam()
+    N_DETECT_THRESH = params["nd"]
+    VEL_THRESH = params["vt"]
+    APARTURE_RADIUS = params["ar"]
+    ##########################################################
+    
+    
     ### read global data #####################################
     textFileNames = sorted(glob.glob('warp*_bin.dat'))
     warpFileNames = sorted(glob.glob('warp*_bin.fits'))
     NImage = len(warpFileNames)
+
+    if N_DETECT_THRESH > NImage:
+        raise ValueError("N_DETECT_THRESH(={0}) is larger than NImage(={1})!".format(N_DETECT_THRESH,NImage))
 
     #---read scidata-----------------------------------
     scidataList = []
@@ -185,7 +191,7 @@ try:
                 continue
 
             #---mktracklet and store tracklets-----------
-            tracList = mktracklet_opt.make_tracklet(radecbList[leftTracId], radecbList[rightTracId], abs(jdList[rightTracId]-jdList[leftTracId])*MINITS_IN_A_DAY)
+            tracList = mktracklet_opt.make_tracklet(radecbList[leftTracId], radecbList[rightTracId], abs(jdList[rightTracId]-jdList[leftTracId])*MINITS_IN_A_DAY,abs(VEL_THRESH))
             trackletClassList = []
             for k in range(len(tracList)):
                 trackletClassList.append( TrackletClass(leftTracId, rightTracId, tracList[k]) )
@@ -219,7 +225,7 @@ try:
                 xypix = wcs0.wcs_world2pix(trackletListAll[p][k].data[image][1], trackletListAll[p][k].data[image][2], 1)
 
                 # param of aperture
-                w = 6
+                w = APARTURE_RADIUS
                 wa = w * u.pix
                 w_in = (w + 2) * u.pix
                 w_out = (w + 8) * u.pix
@@ -259,6 +265,7 @@ try:
     ##########################################################
     end = time.time()
     print("astsearch1M2.py ends. elapsed time = {0:.2f} s".format(end-start))
+    
 
 except FileNotFoundError:
     print("Some previous files are not found in astsearch1M2.py!")
