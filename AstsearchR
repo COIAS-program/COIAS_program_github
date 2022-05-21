@@ -1,12 +1,12 @@
 #!/bin/bash
-# Time-stamp: <2022/04/28 13:37:00 (JST) sugiura>
-#startsearch
+# Time-stamp: <2022/05/20 21:00:00 (JST) sugiura>
+
 preprocess
 startsearch2R
 #exec one time prempsearchC when you change the FOV
 prempsearchC-before
 prempsearchC-after
-astsearch_new
+astsearch_new "$@"
 #fits2png
 #add the difference contrast version if you need
 #fits2png2

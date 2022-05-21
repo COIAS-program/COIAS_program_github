@@ -1,10 +1,12 @@
 #!/bin/bash
-#version 2022.5.6 K.S.
+# Time-stamp: <2022/05/20 21:00:00 (JST) sugiura>
 
 set -o pipefail
 echo astsearch_new begins 2>&1 | tee log.txt
 echo $? 55 501 > error.txt
 
+mkparam "$@" 2>&1 | tee -a log.txt
+echo $? 55 515 >> error.txt
 #REVISE 2022.4.12 KS, we collect search_astB.txt in each necessary directory to search_astB.txt in the current directory
 make_gathered_search_astB.py 2>&1 | tee -a log.txt
 #astsearch1K.py
