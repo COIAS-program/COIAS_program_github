@@ -18,7 +18,7 @@ from tkinter import messagebox
 import tkinter.simpledialog as simpledialog
 #input ast data
 
-ast_xy = np.loadtxt("redisp.txt",dtype = 'str')
+ast_xy = np.loadtxt("disp.txt",dtype = 'str')
 #img = Image.open('warp1_bin.png')
 img = Image.open('1_disp-coias.png') # NM modified 2021-08-10
 xpix = img.size[0]
@@ -114,7 +114,7 @@ class Asthunter(tk.Frame):
         self.messageBox.grid(row=0, column=26, columnspan=42,sticky = tk.W)
 #SU added 2021/7/12
 #set mouse coorinate by rightclick.=> by spacebar (S.U 2021/9/9 )
-        self.sub_win.bind('<space>',self.spacebar)
+        self.sub_win.bind('<KeyPress-space>',self.spacebar)
 
 
 # load_file        
@@ -207,7 +207,8 @@ class Asthunter(tk.Frame):
         self.xycoord.delete(0,tk.END)
         self.xycoord.insert(tk.END,("X pix "+str(self.xp2)+", Y pix " +str(self.yp2)))
 
-#SU added 2021/07/12  get coordinate by right click => by spacebar(2021/9/9)--------------------------------------------------------
+#SU added 2021/07/12  get coordinate by right click => by spacebar(2021/9/9)
+#In the case of spacebar, yp2 needs offset of 30pix. SU don't know the reason(2021/10/28) -------------------------------------------
     def spacebar(self,event):
 #        print('right click')
         res = messagebox.askquestion("New number","Same object with a previous image?")
@@ -216,12 +217,14 @@ class Asthunter(tk.Frame):
 #get the top left coord in image
             xp = self.xscroll.get()
             yp = self.yscroll.get()
-#top left coord in image
+#top left coord in gui image
             xp1 = int(xp[0]*xpix)
             yp1 = int(yp[0]*ypix)
+            #print(xp[self.image_number],yp[self.image_number],xpix,ypix,xp1,yp1,event.x,event.y)
 #add the mouse position
             self.xp2 = event.x + xp1
-            self.yp2 = event.y + yp1
+#            self.yp2 = event.y + yp1 
+            self.yp2 = event.y + yp1 -30
             self.coord = self.xp2,self.yp2
             print(self.coord)
 #            comment = str("If you measure (X, Y) = (") + str(self.xp2) + " pix, " + str(self.yp2) + str(" pix), please input temporay number")
@@ -256,7 +259,7 @@ class Asthunter(tk.Frame):
             yp1 = int(yp[0]*ypix)
 #add the mouse position
             self.xp2 = event.x + xp1
-            self.yp2 = event.y + yp1
+            self.yp2 = event.y + yp1 - 30
             self.coord = self.xp2,self.yp2
 #            print(self.coord)
 

@@ -1,396 +1,724 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
-#Asthunter ver 0.2 /2020/1/27"
-#Asthunter => COIAS ver 0.0 /2020/6/10"
+#COIAS ver 1.0
+#timestamp 2022/5/26 15:30 sugiura
 
 import tkinter as tk
-import tkinter.filedialog as fd
-import sys, os.path
-import os
-from PIL import Image
-from tkinter import ttk
-from time import sleep
-import numpy as np
+from tkinter import messagebox,simpledialog
+from PIL import Image, ImageTk
+from astropy.io import fits
+import traceback
+import sys
+import glob
 import re
-import tkinter.scrolledtext as st
-#SU. revised
-from tkinter import messagebox
-import tkinter.simpledialog as simpledialog
-#input ast data
+import math
+import calcrect
 
-ast_xy = np.loadtxt("disp.txt",dtype = 'str')
-#img = Image.open('warp1_bin.png')
-img = Image.open('1_disp-coias.png') # NM modified 2021-08-10
-xpix = img.size[0]
-ypix = img.size[1]
-path_name = os.getcwd()
+### GLOBAL CONSTANTS #################################################
+try:
+    PNGSIZES  = Image.open('1_disp-coias.png').size
+    FITSSIZES = (fits.open('warp1_bin.fits')[0].header['NAXIS1'],fits.open('warp1_bin.fits')[0].header['NAXIS2'])
+except FileNotFoundError:
+    print("1st png file or fits file are not found!")
+    print(traceback.format_exc())
+    sys.exit(1)
+
+NALLIMAGES = len(glob.glob("*_disp-coias.png"))
+if NALLIMAGES <= 1:
+    print("Number of images is smaller than 1! NALLIMAGES={0:d}".format(NALLIMAGES))
+    sys.exit(1)
+
+ROOT = tk.Tk()
+######################################################################
 
 
+### Functions for converting fits coords between png tk coords ########
+def convertFits2PngCoords(fitsPosition):
+    if fitsPosition[0]>FITSSIZES[0] or fitsPosition[1]>FITSSIZES[1]:
+        raise ValueError("invalid fits positions! X={0:d} Xmax={1:d} Y={2:d} Ymax={3:d}".format(fitsPosition[0],FITSSIZES[0],fitsPosition[1],FITSSIZES[1]))
+    
+    fitsXRelPos = float(fitsPosition[0])/float(FITSSIZES[0])
+    fitsYRelPos = float(fitsPosition[1])/float(FITSSIZES[1])
 
-#class
-class Asthunter(tk.Frame):
-    def __init__(self, master=None):        
-        tk.Frame.__init__(self,master)
-        self.grid()
-        self.create_widgets()
-#first window
-    def create_widgets(self):
-        self.button1 = tk.Button(root,text='Load img',font=("",14),command = self.load_file)
-        self.button1.grid(row=0,column =0,sticky = 'NW')
-        self.button4 = tk.Button(root,text='Quit',font=("",14),command = root.quit)
-        self.button4.grid(row=0,column=2,sticky = 'NE')
-        self.button5 = tk.Button(root,text='OutPut',font=("",14),command = self.output)
-        self.button5.grid(row=0,column=1,sticky = 'NE')
-#moving object H number 
-        self.t0 = st.ScrolledText(font=("Helvetica", 14),width = 10,height = 20)
-        self.t0.grid(row = 1,column =0,columnspan = 1000,sticky = tk.W+tk.E)
+    pngXRelPos = fitsXRelPos
+    pngYRelPos = 1.0 - fitsYRelPos
+
+    pngXPosition = int(pngXRelPos*PNGSIZES[0])
+    pngYPosition = int(pngYRelPos*PNGSIZES[1])
+
+    return (pngXPosition, pngYPosition)
+
+def convertPng2FitsCoords(pngPosition):
+    if pngPosition[0]>PNGSIZES[0] or pngPosition[1]>PNGSIZES[1]:
+        raise ValueError("invalid png positions! X={0:d} Xmax={1:d} Y={2:d} Ymax={3:d}".format(pngPosition[0],PNGSIZES[0],pngPosition[1],PNGSIZES[1]))
+
+    pngXRelPos = float(pngPosition[0])/float(PNGSIZES[0])
+    pngYRelPos = float(pngPosition[1])/float(PNGSIZES[1])
+
+    fitsXRelPos = pngXRelPos
+    fitsYRelPos = 1.0 - pngYRelPos
+
+    fitsXPosition = int(fitsXRelPos*FITSSIZES[0])
+    fitsYPosition = int(fitsYRelPos*FITSSIZES[1])
+
+    return (fitsXPosition, fitsYPosition)
+######################################################################
+
+
+### Class for store a data of an asteroid in an image ################
+class DataOfAnAsteroidInAnImage:
+    #attributes: --------------------------------------------
+    #            astName(str)
+    #            NImage(int)
+    #            fitsPosition(int tuple[2])
+    #            pngPosition(int tuple[2])
+    #            isManualAst(bool)
+    #            aparturePngPoints(int list[3]tuple[2])
+    #            apartureFitsPoints(int list[3]tuple[2])
+    #            isSurvive(bool)
+    #            isKnownAsteroid(bool)
+    #--------------------------------------------------------
+    
+    def __init__(self, astName, NImage, fitsPosition, isManualAst=False, aparturePngPoints=[None, None, None]):
+        if type(astName)!=str or NImage>=NALLIMAGES or len(fitsPosition)!=2 or fitsPosition[0]>FITSSIZES[0] or fitsPosition[1]>FITSSIZES[1]:
+            raise ValueError("Some values for initializing data class are invalid.")
+        if isManualAst:
+            if type(isManualAst)!=bool or len(aparturePngPoints)!=3 or len(aparturePngPoints[0])!=2 or len(aparturePngPoints[1])!=2 or len(aparturePngPoints[2])!=2:
+                raise ValueError("Some manual values for initializing data class are invalid.")
+            for i in range(3):
+                if aparturePngPoints[i][0]>PNGSIZES[0] or aparturePngPoints[i][1]>PNGSIZES[1]:
+                    raise ValueError("Some aparture points are invalid.")
         
-#second window
-    def sub_window(self):
-        global image_data
-        print("filenums",self.filenums)
-#        global inputnumber
-#        self.inputnumber = []
-        self.file_num = 0
-        self.SqOnOffFlag = 1
-        self.sub_win = tk.Toplevel(root)
-        self.sub_win.title('COIAS ver 0')
-        self.sub_win.geometry('1440x900')
-        self.canvas = tk.Canvas(self.sub_win,width=1350,height = 800)
-        self.canvas.grid(row=1,column=0,columnspan = 70, sticky=tk.W+tk.E+tk.N+tk.S)
-#set scroll
-        self.xscroll = tk.Scrollbar(self.sub_win,orient = tk.HORIZONTAL,command = self.canvas.xview)
-        self.xscroll.grid(row=2,column=0,columnspan = 70,sticky = tk.E+tk.W)
-        self.yscroll = tk.Scrollbar(self.sub_win,orient = tk.VERTICAL,command = self.canvas.yview)
-        self.yscroll.grid(row=1,column=70,sticky = tk.N+tk.S)
-        self.canvas.config(yscrollcommand = self.yscroll.set)
+        self.astName = astName
+        self.NImage = NImage
+        self.fitsPosition = fitsPosition
+        self.pngPosition = convertFits2PngCoords(fitsPosition)
+        self.isManualAst = isManualAst
+        self.aparturePngPoints = aparturePngPoints
+        if isManualAst:
+            self.apartureFitsPoints = []
+            for i in range(3):
+                self.apartureFitsPoints.append( convertPng2FitsCoords(aparturePngPoints[i]) )
+        else:
+            self.apartureFitsPoints = [None, None, None]
+
+        if re.search(r'^H......',self.astName)!=None:
+            self.isSurvive = False
+            self.isKnownAsteroid = False
+        else:
+            self.isSurvive = True
+            self.isKnownAsteroid = True
+######################################################################
+
+
+### Class for store all asteroids data ###############################
+class DataOfAllAsteroids:
+    #attributes: --------------------------------------------
+    #            Ndata(int)
+    #            astData(list of DataOfAnAsteroidInAnImage)
+    #            NHMax(int)
+    #--------------------------------------------------------
+    
+    #---constructor------------------------------------------
+    def __init__(self, mode):
+        if not (mode=="COIAS" or mode=="MANUAL" or mode=="RECOIAS"):
+            raise ValueError("invalid mode for initializeing DataOfAllAsteroids instance")
+
+        if mode=="COIAS":
+            inputFileName = "disp.txt"
+        else:
+            inputFileName = "redisp.txt"
+
+        f = open(inputFileName,"r")
+        dataLines = f.readlines()
+        f.close()
+            
+        self.Ndata = len(dataLines)
+        self.astData = []
+        for line in dataLines:
+            contents = line.split()
+            self.astData.append( DataOfAnAsteroidInAnImage(contents[0], int(contents[1]), (int(float(contents[2])),int(float(contents[3]))) ) )
+
+        self.NHMax = 0
+        for i in range(self.Ndata):
+            if re.search(r'^H......',self.astData[i].astName)!=None:
+                NH = int(self.astData[i].astName.lstrip('H'))
+                if NH > self.NHMax:
+                    self.NHMax = NH
+    #----------------------------------------------------------
+
+    #---add an asteroid data for manual pickup-----------------
+    def addManualAsteroidData(self, isSameAsPrevious, NImage, pngPosition, aparturePngPoints, isSpecified=False, NH=None):
+        if type(isSameAsPrevious)!=bool:
+            raise ValueError("isSameAsPrevious in addManualAsteroidData is not boolean value.")
+
+        if isSpecified:
+            if NH==None or type(NH)!=int:
+                raise ValueError("please specify NH in int for specified mode.")
+
+        if not isSpecified:
+            if not isSameAsPrevious:
+                self.NHMax += 1
+            astName = "H"+str(self.NHMax).rjust(7,'0')
+        else:
+            astName = "H"+str(NH).rjust(7,'0')
+
+        self.Ndata += 1
+        self.astData.append( DataOfAnAsteroidInAnImage(astName, NImage, convertPng2FitsCoords(pngPosition), True, aparturePngPoints) )
+    #----------------------------------------------------------
+
+    #---delete asteroid data for manual mode-------------------
+    def delManualAsteroidData(self, astName, NImage):
+        isNotFound = True
+        for i in range(self.Ndata):
+            if self.astData[i].astName==astName and self.astData[i].NImage==NImage and self.astData[i].isManualAst:
+                isNotFound = False
+                break
+
+        if isNotFound:
+            print("we cannot find match astdata in delManualAsteroidData")
+        else:
+            del self.astData[i]
+            self.Ndata -= 1
+    #----------------------------------------------------------
+
+    #---output approved H numbers to memo.txt in COIAS mode----
+    def outputMemoTxt(self):
+        outputNList = []
+        f = open("memo.txt","w",newline="\n")
+        for i in range(self.Ndata):
+            if (not self.astData[i].isKnownAsteroid) and (self.astData[i].isSurvive) and (not self.astData[i].isManualAst):
+                outputFlag = True
+                for outputN in outputNList:
+                    if outputN == int(self.astData[i].astName.lstrip('H')):
+                        outputFlag = False
+                if outputFlag:
+                    f.write(self.astData[i].astName.lstrip('H')+"\n")
+                    outputNList.append(int(self.astData[i].astName.lstrip('H')))
+
+        f.close()
+    #----------------------------------------------------------
+
+    #---output manual information to memo_manual.txt in MANUAL mode
+    def outputMemoManualTxt(self):
+        sortedAstData = sorted(self.astData, key=lambda u: u.astName+str(u.NImage))
+        f = open("memo_manual.txt","w",newline="\n")
+        for i in range(self.Ndata):
+            if sortedAstData[i].isManualAst:
+                f.write(sortedAstData[i].astName.lstrip('H')+" "+str(sortedAstData[i].NImage)+" "+str(sortedAstData[i].fitsPosition[0])+" "+str(sortedAstData[i].fitsPosition[1])+" "+str(sortedAstData[i].apartureFitsPoints[0][0])+" "+str(sortedAstData[i].apartureFitsPoints[0][1])+" "+str(sortedAstData[i].apartureFitsPoints[1][0])+" "+str(sortedAstData[i].apartureFitsPoints[1][1])+" "+str(sortedAstData[i].apartureFitsPoints[2][0])+" "+str(sortedAstData[i].apartureFitsPoints[2][1])+"\n")
+
+        f.close()
+    #--------------------------------------------------------------
+######################################################################
+
+
+### Class for Tk inter ###############################################
+class COIAS:
+    #---constructor---------------------------------------
+    #---this defines first window-------------------------
+    #---important attributes: ----------------------------
+    #                         maskOrNonmaskVar(int)-------
+    #                         COIASModeVar(int)-----------
+    def __init__(self, master=None):
+        #---title of 1st window
+        master.title("COIAS ver.1 mode selection")
+        
+        #---local constants
+        fontSizeFirstWindow = 20
+        padSizeFirstWindow = 5
+        
+        #---buttons for load img and quit
+        self.firstWinLoadImgButton = tk.Button(ROOT, text="Load img", font=("",fontSizeFirstWindow), command = self.makeMainWindow)
+        self.firstWinLoadImgButton.grid(row=0, column=0,sticky=tk.W+tk.E, padx=padSizeFirstWindow, pady=padSizeFirstWindow)
+        self.firstWinQuitButton = tk.Button(ROOT, text="Quit", font=("",fontSizeFirstWindow), command = ROOT.quit)
+        self.firstWinQuitButton.grid(row=0, column=1, sticky=tk.W+tk.E, padx=padSizeFirstWindow, pady=padSizeFirstWindow)
+
+        #---just label
+        self.firstWinLabel1 = tk.Label(ROOT, text="mode select", font=("",fontSizeFirstWindow), bg="LightSkyBlue")
+        self.firstWinLabel1.grid(row=1, column=0, columnspan=3, sticky=tk.W+tk.E, padx=padSizeFirstWindow, pady=padSizeFirstWindow)
+
+        #---radio buttons for mask or nonmask select
+        #---self.maskOrNonmaskVar: 0 = mask
+        #---                       1 = nonmask
+        self.firstWinLabelRadio = tk.Label(ROOT, text="image preference", font=("",fontSizeFirstWindow), bg="gray80")
+        self.firstWinLabelRadio.grid(row=2, column=0, sticky=tk.W, padx=padSizeFirstWindow, pady=padSizeFirstWindow)
+
+        self.maskOrNonmaskVar = tk.IntVar()
+        self.maskOrNonmaskVar.set(0)
+        self.rdoMask = tk.Radiobutton(ROOT, value=0, variable=self.maskOrNonmaskVar, text="mask", font=("",fontSizeFirstWindow))
+        self.rdoMask.grid(row=3, column=0, sticky=tk.W, padx=padSizeFirstWindow, pady=padSizeFirstWindow)
+        self.rdoNonmask = tk.Radiobutton(ROOT, value=1, variable=self.maskOrNonmaskVar, text="nonmask", font=("",fontSizeFirstWindow))
+        self.rdoNonmask.grid(row=3, column=1, sticky=tk.W, padx=padSizeFirstWindow, pady=padSizeFirstWindow)
+
+        #---radio buttons for mode select
+        #---self.COIASMode: 0 = COIAS
+        #---                1 = MANUAL
+        #---                2 = RECOIAS
+        self.firstWinLabelMode = tk.Label(ROOT, text="COIAS mode", font=("",fontSizeFirstWindow), bg="gray80")
+        self.firstWinLabelMode.grid(row=4, column=0, sticky=tk.W, padx=padSizeFirstWindow, pady=padSizeFirstWindow)
+        
+        self.COIASModeVar = tk.IntVar()
+        self.COIASModeVar.set(0)
+        self.rdoCOIAS = tk.Radiobutton(ROOT, value=0, variable=self.COIASModeVar, text="search", font=("",fontSizeFirstWindow))
+        self.rdoCOIAS.grid(row=5, column=0, sticky=tk.W, padx=padSizeFirstWindow, pady=padSizeFirstWindow)
+        self.rdoMANUAL = tk.Radiobutton(ROOT, value=1, variable=self.COIASModeVar, text="manual measure", font=("",fontSizeFirstWindow))
+        self.rdoMANUAL.grid(row=5, column=1, sticky=tk.W, padx=padSizeFirstWindow, pady=padSizeFirstWindow)
+        self.rdoRECOIAS = tk.Radiobutton(ROOT, value=2, variable=self.COIASModeVar, text="reconfirm", font=("",fontSizeFirstWindow))
+        self.rdoRECOIAS.grid(row=5, column=2, sticky=tk.W, padx=padSizeFirstWindow, pady=padSizeFirstWindow)
+
+
+    #---produce main window----------------------------
+    #---important attributes: -------------------------
+    #---                      COIASMode(str)-----------
+    #---                      presentMaskOrNonmask(int)
+    #---                      asteroidData(DataOfAllAsteroids)
+    #---                      pngImages(tk.PhotoImage)-
+    #---                      presentImageNumber(int)--
+    #---                      sqOnOffFlag(bool)--------
+    #---                      doBlink(bool)------------
+    #---                      specifyHNumber(bool)-----
+    #---                      mousePngPosition(int list[2])
+    #---                      coldPresentMousePosition(int list[2])
+    #---                      coldPresentImageNumber(int)-----
+    #---                      coldSpecifyHNumber(bool)--------
+    #---                      isActivateSubWin(bool)
+    def makeMainWindow(self):
+        windowWidth  = int(ROOT.winfo_screenwidth())
+        windowHeight = int(ROOT.winfo_screenheight())
+        canvasWidth  = int(windowWidth*0.92)
+        canvasHeight = int(windowHeight*0.80)
+        ratio = float(windowWidth)/1440.0
+        
+        #---local constants
+        fontSizeMainWindow = int(14*ratio)
+        numberBoxSize = int(9*ratio)
+        coordsBoxSize = int(22*ratio)
+        messageBoxSize = int(45*ratio)
+
+        #---store the mode when the window is produced
+        if self.COIASModeVar.get()==0:
+            self.COIASMode = "COIAS"
+        elif self.COIASModeVar.get()==1:
+            self.COIASMode = "MANUAL"
+        elif self.COIASModeVar.get()==2:
+            self.COIASMode = "RECOIAS"
+        self.presentMaskOrNonmask = self.maskOrNonmaskVar.get()
+        
+        #---produce main window itself
+        self.main_win = tk.Toplevel(ROOT)
+        self.main_win.title("COIAS ver. 1 " + self.COIASMode + " mode")
+
+        #---set widgets 1: first row
+        self.blinkStartStopButton = tk.Button(self.main_win, text='Blink start', font=("",fontSizeMainWindow), command = self.startStopBlinking)
+        self.blinkStartStopButton.grid(row=0, column=0, sticky=tk.W)
+        self.backButton = tk.Button(self.main_win, text='Back', font=("",fontSizeMainWindow), command = self.onBackButton)
+        self.backButton.grid(row=0, column=1, sticky=tk.W)
+        self.nextButton = tk.Button(self.main_win, text="Next",font=("",fontSizeMainWindow), command = self.onNextButton)
+        self.nextButton.grid(row=0, column=2, sticky=tk.W)
+        self.sqOnOffButton = tk.Button(self.main_win, text="Sq. Off", font=("",fontSizeMainWindow), command = self.sqOnOff)
+        self.sqOnOffButton.grid(row=0, column=3, sticky=tk.W)
+        self.numberBox = tk.Entry(self.main_win, font=("", fontSizeMainWindow), width=numberBoxSize)
+        self.numberBox.grid(row=0, column=4, sticky=tk.W)
+        self.coordsBox = tk.Entry(self.main_win, font=("", fontSizeMainWindow), width=coordsBoxSize)
+        self.coordsBox.grid(row=0, column=5, sticky=tk.W)
+        self.messageBox = tk.Entry(self.main_win, font=("", fontSizeMainWindow), width=messageBoxSize)
+        self.messageBox.grid(row=0, column=6, sticky=tk.W)
+        if self.COIASMode == "MANUAL":
+            self.specifyHNumberButton = tk.Button(self.main_win, text="Manual H Number: Auto", font=("",fontSizeMainWindow), command = self.changeSpecifyHNumber)
+            self.specifyHNumberButton.grid(row=0, column=7, sticky=tk.W)
+        if self.COIASMode == "COIAS" or self.COIASMode == "MANUAL":
+            self.outputButton = tk.Button(self.main_win, text="Output",font=("",fontSizeMainWindow), command = self.output)
+            self.outputButton.grid(row=0, column=8, sticky=tk.W)
+
+        #---set widgets 2: main canvas
+        self.canvas = tk.Canvas(self.main_win, width=canvasWidth, height=canvasHeight)
+        self.canvas.grid(row=1, column=0, columnspan=9, sticky=tk.W+tk.E+tk.N+tk.S)
+        self.canvas.bind('<Motion>', self.getMouseCoord)
+        self.canvas.bind('<ButtonPress-1>', self.onClicked)
+
+        #---set widgets 3: scroll bars
+        self.xscroll = tk.Scrollbar(self.main_win, orient=tk.HORIZONTAL, command=self.canvas.xview)
+        self.xscroll.grid(row=2, column=0, columnspan=9, sticky=tk.W+tk.E)
+        self.yscroll = tk.Scrollbar(self.main_win, orient=tk.VERTICAL, command=self.canvas.yview)
+        self.yscroll.grid(row=1, column=9, sticky=tk.N+tk.S)
         self.canvas.config(xscrollcommand = self.xscroll.set)
+        self.canvas.config(yscrollcommand = self.yscroll.set)
+        self.canvas.config(scrollregion = (0, 0, PNGSIZES[0], PNGSIZES[1]))
 
-        #   scrollregion (west,north,east,south)
-        self.canvas.config(scrollregion = (0,0,xpix,ypix))
-        
-        # set first image (center x,y coord of image)/self.image_on_canvas is tag
-        self.image_on_canvas = self.canvas.create_image(xpix/2,ypix/2,image = self.image_data[self.image_number])
-        
-        # set ast coord of the first image/self.coord_on_canvas is tag
-        self.astdata = [ast_xy[i] for i in np.where(ast_xy[:,1] == str(self.filenums[self.image_number] - 1))] # NM 2021.08.10
-        
-        for i in range(len(self.astdata[0])):
-            xpos = int(float(self.astdata[0][i][2]))
-            ypos = int(float(self.astdata[0][i][3]))
-            #set moving object personal name
-            name = str(self.astdata[0][i][0])
-            
-            self.coord_on_canvas = self.canvas.create_rectangle(xpos-20,ypix-ypos+20,xpos+20,ypix-ypos-20,outline='#000000',width=5)
-            self.canvas.create_text(xpos-25,ypix-ypos-30,text = name,fill='#000000',font=("Purisa",16))
+        #---read asteroid data
+        self.asteroidData = DataOfAllAsteroids(self.COIASMode)
 
-#set condition
-        self.do_blink = False
-#set button
-        self.button2 = tk.Button(self.sub_win,text='Blink start/stop',font=("",14),command = self.start_stop_blinking)
-        self.button2.grid(row=0,column =0,sticky = tk.W)
-        self.button3 = tk.Button(self.sub_win,text='close window',font=("",14),command=self.sub_win.destroy)
-        self.button3.grid(row=0,column =69,sticky = tk.E)
-        self.button_back = tk.Button(self.sub_win, text="Back",command = self.onBackButton,font=("",14))
-        self.button_back.grid(row=0,column=1,sticky = tk.W)
-        self.button_next = tk.Button(self.sub_win, text="Next",command = self.onNextButton,font=("",14))
-        self.button_next.grid(row=0,column=2,sticky = tk.W)
-        self.button_SqOnOff = tk.Button(self.sub_win, text="Sq. On/Off",command = self.sq_on_off,font=("",14))
-        self.button_SqOnOff.grid(row=0,column=3,sticky = tk.W)
-#set entry of image name
-        self.message_num = tk.Entry(self.sub_win,font=("",14),width=10)
-        self.message_num.insert(tk.END,(("Image # ") + str(self.image_number +1)))
-        self.message_num.grid(row=0, column=4,sticky = tk.W)
-#print coord & set entry
-        self.canvas.bind('<Motion>', self.mousecoord)
-        self.xycoord = tk.Entry(self.sub_win,font=("",14),width=25)
-        self.xycoord.insert(tk.END,("X pix, Y pix:"))
-        self.xycoord.grid(row=0, column=5, columnspan=20,sticky = tk.W)
-#set mouse coordinate at click. If the coordinate is included in the range of new objects, print those numbers to the ScrolledText
-        self.canvas.bind('<ButtonPress-1>', self.mouseClickAndOutputObjectsNumber)
-#set scrolledText box for message
-        self.messageBox = tk.Entry(self.sub_win,font=("", 14), width=50)
-        self.messageBox.insert(tk.END,"message:")
-        self.messageBox.grid(row=0, column=26, columnspan=42,sticky = tk.W)
-#SU added 2021/7/12
-#set mouse coorinate by rightclick.=> by spacebar (S.U 2021/9/9 )
-        self.sub_win.bind('<KeyPress-space>',self.spacebar)
+        #---load png images
+        if self.maskOrNonmaskVar.get()==0:
+            imageNameList = sorted(glob.glob("*_disp-coias.png"))
+        elif self.maskOrNonmaskVar.get()==1:
+            imageNameList = sorted(glob.glob("*_disp-coias_nonmask.png"))
+        self.pngImages = []
+        for i in range(NALLIMAGES):
+            self.pngImages.append(tk.PhotoImage(file = imageNameList[i]))
 
+        #---initialize some important attributes
+        self.presentImageNumber = 0
+        self.sqOnOffFlag = True
+        self.doBlink = False
+        self.specifyHNumber = False
+        self.mousePngPosition = [0,0]
+        self.coldPresentMousePosition = [0,0]
+        self.isActivateSubWin = False
 
-# load_file        
-    def load_file(self):
-        self.image_data =[]
-        self.filenums = [] # NM added 2021-08-10
-#multi select
-        self.filename = fd.askopenfilenames(filetypes = [('Image Files', ('.gif', '.png', '.ppm')),
-                                               ('GIF Files', '.gif'),
-                                               ('PNG Files', '.png'),
-                                               ('PPM Files', '.ppm')],
-                                  initialdir = path_name)
-        n = len(self.filename)
-        for self.i in range(0,n):
-            self.image_data.append(tk.PhotoImage(file = self.filename[self.i]))
-            self.filenums.append( int(self.filename[self.i].split('/')[-1][0]) )  # NM added 2021-08-10
-        self.image_number = 0
-#make sub_window
-        self.sub_window()
-
-#------------------------------------
-
-    def onBackButton(self):
-        # 最後の画像に戻る
-        if self.image_number == 0:
-            self.image_number = len(self.image_data) - 1
-        else:
-            # 一つ戻る
-            self.image_number -= 1
-
-        # 表示画像を更新
+        #---initial draw
         self.draw()
+        self.numberBox.insert(tk.END, "Image # 1")
+        self.coordsBox.insert(tk.END, "X pix 0, Y pix 0")
+        self.messageBox.insert(tk.END, "message:")
+    #--------------------------------------------------
 
-        # Entryの中身を更新
-        self.message_num.delete(0, tk.END)
-        self.message_num.insert(tk.END, ("Image # " + str(self.image_number+1)))
+    
+    #---draw png image and asteroid data---------------
+    def draw(self):
+        self.canvas.delete("image")
+        self.canvas.create_image(PNGSIZES[0]/2, PNGSIZES[1]/2, image=self.pngImages[self.presentImageNumber], tag="image")
+        self.drawAsteroidOnly()
+    #--------------------------------------------------
 
-    def onNextButton(self):
-        # 一つ進む
-        self.image_number += 1
+    #---draw asteroid rectangles and names-------------
+    def drawAsteroidOnly(self):
+        self.canvas.delete("asteroid")
+        for i in range(self.asteroidData.Ndata):
+            if self.asteroidData.astData[i].NImage==self.presentImageNumber and self.sqOnOffFlag:
+                #---choose color
+                if self.asteroidData.astData[i].isManualAst:
+                    color = "#219DDD"
+                elif self.asteroidData.astData[i].isKnownAsteroid:
+                    color = "#000000"
+                elif self.asteroidData.astData[i].isSurvive:
+                    color = "#FF0000"
+                else:
+                    color = "#000000"
 
-        # 最初の画像に戻る
-        if self.image_number == len(self.image_data):
-            self.image_number = 0
-        
-        # 表示画像を更新
-        self.draw()
-            
-        # Entryの中身を更新
-        self.message_num.delete(0, tk.END)
-        self.message_num.insert(
-            tk.END, ("Image # " + str(self.image_number+1)))
+                #---draw rectangles and names
+                self.canvas.create_rectangle(self.asteroidData.astData[i].pngPosition[0]-20, self.asteroidData.astData[i].pngPosition[1]-20, self.asteroidData.astData[i].pngPosition[0]+20, self.asteroidData.astData[i].pngPosition[1]+20, outline=color, width=5, tag="asteroid")
+                self.canvas.create_text(self.asteroidData.astData[i].pngPosition[0]-25, self.asteroidData.astData[i].pngPosition[1]-30, text=self.asteroidData.astData[i].astName, fill=color, font=("Purisa",16), tag="asteroid")
+    #--------------------------------------------------
 
-    def start_stop_blinking(self):
-        if self.do_blink:
-            self.do_blink = False
+
+    #---method for blinkStartStopButton----------------
+    def startStopBlinking(self):
+        if self.doBlink:
+            self.doBlink = False
+            self.blinkStartStopButton["text"] = "Blink start"
         else:
-            self.do_blink = True
+            self.doBlink = True
+            self.blinkStartStopButton["text"] = "Blink stop"
             self.blink()
 
     def blink(self):
-        if self.do_blink:
-            self.image_number +=1
-         # 最初の画像に戻る
-            if self.image_number == len(self.image_data):
-                self.image_number = 0
+        if self.doBlink:
+            self.presentImageNumber += 1
+            if self.presentImageNumber == NALLIMAGES:
+                self.presentImageNumber = 0
 
-        # 表示画像を更新
             self.draw()
-                    
-            self.after(100,self.blink)
-        # Entryの中身を更新
-        self.message_num.delete(0, tk.END)
-        self.message_num.insert(
-            tk.END, ("Image # " + str(self.image_number+1)))
+            self.numberBox.delete(0, tk.END)
+            self.numberBox.insert(tk.END, "Image # " + str(self.presentImageNumber+1))
+            
+            ROOT.after(100, self.blink)
+    #--------------------------------------------------
 
-    def stop(self):
-        print('stop')
-#--------------------------------------------------------------------
-    def mousecoord(self,event):
-       # get the top left coord in image
-        xp = self.xscroll.get()
-        yp = self.yscroll.get()
-#top left coord in image
-        xp1 = int(xp[0]*xpix)
-        yp1 = int(yp[0]*ypix)
-#add the mouse position
-        self.xp2 = event.x + xp1
-        self.yp2 = event.y + yp1
-        self.xycoord.delete(0,tk.END)
-        self.xycoord.insert(tk.END,("X pix "+str(self.xp2)+", Y pix " +str(self.yp2)))
 
-#SU added 2021/07/12  get coordinate by right click => by spacebar(2021/9/9)
-#In the case of spacebar, yp2 needs offset of 30pix. SU don't know the reason(2021/10/28) -------------------------------------------
-    def spacebar(self,event):
-#        print('right click')
-        res = messagebox.askquestion("New number","Same object with a previous image?")
-#        print(res)
-        if res == "no":
-#get the top left coord in image
-            xp = self.xscroll.get()
-            yp = self.yscroll.get()
-#top left coord in gui image
-            xp1 = int(xp[0]*xpix)
-            yp1 = int(yp[0]*ypix)
-            print(xp[self.image_number],yp[self.image_number],xpix,ypix,xp1,yp1,event.x,event.y)
-#add the mouse position
-            self.xp2 = event.x + xp1
-#            self.yp2 = event.y + yp1 
-            self.yp2 = event.y + yp1 -30
-            self.coord = self.xp2,self.yp2
-            print(self.coord)
-#            comment = str("If you measure (X, Y) = (") + str(self.xp2) + " pix, " + str(self.yp2) + str(" pix), please input temporay number")
-            comment = "Input temporary number"
-            self.inputnumber = simpledialog.askstring("Temporary number",comment)
-
-#get filename(full path)
-            tmp = str(self.filename[self.image_number])
-#only filename
-#       tmp[-13:]
-#change to fits file name
-            if ('nonmask' in tmp):
-                tmp2 = 'warp'+tmp[-24]+'_bin.fits'
-#                print(tmp2)
-            else:
-                tmp2 = 'warp'+tmp[-16]+'_bin.fits'
-#                print(tmp2)
-#out put file on the current directry
-#coord + filename
-            self.coord = str(self.xp2),str(self.yp2),str(tmp2),str(self.inputnumber)
-#        self.coord2 = list(self.coord)
-#        self.f2=open(tmp4,'a')
-            self.f2 = open('memo2.txt','a')
-            self.f2.writelines(str(self.coord)+'\n')
-            self.f2.close()
+    #---method for backButton--------------------------
+    def onBackButton(self):
+        if self.presentImageNumber == 0:
+            self.presentImageNumber = NALLIMAGES - 1
         else:
-#get the top left coord in image
-            xp = self.xscroll.get()
-            yp = self.yscroll.get()
-#top left coord in image
-            xp1 = int(xp[0]*xpix)
-            yp1 = int(yp[0]*ypix)
-#add the mouse position
-            self.xp2 = event.x + xp1
-            self.yp2 = event.y + yp1 - 30
-            self.coord = self.xp2,self.yp2
-#            print(self.coord)
+            self.presentImageNumber -= 1
 
-#get filename(full path)
-            tmp = str(self.filename[self.image_number])
+        self.draw()
+        self.numberBox.delete(0, tk.END)
+        self.numberBox.insert(tk.END, "Image # " + str(self.presentImageNumber+1))
+    #--------------------------------------------------
 
-#change to fits file name
-            if ('nonmask' in tmp):
-#                tmp2 = tmp[-24:].replace("png","fits")
-                tmp2 = 'warp'+tmp[-24]+'_bin.fits'
+
+    #---method for nextButton--------------------------
+    def onNextButton(self):
+        self.presentImageNumber += 1
+        if self.presentImageNumber == NALLIMAGES:
+            self.presentImageNumber = 0
+
+        self.draw()
+        self.numberBox.delete(0, tk.END)
+        self.numberBox.insert(tk.END, "Image # " + str(self.presentImageNumber+1))
+    #--------------------------------------------------
+
+
+    #---method for sqOnOffButton-----------------------
+    def sqOnOff(self):
+        if self.sqOnOffFlag:
+            self.sqOnOffFlag = False
+            self.sqOnOffButton["text"] = "Sq. On"
+        else:
+            self.sqOnOffFlag = True
+            self.sqOnOffButton["text"] = "Sq. Off"
+
+        self.drawAsteroidOnly()
+    #--------------------------------------------------
+
+
+    #---method for specifyHNumberButton----------------
+    def changeSpecifyHNumber(self):
+        if self.specifyHNumber:
+            self.specifyHNumber = False
+            self.specifyHNumberButton["text"] = "Manual H Number: Auto"
+        else:
+            self.specifyHNumber = True
+            self.specifyHNumberButton["text"] = "Manual H Number: Self"
+    #--------------------------------------------------
+
+
+    #---method for mouse motion on the canvas----------
+    def getMouseCoord(self, event):
+        xRelPosScrBar = self.xscroll.get()[0]
+        yRelPosScrBar = self.yscroll.get()[0]
+        xPosScrBar = int(xRelPosScrBar*PNGSIZES[0])
+        yPosScrBar = int(yRelPosScrBar*PNGSIZES[1])
+        self.mousePngPosition[0] = xPosScrBar + event.x
+        self.mousePngPosition[1] = yPosScrBar + event.y
+        self.coordsBox.delete(0,tk.END)
+        self.coordsBox.insert(tk.END,"X pix "+str(self.mousePngPosition[0])+", Y pix "+str(self.mousePngPosition[1]))
+    #--------------------------------------------------
+
+
+    #---method for click on the canvas-----------------
+    def onClicked(self, event):
+        if not self.isActivateSubWin:
+            self.messageBox.delete(0, tk.END)
+            self.messageBox.insert(tk.END,"message:")
+            
+            self.coldPresentMousePosition[0] = self.mousePngPosition[0]
+            self.coldPresentMousePosition[1] = self.mousePngPosition[1]
+            self.coldPresentImageNumber = self.presentImageNumber
+            self.coldSpecifyHNumber = self.specifyHNumber
+            manualSelectFlag = False
+            for i in reversed(range(self.asteroidData.Ndata)):
+                if self.asteroidData.astData[i].NImage==self.presentImageNumber and self.sqOnOffFlag and \
+                   self.coldPresentMousePosition[0]>self.asteroidData.astData[i].pngPosition[0]-20 and \
+                   self.coldPresentMousePosition[0]<self.asteroidData.astData[i].pngPosition[0]+20 and \
+                   self.coldPresentMousePosition[1]>self.asteroidData.astData[i].pngPosition[1]-20 and \
+                   self.coldPresentMousePosition[1]<self.asteroidData.astData[i].pngPosition[1]+20:
+                    if self.COIASMode == "COIAS":
+                        self.selectSurviveAsteroidInCOIAS(i)
+                    elif self.COIASMode == "RECOIAS":
+                        self.messageBox.delete(0, tk.END)
+                        self.messageBox.insert(tk.END,"message: This is reconfirm mode; no need to select.")
+                    elif self.COIASMode == "MANUAL" and  (not self.asteroidData.astData[i].isManualAst):
+                        self.messageBox.delete(0, tk.END)
+                        self.messageBox.insert(tk.END,"message: This is already confirmed object.")
+                    else:
+                        self.delManualAsteroid(i)
+                        manualSelectFlag = True
+
+            if self.COIASMode == "MANUAL" and (not manualSelectFlag):
+                self.addManualAsteroid(self.coldPresentMousePosition)
+
+            self.drawAsteroidOnly()
+    #--------------------------------------------------
+
+
+    #---select survive asteroid in COIAS mode----------
+    def selectSurviveAsteroidInCOIAS(self, index):
+        if self.asteroidData.astData[index].isKnownAsteroid:
+            self.messageBox.delete(0, tk.END)
+            self.messageBox.insert(tk.END,"message: This is known asteroid: " + self.asteroidData.astData[index].astName)
+        else:
+            thisHN = self.asteroidData.astData[index].astName
+            if self.asteroidData.astData[index].isSurvive:
+                surviveBool = False
             else:
-                tmp2 = 'warp'+tmp[-16]+'_bin.fits'
-#out put file on the current directry
-#coord + filename
-            self.coord = str(self.xp2),str(self.yp2),str(tmp2),str(self.inputnumber)
-#        self.coord2 = list(self.coord)
-#        self.f2=open(tmp4,'a')
-            self.f2 = open('memo2.txt','a')
-            self.f2.writelines(str(self.coord)+'\n')
-            self.f2.close()
-           
-#------------------------------------------------------------
+                surviveBool = True
+                
+            for i in range(self.asteroidData.Ndata):
+                if self.asteroidData.astData[i].astName == thisHN:
+                    self.asteroidData.astData[i].isSurvive = surviveBool
+    #--------------------------------------------------
 
+
+    #---del re-selected manual asteroid----------------
+    def delManualAsteroid(self, index):
+        isYes = messagebox.askyesno("confirmation","Do you really want to delete this manual selected object?")
+        if isYes:
+            self.asteroidData.delManualAsteroidData(self.asteroidData.astData[index].astName, self.presentImageNumber)
+    #--------------------------------------------------
+
+
+    #---method for output memo--------------------------
     def output(self):
-        self.f=open('memo.txt','w')
-        self.f.write(self.t0.get('1.0','end -1c'))
-        #self.f.write(self.t0.get('1.0',tk.END))
-        self.f.close()
+        if self.COIASMode == "COIAS":
+            self.asteroidData.outputMemoTxt()
+        elif self.COIASMode == "MANUAL":
+            self.asteroidData.outputMemoManualTxt()
+    #---------------------------------------------------
 
-#KS added 2020/12/24----------------------------------------------------------------
-    def mouseClickAndOutputObjectsNumber(self, event):
-#get numbers already input in the ScrolledText
-        self.inputText = self.t0.get('1.0','end -1c')
-        if len(self.inputText)<2:
-            self.writtenNumbersText=[]
+
+    ### methods for manual measuring #########################
+    #---important attributes: --------------------------------
+    #---                      specifiedNH(int)----------------
+    #---                      isSameAsPrevious(bool)----------
+    #---                      mousePositionSubWin(int list[2])
+    #---                      canvasSize(const int)
+    #---                      NClick(int)---------------------
+    #---                      clickedPositions(int list[3][2])
+    #---                      eventPositions(int list[3][2])--
+    
+    #---add selected manual asteroid via making aparture
+    def addManualAsteroid(self, mousePosition):
+        #---determine H number
+        goFlag = True
+        if self.specifyHNumber:
+            self.specifiedNH = simpledialog.askinteger("specify H number","Please specify H number of this object in integer.")
+            if self.specifiedNH == None:
+                goFlag = False
         else:
-            self.writtenNumbersText = self.inputText.split()
-        self.writtenNumbers = [int(text) for text in self.writtenNumbersText if text.isdigit()]
+            self.isSameAsPrevious = tk.messagebox.askyesno("question","Is this object the same as the previous one you chose?")
+
+        if goFlag:
+            self.makeSubWindow()
+    #---------------------------------------------------
+
+
+    #---produce sub window------------------------------
+    def makeSubWindow(self):
+        #--activate sub window
+        self.isActivateSubWin = True
         
-#get the top left coord in image
-        xp = self.xscroll.get()
-        yp = self.yscroll.get()
-#top left coord in image
-        xp1 = int(xp[0]*xpix)
-        yp1 = int(yp[0]*ypix)
-#add the mouse position
-        self.xp2 = event.x + xp1
-        self.yp2 = event.y + yp1
+        #---const attribute
+        self.canvasSize = 500
         
-#get asteroids coordinates stored in disp.txt
-        self.astdata = [ast_xy[i] for i in np.where(ast_xy[:,1] == str(self.filenums[self.image_number] - 1))] # NM 2021.08.10
-#compare asteroids coordinates and clicked coordinates
-        self.matchAsteroidNamesStr = []
-        for i in range(len(self.astdata[0])):
-            xpos = int(float(self.astdata[0][i][2]))
-            ypos = int(float(self.astdata[0][i][3]))
-            if xpos-20<self.xp2 and xpos+20>self.xp2 and ypix-(ypos+20)<self.yp2 and ypix-(ypos-20)>self.yp2:
-                asteroidNameStr = self.astdata[0][i][0]
-                if len(asteroidNameStr)!=7 or asteroidNameStr[0]!='H':
-                    #print("This is not a new object! name=",asteroidNameStr)
-                    self.messageBox.delete(0, tk.END)
-                    self.messageBox.insert(tk.END,"message: not a new object! name="+asteroidNameStr)
-                else:
-                    self.matchAsteroidNamesStr.append(asteroidNameStr.lstrip("H"))
+        #---local constants
+        fontSizeSubWindow = 16
+        coordsBoxSize = 22
+        promptBoxSize = 30
 
-#put clicked asteroid number that are not yet written on the ScrolledText
-        for asteroidNumberStr in self.matchAsteroidNamesStr:
-            matchFlag=0
-            rowWrittenNumbers=0
-            for num in self.writtenNumbers:
-                rowWrittenNumbers += 1
-                if int(asteroidNumberStr)==num:
-                   self.t0.delete("{}.0".format(rowWrittenNumbers),"{}.end +1c".format(rowWrittenNumbers)) #KS added 2021/7/25
-                   self.messageBox.delete(0, tk.END)
-                   self.messageBox.insert(tk.END,"message:")
-                   matchFlag=1
-            if matchFlag==0:
-                   self.t0.insert(tk.END,asteroidNumberStr+"\n")
-                   self.messageBox.delete(0, tk.END)
-                   self.messageBox.insert(tk.END,"message:")
-                   
-        #再描画
-        self.draw()
-
-
-    def sq_on_off(self):
-        if self.SqOnOffFlag == 1:
-            self.SqOnOffFlag = 0
-        elif self.SqOnOffFlag == 0:
-            self.SqOnOffFlag = 1
-
-        #再描画
-        self.draw()
-
-    def draw(self):
-        #get numbers already input in the ScrolledText
-        self.inputText = self.t0.get('1.0','end -1c')
-        if len(self.inputText)<2:
-            self.writtenNumbersText=[]
-        else:
-            self.writtenNumbersText = self.inputText.split()
-        self.writtenNumbers = [int(text) for text in self.writtenNumbersText if text.isdigit()]
-
-        # 表示画像を更新
-        self.canvas.delete("all")
-        self.image_on_canvas = self.canvas.create_image(xpix/2,ypix/2,image = self.image_data[self.image_number])
-        # refresh new ast coord
-        self.astdata = [ast_xy[i] for i in np.where(ast_xy[:,1] == str(self.filenums[self.image_number] - 1))] # NM 2021.08.10
+        #---initialize some attribute
+        self.mousePositionSubWin = [0, 0]
+        self.NClick = 0
+        self.clickedPositions = [ [0, 0], [0, 0], [0, 0] ]
+        self.eventPositions   = [ [0, 0], [0, 0], [0, 0] ]
         
-        for i in range(len(self.astdata[0])):
-            xpos = int(float(self.astdata[0][i][2]))
-            ypos = int(float(self.astdata[0][i][3]))
+        #---prepare clipped png image
+        if self.presentMaskOrNonmask==0: pngName = "{0:d}_disp-coias.png".format(self.presentImageNumber+1)
+        else:                            pngName = "{0:d}_disp-coias_nonmask.png".format(self.presentImageNumber+1)
+        clippedPng = Image.open(pngName).crop((self.coldPresentMousePosition[0]-20, self.coldPresentMousePosition[1]-20, self.coldPresentMousePosition[0]+20, self.coldPresentMousePosition[1]+20))
+        clippedPngForCanvas = clippedPng.resize((self.canvasSize, self.canvasSize), resample=0)
+        self.clippedPngForCanvasTk = ImageTk.PhotoImage(clippedPngForCanvas)
+        
+        #---produce sub window itself
+        self.sub_win = tk.Toplevel(ROOT)
+        self.sub_win.title("manual measure: aparture setting")
+        self.sub_win.geometry("+{0:d}+{1:d}".format(int(ROOT.winfo_screenwidth()/2-self.canvasSize/2), int(ROOT.winfo_screenheight()/2-self.canvasSize/2)))
+        self.sub_win.protocol("WM_DELETE_WINDOW", self.closeWindow)
 
-            if self.SqOnOffFlag==1:
-                name = str(self.astdata[0][i][0])
-                matchFlag = 0
-                if name.lstrip("H").isdigit():
-                    nameInt = int(name.lstrip("H"))
-                    for n in self.writtenNumbers:
-                        if n == nameInt:
-                            matchFlag = 1
+        #---set widgets
+        self.coordsBoxSubWin = tk.Entry(self.sub_win, font=("", fontSizeSubWindow), width=coordsBoxSize)
+        self.coordsBoxSubWin.grid(row=0, column=0, columnspan=2, sticky=tk.W)
+        self.coordsBoxSubWin.insert(tk.END, "X pix 0, Y pix 0")
+        self.helpButton = tk.Button(self.sub_win, text="Help", font=("", fontSizeSubWindow), command = self.showHelpAparture)
+        self.helpButton.grid(row=0, column=2, sticky=tk.E)
+        self.canvasSubWin = tk.Canvas(self.sub_win, width=self.canvasSize, height=self.canvasSize)
+        self.canvasSubWin.grid(row=1, column=0, columnspan=3, sticky=tk.W+tk.E+tk.N+tk.S)
+        self.canvasSubWin.bind("<Motion>", self.getMouseCoordSubWin)
+        self.canvasSubWin.bind("<ButtonPress-1>", self.onClickedSubWin)
+        self.canvasSubWin.create_image(self.canvasSize/2, self.canvasSize/2, image=self.clippedPngForCanvasTk)
+        self.yesButton = tk.Button(self.sub_win, text="Yes", font=("", fontSizeSubWindow), command = self.yesSubWin)
+        self.yesButton.grid(row=2, column=0, sticky=tk.W)
+        self.promptBox = tk.Entry(self.sub_win, font=("", fontSizeSubWindow), width=promptBoxSize)
+        self.promptBox.grid(row=2, column=1, sticky=tk.W+tk.W)
+        self.noButton  = tk.Button(self.sub_win, text="Clear", font=("", fontSizeSubWindow), command = self.noSubWin)
+        self.noButton.grid(row=2, column=2, sticky=tk.E)
+    #---------------------------------------------------
 
-                if matchFlag == 0:
-                    self.coord_on_canvas = self.canvas.create_rectangle(xpos-20,ypix-ypos+20,xpos+20,ypix-ypos-20,outline='#000000',width=5)   
-                    self.canvas.create_text(xpos-25,ypix-ypos-30,text = name,fill='#000000',font=("Purisa",16))
-                elif matchFlag == 1:
-                    self.coord_on_canvas = self.canvas.create_rectangle(xpos-20,ypix-ypos+20,xpos+20,ypix-ypos-20,outline='#FF0000',width=5)   
-                    self.canvas.create_text(xpos-25,ypix-ypos-30,text = name,fill='#FF0000',font=("Purisa",16))
-#-----------------------------------------------------------------------------------
 
-root = tk.Tk()
-#instance
-app = Asthunter(master=root)
-app.mainloop()
+    #---show help for aparture selection----------------
+    def showHelpAparture(self):
+        tk.messagebox.showinfo("how to select aparture","拡大画像の3点を選んで星像を囲む長方形のアパーチャーを設定します。星像を囲む長方形を想像し、その頂点のうち3点をクリックしてください。必ずしも選んだ3点が長方形の頂点になるとは限りませんが、3点の成す角がなるべく直角になるように選ぶと一致します。最後に長方形アパーチャーが表示されますので、よければYesボタンを押してください。Noボタンを押せばアパーチャーの設定をやり直せます。この星像の測定を中止したければ、拡大画像が表示されているサブウィンドウの左上のバツ印を押してウィンドウを閉じてください。")
+    #---------------------------------------------------
+
+
+    #---get mouse position in sub window----------------
+    def getMouseCoordSubWin(self, event):
+        canvasLeftUpperPositionX = self.coldPresentMousePosition[0]-20
+        canvasLeftUpperPositionY = self.coldPresentMousePosition[1]-20
+        canvasXRelPos = float(event.x) / float(self.canvasSize)
+        canvasYRelPos = float(event.y) / float(self.canvasSize)
+        
+        self.mousePositionSubWin[0] = int(canvasLeftUpperPositionX + canvasXRelPos * 40)
+        self.mousePositionSubWin[1] = int(canvasLeftUpperPositionY + canvasYRelPos * 40)
+
+        self.coordsBoxSubWin.delete(0, tk.END)
+        self.coordsBoxSubWin.insert(tk.END, "X pix "+str(self.mousePositionSubWin[0])+", Y pix "+str(self.mousePositionSubWin[1]))
+    #---------------------------------------------------
+
+
+    #---set aparture------------------------------------
+    def onClickedSubWin(self, event):
+        if self.NClick < 3:
+            self.clickedPositions[self.NClick][0] = self.mousePositionSubWin[0]
+            self.clickedPositions[self.NClick][1] = self.mousePositionSubWin[1]
+            self.eventPositions[self.NClick][0] = event.x
+            self.eventPositions[self.NClick][1] = event.y
+            self.canvasSubWin.create_oval( event.x-3, event.y-3, event.x+3, event.y+3, fill="#FF0000", outline="#FF0000", width=0, tag="clickedPos")
+            self.NClick += 1
+        if self.NClick == 3:
+            rect = calcrect.calc_rectangle_parameters([self.eventPositions[0][0], self.eventPositions[0][1]], [self.eventPositions[1][0], self.eventPositions[1][1]], [self.eventPositions[2][0], self.eventPositions[2][1]])
+            if rect == None:
+                self.NClick=0
+                self.clickedPositions = [ [0, 0], [0, 0], [0, 0] ]
+                self.eventPositions   = [ [0, 0], [0, 0], [0, 0] ]
+                self.canvasSubWin.delete("clickedPos")
+                self.promptBox.delete(0, tk.END)
+                self.promptBox.insert(tk.END, "same points. Select an aparture again.")
+            else:
+                self.canvasSubWin.create_polygon(rect["rectPos1"][0], rect["rectPos1"][1], rect["rectPos2"][0], rect["rectPos2"][1], rect["rectPos3"][0], rect["rectPos3"][1], rect["rectPos4"][0], rect["rectPos4"][1], fill='', outline="#FF0000", width=2, tag="clickedPos")
+                self.promptBox.delete(0, tk.END)
+                self.promptBox.insert(tk.END, "Good aparture?")
+    #---------------------------------------------------
+
+
+    #---yes button--------------------------------------
+    def yesSubWin(self):
+        if self.NClick == 3:
+            if self.specifyHNumber:
+                self.asteroidData.addManualAsteroidData(self.isSameAsPrevious, self.coldPresentImageNumber, self.coldPresentMousePosition, self.clickedPositions, self.coldSpecifyHNumber, self.specifiedNH)
+            else:
+                self.asteroidData.addManualAsteroidData(self.isSameAsPrevious, self.coldPresentImageNumber, self.coldPresentMousePosition, self.clickedPositions)
+            self.sub_win.destroy()
+            self.drawAsteroidOnly()
+            self.isActivateSubWin = False
+    #---------------------------------------------------
+
+    
+    #---no button---------------------------------------
+    def noSubWin(self):
+        self.NClick=0 
+        self.clickedPositions = [ [0, 0], [0, 0], [0, 0] ]
+        self.eventPositions   = [ [0, 0], [0, 0], [0, 0] ]
+        self.canvasSubWin.delete("clickedPos")
+        self.promptBox.delete(0, tk.END)
+        self.promptBox.insert(tk.END, "Please select an aparture again.")
+    #---------------------------------------------------
+
+
+    #---close sub window--------------------------------
+    def closeWindow(self):
+        self.isActivateSubWin = False
+        self.sub_win.destroy()
+    #---------------------------------------------------
+
+    ##########################################################
+    
+######################################################################
+
+
+### EXECUTION ########################################################
+app = COIAS(master=ROOT)
+ROOT.mainloop()
+######################################################################
