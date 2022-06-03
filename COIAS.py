@@ -29,6 +29,9 @@ if NALLIMAGES <= 1:
     sys.exit(1)
 
 ROOT = tk.Tk()
+WINDOWWIDTH  = int(ROOT.winfo_screenwidth())
+WINDOWHEIGHT = int(ROOT.winfo_screenheight())
+WINDOWRATIO  = float(WINDOWWIDTH)/1440.0
 ######################################################################
 
 
@@ -224,8 +227,8 @@ class COIAS:
         master.title("COIAS ver.1 mode selection")
         
         #---local constants
-        fontSizeFirstWindow = 20
-        padSizeFirstWindow = 5
+        fontSizeFirstWindow = int(20*WINDOWRATIO)
+        padSizeFirstWindow = int(5*WINDOWRATIO)
         
         #---buttons for load img and quit
         self.firstWinLoadImgButton = tk.Button(ROOT, text="Load img", font=("",fontSizeFirstWindow), command = self.makeMainWindow)
@@ -283,17 +286,14 @@ class COIAS:
     #---                      coldSpecifyHNumber(bool)--------
     #---                      isActivateSubWin(bool)
     def makeMainWindow(self):
-        windowWidth  = int(ROOT.winfo_screenwidth())
-        windowHeight = int(ROOT.winfo_screenheight())
-        canvasWidth  = int(windowWidth*0.92)
-        canvasHeight = int(windowHeight*0.80)
-        ratio = float(windowWidth)/1440.0
+        canvasWidth  = int(WINDOWWIDTH*0.92)
+        canvasHeight = int(WINDOWHEIGHT*0.80)
         
         #---local constants
-        fontSizeMainWindow = int(14*ratio)
-        numberBoxSize = int(9*ratio)
-        coordsBoxSize = int(22*ratio)
-        messageBoxSize = int(45*ratio)
+        fontSizeMainWindow = int(14*WINDOWRATIO)
+        numberBoxSize = 9
+        coordsBoxSize = 22
+        messageBoxSize = 45
 
         #---store the mode when the window is produced
         if self.COIASModeVar.get()==0:
@@ -383,6 +383,9 @@ class COIAS:
 
     #---draw asteroid rectangles and names-------------
     def drawAsteroidOnly(self):
+        fontSizeAstName = int(16*WINDOWRATIO)
+        dispAstName = int(30*(0.7+WINDOWRATIO*0.3))
+        
         self.canvas.delete("asteroid")
         for i in range(self.asteroidData.Ndata):
             if self.asteroidData.astData[i].NImage==self.presentImageNumber and self.sqOnOffFlag:
@@ -398,7 +401,7 @@ class COIAS:
 
                 #---draw rectangles and names
                 self.canvas.create_rectangle(self.asteroidData.astData[i].pngPosition[0]-20, self.asteroidData.astData[i].pngPosition[1]-20, self.asteroidData.astData[i].pngPosition[0]+20, self.asteroidData.astData[i].pngPosition[1]+20, outline=color, width=5, tag="asteroid")
-                self.canvas.create_text(self.asteroidData.astData[i].pngPosition[0]-25, self.asteroidData.astData[i].pngPosition[1]-30, text=self.asteroidData.astData[i].astName, fill=color, font=("Purisa",16), tag="asteroid")
+                self.canvas.create_text(self.asteroidData.astData[i].pngPosition[0]-dispAstName, self.asteroidData.astData[i].pngPosition[1]-dispAstName, text=self.asteroidData.astData[i].astName, fill=color, font=("Purisa",fontSizeAstName), tag="asteroid")
     #--------------------------------------------------
 
 
@@ -578,7 +581,7 @@ class COIAS:
             if self.specifiedNH == None:
                 goFlag = False
         else:
-            self.isSameAsPrevious = tk.messagebox.askyesno("question","Is this object the same as the previous one you chose?")
+            self.isSameAsPrevious = messagebox.askyesno("question","Is this object the same as the previous one you chose?")
 
         if goFlag:
             self.makeSubWindow()
@@ -591,10 +594,10 @@ class COIAS:
         self.isActivateSubWin = True
         
         #---const attribute
-        self.canvasSize = 500
+        self.canvasSize = int(500*WINDOWRATIO)
         
         #---local constants
-        fontSizeSubWindow = 16
+        fontSizeSubWindow = int(16*WINDOWRATIO)
         coordsBoxSize = 22
         promptBoxSize = 30
 
@@ -639,7 +642,7 @@ class COIAS:
 
     #---show help for aparture selection----------------
     def showHelpAparture(self):
-        tk.messagebox.showinfo("how to select aparture","拡大画像の3点を選んで星像を囲む長方形のアパーチャーを設定します。星像を囲む長方形を想像し、その頂点のうち3点をクリックしてください。必ずしも選んだ3点が長方形の頂点になるとは限りませんが、3点の成す角がなるべく直角になるように選ぶと一致します。最後に長方形アパーチャーが表示されますので、よければYesボタンを押してください。Noボタンを押せばアパーチャーの設定をやり直せます。この星像の測定を中止したければ、拡大画像が表示されているサブウィンドウの左上のバツ印を押してウィンドウを閉じてください。")
+        messagebox.showinfo("how to select aparture","拡大画像の3点を選んで星像を囲む長方形のアパーチャーを設定します。星像を囲む長方形を想像し、その頂点のうち3点をクリックしてください。必ずしも選んだ3点が長方形の頂点になるとは限りませんが、3点の成す角がなるべく直角になるように選ぶと一致します。最後に長方形アパーチャーが表示されますので、よければYesボタンを押してください。Noボタンを押せばアパーチャーの設定をやり直せます。この星像の測定を中止したければ、拡大画像が表示されているサブウィンドウの左上のバツ印を押してウィンドウを閉じてください。")
     #---------------------------------------------------
 
 
