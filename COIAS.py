@@ -143,11 +143,16 @@ class DataOfAllAsteroids:
             self.astData.append( DataOfAnAsteroidInAnImage(contents[0], int(contents[1]), (int(float(contents[2])),int(float(contents[3]))) ) )
 
         self.NHMax = 0
-        for i in range(self.Ndata):
-            if re.search(r'^H......',self.astData[i].astName)!=None:
-                NH = int(self.astData[i].astName.lstrip('H'))
+        f = open("disp.txt","r")
+        lines = f.readlines()
+        f.close()
+        for line in lines:
+            contents = line.split()
+            if re.search(r'^H......',contents[0])!=None:
+                NH = int(contents[0].lstrip('H'))
                 if NH > self.NHMax:
                     self.NHMax = NH
+        self.NHMax += 1
     #----------------------------------------------------------
 
     #---add an asteroid data for manual pickup-----------------
