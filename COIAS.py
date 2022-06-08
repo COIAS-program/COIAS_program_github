@@ -167,9 +167,9 @@ class DataOfAllAsteroids:
         if not isSpecified:
             if not isSameAsPrevious:
                 self.NHMax += 1
-            astName = "H"+str(self.NHMax).rjust(7,'0')
+            astName = "H"+str(self.NHMax).rjust(6,'0')
         else:
-            astName = "H"+str(NH).rjust(7,'0')
+            astName = "H"+str(NH).rjust(6,'0')
 
         self.Ndata += 1
         self.astData.append( DataOfAnAsteroidInAnImage(astName, NImage, convertPng2FitsCoords(pngPosition), True, aparturePngPoints) )
@@ -694,10 +694,11 @@ class COIAS:
     #---yes button--------------------------------------
     def yesSubWin(self):
         if self.NClick == 3:
+            rect = calcrect.calc_rectangle_parameters(self.clickedPositions[0], self.clickedPositions[1], self.clickedPositions[2])
             if self.specifyHNumber:
-                self.asteroidData.addManualAsteroidData(self.isSameAsPrevious, self.coldPresentImageNumber, self.coldPresentMousePosition, self.clickedPositions, self.coldSpecifyHNumber, self.specifiedNH)
+                self.asteroidData.addManualAsteroidData(self.isSameAsPrevious, self.coldPresentImageNumber, rect["center"], self.clickedPositions, self.coldSpecifyHNumber, self.specifiedNH)
             else:
-                self.asteroidData.addManualAsteroidData(self.isSameAsPrevious, self.coldPresentImageNumber, self.coldPresentMousePosition, self.clickedPositions)
+                self.asteroidData.addManualAsteroidData(self.isSameAsPrevious, self.coldPresentImageNumber, rect["center"], self.clickedPositions)
             self.sub_win.destroy()
             self.drawAsteroidOnly()
             self.isActivateSubWin = False
