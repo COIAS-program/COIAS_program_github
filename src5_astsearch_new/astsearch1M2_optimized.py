@@ -248,10 +248,7 @@ try:
                 sigma_ron =  4.5*nbinList[image]*nbinList[image] # read out noise of HSC /nobining :4.5e S.U modified 2022/5/4
                 gain = 3.0 / nbinList[image] # gain of HSC/nobining :3.0  S.U modified 2022/5/4
                 S_star = gain * final_sum
-                effective_area = ap.area * ((1 + ap.area) / sap.area)
-                N2 = S_star
-                N = np.sqrt(N2)  # Noise in electron
-                SNR = S_star / N
+                SNR = np.sqrt(S_star)
                 # error in magnitude m_err = 1.0857/SNR
                 # Noise in ADU
                 mage = np.round(1.0857 / SNR, decimals=3)
