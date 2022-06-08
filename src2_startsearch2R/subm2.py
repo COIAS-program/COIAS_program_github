@@ -3,7 +3,7 @@
 """
 Created on Thu Mar 26 00:38:58 2020
 @author: urakawa
- Time-stamp: <2022/05/20 9:00:00 (JST) sugiura>
+ Time-stamp: <2022/06/8 8:20:00 (JST) sugiura>
 """
 
 import glob
@@ -14,14 +14,22 @@ import photutils.datasets
 from astropy.io import fits
 from astropy.visualization import (ZScaleInterval)
 from matplotlib import cm
+from PIL import Image
 import traceback
 
 #---function---------------------------------------------------------------------
 def fits2png(hdu, pngname):
+    tmpPngName = "temp.png"
+    
     cmap = cm.gray
     vmin, vmax = ZScaleInterval().get_limits(hdu)
-    plt.imsave(pngname, hdu, vmin=vmin, vmax=vmax, cmap=cmap, origin="lower")
+    plt.imsave(tmpPngName, hdu, vmin=vmin, vmax=vmax, cmap=cmap, origin="lower")
     plt.close()
+
+    #convert to PNG-8 to reduce png file size
+    im = Image.open(tmpPngName)
+    im_p = im.convert("P")
+    im_p.save(pngname)
 #--------------------------------------------------------------------------------
 
 try:
