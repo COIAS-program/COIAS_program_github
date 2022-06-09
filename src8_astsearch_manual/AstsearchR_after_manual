@@ -1,0 +1,36 @@
+#!/bin/bash
+#S.U made on 2021/7/14
+#version 2022.6.7 K.S.
+
+set -o pipefail
+echo AstsearchR_after_manual begins 2>&1 | tee log.txt
+echo $? 85 801 > error.txt
+
+photometry_manual_objects.py 2>&1 | tee -a log.txt
+match2E.py 2>&1 | tee -a log.txt
+change_data_to_mpc_format_manual.py 2>&1 | tee -a log.txt
+
+cat numbered_disp_m.txt karifugo_disp_m.txt unknown_disp_m.txt > disp_m.txt 2>&1 | tee -a log.txt
+cat numbered_mpc_m.txt karifugo_mpc_m.txt unknown_mpc_m.txt > mpc_m.txt     2>&1 | tee -a log.txt
+cat numbered_all_m.txt karifugo_all_m.txt unknown_all_m.txt > all_m.txt     2>&1 | tee -a log.txt
+echo $? 84 805 >> error.txt
+
+sed 's/r2     /r     /g;' mpc_m.txt > tmpmpc1_m.txt   2>&1 | tee -a log.txt
+sed 's/i2     /i     /g;' tmpmpc1_m.txt > tmpmpc2.txt 2>&1 | tee -a log.txt
+sed 's/r2     /r     /g;' all_m.txt > tmpall1_m.txt   2>&1 | tee -a log.txt
+sed 's/i2     /i     /g;' tmpall1_m.txt > tmpall2.txt 2>&1 | tee -a log.txt
+echo $? 84 806 >> error.txt
+
+rm tmpmpc1_m.txt tmpall1_m.txt 2>&1 | tee -a log.txt
+cat tmpmpc2.txt > mpc_m.txt      2>&1 | tee -a log.txt
+cat tmpall2.txt > all_m.txt      2>&1 | tee -a log.txt
+echo $? 84 807 >> error.txt
+
+make_mpc4_and_redisp_manual.py 2>&1 | tee -a log.txt
+cat redisp.txt redisp_manual.txt > reredisp.txt
+echo $? 84 809 >> error.txt
+
+echo AstsearchR_after_manual ends 2>&1 | tee -a log.txt
+
+error_handling.py | tee -a log.txt
+exit $?

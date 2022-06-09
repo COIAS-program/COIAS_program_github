@@ -13,7 +13,7 @@ try:
     #-----------------------------------------------------------
 
     #---get H conversion list-----------------------------------
-    HConversionListFile = open("H_conversion_list.txt","r")
+    HConversionListFile = open("H_conversion_list_automanual.txt","r")
     lines = HConversionListFile.readlines()
     HOld = []
     HNew = []
@@ -40,7 +40,7 @@ try:
         # search the same line in all.txt##########
         if flag==1:
             preRepoOneLine = preRepoOneLine.replace(HPreRepo,HPreRepoOld)
-        allFile = open("all.txt","r")
+        allFile = open("all_automanual.txt","r")
         lines = allFile.readlines()
         for l3 in range(len(lines)):
             if preRepoOneLine[0:31]==lines[l3][0:31]:

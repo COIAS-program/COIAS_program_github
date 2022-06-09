@@ -1,0 +1,42 @@
+#!/bin/bash
+#timestamp: 2022/6/8 17:30 sugiura
+
+error=0
+
+if [ -e "mpc4_m.txt" ]; then
+    cat mpc4.txt mpc4_m.txt > mpc4_automanual.txt
+    if [ $? -ne 0 ]; then
+	error=1
+    fi
+else
+    cat mpc4.txt > mpc4_automanual.txt
+    if [ $? -ne 0 ]; then
+	error=1
+    fi
+fi
+
+if [ -e "all_m.txt" ]; then
+    cat	all.txt all_m.txt > all_automanual.txt
+    if [ $? -ne 0 ]; then
+	error=1
+    fi
+else
+    cat	all.txt > all_automanual.txt
+    if [ $? -ne 0 ]; then
+        error=1
+    fi
+fi
+
+if [ -e "H_conversion_list_manual.txt" ]; then
+    cat	H_conversion_list.txt H_conversion_list_manual.txt > H_conversion_list_automanual.txt
+    if [ $? -ne 0 ]; then
+	error=1
+    fi
+else
+    cat	H_conversion_list.txt > H_conversion_list_automanual.txt
+    if [ $? -ne 0 ]; then
+        error=1
+    fi
+fi
+
+exit $error

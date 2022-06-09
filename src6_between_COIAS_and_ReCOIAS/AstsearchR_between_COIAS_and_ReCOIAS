@@ -8,6 +8,7 @@ echo $? 65 601 > error.txt
 prempedit
 prempedit3.py $1 2>&1 | tee -a log.txt
 redisp
+cat redisp.txt > reredisp.txt
 
 echo AstsearchR_between_COIAS_and_ReCOIAS ends 2>&1 | tee -a log.txt
 
