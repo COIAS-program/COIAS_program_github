@@ -12,6 +12,7 @@ import sys
 import glob
 import re
 import math
+import os
 import calcrect
 
 ### GLOBAL CONSTANTS #################################################
@@ -129,19 +130,51 @@ class DataOfAllAsteroids:
 
         if mode=="COIAS":
             inputFileName = "disp.txt"
-        else:
+        elif mode=="MANUAL":
             inputFileName = "redisp.txt"
+        else:
+            inputFileName = "reredisp.txt"
 
         f = open(inputFileName,"r")
         dataLines = f.readlines()
         f.close()
-            
+
+        #---read disp files-----------
         self.Ndata = len(dataLines)
         self.astData = []
         for line in dataLines:
             contents = line.split()
             self.astData.append( DataOfAnAsteroidInAnImage(contents[0], int(contents[1]), (int(float(contents[2])),int(float(contents[3]))) ) )
+        #-----------------------------
 
+        #---set survive flag for objects in memo.txt for COIAS mode
+        if mode=="COIAS" and os.path.isfile("memo.txt"):
+            f = open("memo.txt","r")
+            lines = f.readlines()
+            f.close()
+
+            surviveHList = []
+            for line in lines:
+                surviveHList.append("H"+line.rstrip("\n"))
+
+            for l in range(self.Ndata):
+                for Hname in surviveHList:
+                    if self.astData[l].astName == Hname:
+                        self.astData[l].isSurvive = True
+        #-----------------------------
+
+        #---set already selected manual objects in memo_manual.txt for MANUAL mode
+        if mode=="MANUAL" and os.path.isfile("memo_manual.txt"):
+            f = open("memo_manual.txt","r")
+            lines = f.readlines()
+            f.close()
+
+            for line in lines:
+                contents = line.split()
+                self.addManualAsteroidData(False, int(contents[1]), convertFits2PngCoords([int(contents[2]), int(contents[3])]), [ convertFits2PngCoords([int(contents[4]), int(contents[5])]), convertFits2PngCoords([int(contents[6]), int(contents[7])]), convertFits2PngCoords([int(contents[8]), int(contents[9])]) ], True, int(contents[0]))
+        #-----------------------------
+
+        #---set HMax------------------
         self.NHMax = 0
         f = open("disp.txt","r")
         lines = f.readlines()
@@ -152,7 +185,15 @@ class DataOfAllAsteroids:
                 NH = int(contents[0].lstrip('H'))
                 if NH > self.NHMax:
                     self.NHMax = NH
+
+        for l in range(self.Ndata):
+            if self.astData[l].isManualAst:
+                NH = int(self.astData[l].astName.lstrip("H"))
+                if  NH > self.NHMax:
+                    self.NHMax = NH
+                    
         self.NHMax += 1
+        #-----------------------------
     #----------------------------------------------------------
 
     #---add an asteroid data for manual pickup-----------------
@@ -340,6 +381,10 @@ class COIAS:
         self.canvas.grid(row=1, column=0, columnspan=9, sticky=tk.W+tk.E+tk.N+tk.S)
         self.canvas.bind('<Motion>', self.getMouseCoord)
         self.canvas.bind('<ButtonPress-1>', self.onClicked)
+        self.canvas.focus_set()
+        self.canvas.bind('<Key-s>', self.startStopBlinking)
+        self.canvas.bind('<Left>', self.onBackButton)
+        self.canvas.bind('<Right>', self.onNextButton)
 
         #---set widgets 3: scroll bars
         self.xscroll = tk.Scrollbar(self.main_win, orient=tk.HORIZONTAL, command=self.canvas.xview)
@@ -407,11 +452,13 @@ class COIAS:
                 #---draw rectangles and names
                 self.canvas.create_rectangle(self.asteroidData.astData[i].pngPosition[0]-20, self.asteroidData.astData[i].pngPosition[1]-20, self.asteroidData.astData[i].pngPosition[0]+20, self.asteroidData.astData[i].pngPosition[1]+20, outline=color, width=5, tag="asteroid")
                 self.canvas.create_text(self.asteroidData.astData[i].pngPosition[0]-dispAstName, self.asteroidData.astData[i].pngPosition[1]-dispAstName, text=self.asteroidData.astData[i].astName, fill=color, font=("Purisa",fontSizeAstName), tag="asteroid")
+
+        self.canvas.focus_set()
     #--------------------------------------------------
 
 
     #---method for blinkStartStopButton----------------
-    def startStopBlinking(self):
+    def startStopBlinking(self, event=None):
         if self.doBlink:
             self.doBlink = False
             self.blinkStartStopButton["text"] = "Blink start"
@@ -435,7 +482,7 @@ class COIAS:
 
 
     #---method for backButton--------------------------
-    def onBackButton(self):
+    def onBackButton(self, event=None):
         if self.presentImageNumber == 0:
             self.presentImageNumber = NALLIMAGES - 1
         else:
@@ -448,7 +495,7 @@ class COIAS:
 
 
     #---method for nextButton--------------------------
-    def onNextButton(self):
+    def onNextButton(self, event=None):
         self.presentImageNumber += 1
         if self.presentImageNumber == NALLIMAGES:
             self.presentImageNumber = 0
@@ -529,6 +576,8 @@ class COIAS:
                 self.addManualAsteroid(self.coldPresentMousePosition)
 
             self.drawAsteroidOnly()
+            if self.COIASMode == "COIAS":  self.asteroidData.outputMemoTxt()
+            if self.COIASMode == "MANUAL": self.asteroidData.outputMemoManualTxt()
     #--------------------------------------------------
 
 
@@ -624,6 +673,7 @@ class COIAS:
         self.sub_win.title("manual measure: aparture setting")
         self.sub_win.geometry("+{0:d}+{1:d}".format(int(ROOT.winfo_screenwidth()/2-self.canvasSize/2), int(ROOT.winfo_screenheight()/2-self.canvasSize/2)))
         self.sub_win.protocol("WM_DELETE_WINDOW", self.closeWindow)
+        self.sub_win.focus_set()
 
         #---set widgets
         self.coordsBoxSubWin = tk.Entry(self.sub_win, font=("", fontSizeSubWindow), width=coordsBoxSize)
@@ -669,10 +719,11 @@ class COIAS:
     #---set aparture------------------------------------
     def onClickedSubWin(self, event):
         if self.NClick < 3:
-            self.clickedPositions[self.NClick][0] = self.mousePositionSubWin[0]
-            self.clickedPositions[self.NClick][1] = self.mousePositionSubWin[1]
             self.eventPositions[self.NClick][0] = event.x
             self.eventPositions[self.NClick][1] = event.y
+            self.getMouseCoordSubWin(event)
+            self.clickedPositions[self.NClick][0] = self.mousePositionSubWin[0]
+            self.clickedPositions[self.NClick][1] = self.mousePositionSubWin[1]
             self.canvasSubWin.create_oval( event.x-3, event.y-3, event.x+3, event.y+3, fill="#FF0000", outline="#FF0000", width=0, tag="clickedPos")
             self.NClick += 1
         if self.NClick == 3:
