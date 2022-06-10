@@ -9,7 +9,7 @@ echo $i
 t1=$(echo $i|sed "s/.fits/.dat/g")
 echo $? 25 205 >> error.txt
 
-sex $i -c ~/.coias/param/default.sex
+source-extractor $i -c ~/.coias/param/default.sex
 echo $? 24 206 >> error.txt
 
 echo $t1
