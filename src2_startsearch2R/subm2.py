@@ -15,6 +15,7 @@ from astropy.io import fits
 from astropy.visualization import (ZScaleInterval)
 from matplotlib import cm
 from PIL import Image
+import subprocess
 import traceback
 
 #---function---------------------------------------------------------------------
@@ -30,6 +31,8 @@ def fits2png(hdu, pngname):
     im = Image.open(tmpPngName)
     im_p = im.convert("P")
     im_p.save(pngname)
+
+    subprocess.run("rm temp.png", shell=True)
 #--------------------------------------------------------------------------------
 
 try:
