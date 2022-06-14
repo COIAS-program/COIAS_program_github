@@ -3,7 +3,7 @@
 """
 Created on Thu Mar 26 00:38:58 2020
 @author: urakawa
- Time-stamp: <2022/06/8 8:20:00 (JST) sugiura>
+ Time-stamp: <2022/06/14 9:30 (JST) sugiura>
 """
 
 import glob
@@ -41,66 +41,58 @@ try:
     if len(img_list)==0:
         raise FileNotFoundError
 
-    ## make arrays to store output images
-    hdutmp = fits.open(img_list[0])
-    head_list = []
-    scidata = np.empty((len(img_list), np.shape(hdutmp[0].data)[0], np.shape(hdutmp[0].data)[1]))
-    maskdata = np.empty((len(img_list), np.shape(hdutmp[0].data)[0], np.shape(hdutmp[0].data)[1]))
-    image_sky_nan_mask = np.empty_like(scidata)
-    image_sky_nan = np.empty_like(scidata)
-    del hdutmp
-
-    ## Loading original fits images
-    nanmaskList = []
+    ## produce median mask #######
+    maskdata = []
     for i in range(len(img_list)):
         hdu = fits.open(img_list[i])
-        scidata[i] = hdu[0].data
+        maskdata.append(hdu[1].data)
+        hdu.close()
+
+    ## median for mask
+    median_maskdata = np.median(maskdata, axis=0)
+
+    ## hanten 
+    tmp_hanten = np.where(median_maskdata == 0, 1, median_maskdata)
+    hanten_image = np.where(tmp_hanten > 1, 0, tmp_hanten)
+
+    ## clear
+    del maskdata
+    del median_maskdata
+    del tmp_hanten
+    ##############################
+
+    ## load, masking, and output ##
+    for i in range(len(img_list)):
+        ## load
+        hdu = fits.open(img_list[i])
+        scidata = hdu[0].data
+        header = hdu[0].header
+        hdu.close()
 
         ## Make sky background image to replace NaN region #####
         # masking NaN
-        nanmask = np.isnan(scidata[i])
-        nanmaskList.append(nanmask)
-        scidata_maskednan = np.ma.array(scidata[i], mask=nanmask)
+        nanmask = np.isnan(scidata)
+        scidata_maskednan = np.ma.array(scidata, mask=nanmask)
 
         # sigma-clipping and measuring statistics to make sky
         rejection = 3.0  # threshold sigma value of sky 
         sky_mean, sky_median, sky_stddev = astropy.stats.sigma_clipped_stats(scidata_maskednan, sigma=rejection)
 
         # make sky background image
-        image_sky = photutils.datasets.make_noise_image((np.shape(scidata[i])), distribution='gaussian', mean=sky_mean, stddev=sky_stddev)
+        image_sky = photutils.datasets.make_noise_image((np.shape(scidata)), distribution='gaussian', mean=sky_mean, stddev=sky_stddev)
 
         # replace nan -> sky background
-        scidata[i][nanmask] = 0  # replace nan =>0 temporaly
-        ###########################################################
+        scidata[nanmask] = 0  # replace nan =>0 temporaly        
 
-        ## Mask image of HSC
-        maskdata[i] = hdu[1].data
-        # maskdatalist.append ( maskdata[i] )
+        ## make sky masked (K.S. 2022/6/14) 
+        image_sky_nan_mask  = np.where( (nanmask) | (hanten_image == 0), image_sky, 0)
+        image_sky_nan  = np.where(nanmask, image_sky, 0)
 
-        ## make header with wcs info
-        head_list.append(hdu[0].header)
-
-    ## make mask images ##
-    ## median for mask
-    stacked_maskdata = np.stack(maskdata)
-    median_maskdata = np.median(stacked_maskdata, axis=0)
-
-    ## hanten 
-    tmp_hanten = np.where(median_maskdata == 0, 1, median_maskdata)
-    hanten_image = np.where(tmp_hanten > 1, 0, tmp_hanten)
-
-    ## make sky masked (K.S. 2022/5/20) ###
-    for i in range(len(img_list)):
-        image_sky_nan_mask[i]  = np.where( (nanmaskList[i]) | (hanten_image == 0), image_sky, 0)
-        image_sky_nan[i]  = np.where(nanmaskList[i], image_sky, 0)
-    #######################################
-
-    ## masking and output to fits images ##
-    for i in range(len(img_list)):
+        ## masking and output to fits images ##
         ## masked scidata 
         ## masking : image * hanten median
-        output_scidata_masked = scidata[i] * hanten_image + image_sky_nan_mask[i]
-        hdunew = fits.PrimaryHDU(output_scidata_masked, head_list[i])
+        output_scidata_masked = scidata * hanten_image + image_sky_nan_mask
+        hdunew = fits.PrimaryHDU(output_scidata_masked, header)
         ## output 
         fitsname = 'warp%s_bin' % str(i + 1)
         pngname = '%s_disp-coias' % str(i + 1)  # NM added 2021-08-10
@@ -109,11 +101,9 @@ try:
 
         ## non-masked scidata
         ## masking : image * hanten median
-        output_scidata = scidata[i] + image_sky_nan[i]
-        # hdunew = fits.PrimaryHDU( output_scidata, head_list[i] )  ## comment-out: non-mask image is not needed to fits format
+        output_scidata = scidata + image_sky_nan
         ## output 
         pngname = '%s_disp-coias_nonmask' % str(i + 1)  # NM added 2021-08-10
-        # hdunew.writeto( outfilename+".fits", overwrite = True) # output as fits image ## comment-out:non-mask image is not needed to fits format
         fits2png(output_scidata, pngname + ".png")  # output as png image
 
 except FileNotFoundError:
