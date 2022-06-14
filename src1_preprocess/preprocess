@@ -29,6 +29,17 @@ fi
 
 if [ ! -f ~/.coias/param/MPCORB.DAT ]; then
     getMPCORB_and_mpc2edb 2>&1 | tee -a log.txt
+else
+    #even if MPCORB.DAT exists, interruption of previous download leads to incomplete data and we need re-download
+    wget --spider https://www.minorplanetcenter.net/iau/MPCORB/MPCORB.DAT 2>&1 | tee wgetMPC.txt
+    echo $? 12 109 >> error.txt
+
+    MSIZE=`grep -oE "\([0-9]*M\)" wgetMPC.txt | sed "s/(//g" | sed "s/)//g" | sed "s/M//g"`
+    MPCMSIZE=`ls -l ~/.coias/param/MPCORB.DAT | awk '{print $5 * 1.1 * 0.000001}' | awk '{printf("%d",$1)}'`
+    if [ $MPCMSIZE -lt $MSIZE ]; then
+	echo "previous download of MPCORB.DAT may be interrupted. download again." 2>&1 | tee -a log.txt
+	getMPCORB_and_mpc2edb 2>&1 | tee -a log.txt
+    fi
 fi
 
 echo preprocess ends 2>&1 | tee -a log.txt
