@@ -57,9 +57,6 @@ try:
 
     #---read scidata--------------------------------------
     scidataNames = sorted(glob.glob("warp*_bin.fits"))
-    scidataList = []
-    for name in scidataNames:
-        scidataList.append(fits.open(name))
     #-----------------------------------------------------
 
 
@@ -74,7 +71,7 @@ try:
                                 [int(contents[8]), int(contents[9])] ]
     
         #---read fits and related information
-        scidata = scidataList[NImage]
+        scidata = fits.open(scidataNames[NImage])
         fil = scidata[0].header["FILTER"]
         jd  = scidata[0].header["JD"]
         zm  = scidata[0].header["Z_P"]
@@ -84,12 +81,6 @@ try:
         fOutput.write(name + " {0:.9f} {1:.7f} {2:.7f} {3:.3f} {4:.3f} {5:.2f} {6:.2f} ".format(jd, photRaDecDict["ra"], photRaDecDict["dec"], photRaDecDict["mag"], photRaDecDict["mage"], clickedPosition[0], clickedPosition[1])+fil+" "+str(NImage)+"\n")
     #-----------------------------------------------------
 
-
-    #---close output file and scidata---------------------
-    fOutput.close()
-    for i in range(len(scidataNames)):
-        scidataList[i].close()
-    #-----------------------------------------------------
 
 except FileNotFoundError:
     print("Some previous files are not found in photometry_manual_objects.py!")

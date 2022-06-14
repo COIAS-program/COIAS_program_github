@@ -8,6 +8,7 @@ import numpy as np
 import scipy.spatial as ss
 from astropy.io import fits, ascii
 from astropy.wcs import wcs
+import subprocess
 import traceback
 import mktracklet_opt
 import readparam
@@ -144,21 +145,21 @@ try:
         raise ValueError("N_DETECT_THRESH(={0}) is larger than NImage(={1})!".format(N_DETECT_THRESH,NImage))
 
     #---read scidata-----------------------------------
-    scidataList = []
     jdList = []
     zmList = []
     nbinList = []
     filList = []
     for f in range(NImage):
-        scidataList.append(fits.open(warpFileNames[f]))
-        jdList.append(scidataList[f][0].header['JD'])
-        zmList.append(scidataList[f][0].header['Z_P'])
-        nbinList.append(scidataList[f][0].header['NBIN'])
-        filList.append(scidataList[f][0].header['FILTER'])
+        scidata = fits.open(warpFileNames[f])
+        jdList.append(scidata[0].header['JD'])
+        zmList.append(scidata[0].header['Z_P'])
+        nbinList.append(scidata[0].header['NBIN'])
+        filList.append(scidata[0].header['FILTER'])
+        if f==0:
+            wcs0 = wcs.WCS(scidata[0].header)
     #--------------------------------------------------
 
     #---read ascii source list-------------------------
-    wcs0 = wcs.WCS(scidataList[0][0].header)
     textFNamesList = []
     radecList = []
     radecbList = []
@@ -211,14 +212,26 @@ try:
 
 
     ### photometry ###########################################
-    result = []
-    idTracklet = 0
+
+    ## define id
+    idtrac = 0
+    idTracklet = []
     for p in range(len(trackletListAll)):
+        idTrackletInner = []
         for k in range(len(trackletListAll[p])):
-            if trackletListAll[p][k].NDetect < N_DETECT_THRESH:
-                raise ValueError("Something wrong! Tracklets with NDetect < N_DETECT_THRESH survive! this NDetect={0:d}".format(trackletListAll[p][k].NDetect))
+            idTrackletInner.append(idtrac)
+            idtrac += 1
+        idTracklet.append(idTrackletInner)
+    
+    result = []
+    for image in range(NImage):
+        scidata = fits.open(warpFileNames[image])
+    
+        for p in range(len(trackletListAll)):
+            for k in range(len(trackletListAll[p])):
+                if trackletListAll[p][k].NDetect < N_DETECT_THRESH:
+                    raise ValueError("Something wrong! Tracklets with NDetect < N_DETECT_THRESH survive! this NDetect={0:d}".format(trackletListAll[p][k].NDetect))
             
-            for image in range(NImage):
                 if not trackletListAll[p][k].isDetectedList[image]:
                     continue
                 
@@ -235,8 +248,8 @@ try:
                 ap = CircularAperture(position, wa.value)
                 sap = CircularAnnulus(position, w_in.value, w_out.value)
 
-                rawflux_table = aperture_photometry(scidataList[image][0].data, ap, method='subpixel', subpixels=5)
-                bkgflux_table = aperture_photometry(scidataList[image][0].data, sap, method='subpixel', subpixels=5)
+                rawflux_table = aperture_photometry(scidata[0].data, ap, method='subpixel', subpixels=5)
+                bkgflux_table = aperture_photometry(scidata[0].data, sap, method='subpixel', subpixels=5)
                 # 2020.11.25 revised
                 bkg_mean = bkgflux_table['aperture_sum'] / sap.area
                 bkg_sum = bkg_mean * ap.area
@@ -253,12 +266,12 @@ try:
                 # Noise in ADU
                 mage = np.round(1.0857 / SNR, decimals=3)
 
-                result.append([idTracklet, trackletListAll[p][k].data[image][0], trackletListAll[p][k].data[image][1], trackletListAll[p][k].data[image][2], mag, mage, xypix[0], xypix[1], filList[image]])
+                result.append([idTracklet[p][k], trackletListAll[p][k].data[image][0], trackletListAll[p][k].data[image][1], trackletListAll[p][k].data[image][2], mag, mage, xypix[0], xypix[1], filList[image]])
 
-            idTracklet += 1
 
     result2 = np.array(result, dtype='object')  # revised by N.M 2020.12.14
     np.savetxt("listb2.txt", result2, fmt="%d %.9f %.7f %.7f %.3f %.3f %.2f %.2f %s")
+    subprocess.run("sort -t ' ' -k 1,1n -k 2,2n listb2.txt -o listb2.txt", shell=True)
     ##########################################################
     end = time.time()
     print("astsearch1M2.py ends. elapsed time = {0:.2f} s".format(end-start))
