@@ -40,7 +40,8 @@ try:
         # bining
         # mean(?) ? is axis number.-1 means horizontal. 1 means vertical.
         scidata_bin = scidata.reshape(int(ypix / nbin), nbin, int(xpix / nbin), nbin).mean(-1).mean(1)
-        maskdata_bin = maskdata.reshape(int(ypix / nbin), nbin, int(xpix / nbin), nbin).mean(-1).mean(1)
+        maskdata_bin_org = maskdata.reshape(int(ypix / nbin), nbin, int(xpix / nbin), nbin).mean(-1).mean(1)
+        maskdata_bin = np.array(maskdata_bin_org, dtype="int16")
 
         # make header
         # obs time
