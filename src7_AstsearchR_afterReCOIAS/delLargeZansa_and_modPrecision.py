@@ -24,8 +24,9 @@ try:
     outputLines = []
 
     for i in range(len(inputLines)):
-        Xres = float(inputLines[i][87:92])
-        Yres = float(inputLines[i][97:102])
+        contents = inputLines[i].split()
+        Xres = float(contents[14])
+        Yres = float(contents[15])
 
         if (abs(Xres) < 0.7) and (abs(Yres) < 0.7):
             str_list = list(inputLines[i][0:80]) + list("\n")
