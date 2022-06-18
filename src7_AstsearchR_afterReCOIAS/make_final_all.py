@@ -2,7 +2,9 @@
 # -*- coding: UTF-8 -*
 
 import glob
+import os
 import traceback
+import re
 
 try:
     #---open output file and write header-----------------------
@@ -30,6 +32,7 @@ try:
     for l in range(len(preRepoLines)):
         preRepoOneLine = preRepoLines[l]
         preRepoOneLineList = preRepoOneLine.split()
+        
         # search H old name########################
         HPreRepo = preRepoOneLineList[0]
         flag=0
@@ -46,6 +49,25 @@ try:
             if preRepoOneLine[0:31]==lines[l3][0:31]:
                 outputFile.write(lines[l3].replace(HPreRepoOld,HPreRepo))
         allFile.close()
+
+        # output contents of orbital_element_summary_web.txt###
+        if (l==len(preRepoLines)-1 or len(preRepoLines[l+1].split())==0 or preRepoLines[l+1].split()[0]!=preRepoOneLineList[0]) and os.path.isfile("orbital_elements_summary_web.txt"):
+            if len(preRepoOneLineList[0])==7:
+                headSpace="     "
+            elif len(preRepoOneLineList[0])==5:
+                headSpace=""
+            
+            orbElemFile = open("orbital_elements_summary_web.txt","r")
+            orbElemLines = orbElemFile.readlines()
+            orbElemFile.close()
+
+            for l2 in range(len(orbElemLines)):
+                if orbElemLines[l2].split()[0].rstrip(":")==preRepoOneLineList[0]:
+                    outputFile.write(headSpace + orbElemLines[l2])
+                    outputFile.write(headSpace + orbElemLines[l2+1])
+                    outputFile.write(headSpace + orbElemLines[l2+2])
+                    outputFile.write("\n")
+                    break
 
     preRepoFile.close()
     outputFile.close()

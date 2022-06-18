@@ -13,8 +13,7 @@ echo $? 74 702 >> error.txt
 
 deldaburi4.py 2>&1 | tee -a log.txt
 
-dos_find mpc7.txt -k | cut -c 2- > result.txt 2>&1 | tee -a log.txt
-echo $? 75 704 >> error.txt
+findorb.py 2>&1 | tee -a log.txt
 
 delLargeZansa_and_modPrecision.py 1 2>&1 | tee -a log.txt
 
