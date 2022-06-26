@@ -25,6 +25,7 @@ conda install -y pandas==1.3.4
 conda install -y bokeh==2.4.1
 conda install -y -c conda-forge astromatic-source-extractor==2.25.0
 conda install -c anaconda beautifulsoup4==4.11.1
+conda install -c anaconda lxml==4.8.0
 
 pip install --upgrade pip
 pip install -y julian==0.14
