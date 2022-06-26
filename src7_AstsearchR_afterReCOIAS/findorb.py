@@ -112,9 +112,17 @@ try:
                 obsList.append(lines[l].rstrip("\n"))
                 
             findOrbResult = get_imformation_from_findorb_html(request_find_orb(obsList), len(obsList))
-            fOrbElem.write(prevObsName.ljust(7) + ": " + findOrbResult["orbElemSentence"])
-            fOrbElem.write("         " + findOrbResult["sizeSentence"])
-            fOrbElem.write("         " + findOrbResult["obsArcSentence"])
+
+            if len(prevObsName)==5:
+                fOrbElem.write(prevObsName.ljust(12) + ": " + findOrbResult["orbElemSentence"])
+                fOrbElem.write("              " + findOrbResult["sizeSentence"])
+                fOrbElem.write("              " + findOrbResult["obsArcSentence"])
+
+            elif len(prevObsName)==7:
+                fOrbElem.write(prevObsName.ljust(7) + ": " + findOrbResult["orbElemSentence"])
+                fOrbElem.write("         " + findOrbResult["sizeSentence"])
+                fOrbElem.write("         " + findOrbResult["obsArcSentence"])
+                
             for o in range(len(obsList)):
               fResult.write(obsList[o] + " |" + findOrbResult["residuals"][o][0].rjust(10) + findOrbResult["residuals"][o][1].rjust(10) + "\n")
 

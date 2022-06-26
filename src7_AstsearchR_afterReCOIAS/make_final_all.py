@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
+#timestamp: 2022/6/26 17:30 sugiura
 
 import glob
 import os
@@ -29,6 +30,7 @@ try:
     #---output all.txt only in pre_repo.txt---------------------
     preRepoFile = open("pre_repo.txt","r")
     preRepoLines = preRepoFile.readlines()
+    HPreRepoOld="NoMeaning"
     for l in range(len(preRepoLines)):
         preRepoOneLine = preRepoLines[l]
         preRepoOneLineList = preRepoOneLine.split()
@@ -48,6 +50,7 @@ try:
         for l3 in range(len(lines)):
             if preRepoOneLine[0:31]==lines[l3][0:31]:
                 outputFile.write(lines[l3].replace(HPreRepoOld,HPreRepo))
+                break
         allFile.close()
 
         # output contents of orbital_element_summary_web.txt###

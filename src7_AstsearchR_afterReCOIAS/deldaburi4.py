@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
+#timestamp: 2022/6/26 17:30 sugiura
 import itertools
 import re
 
@@ -76,9 +77,9 @@ try:
 
     list4 = []
     for i in range(len(list3)):
-        # K. S. modify 2021/6/17
-        if (re.search(r'^H......', list3[i][0]) or re.search(r'^K......', list3[i][0]) or re.search(r'^J......', list3[i][0])):
-            part1 = '     ' + list3[i][0] + '  ' + list3[i][1] + ' ' + str(list3[i][2]).zfill(2)
+        # K. S. modify 2022/6/26
+        if (re.search(r'^H......', str(list3[i][0])) or re.search(r'^K......', str(list3[i][0])) or re.search(r'^J......', str(list3[i][0]))):
+            part1 = '     ' + str(list3[i][0]) + '  ' + list3[i][1] + ' ' + str(list3[i][2]).zfill(2)
             part2 = "{:.5f}".format(list3[i][3]).zfill(8) + ' ' + str(list3[i][4]).zfill(2) + ' ' + str(list3[i][5]).zfill(2)
             part3 = "{:.2f}".format(list3[i][6]).zfill(5) + ' ' + str(list3[i][7]) + ' ' + str(list3[i][8]).zfill(2)
             part4 = "{:.2f}".format(list3[i][9]).zfill(5) + '         ' + "{:.1f}".format(list3[i][10])
