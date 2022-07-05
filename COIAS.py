@@ -728,6 +728,7 @@ class COIAS:
             self.NClick += 1
         if self.NClick == 3:
             rect = calcrect.calc_rectangle_parameters([self.eventPositions[0][0], self.eventPositions[0][1]], [self.eventPositions[1][0], self.eventPositions[1][1]], [self.eventPositions[2][0], self.eventPositions[2][1]])
+            ## some clicked points have the same postions
             if rect == None:
                 self.NClick=0
                 self.clickedPositions = [ [0, 0], [0, 0], [0, 0] ]
@@ -735,6 +736,19 @@ class COIAS:
                 self.canvasSubWin.delete("clickedPos")
                 self.promptBox.delete(0, tk.END)
                 self.promptBox.insert(tk.END, "same points. Select an aparture again.")
+            ## some clicked potins are out of the range of the image
+            if (self.clickedPositions[0][0] < 0 or self.clickedPositions[0][0] >= PNGSIZES[0] or  
+                self.clickedPositions[0][1] < 0 or self.clickedPositions[0][1] >= PNGSIZES[1] or 
+                self.clickedPositions[1][0] < 0 or self.clickedPositions[1][0] >= PNGSIZES[0] or 
+                self.clickedPositions[1][1] < 0 or self.clickedPositions[1][1] >= PNGSIZES[1] or 
+                self.clickedPositions[2][0] < 0 or self.clickedPositions[2][0] >= PNGSIZES[0] or 
+                self.clickedPositions[2][1] < 0 or self.clickedPositions[2][1] >= PNGSIZES[1]):
+                self.NClick=0
+                self.clickedPositions = [ [0, 0], [0, 0], [0, 0] ]
+                self.eventPositions   = [ [0, 0], [0, 0], [0, 0] ]
+                self.canvasSubWin.delete("clickedPos")
+                self.promptBox.delete(0, tk.END)
+                self.promptBox.insert(tk.END, "Some points are out of image. Select again.")
             else:
                 self.canvasSubWin.create_polygon(rect["rectPos1"][0], rect["rectPos1"][1], rect["rectPos2"][0], rect["rectPos2"][1], rect["rectPos3"][0], rect["rectPos3"][1], rect["rectPos4"][0], rect["rectPos4"][1], fill='', outline="#FF0000", width=2, tag="clickedPos")
                 self.promptBox.delete(0, tk.END)
