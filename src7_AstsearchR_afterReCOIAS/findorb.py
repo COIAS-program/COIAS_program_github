@@ -45,6 +45,11 @@ def get_imformation_from_findorb_html(htmlDocument, ndata):
     #---extract a, e, i-------------------------------
     orbElemStrList = soup.find("a",href="https://www.projectpluto.com/mpec_xpl.htm#elems").next_sibling.split("\n")
 
+    ## hyperbolic orbit or insane observations
+    if orbElemStrList[3][0]=='q':
+        retDict = {"None":None}
+        return retDict
+
     ## large error
     if orbElemStrList[5].split()[2]!="+/-":
         a = orbElemStrList[5].split()[1]
@@ -112,21 +117,22 @@ try:
                 obsList.append(lines[l].rstrip("\n"))
                 
             findOrbResult = get_imformation_from_findorb_html(request_find_orb(obsList), len(obsList))
+            if "None" not in findOrbResult:
 
-            if len(prevObsName)==5:
-                fOrbElem.write(prevObsName.ljust(12) + ": " + findOrbResult["orbElemSentence"])
-                fOrbElem.write("              " + findOrbResult["sizeSentence"])
-                fOrbElem.write("              " + findOrbResult["obsArcSentence"])
-
-            elif len(prevObsName)==7:
-                fOrbElem.write(prevObsName.ljust(7) + ": " + findOrbResult["orbElemSentence"])
-                fOrbElem.write("         " + findOrbResult["sizeSentence"])
-                fOrbElem.write("         " + findOrbResult["obsArcSentence"])
+                if len(prevObsName)==5:
+                    fOrbElem.write(prevObsName.ljust(12) + ": " + findOrbResult["orbElemSentence"])
+                    fOrbElem.write("              " + findOrbResult["sizeSentence"])
+                    fOrbElem.write("              " + findOrbResult["obsArcSentence"])
+                    
+                elif len(prevObsName)==7:
+                    fOrbElem.write(prevObsName.ljust(7) + ": " + findOrbResult["orbElemSentence"])
+                    fOrbElem.write("         " + findOrbResult["sizeSentence"])
+                    fOrbElem.write("         " + findOrbResult["obsArcSentence"])
                 
-            for o in range(len(obsList)):
-              fResult.write(obsList[o] + " |" + findOrbResult["residuals"][o][0].rjust(10) + findOrbResult["residuals"][o][1].rjust(10) + "\n")
+                for o in range(len(obsList)):
+                    fResult.write(obsList[o] + " |" + findOrbResult["residuals"][o][0].rjust(10) + findOrbResult["residuals"][o][1].rjust(10) + "\n")
 
-            obsList = [lines[l].rstrip("\n")]
+                obsList = [lines[l].rstrip("\n")]
 
         else:
             obsList.append(lines[l].rstrip("\n"))
