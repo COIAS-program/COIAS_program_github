@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
-# Time-stamp: <2022/04/13 12:00:00 (JST) KS>
+# Time-stamp: <2022/07/7 13:00:00 (JST) KS>
 
 import numpy as np
 from astroquery.jplhorizons import Horizons
@@ -140,10 +140,7 @@ try:
                                                 
         # remove name and karifugo from numberd
         for l in range(len(tmp8)):
-            tmp9 = re.sub(r"\(.+?\)","",tmp8[l,0]) # remove karifugo
-            tmp11 = re.sub(r"[a-zA-Z\']","",tmp9) # remove name
-            tmp12 = tmp11.rstrip()
-            tmp8[l,0] = tmp12
+            tmp8[l,0] = tmp8[l,0].split()[0]
         
         fList = np.ndarray((Ndata),dtype=object)
         for i in range(Ndata):
