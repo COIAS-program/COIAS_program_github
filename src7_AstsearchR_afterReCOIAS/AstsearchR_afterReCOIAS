@@ -5,6 +5,8 @@ set -o pipefail
 echo AstsearchR_afterReCOIAS begins 2>&1 | tee log.txt
 echo $? 75 701 > error.txt
 
+adjust_newH_manual.py 2>&1 | tee -a log.txt
+
 merge_manual 2>&1 | tee -a log.txt
 echo $? 75 709 >> error.txt
 

@@ -3,6 +3,7 @@
 #timestamp: 2022/6/8 16:30 sugiura
 
 import re
+import traceback
 
 try:
     #---get maximum H number from redisp.txt---------
