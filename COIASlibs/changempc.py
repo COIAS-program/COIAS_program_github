@@ -82,8 +82,8 @@ def change_jd_to_MPC_format_date(jd):
 #-------------------------------------------------------------------------------------------
 
 #---function: input = ra(degree), dec(degree), output = ra and dec in MPC format------------
-def change_ra_dec_to_MPC_format(raDegree, decDegree):
-    coord = SkyCoord(ra = raDegree*u.degree, dec = decDegree*u.degree)
+def change_ra_dec_to_MPC_format(raDegreeOrg, decDegreeOrg):
+    coord = SkyCoord(ra = raDegreeOrg*u.degree, dec = decDegreeOrg*u.degree)
 
     ##convert ra
     raHour = int(coord.ra.hms[0])
@@ -100,9 +100,9 @@ def change_ra_dec_to_MPC_format(raDegree, decDegree):
     decMinit = int(coord.dec.dms[1])
     decSecond = np.round(coord.dec.dms[2],decimals=2)
     
-    if decDegree > 0.0:
+    if decDegreeOrg > 0.0:
         decDegreeStr = '+'+"{:02d}".format(decDegreeInt)
-    elif decDegree > -1.0 and decDegree < 0.0:
+    elif decDegreeOrg > -1.0 and decDegreeOrg < 0.0:
         decDegreeStr = '-0'+"{:01d}".format(decDegreeInt)
         decMinit *= -1
         decSecond *= -1
