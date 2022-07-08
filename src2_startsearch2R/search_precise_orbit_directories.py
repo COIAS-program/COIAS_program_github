@@ -41,13 +41,12 @@ try:
     #---check presice orbit directory exists or not-
     for fileName in filesInOrbitDataDir:
         if os.path.isdir(fileName):
-            try:
-                raDecJdTimeFile = open(fileName+"/ra_dec_jd_time.txt","r")
-            except FileNotFoundError:
-                print("The directory "+fileName+" does not have ra_dec_jd_time.txt")
+            if (not os.path.isfile(fileName+"/ra_dec_jd_time.txt")) or (not os.path.isfile(fileName+"/numbered_new2B.txt")) or (not os.path.isfile(fileName+"/karifugo_new2B.txt")):
+                print("The directory "+fileName+" does not have ra_dec_jd_time.txt, numbered_new2B.txt, or karifugo_new2B.txt")
                 print("Remove the directory.")
                 shutil.rmtree(fileName)
             else:
+                raDecJdTimeFile = open(fileName+"/ra_dec_jd_time.txt","r")
                 line = raDecJdTimeFile.readline()
                 content = line.split()
                 ra = float(content[0])
