@@ -3,6 +3,7 @@
 # timestamp: 2022/7/6 14:30 sugiura
 import sys
 import traceback
+import os
 
 try:
     argc = len(sys.argv)
@@ -21,43 +22,44 @@ try:
     inputFile = open(inputFileName, "r")
     outputFile = open(outputFileName, "w")
 
-    inputLines = inputFile.readlines()
-    outputLines = []
+    if os.stat(inputFileName).st_size != 0:
+        inputLines = inputFile.readlines()
+        outputLines = []
 
-    for i in range(len(inputLines)):
-        contents = inputLines[i].split()
-        Xres = float(contents[14])
-        Yres = float(contents[15])
+        for i in range(len(inputLines)):
+            contents = inputLines[i].split()
+            Xres = float(contents[14])
+            Yres = float(contents[15])
 
-        if (abs(Xres) < 0.7) and (abs(Yres) < 0.7):
-            str_list = list(inputLines[i][0:80]) + list("\n")
+            if (abs(Xres) < 0.7) and (abs(Yres) < 0.7):
+                str_list = list(inputLines[i][0:80]) + list("\n")
 
-            if sys.argv[1] == "1":
-                str_list[55] = ' '
+                if sys.argv[1] == "1":
+                    str_list[55] = ' '
 
-            outputLines.append("".join(str_list))
+                outputLines.append("".join(str_list))
 
-    #---remove objects with observation numbers smaller than 2-----
-    prevObsName = outputLines[-1][0:12]
-    nObs=0
-    for i in reversed(range(len(outputLines))):
-        obsName = outputLines[i][0:12]
-        if obsName==prevObsName:
-            nObs += 1
-        else:
-            if nObs<=2:
+        #---remove objects with observation numbers smaller than 2-----
+        prevObsName = outputLines[-1][0:12]
+        nObs=0
+        for i in reversed(range(len(outputLines))):
+            obsName = outputLines[i][0:12]
+            if obsName==prevObsName:
+                nObs += 1
+            else:
+                if nObs<=2:
+                    for n in reversed(range(nObs)):
+                        del outputLines[i+n+1]
+                nObs=1
+
+            if i==0 and nObs<=2:
                 for n in reversed(range(nObs)):
-                    del outputLines[i+n+1]
-            nObs=1
-
-        if i==0 and nObs<=2:
-            for n in reversed(range(nObs)):
-                del outputLines[n]
+                    del outputLines[n]
             
-        prevObsName = obsName
-    #--------------------------------------------------------------
+            prevObsName = obsName
+        #--------------------------------------------------------------
             
-    outputFile.writelines(outputLines)
+        outputFile.writelines(outputLines)
 
     inputFile.close()
     outputFile.close()

@@ -421,6 +421,12 @@ class COIAS:
         self.numberBox.insert(tk.END, "Image # 1")
         self.coordsBox.insert(tk.END, "X pix 0, Y pix 0")
         self.messageBox.insert(tk.END, "message:")
+
+        #---auto save
+        if self.COIASMode == "COIAS":
+            self.asteroidData.outputMemoTxt()
+        if self.COIASMode == "MANUAL":
+            self.asteroidData.outputMemoManualTxt()
     #--------------------------------------------------
 
     

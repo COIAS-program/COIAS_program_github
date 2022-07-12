@@ -10,6 +10,7 @@ from bs4 import Comment
 import subprocess
 import traceback
 import requests.exceptions
+import os
 
 ### FUNCTIONS #######################################################
 def request_find_orb(mpcformat, orbit_type=-2):
@@ -107,37 +108,41 @@ try:
 
     fResult  = open("result.txt","w",newline="\n")
     fOrbElem = open("orbital_elements_summary_web.txt","w",newline="\n")
-    
-    prevObsName = lines[0].split()[0]
-    obsList = []
-    for l in range(len(lines)):
-        if lines[l].split()[0]!= prevObsName or len(lines[l].split())==0 or l==len(lines)-1:
+
+    if os.stat("mpc7.txt").st_size != 0:
+        prevObsName = lines[0].split()[0]
+        obsList = []
+        for l in range(len(lines)):
+            if lines[l].split()[0]!= prevObsName or len(lines[l].split())==0 or l==len(lines)-1:
           
-            if l==len(lines)-1:
-                obsList.append(lines[l].rstrip("\n"))
+                if l==len(lines)-1:
+                    obsList.append(lines[l].rstrip("\n"))
                 
-            findOrbResult = get_imformation_from_findorb_html(request_find_orb(obsList), len(obsList))
-            if "None" not in findOrbResult:
+                findOrbResult = get_imformation_from_findorb_html(request_find_orb(obsList), len(obsList))
+                if "None" not in findOrbResult:
 
-                if len(prevObsName)==5:
-                    fOrbElem.write(prevObsName.ljust(12) + ": " + findOrbResult["orbElemSentence"])
-                    fOrbElem.write("              " + findOrbResult["sizeSentence"])
-                    fOrbElem.write("              " + findOrbResult["obsArcSentence"])
+                    if len(prevObsName)==5:
+                        fOrbElem.write(prevObsName.ljust(12) + ": " + findOrbResult["orbElemSentence"])
+                        fOrbElem.write("              " + findOrbResult["sizeSentence"])
+                        fOrbElem.write("              " + findOrbResult["obsArcSentence"])
+                        
+                    elif len(prevObsName)==7:
+                        fOrbElem.write(prevObsName.ljust(7) + ": " + findOrbResult["orbElemSentence"])
+                        fOrbElem.write("         " + findOrbResult["sizeSentence"])
+                        fOrbElem.write("         " + findOrbResult["obsArcSentence"])
+                
+                    for o in range(len(obsList)):
+                        fResult.write(obsList[o] + " |" + findOrbResult["residuals"][o][0].rjust(10) + findOrbResult["residuals"][o][1].rjust(10) + "\n")
+
+                    obsList = [lines[l].rstrip("\n")]
                     
-                elif len(prevObsName)==7:
-                    fOrbElem.write(prevObsName.ljust(7) + ": " + findOrbResult["orbElemSentence"])
-                    fOrbElem.write("         " + findOrbResult["sizeSentence"])
-                    fOrbElem.write("         " + findOrbResult["obsArcSentence"])
-                
-                for o in range(len(obsList)):
-                    fResult.write(obsList[o] + " |" + findOrbResult["residuals"][o][0].rjust(10) + findOrbResult["residuals"][o][1].rjust(10) + "\n")
+            else:
+                obsList.append(lines[l].rstrip("\n"))
 
-                obsList = [lines[l].rstrip("\n")]
+            prevObsName = lines[l].split()[0]
 
-        else:
-            obsList.append(lines[l].rstrip("\n"))
-
-        prevObsName = lines[l].split()[0]
+        fResult.close()
+        fOrbElem.close()
 
 except requests.exceptions.ConnectionError:
     print("You do not connect to the internet in findorb.py. We try desktop findorb.")
