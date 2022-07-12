@@ -62,10 +62,11 @@ try:
         for l in range(len(oldHList)):
             if contents[0]==oldHList[l]:
                 replaceHl = l
-        replacedLine = line.replace(oldHList[replaceHl], newHList[replaceHl])
-        contents = replacedLine.split()
+        if len(oldHList)!=0:
+            line = line.replace(oldHList[replaceHl], newHList[replaceHl])
+        contents = line.split()
 
-        mpc4MFile.write(replacedLine[0:80]+"\n")
+        mpc4MFile.write(line[0:80]+"\n")
         redispMFile.write(contents[0]+" "+contents[13]+" "+contents[16]+" "+contents[17]+"\n")
 
     mpc4MFile.close()

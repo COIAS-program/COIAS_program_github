@@ -25,8 +25,8 @@ try:
     # input first number
     args = sys.argv
     if len(args) <= 1:
-        print("Please input the first H number.")
-        logFile.write("Please input the first H number.\n")
+        print("####  PLEASE INPUT THE FIRST H NUMBER!!! ####")
+        logFile.write("####  PLEASE INPUT THE FIRST H NUMBER!!! ####\n")
         raise ValueError
     else:
         # args= [0,0,0]
