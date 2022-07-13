@@ -83,10 +83,13 @@ try:
 
     fileMpc4M = open("mpc4_m.txt","w")
     for line in lines:
-        for l in range(len(adjustedNewHList)):
-            if line.split()[0] == newHList[l]:
-                break
-        fileMpc4M.write(line.replace(newHList[l],adjustedNewHList[l]))
+        if len(adjustedNewHList)==0:
+            fileMpc4M.write(line)
+        else:
+            for l in range(len(adjustedNewHList)):
+                if line.split()[0] == newHList[l]:
+                    break
+            fileMpc4M.write(line.replace(newHList[l],adjustedNewHList[l]))
     fileMpc4M.close()
     #------------------------------------------------
 
