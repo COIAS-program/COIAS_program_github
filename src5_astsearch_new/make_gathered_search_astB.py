@@ -31,10 +31,10 @@ try:
     #---add image number to all data in search_astB.txt in each directory--------
     for i in range(Ndata):
         inputFile = open(directoryNames[i]+"/search_astB.txt","r")
-        outputFile = open("search_astB_{0:d}.txt".format(i),"w",newline="\n")
+        outputFile = open("search_astB_{0:02d}.txt".format(i),"w",newline="\n")
         lines = inputFile.read().splitlines()
         for l in range(len(lines)):
-            outputFile.write(lines[l]+" {0:d} ".format(i)+"\n")
+            outputFile.write(lines[l]+" {0:02d} ".format(i)+"\n")
         inputFile.close()
         outputFile.close()
     #----------------------------------------------------------------------------
@@ -43,7 +43,7 @@ try:
     errorList=[]
     command = "cat "
     for i in range(Ndata):
-        command = command + "search_astB_{0:d}.txt ".format(i)
+        command = command + "search_astB_{0:02d}.txt ".format(i)
     command = command + "|sort -n > search_astB.txt"
     completed_process = subprocess.run(command, shell=True)
     errorList.append(completed_process.returncode)

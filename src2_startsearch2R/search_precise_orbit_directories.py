@@ -23,8 +23,7 @@ try:
     decList = []
     jdList = []
     for i in range(Ndata):
-        dataFileName = "warp{0:d}_bin.fits".format(i+1)
-        scidata = fits.open(dataFileName)
+        scidata = fits.open(fitsFileNameList[i])
         raList.append(scidata[0].header['CRVAL1'])
         decList.append(scidata[0].header['CRVAL2'])
         jdList.append(scidata[0].header['JD'])

@@ -17,8 +17,8 @@ import calcrect
 
 ### GLOBAL CONSTANTS #################################################
 try:
-    PNGSIZES  = Image.open('1_disp-coias.png').size
-    FITSSIZES = (fits.open('warp1_bin.fits')[0].header['NAXIS1'],fits.open('warp1_bin.fits')[0].header['NAXIS2'])
+    PNGSIZES  = Image.open('01_disp-coias.png').size
+    FITSSIZES = (fits.open('warp01_bin.fits')[0].header['NAXIS1'],fits.open('warp01_bin.fits')[0].header['NAXIS2'])
 except FileNotFoundError:
     print("1st png file or fits file are not found!")
     print(traceback.format_exc())
@@ -250,7 +250,7 @@ class DataOfAllAsteroids:
 
     #---output manual information to memo_manual.txt in MANUAL mode
     def outputMemoManualTxt(self):
-        sortedAstData = sorted(self.astData, key=lambda u: u.astName+str(u.NImage))
+        sortedAstData = sorted(self.astData, key=lambda u: u.astName+"{0:02d}".format(u.NImage))
         f = open("memo_manual.txt","w",newline="\n")
         for i in range(self.Ndata):
             if sortedAstData[i].isManualAst:
@@ -668,8 +668,8 @@ class COIAS:
         self.eventPositions   = [ [0, 0], [0, 0], [0, 0] ]
         
         #---prepare clipped png image
-        if self.presentMaskOrNonmask==0: pngName = "{0:d}_disp-coias.png".format(self.presentImageNumber+1)
-        else:                            pngName = "{0:d}_disp-coias_nonmask.png".format(self.presentImageNumber+1)
+        if self.presentMaskOrNonmask==0: pngName = "{0:02d}_disp-coias.png".format(self.presentImageNumber+1)
+        else:                            pngName = "{0:02d}_disp-coias_nonmask.png".format(self.presentImageNumber+1)
         clippedPng = Image.open(pngName).crop((self.coldPresentMousePosition[0]-20, self.coldPresentMousePosition[1]-20, self.coldPresentMousePosition[0]+20, self.coldPresentMousePosition[1]+20))
         clippedPngForCanvas = clippedPng.resize((self.canvasSize, self.canvasSize), resample=0)
         self.clippedPngForCanvasTk = ImageTk.PhotoImage(clippedPngForCanvas)

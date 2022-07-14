@@ -3,7 +3,7 @@
 """
 Created on Thu Mar 26 00:38:58 2020
 @author: urakawa
- Time-stamp: <2022/06/14 9:30 (JST) sugiura>
+ Time-stamp: <2022/07/15 5:00 (JST) sugiura>
 """
 
 import glob
@@ -94,8 +94,8 @@ try:
         output_scidata_masked = scidata * hanten_image + image_sky_nan_mask
         hdunew = fits.PrimaryHDU(output_scidata_masked, header)
         ## output 
-        fitsname = 'warp%s_bin' % str(i + 1)
-        pngname = '%s_disp-coias' % str(i + 1)  # NM added 2021-08-10
+        fitsname = 'warp{0:02d}_bin'.format(i + 1)
+        pngname = '{0:02d}_disp-coias'.format(i + 1)  # NM added 2021-08-10
         hdunew.writeto(fitsname + ".fits", overwrite=True)  # output as fits image
         fits2png(output_scidata_masked, pngname + ".png")  # output as png image
 
@@ -103,7 +103,7 @@ try:
         ## masking : image * hanten median
         output_scidata = scidata + image_sky_nan
         ## output 
-        pngname = '%s_disp-coias_nonmask' % str(i + 1)  # NM added 2021-08-10
+        pngname = '{0:02d}_disp-coias_nonmask'.format(i + 1)  # NM added 2021-08-10
         fits2png(output_scidata, pngname + ".png")  # output as png image
 
 except FileNotFoundError:
