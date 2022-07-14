@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
+# timestamp: 2022/7/15 07:00 sugiura
 import os
 import numpy as np
 import traceback
+import glob
 
 try:
     # detect list
@@ -14,36 +16,30 @@ try:
     else:
         tmp1 = str("listb2.txt")
         data1 = np.loadtxt(tmp1, usecols=[0, 1, 2, 3, 4, 5, 6, 7])
+        data1ImageNum = np.loadtxt(tmp1, usecols=[9], dtype='int')
         data1b = np.loadtxt(tmp1, dtype='str')
         # search list
-        tmp2 = str("search_astB.txt")
-        data2 = np.loadtxt(tmp2, usecols=[1, 2, 3, 4])
-        data2b = np.loadtxt(tmp2, dtype='str', usecols=[0, 5])
-        # time list
-        time_list = np.unique(data1[:, 1])
-        # file_list
-        file_list = np.unique(data2b[:, 1])
+        tmp2List = sorted(glob.glob("search_astB_*.txt"))
+        data2  = []
+        data2b = []
+        for tmp2 in tmp2List:
+            data2.append(np.loadtxt(tmp2, usecols=[1, 2, 3, 4]))
+            data2b.append(np.loadtxt(tmp2, dtype='str', usecols=[0, 5]))
 
         tmp3 = []
         tmp5 = []
         for i in range(len(data1)):
             l = 0
-            for j in range(len(data2)):
-                if data1[i, 1] - 0.000001 < data2[j, 0] and data1[i, 1] + 0.000001 > data2[j, 0] and \
-                   data1[i, 2] - 0.0005 < data2[j, 1] and data1[i, 2] + 0.0005 > data2[j, 1] and \
-                   data1[i, 3] - 0.0005 < data2[j, 2] and data1[i, 3] + 0.0005 > data2[j, 2]:
-                    tmp3 = np.append(tmp3, data2b[j, 0:1])
+            for j in range(len(data2[data1ImageNum[i]])):
+                if data1[i, 2] - 0.0005 < data2[data1ImageNum[i]][j, 1] and data1[i, 2] + 0.0005 > data2[data1ImageNum[i]][j, 1] and \
+                   data1[i, 3] - 0.0005 < data2[data1ImageNum[i]][j, 2] and data1[i, 3] + 0.0005 > data2[data1ImageNum[i]][j, 2]:
+                    tmp3 = np.append(tmp3, data2b[data1ImageNum[i]][j, 0:1])
                     tmp3 = np.append(tmp3, data1b[i, 1:9])
-                    tmp3 = np.append(tmp3, data2b[j, 1:2])
+                    tmp3 = np.append(tmp3, data2b[data1ImageNum[i]][j, 1:2])
                     l = l + 1
             if l == 0:
-                for n in range(len(time_list)):
-                    if time_list[n] - 0.00001 < float(data1b[i, 1]) and time_list[n] + 0.00001 > float(data1b[i, 1]):
-                        # print(n,file_list[n])
-                        tmp5 = np.append(tmp5, data1b[i])
-                        tmp5 = np.append(tmp5, file_list[n])
+                tmp5 = np.append(tmp5, data1b[i])
 
-        # print(data1[i],data2b[j,0])
         # Revised 2020.2.13
         if len(tmp3) == 0:
             np.savetxt('match.txt', tmp3, fmt='%s')

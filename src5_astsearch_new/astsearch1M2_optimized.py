@@ -266,11 +266,11 @@ try:
                 # Noise in ADU
                 mage = np.round(1.0857 / SNR, decimals=3)
 
-                result.append([idTracklet[p][k], trackletListAll[p][k].data[image][0], trackletListAll[p][k].data[image][1], trackletListAll[p][k].data[image][2], mag, mage, xypix[0], xypix[1], filList[image]])
+                result.append([idTracklet[p][k], trackletListAll[p][k].data[image][0], trackletListAll[p][k].data[image][1], trackletListAll[p][k].data[image][2], mag, mage, xypix[0], xypix[1], filList[image], image])
 
 
     result2 = np.array(result, dtype='object')  # revised by N.M 2020.12.14
-    np.savetxt("listb2.txt", result2, fmt="%d %.9f %.7f %.7f %.3f %.3f %.2f %.2f %s")
+    np.savetxt("listb2.txt", result2, fmt="%d %.9f %.7f %.7f %.3f %.3f %.2f %.2f %s %d")
     subprocess.run("sort -t ' ' -k 1,1n -k 2,2n listb2.txt -o listb2.txt", shell=True)
     ##########################################################
     end = time.time()

@@ -34,7 +34,7 @@ try:
         outputFile = open("search_astB_{0:02d}.txt".format(i),"w",newline="\n")
         lines = inputFile.read().splitlines()
         for l in range(len(lines)):
-            outputFile.write(lines[l]+" {0:02d} ".format(i)+"\n")
+            outputFile.write(lines[l]+" {0:d} ".format(i)+"\n")
         inputFile.close()
         outputFile.close()
     #----------------------------------------------------------------------------
