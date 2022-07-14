@@ -5,6 +5,9 @@ set -o pipefail
 echo preprocess begins 2>&1 | tee log.txt
 echo $? 15 101 > error.txt
 
+mkparam "$@" 2>&1 | tee -a log.txt
+echo $? 15 110 >> error.txt
+
 if [ ! -d ~/.coias ]; then
     mkdir ~/.coias 2>&1 | tee -a log.txt
     echo $? 15 102 >> error.txt
@@ -28,9 +31,7 @@ if [ ! -f ~/.coias/orbit_data/log.txt ]; then
     echo $? 15 110 >> error.txt
 fi
     
-if [ ! -f ~/.coias/param/default.conv ]; then
-    make_default_parameter_files.py 2>&1 | tee -a log.txt
-fi
+make_default_parameter_files.py 2>&1 | tee -a log.txt
 
 if [ ! -f ~/.coias/param/MPCORB.DAT ]; then
     getMPCORB_and_mpc2edb 2>&1 | tee -a log.txt

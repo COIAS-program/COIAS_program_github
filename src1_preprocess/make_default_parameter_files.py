@@ -3,6 +3,7 @@
 
 from os.path import expanduser
 import traceback
+import readparam
 
 directory_path = expanduser("~") + "/.coias/param/"
 
@@ -21,7 +22,7 @@ def make_default_conv():
 #---------------------------------------------------------------------------------
 
 #---make default.sex--------------------------------------------------------------
-def make_default_sex():
+def make_default_sex(DETECT_MINAREA):
     filename = directory_path + "default.sex"
     file = open(filename,"w")
 
@@ -39,7 +40,7 @@ def make_default_sex():
     file.write("#------------------------------- Extraction ----------------------------------\n")
     file.write("\n")
     file.write("DETECT_TYPE      CCD            # CCD (linear) or PHOTO (with gamma correction)\n")
-    file.write("DETECT_MINAREA   6              # minimum number of pixels above threshold\n")
+    file.write("DETECT_MINAREA   {0:d}              # minimum number of pixels above threshold\n".format(DETECT_MINAREA))
     file.write("DETECT_THRESH    1.20          # <sigmas> or <threshold>,<ZP> in mag.arcsec-2\n")
     file.write("ANALYSIS_THRESH  1            # <sigmas> or <threshold>,<ZP> in mag.arcsec-2\n")
     file.write("\n")
@@ -1830,8 +1831,11 @@ def make_xdesig_txt():
 #---------------------------------------------------------------------------------
 
 try:
+    params = readparam.readparam()
+    DETECT_MINAREA = params["dm"]
+    
     make_default_conv()
-    make_default_sex()
+    make_default_sex(DETECT_MINAREA)
     make_default2_param()
     make_ObsCodes_htm()
     make_options_txt()
