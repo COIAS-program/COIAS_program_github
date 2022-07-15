@@ -1,0 +1,62 @@
+#!/bin/bash
+# Time-stamp: <2022/07/15 16:30:00 (JST) sugiura>
+
+error=0
+
+if [ -e "memo.txt" ]; then
+	rm memo.txt
+	if [ $? -ne 0 ]; then
+		error=1
+    fi
+fi
+
+if [ -e "memo_manual.txt" ]; then
+	rm memo_manual.txt
+	if [ $? -ne 0 ]; then
+		error=1
+    fi
+fi
+
+if [ -e "mpc4.txt" ]; then
+	rm mpc4.txt
+	if [ $? -ne 0 ]; then
+		error=1
+    fi
+fi
+
+if [ -e "mpc4_m.txt" ]; then
+	rm mpc4_m.txt
+	if [ $? -ne 0 ]; then
+		error=1
+    fi
+fi
+
+if [ -e "mpc4_automanual.txt" ]; then
+	rm mpc4_automanual.txt
+	if [ $? -ne 0 ]; then
+		error=1
+    fi
+fi
+
+if [ -e "redisp.txt" ]; then
+	rm redisp.txt
+	if [ $? -ne 0 ]; then
+		error=1
+    fi
+fi
+
+if [ -e "redisp_manual.txt" ]; then
+	rm redisp_manual.txt
+	if [ $? -ne 0 ]; then
+		error=1
+    fi
+fi
+
+if [ -e "reredisp.txt" ]; then
+	rm reredisp.txt
+	if [ $? -ne 0 ]; then
+		error=1
+    fi
+fi
+
+exit $error
