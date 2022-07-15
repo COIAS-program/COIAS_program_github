@@ -39,7 +39,7 @@ try:
     data1 = np.loadtxt(tmp1,delimiter = ',',dtype='str')
 
     # read scidata
-    scidata1 = fits.open('warp1_bin.fits')
+    scidata1 = fits.open('warp01_bin.fits')
     jd1 = scidata1[0].header['JD']
 
     # ra dec
