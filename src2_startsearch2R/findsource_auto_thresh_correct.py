@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# timestamp: 2022/7/15 15:00 sugiura
 
 import subprocess
 from os.path import expanduser
 import traceback
 import glob
+import readparam
 
 ### function #####################################################
 def calc_mean_detection_number(detect_thresh):
@@ -47,6 +49,8 @@ try:
     program_path = expanduser("~") + "/.coias/param/"
     default_sex_file_name = program_path+"default.sex"
     findsource_file_name = "findsource"
+    params = readparam.readparam()
+    SOURCE_NUMBER = params["sn"]
     #--------------------------------------------------
 
     #---first trial------------------------------------
@@ -58,9 +62,9 @@ try:
     print("----------------------------------------------------------------")
     #--------------------------------------------------
 
-    #---find two detection threshs so that prev>3000 and present<2000-----
-    if mean_detection_number>3000:
-        while mean_detection_number>3000:
+    #---find two detection threshs so that prev>SOURCE_NUMBER*1.25 and present<SOURCE_NUMBER*1.25-----
+    if mean_detection_number>SOURCE_NUMBER*1.25:
+        while mean_detection_number>SOURCE_NUMBER*1.25:
             detect_thresh_prev = detect_thresh
             mean_detection_number_prev = mean_detection_number
         
@@ -72,8 +76,8 @@ try:
             print("#"+str(trial_number)+" detect_thresh="+"{:.2f}".format(detect_thresh)+"  mean_detection_number="+str(int(mean_detection_number)))
             print("----------------------------------------------------------------")
 
-        #---find detection thresh so that 2000<detection number<3000-----
-        if mean_detection_number<2000:
+        #---find detection thresh so that SOURCE_NUMBER*0.75<detection number<SOURCE_NUMBER*1.25-----
+        if mean_detection_number<SOURCE_NUMBER*0.75:
             detect_thresh_right = detect_thresh_prev
             detect_thresh_left  = detect_thresh
         
@@ -81,9 +85,9 @@ try:
                 detect_thresh_center = (detect_thresh_right + detect_thresh_left)*0.5
                 mean_detection_number_center = calc_mean_detection_number(detect_thresh_center)
 
-                if mean_detection_number_center>2500:
+                if mean_detection_number_center>SOURCE_NUMBER:
                     detect_thresh_right = detect_thresh_center
-                if mean_detection_number_center<2500:
+                if mean_detection_number_center<SOURCE_NUMBER:
                     detect_thresh_left  = detect_thresh_center
 
                 trial_number += 1
@@ -91,7 +95,7 @@ try:
                 print("#"+str(trial_number)+" detect_thresh="+"{:.2f}".format(detect_thresh_center)+"  mean_detection_number="+str(int(mean_detection_number_center)))
                 print("----------------------------------------------------------------")
 
-                if (mean_detection_number_center>2000 and mean_detection_number_center<3000) or trial_number>40:
+                if (mean_detection_number_center>SOURCE_NUMBER*0.75 and mean_detection_number_center<SOURCE_NUMBER*1.25) or trial_number>40:
                     break
         #-----------------------------------------------------------------
             

@@ -5,6 +5,7 @@ nd="4" # default value for detection number threshold for moving objects
 ar="6" # default value for aparture radius in pixel for photometory
 vt="1.5" # default value for velocity threshold to detect moving objects
 dm="6" #default value for DETECT_MINAREA, i.e., minimum area for detecting sources at SExtractor
+sn="2000" #default value for mean source number detected by SExtractor
 
 for arg in "$@"; do
   case $arg in
@@ -12,6 +13,7 @@ for arg in "$@"; do
     ar=*) ar=${arg#???}                 ;;
     vt=*) vt=${arg#???}                 ;;
 	dm=*) dm=${arg#???}                 ;;
+	sn=*) sn=${arg#???}                 ;;
        *) echo "Invalid option" 1>&2    ;;
   esac
 done
@@ -20,3 +22,4 @@ echo nd $nd >  param.txt
 echo ar $ar >> param.txt
 echo vt $vt >> param.txt
 echo dm $dm >> param.txt
+echo sn $sn >> param.txt

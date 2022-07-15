@@ -22,7 +22,7 @@ def readparam():
             if not is_num(content[1]):
                 raise ValueError("some second laws in param.txt are not numbers! content[1]={0}".format(content[1]))
 
-            if content[0]=="nd" or content[0]=="ar" or content[0]=="dm":
+            if content[0]=="nd" or content[0]=="ar" or content[0]=="dm" or content[0]=="sn":
                 params[content[0]] = int(content[1])
             elif content[0]=="vt":
                 params[content[0]] = float(content[1])
