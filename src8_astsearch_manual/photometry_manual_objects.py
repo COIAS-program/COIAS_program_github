@@ -11,7 +11,7 @@ import math
 import glob
 import traceback
 import calcrect
-
+import numpy as np
 ### FUNCTION: PHOTOMETRY AND RADEC ###################
 def get_photometry_and_radec(scidata, threeAparturePoints, nbin, zm):
     #---calc rect and radec---
@@ -34,11 +34,11 @@ def get_photometry_and_radec(scidata, threeAparturePoints, nbin, zm):
     sigma_ron =  4.5*nbin*nbin #read out noise of HSC with 2X2 binning: nobinning 4.5 e-
     gain = 3.0 / nbin # gain of HSC with 2X2 binning :nobinning 3.0e/ADU
     S_star = gain * final_sum
-    Noise = np.sqrt(S_star + ap.area * (gain * bkg_mean + sigma_ron * sigma_ron))  # S.U modified 2022/7/16
+#    Noise = np.sqrt(S_star + ap.area * (gain * bkg_mean + sigma_ron * sigma_ron))  # S.U modified 2022/7/16
+    Noise = np.sqrt(S_star + ap.area * (sigma_ron * sigma_ron))
     SNR = np.sqrt(S_star/Noise) # S.U modified 2022/7/16
     # error in magnitude m_err = 1.0857/SNR
-    # Noise in ADU
-    mage = round(1.0857 / SNR, 3)
+    mage = round(1.0857 / SNR[0], 3)
 
     return {"ra":radec[0,0], "dec":radec[0,1], "mag":mag, "mage":mage}
 ######################################################
