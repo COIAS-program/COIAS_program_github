@@ -617,8 +617,14 @@ class COIAS:
     def output(self):
         if self.COIASMode == "COIAS":
             self.asteroidData.outputMemoTxt()
+            outputTxt = "memo.txt"
         elif self.COIASMode == "MANUAL":
             self.asteroidData.outputMemoManualTxt()
+            outputTxt = "memo_manual.txt"
+
+        isYes = messagebox.askyesno("OUTPUT","Output "+outputTxt+"\nDo you want to close the main window?")
+        if isYes:
+            self.main_win.destroy()
     #---------------------------------------------------
 
 
