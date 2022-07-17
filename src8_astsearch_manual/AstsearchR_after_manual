@@ -30,6 +30,11 @@ make_mpc4_and_redisp_manual.py 2>&1 | tee -a log.txt
 cat redisp.txt redisp_manual.txt > reredisp.txt
 echo $? 84 809 >> error.txt
 
+if [ -e "manual_name_modify_list.txt" ]; then
+	rm manual_name_modify_list.txt
+	echo $? 85 810 >> error.txt
+fi
+
 echo AstsearchR_after_manual ends 2>&1 | tee -a log.txt
 
 error_handling.py | tee -a log.txt

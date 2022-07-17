@@ -59,4 +59,11 @@ if [ -e "reredisp.txt" ]; then
     fi
 fi
 
+if [ -e "manual_name_modify_list.txt" ]; then
+	rm manual_name_modify_list.txt
+	if [ $? -ne 0 ]; then
+		error=1
+    fi
+fi
+
 exit $error

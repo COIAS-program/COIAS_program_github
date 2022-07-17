@@ -4,6 +4,7 @@
 #timestamp 2022/5/26 15:30 sugiura
 
 import tkinter as tk
+import tkinter.ttk as ttk
 from tkinter import messagebox,simpledialog
 from PIL import Image, ImageTk
 from astropy.io import fits
@@ -81,6 +82,8 @@ class DataOfAnAsteroidInAnImage:
     #            apartureFitsPoints(int list[3]tuple[2])
     #            isSurvive(bool)
     #            isKnownAsteroid(bool)
+    #            astNameModified(str)
+    #            isModifiedName(bool)
     #--------------------------------------------------------
     
     def __init__(self, astName, NImage, fitsPosition, isManualAst=False, aparturePngPoints=[None, None, None]):
@@ -112,6 +115,9 @@ class DataOfAnAsteroidInAnImage:
         else:
             self.isSurvive = True
             self.isKnownAsteroid = True
+
+        self.astNameModified = astName
+        self.isModifiedName  = False
 ######################################################################
 
 
@@ -121,6 +127,7 @@ class DataOfAllAsteroids:
     #            Ndata(int)
     #            astData(list of DataOfAnAsteroidInAnImage)
     #            NHMax(int)
+    #            originalNameList(str list[asteroids])
     #--------------------------------------------------------
     
     #---constructor------------------------------------------
@@ -132,7 +139,7 @@ class DataOfAllAsteroids:
             inputFileName = "disp.txt"
         elif mode=="MANUAL":
             inputFileName = "redisp.txt"
-        else:
+        elif mode=="RECOIAS":
             inputFileName = "reredisp.txt"
 
         f = open(inputFileName,"r")
@@ -194,6 +201,14 @@ class DataOfAllAsteroids:
                     
         self.NHMax += 1
         #-----------------------------
+
+        #---set originalNameList------
+        if mode=="RECOIAS":
+            self.originalNameList = []
+            for l in range(self.Ndata):
+                if self.astData[l].astName not in self.originalNameList:
+                    self.originalNameList.append(self.astData[l].astName)
+        #-----------------------------
     #----------------------------------------------------------
 
     #---add an asteroid data for manual pickup-----------------
@@ -237,11 +252,7 @@ class DataOfAllAsteroids:
         f = open("memo.txt","w",newline="\n")
         for i in range(self.Ndata):
             if (not self.astData[i].isKnownAsteroid) and (self.astData[i].isSurvive) and (not self.astData[i].isManualAst):
-                outputFlag = True
-                for outputN in outputNList:
-                    if outputN == int(self.astData[i].astName.lstrip('H')):
-                        outputFlag = False
-                if outputFlag:
+                if int(self.astData[i].astName.lstrip('H')) not in outputNList:
                     f.write(self.astData[i].astName.lstrip('H')+"\n")
                     outputNList.append(int(self.astData[i].astName.lstrip('H')))
 
@@ -255,6 +266,18 @@ class DataOfAllAsteroids:
         for i in range(self.Ndata):
             if sortedAstData[i].isManualAst:
                 f.write(sortedAstData[i].astName.lstrip('H')+" "+str(sortedAstData[i].NImage)+" "+str(sortedAstData[i].fitsPosition[0])+" "+str(sortedAstData[i].fitsPosition[1])+" "+str(sortedAstData[i].apartureFitsPoints[0][0])+" "+str(sortedAstData[i].apartureFitsPoints[0][1])+" "+str(sortedAstData[i].apartureFitsPoints[1][0])+" "+str(sortedAstData[i].apartureFitsPoints[1][1])+" "+str(sortedAstData[i].apartureFitsPoints[2][0])+" "+str(sortedAstData[i].apartureFitsPoints[2][1])+"\n")
+
+        f.close()
+    #--------------------------------------------------------------
+
+    #---output manual_name_modify_list.txt in RECOIAS mode---------
+    def outputManualNameModifyListTxt(self):
+        outputNameList = []
+        f = open("manual_name_modify_list.txt","w",newline="\n")
+        for i in range(self.Ndata):
+            if self.astData[i].astName not in outputNameList:
+                f.write(self.astData[i].astName + " " + self.astData[i].astNameModified + "\n")
+                outputNameList.append(self.astData[i].astName)
 
         f.close()
     #--------------------------------------------------------------
@@ -312,7 +335,7 @@ class COIAS:
         self.rdoCOIAS.grid(row=5, column=0, sticky=tk.W, padx=padSizeFirstWindow, pady=padSizeFirstWindow)
         self.rdoMANUAL = tk.Radiobutton(ROOT, value=1, variable=self.COIASModeVar, text="manual measure", font=("",fontSizeFirstWindow))
         self.rdoMANUAL.grid(row=5, column=1, sticky=tk.W, padx=padSizeFirstWindow, pady=padSizeFirstWindow)
-        self.rdoRECOIAS = tk.Radiobutton(ROOT, value=2, variable=self.COIASModeVar, text="reconfirm", font=("",fontSizeFirstWindow))
+        self.rdoRECOIAS = tk.Radiobutton(ROOT, value=2, variable=self.COIASModeVar, text="reconfirm/modify name", font=("",fontSizeFirstWindow))
         self.rdoRECOIAS.grid(row=5, column=2, sticky=tk.W, padx=padSizeFirstWindow, pady=padSizeFirstWindow)
 
 
@@ -372,7 +395,7 @@ class COIAS:
         if self.COIASMode == "MANUAL":
             self.specifyHNumberButton = tk.Button(self.main_win, text="Manual H Number: Auto", font=("",fontSizeMainWindow), command = self.changeSpecifyHNumber)
             self.specifyHNumberButton.grid(row=0, column=7, sticky=tk.W)
-        if self.COIASMode == "COIAS" or self.COIASMode == "MANUAL":
+        if self.COIASMode == "COIAS" or self.COIASMode == "MANUAL" or self.COIASMode == "RECOIAS":
             self.outputButton = tk.Button(self.main_win, text="Output",font=("",fontSizeMainWindow), command = self.output)
             self.outputButton.grid(row=0, column=8, sticky=tk.W)
 
@@ -381,7 +404,8 @@ class COIAS:
         self.canvas.grid(row=1, column=0, columnspan=9, sticky=tk.W+tk.E+tk.N+tk.S)
         self.canvas.bind('<Motion>', self.getMouseCoord)
         self.canvas.bind('<ButtonPress-1>', self.onClicked)
-        self.canvas.focus_set()
+        self.main_win.focus_force()
+        self.canvas.focus_force()
         self.canvas.bind('<Key-s>', self.startStopBlinking)
         self.canvas.bind('<Left>', self.onBackButton)
         self.canvas.bind('<Right>', self.onNextButton)
@@ -446,7 +470,9 @@ class COIAS:
         for i in range(self.asteroidData.Ndata):
             if self.asteroidData.astData[i].NImage==self.presentImageNumber and self.sqOnOffFlag:
                 #---choose color
-                if self.asteroidData.astData[i].isManualAst:
+                if   self.asteroidData.astData[i].isModifiedName:
+                    color = "#FFCC33"
+                elif self.asteroidData.astData[i].isManualAst:
                     color = "#219DDD"
                 elif self.asteroidData.astData[i].isKnownAsteroid:
                     color = "#000000"
@@ -457,9 +483,13 @@ class COIAS:
 
                 #---draw rectangles and names
                 self.canvas.create_rectangle(self.asteroidData.astData[i].pngPosition[0]-20, self.asteroidData.astData[i].pngPosition[1]-20, self.asteroidData.astData[i].pngPosition[0]+20, self.asteroidData.astData[i].pngPosition[1]+20, outline=color, width=5, tag="asteroid")
-                self.canvas.create_text(self.asteroidData.astData[i].pngPosition[0]-dispAstName, self.asteroidData.astData[i].pngPosition[1]-dispAstName, text=self.asteroidData.astData[i].astName, fill=color, font=("Purisa",fontSizeAstName), tag="asteroid")
+                if self.COIASMode=="RECOIAS":
+                    self.canvas.create_text(self.asteroidData.astData[i].pngPosition[0]-dispAstName, self.asteroidData.astData[i].pngPosition[1]-dispAstName, text=self.asteroidData.astData[i].astNameModified, fill=color, font=("Purisa",fontSizeAstName), tag="asteroid")
+                else:
+                    self.canvas.create_text(self.asteroidData.astData[i].pngPosition[0]-dispAstName, self.asteroidData.astData[i].pngPosition[1]-dispAstName, text=self.asteroidData.astData[i].astName, fill=color, font=("Purisa",fontSizeAstName), tag="asteroid")
 
-        self.canvas.focus_set()
+        self.main_win.focus_force()
+        self.canvas.focus_force()
     #--------------------------------------------------
 
 
@@ -569,8 +599,7 @@ class COIAS:
                     if self.COIASMode == "COIAS":
                         self.selectSurviveAsteroidInCOIAS(i)
                     elif self.COIASMode == "RECOIAS":
-                        self.messageBox.delete(0, tk.END)
-                        self.messageBox.insert(tk.END,"message: This is reconfirm mode; no need to select.")
+                        self.modifyAsteroidName(i)
                     elif self.COIASMode == "MANUAL" and  (not self.asteroidData.astData[i].isManualAst):
                         self.messageBox.delete(0, tk.END)
                         self.messageBox.insert(tk.END,"message: This is already confirmed object.")
@@ -610,6 +639,8 @@ class COIAS:
         isYes = messagebox.askyesno("confirmation","Do you really want to delete this manual selected object?")
         if isYes:
             self.asteroidData.delManualAsteroidData(self.asteroidData.astData[index].astName, self.presentImageNumber)
+            self.main_win.focus_force()
+            self.canvas.focus_force()
     #--------------------------------------------------
 
 
@@ -621,6 +652,9 @@ class COIAS:
         elif self.COIASMode == "MANUAL":
             self.asteroidData.outputMemoManualTxt()
             outputTxt = "memo_manual.txt"
+        elif self.COIASMode == "RECOIAS":
+            self.asteroidData.outputManualNameModifyListTxt()
+            outputTxt = "manual_name_modify_list.txt"
 
         isYes = messagebox.askyesno("OUTPUT","Output "+outputTxt+"\nDo you want to close the main window?")
         if isYes:
@@ -629,6 +663,7 @@ class COIAS:
 
 
     ### methods for manual measuring #########################
+    ##########################################################
     #---important attributes: --------------------------------
     #---                      specifiedNH(int)----------------
     #---                      isSameAsPrevious(bool)----------
@@ -685,7 +720,7 @@ class COIAS:
         self.sub_win.title("manual measure: aparture setting")
         self.sub_win.geometry("+{0:d}+{1:d}".format(int(ROOT.winfo_screenwidth()/2-self.canvasSize/2), int(ROOT.winfo_screenheight()/2-self.canvasSize/2)))
         self.sub_win.protocol("WM_DELETE_WINDOW", self.closeWindow)
-        self.sub_win.focus_set()
+        self.sub_win.focus_force()
 
         #---set widgets
         self.coordsBoxSubWin = tk.Entry(self.sub_win, font=("", fontSizeSubWindow), width=coordsBoxSize)
@@ -791,12 +826,85 @@ class COIAS:
         self.promptBox.delete(0, tk.END)
         self.promptBox.insert(tk.END, "Please select an aparture again.")
     #---------------------------------------------------
+    ##########################################################
+    ##########################################################
+
+
+    ### methods for modifying asteroid name ############
+    ####################################################
+    #---modify asteroid name in RECOIAS mode------------
+    def modifyAsteroidName(self, index):
+        if self.asteroidData.astData[index].isKnownAsteroid:
+            self.messageBox.delete(0, tk.END)
+            self.messageBox.insert(tk.END,"message: This is known asteroid; can't modify name.")
+        else:
+            if self.asteroidData.astData[index].isModifiedName:
+                isYes = messagebox.askyesno("confirmation","Do you want to restore the name?")
+                if isYes:
+                    thisOriginalName = self.asteroidData.astData[index].astName
+                    for i in range(self.asteroidData.Ndata):
+                        if self.asteroidData.astData[i].astName == thisOriginalName:
+                            self.asteroidData.astData[i].astNameModified = thisOriginalName
+                            self.asteroidData.astData[i].isModifiedName  = False
+                            self.main_win.focus_force()
+                            self.canvas.focus_force()
+            else:
+                #--activate sub window
+                self.isActivateSubWin = True
+
+                #---local constants
+                fontSizeSubWindow = int(16*WINDOWRATIO)
+
+                #---produce sub window itself
+                self.sub_win_modName = tk.Toplevel(ROOT)
+                self.sub_win_modName.title("MODIFY THE NAME OF " + self.asteroidData.astData[index].astName)
+                self.sub_win_modName.protocol("WM_DELETE_WINDOW", self.closeWindow)
+
+                #---set widgets
+                self.labelSubWinModName = tk.Label(self.sub_win_modName, font=("", fontSizeSubWindow), text="please select or input the name you want to set.")
+                self.labelSubWinModName.grid(row=0, column=0, columnspan=2, sticky=tk.W+tk.E, padx=5, pady=5)
+                self.comboboxSubWinModName = ttk.Combobox(self.sub_win_modName, font=("", fontSizeSubWindow), height=5, width=10, justify="left", values=self.asteroidData.originalNameList)
+                self.comboboxSubWinModName.grid(row=1, column=0, columnspan=2, sticky=tk.W+tk.E, padx=5, pady=5)
+                self.OKButtonSubWinModName = tk.Button(self.sub_win_modName, text="OK", font=("", fontSizeSubWindow), command = lambda: self.OKSubWinModName(index))
+                self.OKButtonSubWinModName.grid(row=2, column=0, sticky=tk.W, padx=5, pady=5)
+                self.cancelButtonSubWinModName = tk.Button(self.sub_win_modName, text="cancel", font=("", fontSizeSubWindow), command = self.closeWindow)
+                self.cancelButtonSubWinModName.grid(row=2, column=1, sticky=tk.E, padx=5, pady=5)
+
+                windowWidth  = self.sub_win_modName.winfo_width()
+                self.sub_win_modName.geometry("+{0:d}+{1:d}".format(int(ROOT.winfo_screenwidth()/2-windowWidth/2), int(ROOT.winfo_screenheight()/10)))
+
+                self.main_win.focus_force()
+                self.canvas.focus_force()
+    #---------------------------------------------------
+
+
+    #---modify asteroid name via OK button--------------
+    def OKSubWinModName(self, index):
+        if self.comboboxSubWinModName.get() == "":
+            self.labelSubWinModName["text"] = "EMPTY! Please select or input the name."
+        else:
+            thisOriginalName = self.asteroidData.astData[index].astName
+            for i in range(self.asteroidData.Ndata):
+                if self.asteroidData.astData[i].astName == thisOriginalName:
+                    self.asteroidData.astData[i].astNameModified = self.comboboxSubWinModName.get()
+                    self.asteroidData.astData[i].isModifiedName  = True
+            self.sub_win_modName.destroy()
+            self.drawAsteroidOnly()
+            self.isActivateSubWin = False
+            self.main_win.focus_force()
+            self.canvas.focus_force()
+    #---------------------------------------------------
+    ####################################################
+    ####################################################
 
 
     #---close sub window--------------------------------
     def closeWindow(self):
         self.isActivateSubWin = False
-        self.sub_win.destroy()
+        if self.COIASMode == "MANUAL":
+            self.sub_win.destroy()
+        elif self.COIASMode == "RECOIAS":
+            self.sub_win_modName.destroy()
     #---------------------------------------------------
 
     ##########################################################

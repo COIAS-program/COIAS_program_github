@@ -10,6 +10,11 @@ prempedit3.py $1 2>&1 | tee -a log.txt
 redisp
 cat redisp.txt > reredisp.txt
 
+if [ -e "manual_name_modify_list.txt" ]; then
+	rm manual_name_modify_list.txt
+	echo $? 55 607 >> error.txt
+fi
+
 echo AstsearchR_between_COIAS_and_ReCOIAS ends 2>&1 | tee -a log.txt
 
 error_handling.py | tee -a log.txt
