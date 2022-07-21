@@ -4,26 +4,38 @@
 error=0
 
 if [ -e "mpc4_m.txt" ]; then
-    cat mpc4.txt mpc4_m.txt > mpc4_automanual.txt
+    cat mpc4.txt mpc4_m.txt | sort -n > mpc4_automanual.txt
     if [ $? -ne 0 ]; then
 	error=1
     fi
 else
-    cat mpc4.txt > mpc4_automanual.txt
+    cat mpc4.txt | sort -n > mpc4_automanual.txt
     if [ $? -ne 0 ]; then
 	error=1
     fi
 fi
 
-if [ -e "all_m.txt" ]; then
-    cat	all.txt all_m.txt > all_automanual.txt
+if [ -e "newall_m.txt" ]; then
+    cat	newall.txt newall_m.txt | sort -n > newall_automanual.txt
     if [ $? -ne 0 ]; then
 	error=1
     fi
 else
-    cat	all.txt > all_automanual.txt
+    cat	newall.txt | sort -n > newall_automanual.txt
     if [ $? -ne 0 ]; then
         error=1
+    fi
+fi
+
+if [ -e "redisp_manual.txt" ]; then
+    cat redisp.txt redisp_manual.txt | sort -n > redisp_automanual.txt
+    if [ $? -ne 0 ]; then
+	error=1
+    fi
+else
+    cat redisp.txt | sort -n > redisp_automanual.txt
+    if [ $? -ne 0 ]; then
+	error=1
     fi
 fi
 

@@ -10,8 +10,7 @@ adjust_newH_manual.py 2>&1 | tee -a log.txt
 merge_manual 2>&1 | tee -a log.txt
 echo $? 75 709 >> error.txt
 
-cp mpc4_automanual.txt hoge2.txt 2>&1 | tee -a log.txt
-echo $? 74 702 >> error.txt
+apply_manual_name_modify.py 2>&1 | tee -a log.txt
 
 deldaburi4.py 2>&1 | tee -a log.txt
 
@@ -21,7 +20,9 @@ delLargeZansa_and_modPrecision.py 1 2>&1 | tee -a log.txt
 
 reject_bright_known_asteroids_from_report.py 2>&1 | tee -a log.txt
 
-make_final_all.py 2>&1 | tee -a log.txt
+modify_preRepo_as_H_sequential.py 2>&1 | tee -a log.txt
+
+make_final_all_and_disp.py 2>&1 | tee -a log.txt
 
 komejirushi.py 2>&1 | tee -a log.txt
 

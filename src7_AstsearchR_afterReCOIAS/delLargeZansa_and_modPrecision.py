@@ -40,26 +40,27 @@ try:
                 outputLines.append("".join(str_list))
 
         #---remove objects with observation numbers smaller than 2-----
-        prevObsName = outputLines[-1][0:12]
-        nObs=0
-        for i in reversed(range(len(outputLines))):
-            obsName = outputLines[i][0:12]
-            if obsName==prevObsName:
-                nObs += 1
-            else:
-                if nObs<=2:
-                    for n in reversed(range(nObs)):
-                        del outputLines[i+n+1]
-                nObs=1
+        if len(outputLines)!=0:
+            prevObsName = outputLines[-1][0:12]
+            nObs=0
+            for i in reversed(range(len(outputLines))):
+                obsName = outputLines[i][0:12]
+                if obsName==prevObsName:
+                    nObs += 1
+                else:
+                    if nObs<=2:
+                        for n in reversed(range(nObs)):
+                            del outputLines[i+n+1]
+                    nObs=1
 
-            if i==0 and nObs<=2:
-                for n in reversed(range(nObs)):
-                    del outputLines[n]
+                if i==0 and nObs<=2:
+                    for n in reversed(range(nObs)):
+                        del outputLines[n]
             
-            prevObsName = obsName
+                prevObsName = obsName
+
+            outputFile.writelines(outputLines)
         #--------------------------------------------------------------
-            
-        outputFile.writelines(outputLines)
 
     inputFile.close()
     outputFile.close()

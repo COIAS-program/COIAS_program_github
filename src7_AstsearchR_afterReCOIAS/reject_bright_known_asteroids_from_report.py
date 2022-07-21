@@ -23,11 +23,7 @@ try:
     outputfileSendMpc = open("pre_repo.txt","w",newline="\n")
     for l in range(len(lines)):
         oneLineList = lines[l].split()
-        flag = 0
-        for l2 in range(len(namesOfBrightKnownAsteroids)):
-            if oneLineList[0] == namesOfBrightKnownAsteroids[l2]:
-                flag = 1
-        if flag == 0:
+        if oneLineList[0] not in namesOfBrightKnownAsteroids:
             outputfileSendMpc.write(lines[l])
     outputfileSendMpc.close()
     #---------------------------------------------------------------------

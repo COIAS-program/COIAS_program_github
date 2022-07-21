@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#timestamp: 2022/6/8 16:30 sugiura
+#timestamp: 2022/7/21 8:45 sugiura
 
 import re
 import traceback
@@ -33,11 +33,7 @@ try:
         contents = line.split()
         if re.search(r'^H......',contents[0])!=None:
             strH = contents[0]
-            findFlag = False
-            for oldH in oldHList:
-                if oldH == strH:
-                    findFlag = True
-            if not findFlag:
+            if strH not in oldHList:
                 oldHList.append(strH)
                 newHList.append("H"+str(NHMax+k).rjust(6,'0'))
                 k += 1
@@ -49,10 +45,11 @@ try:
     #------------------------------------------------
 
 
-    #---make mpc4_m.txt and redisp_manual.txt--------
+    #---make mpc4_m.txt, newall_m.txt, and redisp_manual.txt--------
     inputFile = open("all_m.txt","r")
     mpc4MFile = open("mpc4_m.txt","w",newline="\n")
     redispMFile = open("redisp_manual.txt","w",newline="\n")
+    newallMFile = open("newall_m.txt","w",newline="\n")
 
     lines = inputFile.readlines()
     inputFile.close()
@@ -68,19 +65,20 @@ try:
 
         mpc4MFile.write(line[0:80]+"\n")
         redispMFile.write(contents[0]+" "+contents[13]+" "+contents[16]+" "+contents[17]+"\n")
+        newallMFile.write(line)
 
     mpc4MFile.close()
     redispMFile.close()
-    #------------------------------------------------
+    #------------------------------------------------------------------
 
 except FileNotFoundError:
-    print("Some previous files are not found in make_mpc4_and_redisp_manual.py!")
+    print("Some previous files are not found in make_mpc4_newall_and_redisp_manual.py!")
     print(traceback.format_exc())
     error = 1
     errorReason = 84
 
 except Exception:
-    print("Some errors occur in make_mpc4_and_redisp_manual.py!")
+    print("Some errors occur in make_mpc4_newall_and_redisp_manual.py!")
     print(traceback.format_exc())
     error = 1
     errorReason = 85

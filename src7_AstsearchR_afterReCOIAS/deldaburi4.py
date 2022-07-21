@@ -11,7 +11,7 @@ import os
 
 try:
     # detect list
-    tmp1 = "hoge2.txt"
+    tmp1 = "mpc4_automanual2.txt"
     if os.stat(tmp1).st_size == 0:
         empty = []
         np.savetxt('mpc7.txt', empty, fmt="%s")

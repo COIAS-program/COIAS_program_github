@@ -11,7 +11,7 @@ class NothingToDo(Exception):
 
 try:
     #---assess manual mode is done or not-----------
-    if (not os.path.isfile("mpc4_m.txt")) or (not os.path.isfile("H_conversion_list_manual.txt")) or (not os.path.isfile("redisp_manual.txt")):
+    if (not os.path.isfile("mpc4_m.txt")) or (not os.path.isfile("H_conversion_list_manual.txt")) or (not os.path.isfile("redisp_manual.txt")) or (not os.path.isfile("newall_m.txt")):
         raise NothingToDo
     #------------------------------------------------
     
@@ -66,22 +66,24 @@ try:
         k += 1
     #------------------------------------------------
 
-
-    #---adjust H_conversion_list_manual.txt and mpc4_m.txt
+    
+    #---adjust H_conversion_list_manual.txt, mpc4_m.txt, newall_m.txt, and redisp_manual.txt
+    ## H_conversion_list_manual.txt
     fileHConvListManual = open("H_conversion_list_manual.txt","w",newline="\n")
     for line in lines:
         for l in range(len(adjustedNewHList)):
             if line.split()[1] == newHList[l]:
-                newline = line.replace(newHList[l],adjustedNewHList[l])
+                newline = line.split()[0] + " " + adjustedNewHList[l] + "\n"
                 break
         fileHConvListManual.write(newline)
     fileHConvListManual.close()
 
+    ## mpc4_m.txt
     fileMpc4M = open("mpc4_m.txt","r")
     lines = fileMpc4M.readlines()
     fileMpc4M.close()
 
-    fileMpc4M = open("mpc4_m.txt","w")
+    fileMpc4M = open("mpc4_m.txt","w",newline="\n")
     for line in lines:
         if len(adjustedNewHList)==0:
             fileMpc4M.write(line)
@@ -91,6 +93,38 @@ try:
                     break
             fileMpc4M.write(line.replace(newHList[l],adjustedNewHList[l]))
     fileMpc4M.close()
+
+    ## newall_m.txt
+    fileNewallM = open("newall_m.txt","r")
+    lines = fileNewallM.readlines()
+    fileNewallM.close()
+
+    fileNewallM = open("newall_m.txt","w",newline="\n")
+    for line in lines:
+        if len(adjustedNewHList)==0:
+            fileNewallM.write(line)
+        else:
+            for l in range(len(adjustedNewHList)):
+                if line.split()[0] == newHList[l]:
+                    break
+            fileNewallM.write(line.replace(newHList[l],adjustedNewHList[l]))
+    fileNewallM.close()
+
+    ## redisp_manual.txt
+    fileRedispM = open("redisp_manual.txt","r")
+    lines = fileRedispM.readlines()
+    fileRedispM.close()
+
+    fileRedispM = open("redisp_manual.txt","w",newline="\n")
+    for line in lines:
+        if len(adjustedNewHList)==0:
+            fileRedispM.write(line)
+        else:
+            for l in range(len(adjustedNewHList)):
+                if line.split()[0] == newHList[l]:
+                    break
+            fileRedispM.write(line.replace(newHList[l],adjustedNewHList[l]))
+    fileRedispM.close()
     #------------------------------------------------
 
 except NothingToDo:
