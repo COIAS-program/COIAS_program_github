@@ -133,8 +133,6 @@ try:
     N_DETECT_THRESH = params["nd"]
     VEL_THRESH = params["vt"]
     APARTURE_RADIUS = params["ar"]
-    if nbinList[0]==4:
-        APARTURE_RADIUS = APARTURE_RADIUS / 2.0
     ##########################################################
     
     
@@ -159,6 +157,9 @@ try:
         filList.append(scidata[0].header['FILTER'])
         if f==0:
             wcs0 = wcs.WCS(scidata[0].header)
+
+    if nbinList[0]==4:
+        APARTURE_RADIUS = APARTURE_RADIUS / 2.0
     #--------------------------------------------------
 
     #---read ascii source list-------------------------
