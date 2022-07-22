@@ -254,11 +254,11 @@ try:
                 rawflux_table = aperture_photometry(scidata[0].data, ap, method='subpixel', subpixels=5)
                 bkgflux_table = aperture_photometry(scidata[0].data, sap, method='subpixel', subpixels=5)
                 # 2020.11.25 revised
-                bkg_mean = bkgflux_table['aperture_sum'] / sap.area
+                bkg_mean = bkgflux_table['aperture_sum'][0] / sap.area
                 bkg_sum = bkg_mean * ap.area
-                final_sum = nbinList[image]*nbinList[image]*(rawflux_table['aperture_sum'] - bkg_sum) #K.S. modified 2022/5/3
+                final_sum = nbinList[image]*nbinList[image]*(rawflux_table['aperture_sum'][0] - bkg_sum) #K.S. modified 2022/5/3
                 if final_sum <= 0:
-                    final_sum = 1
+                    continue
                 mag = np.round(zmList[image] - 2.5 * np.log10(final_sum), decimals=3)
                 # error
                 sigma_ron =  4.5*nbinList[image]*nbinList[image] # read out noise of HSC /nobining :4.5e S.U modified 2022/5/4
