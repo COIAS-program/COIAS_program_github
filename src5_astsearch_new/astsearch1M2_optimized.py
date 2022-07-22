@@ -133,6 +133,8 @@ try:
     N_DETECT_THRESH = params["nd"]
     VEL_THRESH = params["vt"]
     APARTURE_RADIUS = params["ar"]
+    if nbinList[0]==4:
+        APARTURE_RADIUS = APARTURE_RADIUS / 2.0
     ##########################################################
     
     
