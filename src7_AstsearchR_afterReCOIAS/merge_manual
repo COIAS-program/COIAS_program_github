@@ -28,12 +28,12 @@ else
 fi
 
 if [ -e "redisp_manual.txt" ]; then
-    cat redisp.txt redisp_manual.txt | sort -n > redisp_automanual.txt
+    cat redisp.txt redisp_manual.txt | sort -k 1,1 -k 2n,2 > redisp_automanual.txt
     if [ $? -ne 0 ]; then
 	error=1
     fi
 else
-    cat redisp.txt | sort -n > redisp_automanual.txt
+    cat redisp.txt | sort -k 1,1 -k 2n,2 > redisp_automanual.txt
     if [ $? -ne 0 ]; then
 	error=1
     fi

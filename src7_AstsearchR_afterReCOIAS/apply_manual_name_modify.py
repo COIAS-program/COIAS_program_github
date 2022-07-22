@@ -118,7 +118,7 @@ try:
         if not isMatch:
             fileRedispAutomanual2.write(line)
     fileRedispAutomanual2.close()
-    completed_process = subprocess.run("sort -n -o redisp_automanual2.txt redisp_automanual2.txt", shell=True)
+    completed_process = subprocess.run("sort -k 1,1 -k 2n,2 -o redisp_automanual2.txt redisp_automanual2.txt", shell=True)
     if completed_process.returncode!=0: raise Exception
     #-------------------------------------------------------------------------------
 
