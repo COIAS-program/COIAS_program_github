@@ -25,11 +25,11 @@ def get_photometry_and_radec(scidata, threeAparturePoints, nbin, zm):
 
     rawflux_table = aperture_photometry(scidata[0].data, ap, method='subpixel', subpixels=5)
     bkgflux_table = aperture_photometry(scidata[0].data, sap, method='subpixel', subpixels=5)
-    bkg_mean = bkgflux_table['aperture_sum'] / sap.area
+    bkg_mean = bkgflux_table['aperture_sum'][0] / sap.area
     bkg_sum = bkg_mean * ap.area
-    final_sum = nbin*nbin*(rawflux_table['aperture_sum'] - bkg_sum)
+    final_sum = nbin*nbin*(rawflux_table['aperture_sum'][0] - bkg_sum)
     if final_sum <= 0:
-        final_sum = 1
+        return None
     mag = round(zm - 2.5*math.log10(final_sum), 3)
     sigma_ron =  4.5*nbin*nbin #read out noise of HSC with 2X2 binning: nobinning 4.5 e-
     gain = 3.0 / nbin # gain of HSC with 2X2 binning :nobinning 3.0e/ADU
@@ -38,7 +38,7 @@ def get_photometry_and_radec(scidata, threeAparturePoints, nbin, zm):
     Noise = np.sqrt(S_star + ap.area * (sigma_ron * sigma_ron))
     SNR = np.sqrt(S_star/Noise) # S.U modified 2022/7/16
     # error in magnitude m_err = 1.0857/SNR
-    mage = round(1.0857 / SNR[0], 3)
+    mage = round(1.0857 / SNR, 3)
 
     return {"ra":radec[0,0], "dec":radec[0,1], "mag":mag, "mage":mage}
 ######################################################
@@ -78,6 +78,8 @@ try:
         zm  = scidata[0].header["Z_P"]
         nbin = scidata[0].header["NBIN"]
         photRaDecDict = get_photometry_and_radec(scidata, threeAparturePoints, nbin, zm)
+        if photRaDecDict==None:
+            continue
     
         fOutput.write(name + " {0:.9f} {1:.7f} {2:.7f} {3:.3f} {4:.3f} {5:.2f} {6:.2f} ".format(jd, photRaDecDict["ra"], photRaDecDict["dec"], photRaDecDict["mag"], photRaDecDict["mage"], clickedPosition[0], clickedPosition[1])+fil+" "+str(NImage)+"\n")
     #-----------------------------------------------------
