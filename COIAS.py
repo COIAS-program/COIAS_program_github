@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
 #COIAS ver 1.0
-#timestamp 2022/5/26 15:30 sugiura
+#timestamp 2022/7/22 20:00 sugiura
 
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -15,6 +15,9 @@ import re
 import math
 import os
 import calcrect
+
+class MyFileNotFoundError(FileNotFoundError):
+    pass
 
 ### GLOBAL CONSTANTS #################################################
 try:
@@ -132,7 +135,7 @@ class DataOfAllAsteroids:
     
     #---constructor------------------------------------------
     def __init__(self, mode):
-        if not (mode=="COIAS" or mode=="MANUAL" or mode=="RECOIAS"):
+        if not (mode=="COIAS" or mode=="MANUAL" or mode=="RECOIAS" or mode=="FINAL"):
             raise ValueError("invalid mode for initializeing DataOfAllAsteroids instance")
 
         if mode=="COIAS":
@@ -141,8 +144,15 @@ class DataOfAllAsteroids:
             inputFileName = "redisp.txt"
         elif mode=="RECOIAS":
             inputFileName = "reredisp.txt"
+        elif mode=="FINAL":
+            inputFileName = "final_disp.txt"
 
-        f = open(inputFileName,"r")
+        try:
+            f = open(inputFileName,"r")
+        except FileNotFoundError:
+            print("file: " + inputFileName + " is not found!!!")
+            raise MyFileNotFoundError
+            
         dataLines = f.readlines()
         f.close()
 
@@ -326,6 +336,7 @@ class COIAS:
         #---self.COIASMode: 0 = COIAS
         #---                1 = MANUAL
         #---                2 = RECOIAS
+        #---                3 = FINAL
         self.firstWinLabelMode = tk.Label(ROOT, text="COIAS mode", font=("",fontSizeFirstWindow), bg="gray80")
         self.firstWinLabelMode.grid(row=4, column=0, sticky=tk.W, padx=padSizeFirstWindow, pady=padSizeFirstWindow)
         
@@ -337,6 +348,8 @@ class COIAS:
         self.rdoMANUAL.grid(row=5, column=1, sticky=tk.W, padx=padSizeFirstWindow, pady=padSizeFirstWindow)
         self.rdoRECOIAS = tk.Radiobutton(ROOT, value=2, variable=self.COIASModeVar, text="reconfirm/modify name", font=("",fontSizeFirstWindow))
         self.rdoRECOIAS.grid(row=5, column=2, sticky=tk.W, padx=padSizeFirstWindow, pady=padSizeFirstWindow)
+        self.rdoFINAL = tk.Radiobutton(ROOT, value=3, variable=self.COIASModeVar, text="final check", font=("",fontSizeFirstWindow))
+        self.rdoFINAL.grid(row=5, column=3, sticky=tk.W, padx=padSizeFirstWindow, pady=padSizeFirstWindow)
 
 
     #---produce main window----------------------------
@@ -371,6 +384,8 @@ class COIAS:
             self.COIASMode = "MANUAL"
         elif self.COIASModeVar.get()==2:
             self.COIASMode = "RECOIAS"
+        elif self.COIASModeVar.get()==3:
+            self.COIASMode = "FINAL"
         self.presentMaskOrNonmask = self.maskOrNonmaskVar.get()
         
         #---produce main window itself
@@ -420,7 +435,11 @@ class COIAS:
         self.canvas.config(scrollregion = (0, 0, PNGSIZES[0], PNGSIZES[1]))
 
         #---read asteroid data
-        self.asteroidData = DataOfAllAsteroids(self.COIASMode)
+        try:
+            self.asteroidData = DataOfAllAsteroids(self.COIASMode)
+        except MyFileNotFoundError:
+            self.main_win.destroy()
+            return
 
         #---load png images
         if self.maskOrNonmaskVar.get()==0:
@@ -598,6 +617,9 @@ class COIAS:
                    self.coldPresentMousePosition[1]<self.asteroidData.astData[i].pngPosition[1]+20:
                     if self.COIASMode == "COIAS":
                         self.selectSurviveAsteroidInCOIAS(i)
+                    elif self.COIASMode == "FINAL":
+                        self.messageBox.delete(0, tk.END)
+                        self.messageBox.insert(tk.END,"message: This is final check mode. cannot edit anything.")
                     elif self.COIASMode == "RECOIAS":
                         self.modifyAsteroidName(i)
                     elif self.COIASMode == "MANUAL" and  (not self.asteroidData.astData[i].isManualAst):
