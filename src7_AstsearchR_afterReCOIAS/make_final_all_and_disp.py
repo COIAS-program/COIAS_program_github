@@ -66,10 +66,11 @@ try:
 
         ## search the same line in newall_automanual2.txt
         for newAllOneLine in newAllLines:
-            if preRepoLines[l].replace(thisName, thisOldName)[0:31] == newAllOneLine[0:31]:
+            if preRepoLines[l].replace(thisName, thisOldName)[0:55] == newAllOneLine[0:55]:
                 contents = newAllOneLine.split()
                 fileFinalDisp.write(thisName + " " + contents[13] + " " + contents[16] + " " + contents[17] + "\n")
                 outputFile.write(newAllOneLine.replace(thisOldName, thisName))
+                break
 
         ## output contents of orbital_element_summary_web.txt###
         if (l==len(preRepoLines)-1 or len(preRepoLines[l+1].split())==0 or preRepoLines[l+1].split()[0]!=thisName) and os.path.isfile("orbital_elements_summary_web.txt"):
