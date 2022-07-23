@@ -97,13 +97,13 @@ try:
     
 
 except FileNotFoundError:
-    print("Some previous files are not found in make_final_all.py!")
+    print("Some previous files are not found in make_final_all_and_disp.py!")
     print(traceback.format_exc())
     error = 1
     errorReason = 74
 
 except Exception:
-    print("Some errors occur in make_final_all.py!")
+    print("Some errors occur in make_final_all_and_disp.py!")
     print(traceback.format_exc())
     error = 1
     errorReason = 75
