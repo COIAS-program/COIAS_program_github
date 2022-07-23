@@ -84,12 +84,13 @@ try:
             orbElemFile.close()
 
             for l2 in range(len(orbElemLines)):
-                if orbElemLines[l2].split()[0].rstrip(":")==thisOldName:
-                    outputFile.write(headSpace + orbElemLines[l2].replace(thisOldName, thisName))
-                    outputFile.write(headSpace + orbElemLines[l2+1])
-                    outputFile.write(headSpace + orbElemLines[l2+2])
-                    outputFile.write("\n")
-                    break
+                if len(orbElemLines[l2].split())!=0:
+                    if orbElemLines[l2].split()[0].rstrip(":")==thisOldName:
+                        outputFile.write(headSpace + orbElemLines[l2].replace(thisOldName, thisName))
+                        outputFile.write(headSpace + orbElemLines[l2+1])
+                        outputFile.write(headSpace + orbElemLines[l2+2])
+                        outputFile.write("\n")
+                        break
 
     fileFinalDisp.close()
     outputFile.close()

@@ -81,7 +81,12 @@ def get_imformation_from_findorb_html(htmlDocument, ndata):
     #-------------------------------------------------
 
     #---extract obsercation arc-----------------------
-    obsArcSentence = soup.find("a",href="https://www.minorplanetcenter.net/iau/lists/Sizes.html").next_sibling.split("\n")[2]+"\n"
+    ## large error
+    if orbElemStrList[5].split()[2]!="+/-":
+        obsArcSentence = soup.find("a",href="https://www.minorplanetcenter.net/iau/lists/Sizes.html").next_sibling.split("\n")[1]+"\n"
+    ## small error
+    else:
+        obsArcSentence = soup.find("a",href="https://www.minorplanetcenter.net/iau/lists/Sizes.html").next_sibling.split("\n")[2]+"\n"
     #-------------------------------------------------
 
     #---extract residuals-----------------------------
