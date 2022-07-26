@@ -470,6 +470,8 @@ class COIAS:
             self.asteroidData.outputMemoTxt()
         if self.COIASMode == "MANUAL":
             self.asteroidData.outputMemoManualTxt()
+        if self.COIASMode == "RECOIAS":
+            self.asteroidData.outputManualNameModifyListTxt()
     #--------------------------------------------------
 
     
@@ -633,8 +635,8 @@ class COIAS:
                 self.addManualAsteroid(self.coldPresentMousePosition)
 
             self.drawAsteroidOnly()
-            if self.COIASMode == "COIAS":  self.asteroidData.outputMemoTxt()
-            if self.COIASMode == "MANUAL": self.asteroidData.outputMemoManualTxt()
+            if self.COIASMode == "COIAS":   self.asteroidData.outputMemoTxt()
+            if self.COIASMode == "MANUAL":  self.asteroidData.outputMemoManualTxt()
     #--------------------------------------------------
 
 
@@ -836,6 +838,7 @@ class COIAS:
             self.sub_win.destroy()
             self.drawAsteroidOnly()
             self.isActivateSubWin = False
+            self.asteroidData.outputMemoManualTxt()
     #---------------------------------------------------
 
     
@@ -870,6 +873,7 @@ class COIAS:
                             self.asteroidData.astData[i].isModifiedName  = False
                             self.main_win.focus_force()
                             self.canvas.focus_force()
+                            self.asteroidData.outputManualNameModifyListTxt()
             else:
                 #--activate sub window
                 self.isActivateSubWin = True
@@ -915,6 +919,7 @@ class COIAS:
             self.isActivateSubWin = False
             self.main_win.focus_force()
             self.canvas.focus_force()
+            self.asteroidData.outputManualNameModifyListTxt()
     #---------------------------------------------------
     ####################################################
     ####################################################
