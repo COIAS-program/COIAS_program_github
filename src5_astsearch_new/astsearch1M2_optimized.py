@@ -165,7 +165,7 @@ class TrackletClass:
         ### condition 2: difference of speed between this and another tracklet is less than 0.3 arcseconds/min
         ### condition 3: predicted position of this at another tracklet is between another tracklet
         ### condition 4: distance between predicted position from another tracklet is less than 3.6 arcseconds
-        if ( abs(self.angle-anotherTracklet.angle) < 15.0 and
+        if ( abs(self.angle-anotherTracklet.angle) < 15.0*np.pi/180.0 and
              abs(self.speed-anotherTracklet.speed) < 0.3*MINITS_IN_A_DAY/3600.0 and
              distAlongAnotherTracklet > 0.0 and distAlongAnotherTracklet < anotherTracklet.length and
              abs(distFromAnotherTracklet) < 3.6/3600.0):
