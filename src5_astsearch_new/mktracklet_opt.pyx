@@ -8,10 +8,10 @@ from cython import boundscheck, wraparound
 
 ctypedef np.float64_t DOUBLE_t
 
-### make tracklets from two images #######################################################################
-### input: two-dimensional numpy arrays, first-dim: point id, second-dim: jd, ra, dec#####################
-### input: delta t of two images in the unit of "minits" #################################################
-### output: three-dimensional list, first-dim: tracklet id, second-dim: image id, third-dim: jd, ra, dec##
+### make tracklets from two images ###########################################################################
+### input: two-dimensional numpy arrays, first-dim: point id, second-dim: jd, ra, dec, mag####################
+### input: delta t of two images in the unit of "minits" #####################################################
+### output: three-dimensional list, first-dim: tracklet id, second-dim: image id, third-dim: jd, ra, dec, mag#
 def make_tracklet(np.ndarray[DOUBLE_t,ndim =2] radec1b, np.ndarray[DOUBLE_t,ndim =2] radec2b, double dt, double velThresh):
     cdef int i,j,num1,num2
     cdef double raDelta, decDelta, vel
