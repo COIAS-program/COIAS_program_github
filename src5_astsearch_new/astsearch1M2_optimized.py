@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# timestamp: 2022/7/30 07:00 sugiura
 
 ### import modules #######################################
 import time
@@ -161,14 +162,16 @@ class TrackletClass:
         distAlongAnotherTracklet =  anotherTracklet.direction[0] * thisPredictedRelX + anotherTracklet.direction[1] * thisPredictedRelY
         distFromAnotherTracklet  = -anotherTracklet.direction[1] * thisPredictedRelX + anotherTracklet.direction[0] * thisPredictedRelY
 
-        ### condition 1: difference of angle between this and another tracklet is less than 15 degrees
+        ### condition 1: difference of angle between this and another tracklet is less than 5 degrees
         ### condition 2: difference of speed between this and another tracklet is less than 0.3 arcseconds/min
         ### condition 3: predicted position of this at another tracklet is between another tracklet
         ### condition 4: distance between predicted position from another tracklet is less than 3.6 arcseconds
-        if ( abs(self.angle-anotherTracklet.angle) < 15.0*np.pi/180.0 and
+        ### condition 5: difference of median mag. between this and nother tracklet is less than 0.7 magnitude
+        if ( abs(self.angle-anotherTracklet.angle) < 5.0*np.pi/180.0 and
              abs(self.speed-anotherTracklet.speed) < 0.3*MINITS_IN_A_DAY/3600.0 and
              distAlongAnotherTracklet > 0.0 and distAlongAnotherTracklet < anotherTracklet.length and
-             abs(distFromAnotherTracklet) < 3.6/3600.0):
+             abs(distFromAnotherTracklet) < 3.6/3600.0 and
+             abs(self.get_median_mag_of_this_tracklet() - anotherTracklet.get_median_mag_of_this_tracklet()) < 0.7 ):
             return True
         else:
             return False
@@ -300,12 +303,63 @@ try:
             trackletListAll.append(trackletClassList)
     ##########################################################
     ##########################################################
+    
 
     ### check: all tracklets really have points > N_DETECT_THRESH ##
     for p in range(len(trackletListAll)):
         for k in range(len(trackletListAll[p])):
             if trackletListAll[p][k].NDetect < N_DETECT_THRESH:
                 raise ValueError("Something wrong! Tracklets with NDetect < N_DETECT_THRESH survive! this NDetect={0:d}".format(trackletListAll[p][k].NDetect))
+    ################################################################
+
+
+    ### photometry #################################################
+    for image in range(NImage):
+        scidata = fits.open(warpFileNames[image])
+    
+        for p in range(len(trackletListAll)):
+            for k in reversed(range(len(trackletListAll[p]))):
+            
+                if not trackletListAll[p][k].isDetectedList[image]:
+                    continue
+                
+                xypix = wcs0.wcs_world2pix(trackletListAll[p][k].data[image][1], trackletListAll[p][k].data[image][2], 1)
+
+                # param of aperture
+                w = APARTURE_RADIUS
+                wa = w * u.pix
+                w_in = (w + 2) * u.pix
+                w_out = (w + 8) * u.pix
+
+                position = (xypix[0], xypix[1])
+                # aperture phot
+                ap = CircularAperture(position, wa.value)
+                sap = CircularAnnulus(position, w_in.value, w_out.value)
+
+                rawflux_table = aperture_photometry(scidata[0].data, ap, method='subpixel', subpixels=5)
+                bkgflux_table = aperture_photometry(scidata[0].data, sap, method='subpixel', subpixels=5)
+                # 2020.11.25 revised
+                bkg_mean = bkgflux_table['aperture_sum'][0] / sap.area
+                bkg_sum = bkg_mean * ap.area
+                final_sum = nbinList[image]*nbinList[image]*(rawflux_table['aperture_sum'][0] - bkg_sum) #K.S. modified 2022/5/3
+                if final_sum <= 0:
+                    trackletListAll[p][k].del_data(image)
+                    if trackletListAll[p][k].NDetect < 2:
+                        del trackletListAll[p][k]
+                    continue
+                mag = np.round(zmList[image] - 2.5 * np.log10(final_sum), decimals=3)
+                # error
+                sigma_ron =  4.5*nbinList[image]*nbinList[image] # read out noise of HSC /nobining :4.5e S.U modified 2022/5/4
+                gain = 3.0 / nbinList[image] # gain of HSC/nobining :3.0  S.U modified 2022/5/4
+                S_star = gain * final_sum  
+                Noise = np.sqrt(S_star + ap.area * (gain * bkg_mean + sigma_ron * sigma_ron))  # S.U modified 2022/7/16
+                SNR = np.sqrt(S_star/Noise) # S.U modified 2022/7/16
+                # error in magnitude m_err = 1.0857/SNR
+                # Noise in ADU
+                mage = np.round(1.0857 / SNR, decimals=3)
+
+                trackletListAll[p][k].data[image][3] = mag
+                trackletListAll[p][k].data[image] = np.append(trackletListAll[p][k].data[image], mage)
     ################################################################
 
     
@@ -315,7 +369,7 @@ try:
             medianMag = trackletListAll[p][k].get_median_mag_of_this_tracklet()
             for image in range(NImage):
                 if trackletListAll[p][k].isDetectedList[image]:
-                    if abs(trackletListAll[p][k].data[image][3] - medianMag) > 1.0:
+                    if abs(trackletListAll[p][k].data[image][3] - medianMag) > 0.7:
                         trackletListAll[p][k].del_data(image)
             if trackletListAll[p][k].NDetect < 2:
                 del trackletListAll[p][k]
@@ -359,7 +413,7 @@ try:
     ##########################################################
     
 
-    ### photometry ###########################################
+    ### output result ########################################
 
     ## define id
     idtrac = 0
@@ -372,48 +426,14 @@ try:
         idTracklet.append(idTrackletInner)
     
     result = []
-    for image in range(NImage):
-        scidata = fits.open(warpFileNames[image])
-    
-        for p in range(len(trackletListAll)):
-            for k in range(len(trackletListAll[p])):
-            
+    for p in range(len(trackletListAll)):
+        for k in range(len(trackletListAll[p])):
+            for image in range(NImage):
                 if not trackletListAll[p][k].isDetectedList[image]:
                     continue
-                
+
                 xypix = wcs0.wcs_world2pix(trackletListAll[p][k].data[image][1], trackletListAll[p][k].data[image][2], 1)
-
-                # param of aperture
-                w = APARTURE_RADIUS
-                wa = w * u.pix
-                w_in = (w + 2) * u.pix
-                w_out = (w + 8) * u.pix
-
-                position = (xypix[0], xypix[1])
-                # aperture phot
-                ap = CircularAperture(position, wa.value)
-                sap = CircularAnnulus(position, w_in.value, w_out.value)
-
-                rawflux_table = aperture_photometry(scidata[0].data, ap, method='subpixel', subpixels=5)
-                bkgflux_table = aperture_photometry(scidata[0].data, sap, method='subpixel', subpixels=5)
-                # 2020.11.25 revised
-                bkg_mean = bkgflux_table['aperture_sum'][0] / sap.area
-                bkg_sum = bkg_mean * ap.area
-                final_sum = nbinList[image]*nbinList[image]*(rawflux_table['aperture_sum'][0] - bkg_sum) #K.S. modified 2022/5/3
-                if final_sum <= 0:
-                    continue
-                mag = np.round(zmList[image] - 2.5 * np.log10(final_sum), decimals=3)
-                # error
-                sigma_ron =  4.5*nbinList[image]*nbinList[image] # read out noise of HSC /nobining :4.5e S.U modified 2022/5/4
-                gain = 3.0 / nbinList[image] # gain of HSC/nobining :3.0  S.U modified 2022/5/4
-                S_star = gain * final_sum  
-                Noise = np.sqrt(S_star + ap.area * (gain * bkg_mean + sigma_ron * sigma_ron))  # S.U modified 2022/7/16
-                SNR = np.sqrt(S_star/Noise) # S.U modified 2022/7/16
-                # error in magnitude m_err = 1.0857/SNR
-                # Noise in ADU
-                mage = np.round(1.0857 / SNR, decimals=3)
-
-                result.append([idTracklet[p][k], trackletListAll[p][k].data[image][0], trackletListAll[p][k].data[image][1], trackletListAll[p][k].data[image][2], mag, mage, xypix[0], xypix[1], filList[image], image])
+                result.append([idTracklet[p][k], trackletListAll[p][k].data[image][0], trackletListAll[p][k].data[image][1], trackletListAll[p][k].data[image][2], trackletListAll[p][k].data[image][3], trackletListAll[p][k].data[image][4], xypix[0], xypix[1], filList[image], image])
 
 
     result2 = np.array(result, dtype='object')  # revised by N.M 2020.12.14
