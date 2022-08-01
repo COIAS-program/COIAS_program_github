@@ -39,9 +39,10 @@ try:
     beforeNameList = []
     afterNameList  = []
     for line in lines:
-        if re.search(r'^H......', line.split()[0])!=None:
-            beforeNameList.append(line.split()[0])
-            afterNameList.append(line.split()[1])
+        if len(line.split())!=0:
+            if re.search(r'^H......', line.split()[0])!=None:
+                beforeNameList.append(line.split()[0])
+                afterNameList.append(line.split()[1])
     #--------------------------------------------------------------
 
 
