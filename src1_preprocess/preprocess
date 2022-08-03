@@ -21,14 +21,6 @@ fi
 if [ ! -d ~/.coias/orbit_data ]; then
     mkdir ~/.coias/orbit_data 2>&1 | tee -a log.txt
     echo $? 15 104 >> error.txt
-    
-    echo 0 > ~/.coias/orbit_data/log.txt 2>&1 | tee -a log.txt
-    echo $? 15 105 >> error.txt
-fi
-
-if [ ! -f ~/.coias/orbit_data/log.txt ]; then
-	echo 0 > ~/.coias/orbit_data/log.txt 2>&1 | tee -a log.txt
-    echo $? 15 110 >> error.txt
 fi
     
 make_default_parameter_files.py 2>&1 | tee -a log.txt

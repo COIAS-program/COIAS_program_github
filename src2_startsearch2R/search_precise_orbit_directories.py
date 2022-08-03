@@ -5,6 +5,7 @@ import glob
 import time
 import shutil
 from astropy.io import fits
+from astropy.time import Time
 import traceback
 
 try:
@@ -14,7 +15,6 @@ try:
     presentTimeStamp = time.time()
     isCorrectDirectory = [0] * Ndata
     directoryNames = ['a'] * Ndata
-    filesInOrbitDataDir = glob.glob(os.path.expanduser("~")+"/.coias/orbit_data/*")
     preciseOrbitFleshTime = 60*60*24*14
     #--------------------------------------------
 
@@ -29,15 +29,34 @@ try:
         jdList.append(scidata[0].header['JD'])
     #--------------------------------------------
 
+    #---get yyyy-mm-dd of jdList[0]--------------
+    tInTimeObj = Time(jdList[0], format="jd")
+    tInIso = tInTimeObj.iso
+    yyyy_mm_dd = tInIso.split()[0]
+    #--------------------------------------------
+
+    #---if directory ~/.coias/orbit_data/yyyy_mm_dd does not exist-
+    #---we produce it----------------------------------------------
+    dirName = os.path.expanduser("~") + "/.coias/orbit_data/" + yyyy_mm_dd
+    if not os.path.isdir(dirName):
+        os.mkdir(dirName)
+    logFileName = dirName + "/log.txt"
+    if not os.path.isfile(logFileName):
+        logFile = open(logFileName, "w")
+        logFile.write("0")
+        logFile.close
+    #--------------------------------------------------------------
+
     #---read ~/.coias/orbit_data/log.txt---------
-    logFileName = os.path.expanduser("~")+"/.coias/orbit_data/log.txt"
+    logFileName = dirName + "/log.txt"
     logFile = open(logFileName,"r")
     line = logFile.readline()
     maxNumOrbitDirectories = int(line.rstrip("\n"))
     logFile.close()
     #--------------------------------------------
-
+    
     #---check presice orbit directory exists or not-
+    filesInOrbitDataDir = glob.glob(dirName + "/*")
     for fileName in filesInOrbitDataDir:
         if os.path.isdir(fileName):
             if (not os.path.isfile(fileName+"/ra_dec_jd_time.txt")) or (not os.path.isfile(fileName+"/numbered_new2B.txt")) or (not os.path.isfile(fileName+"/karifugo_new2B.txt")) or (not os.path.isfile(fileName+"/search_astB.txt")) or (not os.path.isfile(fileName+"/bright_asteroid_MPC_names_in_the_field.txt")) or (not os.path.isfile(fileName+"/name_conversion_list_in_the_field.txt")):
@@ -68,7 +87,7 @@ try:
     #---if presice orbit directory does not exist, make it-
     for i in range(Ndata):
         if isCorrectDirectory[i]==0 and directoryNames[i]=='a':
-            directory = os.path.expanduser("~")+"/.coias/orbit_data/{0:d}".format(maxNumOrbitDirectories)
+            directory = dirName + "/{0:d}".format(maxNumOrbitDirectories)
             os.mkdir(directory)
             isCorrectDirectory[i] = 0
             directoryNames[i] = directory
