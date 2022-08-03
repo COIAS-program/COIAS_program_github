@@ -5,7 +5,7 @@ import traceback
 
 try:
     # detect list
-    tmp1 = "pre_repo2.txt"
+    tmp1 = "pre_repo3.txt"
     tmp2 = "send_mpc.txt"
     data1 = open(tmp1, "r")
 

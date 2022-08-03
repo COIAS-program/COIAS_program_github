@@ -24,6 +24,10 @@ modify_preRepo_as_H_sequential.py 2>&1 | tee -a log.txt
 
 make_final_all_and_disp.py 2>&1 | tee -a log.txt
 
+del_duplicated_line_from_pre_repo2.py 2>&1 | tee -a log.txt
+
+store_pre_repo3.py 2>&1 | tee -a log.txt
+
 komejirushi.py 2>&1 | tee -a log.txt
 
 echo AstsearchR_afterReCOIAS ends 2>&1 | tee -a log.txt

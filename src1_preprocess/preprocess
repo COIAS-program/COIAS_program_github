@@ -22,6 +22,11 @@ if [ ! -d ~/.coias/orbit_data ]; then
     mkdir ~/.coias/orbit_data 2>&1 | tee -a log.txt
     echo $? 15 104 >> error.txt
 fi
+
+if [ ! -d ~/.coias/past_pre_repo_data ]; then
+    mkdir ~/.coias/past_pre_repo_data 2>&1 | tee -a log.txt
+    echo $? 15 110 >> error.txt
+fi
     
 make_default_parameter_files.py 2>&1 | tee -a log.txt
 
