@@ -1,7 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# timestamp: 2022/7/15 15:00 sugiura
-
+#Timestamp: 2022/08/04 13:00 sugiura
+##############################################################################
+# SExtractorを用いた光源検出スクリプトfindsourceのラッパー的スクリプト.
+# 読み込む画像から検出される光源の数の画像に対する平均値が,
+# param.txtに記載のsn (Source Number) 程度になるようにパラメータを調整しつつ,
+# 繰り返しfindsourceを呼ぶ.
+# 調整するパラメータはdefault.sexに記載のDETECT_THRESH.
+# 検出光源数が多すぎる場合は, まずDETECT_THRESHを1.2から指数関数的に増やしていき,
+# sn以下になるようなDETECT_THRESHを見つける.
+# 次に2分法的な処理で検出光源数の平均がだいたいsnになるようにDETECT_THRESHを調整する.
+#
+# (正確には以下の入力と出力はfindsourceスクリプトのもの)
+# 入力: マスク後の画像データ warp*_bin.fits
+# 出力: 検出された光源のピクセル座標のリスト warp*_bin.dat
+# 　　  (書式はファイルを直接見ればわかる)
+##############################################################################
 import subprocess
 from os.path import expanduser
 import traceback

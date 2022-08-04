@@ -1,9 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
- Time-stamp: <2022/06/14 9:30 (JST) sugiura>
-"""
-
+#Timestamp: 2022/08/04 13:00 sugiura
+##########################################################
+# 元画像のビニング・0フラックスでの等級・ヘッダの移し替えを行う.
+# (元画像が小惑星検出にはオーバースペックなため容量を減らす)
+# ビニングは2x2か4x4のどちらかから選べる.
+#
+# 入力: カレントディレクトリに存在する全ての元画像ファイル
+#       warp-HSC-[filter]-[tract]-[patch],[patch]-[visit].fits
+# 出力: 元画像ファイルをビニング・ヘッダ書き換えをした画像ファイル
+#       warpbin-HSC-[filter]-[tract]-[patch],[patch]-[visit].fits
+##########################################################
 import glob
 import sys
 import traceback
@@ -13,8 +20,6 @@ from astropy.io import fits
 from astropy.time import Time
 
 try:
-    # import lsst.afw.image as afwImage
-
     ## mode selection ####
     mode = input("Please choose binning mode.\n (2: 2x2 binning, 4: 4x4 binning):")
     if mode == "2":

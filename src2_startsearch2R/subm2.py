@@ -1,11 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Thu Mar 26 00:38:58 2020
-@author: urakawa
- Time-stamp: <2022/07/15 5:00 (JST) sugiura>
-"""
-
+#Timestamp: 2022/08/04 13:00 sugiura
+##########################################################
+# ビニングされた画像データにマスク処理を施す.
+# 元画像のHDUList型データにはリストの2番目の要素(hdu[1])として
+# XPIXELxYPIXELの0~255の整数配列のマスク用データが存在する.
+# (0は暗く, 大きいほど明るい)
+# 各ピクセルのマスク用データの中央値が0でなければずっと明るい,
+# すなわち星であると見做して, そのようなピクセルにはマスク処理を施す.
+# また, 元画像がNaNである領域とマスクした領域を単に0にすると
+# 目に悪いpng画像ができたりするので, スカイで埋めることにしている.
+# 表示用のpng画像生成もこのスクリプトで行う.
+#
+# 入力: カレントディレクトリに存在する全てのビニング済み画像データ
+# 　　  warpbin-HSC-[filter]-[tract]-[patch],[patch]-[visit].fits
+# 出力: マスク済み画像データ  warp[1から連番の画像番号]_bin.fits
+# 　　  マスク済みpngファイル [1から連番の画像番号]_disp-coias.png
+# 　　  マスクなしpngファイル [1から連番の画像番号]_disp-coias_nonmask.png
+##########################################################
 import glob
 import astropy.stats
 import matplotlib.pyplot as plt
