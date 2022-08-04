@@ -1,5 +1,24 @@
 #!/bin/bash
-# Time-stamp: <2022/05/20 21:00:00 (JST) sugiura>
+#Timestamp: 2022/08/04 16:30 sugiura
+###################################################################################
+# 検出した光源から移動天体候補を自動検出し, 既知天体との照合を行い, MPCフォーマットに変換する.
+# GUI COIASの自動検出ボタンで叩かれるのはこのスクリプト.
+# 1. make_gathered_search_astB.py
+#    precise_orbit_directories.txtに記載のディレクトリ以下にあるsearch_astB.txtたち
+#    をまとめてカレントディレクトリに1つのsearch_astB.txtを作成する.
+# 2. astsearch1M2_optimized.py 移動天体候補を自動検出する
+# 3. match2D.py 既知天体との照合を行い, 検出天体候補を既知と未知に振り分ける
+# 4. change_data_to_mpc_format.py データをMPCフォーマット形式に変換する
+# 5. ファイルを多少編集しながらマージする. 最終的に生成されるのは,
+#    mpc.txt  (検出天体の情報をMPC 80カラム形式で書き出したもの)
+#    all.txt  (mpc.txtにさらに画像番号 詳細等級 等級誤差 画像内でのxpixel位置 ypixel位置 を加えたもの)
+#    disp.txt (all.txtから天体名 画像番号 画像内でのxpixel位置 ypixel位置 のみを抜き出したもの)
+# 6. rm_should_modify_files
+#    COIAS.py以降の検出・解析をした後に, もう一度AstsearchRの探索準備をしたいこともあるかもしれないが,
+#    再解析すると移動天体候補のHから始まる名前が全て変わってしまう.
+#    そのようなときに前回の解析で得たCOIAS.py以降のファイルが残っていると辻褄が合わなくなってしまうので,
+#    そのようなファイルを消去する.
+###################################################################################
 
 set -o pipefail
 echo astsearch_new begins 2>&1 | tee log.txt
@@ -7,15 +26,15 @@ echo $? 55 501 > error.txt
 
 mkparam "$@" 2>&1 | tee -a log.txt
 echo $? 55 515 >> error.txt
+
 #REVISE 2022.4.12 KS, we collect search_astB.txt in each necessary directory to search_astB.txt in the current directory
 make_gathered_search_astB.py 2>&1 | tee -a log.txt
-#astsearch1K.py
+
 #I applay cython partially on 2020.5.28
 astsearch1M2_optimized.py 2>&1 | tee -a log.txt
-#astsearch1KBK.py
+
 match2D.py 2>&1 | tee -a log.txt
-#mpc1b.py
-#mpc2b.py
+
 #I merged mpc1b.py and mpc2b.py to change_data_to_mpc_format.py 2022.4.20 K.S.
 change_data_to_mpc_format.py 2>&1 | tee -a log.txt
 

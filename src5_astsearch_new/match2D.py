@@ -1,6 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
-# timestamp: 2022/7/15 07:00 sugiura
+# timestamp: 2022/08/04 17:30 sugiura
+###################################################################################
+# listb2.txtに記載の各点が, search_astB.txtに記載の既知天体の精密位置と
+# 一致するかどうか照合し, 一致したら既知天体と見なす.
+#
+# 入力: listb2.txt 移動天体候補のリスト
+# 　　  search_astB.txt 視野内の既知天体の精密位置のリスト
+# 出力: match.txt
+# 　　    listb2.txtのうちsearch_astB.txtのどれかと一致し既知天体と見なされた点のリスト
+# 　　    書式: 確定番号or仮符号 jd ra[degree] dec[degree] mag magerr Xpixel Ypixel フィルター 画像番号
+# 　　  nomatch.txt
+# 　　    listb2.txtのうちsearch_astB.txtのどれとも一致しなかった点のリスト
+# 　　    書式: trackletID jd ra[degree] dec[degree] mag magerr Xpixel Ypixel フィルター 画像番号
+###################################################################################
 import os
 import numpy as np
 import traceback

@@ -1,8 +1,10 @@
 #!/bin/bash
 #Timestamp: 2022/08/04 15:30 sugiura
 ##############################################################################
-# 1. 視野内の仮符号既知小惑星の精密位置をJPLに問い合わせる.
-# 2. precise_orbit_directories.txtに記載の各ディレクトリに存在する
+# 1. getinfo_karifugo2D.py
+#    視野内の仮符号既知小惑星の精密位置をJPLに問い合わせる.
+# 2. make_search_astB_in_each_directory.py
+#    precise_orbit_directories.txtに記載の各ディレクトリに存在する
 #    確定番号と仮符号小惑星の精密位置が記載されているファイルを少し整形し,
 #    各ディレクトリ内にsearch_astB.txtを作成する.
 # GUI COIASの軌道取得(仮符号)ボタンで叩かれるのはこのスクリプト.

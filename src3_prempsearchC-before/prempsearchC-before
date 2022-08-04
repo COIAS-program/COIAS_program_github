@@ -8,11 +8,12 @@
 #    それぞれAstMPC_dim.edbとAstMPC.edbから探し出してくる.
 # 2. データ整形をして, 視野内の確定番号付き小惑星の確定番号の一覧をcand3.txtに,
 #    視野内の仮符号小惑星の仮符号の一覧をcand4.txtに書き出す.
-# 3. make_asteroid_name_list_in_the_field.pyで,
+# 3. make_asteroid_name_list_in_the_field.py
 #    precise_orbit_directories.txtに記載のディレクトリ以下に,
 #    明るい既知小惑星の一覧を保存しておく. (レポートモードで弾くため)
 #    また既知小惑星のMPC形式の名前と元の名前の一覧も保存する.(将来的に使いたいという野望)
-# 4. getinfo_numbered2D.pyでcand3.txtに記載の確定番号付き既知小惑星の詳細位置を問い合わせ,
+# 4. getinfo_numbered2D.py
+#    cand3.txtに記載の確定番号付き既知小惑星の詳細位置を問い合わせ,
 #    その結果をprecise_orbit_directories.txtに記載のディレクトリ以下に保存する.
 ##############################################################################
 
@@ -63,10 +64,6 @@ if [ "$haveAllPreciseOrbits" = "0" ]; then
     make_asteroid_name_list_in_the_field.py 2>&1 | tee -a log.txt
 fi
 
-#getinfo_numbered2B.py
-#getinfo_karifugo2B.py
-#REVISED 2020.1.28
-#REVISED 2020.5.29 2B=>2D 
 getinfo_numbered2D.py 2>&1 | tee -a log.txt
 
 echo prempsearchC-before ends 2>&1 | tee -a log.txt

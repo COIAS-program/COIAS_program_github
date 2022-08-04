@@ -1,6 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
+# timestamp: 2022/08/04 18:00 sugiura
+###################################################################################
+# match.txtおよびnomatch.txtに記載のデータを全てMPC フォーマットに変換し,
+# さらに未発見天体候補(unknown_), 仮符号既知天体(karifugo_), 確定番号付き既知天体(numbered_)
+# に振り分ける.
+#
+# 入力: nomatch.txt 既知天体と照合しなかった移動天体候補のデータ点リスト
+# 　　  match.txt   既知天体と照合したデータ点のリスト
+# 出力: unknown_ karifugo_ numbered_
+#                   x
+# 　　  mpc.txt   all.txt   disp.txt
+# 　　  の9種類のファイル.
+# 　　  例えばunknown_*.txtは書式が違うだけでデータ点や数は同じ.
+# 　　  unknown_*.txtの天体名は, H+0左詰6桁にしたtrackletID
+# 　　  mpc.txtの書式: MPC 80カラムフォーマット
+# 　　  all.txtの書式: MPC 80カラムフォーマット 画像番号 詳細等級 等級誤差 Xpixel Ypixel
+# 　　  disp.txtの書式: 天体名 画像番号 Xpixel Ypixel
+###################################################################################
 import os
 import numpy as np
 import re
