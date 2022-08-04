@@ -1,7 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
-# Time-stamp: <2022/04/13 12:00:00 (JST) KS>
-
+#Timestamp: 2022/08/04 16:00 sugiura
+######################################################################################
+# cand4.txtに記載の視野内の仮符号小惑星の精密位置をJPLに問い合わせる.
+# ネットに繋がっていないと当然問い合わせできないし, たまに途中でタイムアウトすることもある.
+# (ただし, 過去の問い合わせ結果は~/.astropy/cache/astroquery/Horizonsに保存されているらしく
+#  これがあるとネットに繋がっていなくても情報を取得できたりする. 多少遅いが...)
+# また, このスクリプトの完了でもってこの視野のJPLへの既知天体の問い合わせが終わるので,
+# precise_orbit_directories.txtに記載のディレクトリ以下にra_dec_jd_time.txtを作成し,
+# この視野の中心のra, decとjdと問い合わせを行った時間を記録する.
+#
+# 入力: cand4.txt (視野内の仮符号小惑星の仮符号の一覧)
+# 出力: precise_orbit_directories.txtに記載のディレクトリ/karifugo_new2B.txt
+# 　　    cand4.txtに記載の天体の, JPLから得られた精密位置情報など
+# 　　    書式: 仮符号 jd ra[degree] dec[degree] mag
+# 　　  precise_orbit_directories.txtに記載のディレクトリ/ra_dec_jd_time.txt
+# 　　    この視野の中心のra, decとjdと問い合わせを行った時刻.
+# 　　    書式: ra[degree] dec[degree] jd unix時間[sec]
+######################################################################################
 import numpy as np
 from astroquery.jplhorizons import Horizons
 import time

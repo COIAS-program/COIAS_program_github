@@ -1,5 +1,12 @@
 #!/bin/bash
-#version 2022.5.6 K.S.
+#Timestamp: 2022/08/04 15:30 sugiura
+##############################################################################
+# 1. 視野内の仮符号既知小惑星の精密位置をJPLに問い合わせる.
+# 2. precise_orbit_directories.txtに記載の各ディレクトリに存在する
+#    確定番号と仮符号小惑星の精密位置が記載されているファイルを少し整形し,
+#    各ディレクトリ内にsearch_astB.txtを作成する.
+# GUI COIASの軌道取得(仮符号)ボタンで叩かれるのはこのスクリプト.
+##############################################################################
 
 set -o pipefail
 echo prempsearchC-after begins 2>&1 | tee log.txt
@@ -7,14 +14,6 @@ echo $? 45 401 > error.txt
 
 getinfo_karifugo2D.py 2>&1 | tee -a log.txt
 
-#(cat numbered_new2B.txt karifugo_new2B.txt |sort -n >search_astB.txt) <- old statement, we did not use this from 2020/12
-#Revised 2020.2.20
-#grep -E "^19|^20" karifugo_new2B.txt > karifugo_new2C.txt 
-#cat numbered_new2B.txt karifugo_new2C.txt |sort -n > search_astpre.txt
-#REVISED 2020.2.2
-#Revised 2020.2.20
-#sed 's/--/30.0/g;' search_astpre.txt |sed 's/ (1999 19 //g;' |sed 's/ (1981 2 //g;'|sed 's/ - / /g;'> search_astB.txt
-#Revised 2022.4.12 KS, I merged the above three statements to make_seach_astB_in_each_directory.py
 make_search_astB_in_each_directory.py 2>&1 | tee -a log.txt
 
 echo prempsearchC-after ends 2>&1 | tee -a log.txt
