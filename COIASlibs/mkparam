@@ -1,5 +1,15 @@
 #!/bin/bash
-# Time-stamp: <2022/05/21 20:30:00 (JST) sugiura>
+# Timestamp: 2022/08/04 11:00 sugiura
+####################################################################
+# startsearch2R や astsearch_new などのスクリプトで
+# オプション的に指定されたパラメータをparam.txtに書き出すスクリプト.
+# パラメータの指定方法や意味の詳細はCOIAS_program_github/README.mdを参照.
+# param.txtには
+# [パラメータ名] [値]
+# の書式で全てのパラメータが書き出される.
+# startsearch2R などの実行時に指定されなかったパラメータは,
+# 以下に記述してあるデフォルトの値が書き出される.
+####################################################################
 
 nd="4" # default value for detection number threshold for moving objects
 ar="6" # default value for aparture radius in pixel for photometory

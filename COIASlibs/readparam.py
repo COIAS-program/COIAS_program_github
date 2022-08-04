@@ -1,6 +1,15 @@
 #!/usr/bin/env python3                                                                                                                  
 # -*- coding: UTF-8 -*
-# Time-stamp: <2022/05/21 21:00:00 (JST) sugiura>
+# Timestamp: 2022/08/04 11:00 sugiura
+########################################################
+# param.txtを読み込み, パラメータを読み出し,
+# 辞書型に変換して返却する関数readparam()を定義したスクリプト.
+# 他のpythonスクリプトでは,
+# import readparam
+# params = readparam.readparam()
+# APARTURE_RADIUS = params["ar"]
+# などとして利用できる.
+########################################################
 
 def is_num(s):
     try:

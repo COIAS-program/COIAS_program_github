@@ -1,12 +1,23 @@
 #!/bin/bash
-# Time-stamp: <2022/05/20 21:00:00 (JST) sugiura>
+# Timestamp: 2022/08/04 10:00 sugiura
+####################################################
+# 探索事前処理全てを統括するスクリプト.
+# 1回目のCOIAS.pyの実行(探索モード)前の処理は
+# このスクリプトに記載されたスクリプトを順番に実行すれば良い.
+# このスクリプト実行時に5つのパラメータを渡すことができる.
+# ex) AstsearchR nd=値 ar=値 vt=値 dm=値 sn=値
+# それぞれのパラメータの意味はREADME.mdを参照.
+# パラメータは "$@" によってそれぞれのスクリプトに渡され
+# mkparamスクリプトにて処理されてparam.txtが生成される.
+####################################################
 
 preprocess "$@"
+
 startsearch2R "$@"
-#exec one time prempsearchC when you change the FOV
+
 prempsearchC-before
+
 prempsearchC-after
+
 astsearch_new "$@"
-#fits2png
-#add the difference contrast version if you need
-#fits2png2
+
