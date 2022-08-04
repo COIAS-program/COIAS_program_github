@@ -1,3 +1,13 @@
+#!/bin/bash
+#Timestamp: 2022/08/04 11:30 sugiura
+#####################################################
+# 1. MPCからMPCORB.DATをダウンロードし,
+#    ~/.coias/paramに保存する.
+# 2. mpc2edb.plを動かし, MPCORB.DATをedb形式に変換する.
+#    AstMPC.edb: 15等級より明るくなることがある小惑星の情報
+#    AstMPC_dim.edb: それ以外の暗い小惑星の情報
+#    これら2つのファイルも~/.coias/paramに保存される.
+#####################################################
 wget -O ~/.coias/param/MPCORB.DAT https://www.minorplanetcenter.net/iau/MPCORB/MPCORB.DAT
 echo $? 12 107 >> error.txt
 

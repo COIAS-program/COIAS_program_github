@@ -1,6 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
+#Timestamp: 2022/08/04 11:30 sugiura
+###################################################################
+# SExtractor と findOrb で使用するパラメータファイルを
+# ~/.coias/param 以下に生成するスクリプト.
+# あくまでも雛形でありパスなどはあとで適切に書き換えられる.
+# 最も重要なパラメータはSExtractorのDETECT_MINAREAとDETECT_THRESHだが,
+# これらはメインスクリプト実行時に引数にてオプション的に指定できる.
+# その他このスクリプトに記載のパラメータの意味はよくわかっていないので
+# あまり気にする必要はない.
+###################################################################
 from os.path import expanduser
 import traceback
 import readparam
