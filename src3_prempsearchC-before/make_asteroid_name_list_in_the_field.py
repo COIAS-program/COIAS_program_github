@@ -1,5 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
+#Timestamp: 2022/08/04 14:30 sugiura
+#################################################################################
+# 明るい(15等級以上になりうる)小惑星は軌道が十分に分かっているため報告の必要はない.
+# レポート前処理で明るい天体を弾くために, そのリストを作成しておく.
+# また将来的にGUIで小惑星の名前をMPCフォーマットではなく生の名前で見たくなったときのために,
+# 視野内の既知天体の名前(フルネームとMPCフォーマットの名前)の一覧を作っておく.
+#
+# 入力: bright_asteroid_raw_names_in_the_field.txt
+# 　　    視野内の明るい既知小惑星の名前を縦に並べたもの
+# 　　  cand2b.txt
+# 　　    視野内の全ての既知小惑星の大雑把な情報
+# 出力: precise_orbit_directories.txtに記載のディレクトリ/bright_asteroid_MPC_names_in_the_field.txt
+# 　　    視野内の明るい既知小惑星のMPC形式の名前を縦に並べたもの
+# 　　  precise_orbit_directories.txtに記載のディレクトリ/name_conversion_list_in_the_field.txt
+# 　　    視野内の全ての既知小惑星の名前の一覧
+# 　　    書式: フルネーム, 確定番号or仮符号, MPC形式の名前
+#################################################################################
 import subprocess
 import re
 import numpy as np

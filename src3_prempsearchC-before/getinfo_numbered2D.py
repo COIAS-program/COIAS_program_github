@@ -1,7 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
-# Time-stamp: <2022/07/7 13:00:00 (JST) KS>
-
+#Timestamp: 2022/08/04 14:00 sugiura
+######################################################################################
+# cand3.txtに記載の視野内の確定番号付き小惑星の精密位置をJPLに問い合わせる.
+# ネットに繋がっていないと当然問い合わせできないし, たまに途中でタイムアウトすることもある.
+# (ただし, 過去の問い合わせ結果は~/.astropy/cache/astroquery/Horizonsに保存されているらしく
+#  これがあるとネットに繋がっていなくても情報を取得できたりする. 多少遅いが...)
+#
+# 入力: cand3.txt (視野内の確定番号付き小惑星の確定番号の一覧)
+# 出力: precise_orbit_directories.txtに記載のディレクトリ/numbered_new2B.txt
+# 　　    cand3.txtに記載の天体の, JPLから得られた精密位置情報など
+# 　　    書式: 確定番号 jd ra[degree] dec[degree] mag
+######################################################################################
 import numpy as np
 from astroquery.jplhorizons import Horizons
 import time

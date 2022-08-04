@@ -1,5 +1,20 @@
 #!/bin/bash
-#version 2022.5.6 K.S.
+#Timestamp: 2022/08/04 14:00 sugiura
+##############################################################################
+# 視野内にある既知天体のリスト作成・データ整形をし,
+# 特に確定番号付き小惑星の精密位置をJPLに問い合わせる操作を統括するスクリプト.
+# GUI COIASの軌道取得(確定番号)ボタンで叩かれるのはこれ.
+# 1. searchB.pyで視野内の暗い既知天体を, searchB_AstMPC.pyで明るい既知天体を
+#    それぞれAstMPC_dim.edbとAstMPC.edbから探し出してくる.
+# 2. データ整形をして, 視野内の確定番号付き小惑星の確定番号の一覧をcand3.txtに,
+#    視野内の仮符号小惑星の仮符号の一覧をcand4.txtに書き出す.
+# 3. make_asteroid_name_list_in_the_field.pyで,
+#    precise_orbit_directories.txtに記載のディレクトリ以下に,
+#    明るい既知小惑星の一覧を保存しておく. (レポートモードで弾くため)
+#    また既知小惑星のMPC形式の名前と元の名前の一覧も保存する.(将来的に使いたいという野望)
+# 4. getinfo_numbered2D.pyでcand3.txtに記載の確定番号付き既知小惑星の詳細位置を問い合わせ,
+#    その結果をprecise_orbit_directories.txtに記載のディレクトリ以下に保存する.
+##############################################################################
 
 set -o pipefail
 echo prempsearchC-before begins 2>&1 | tee log.txt
@@ -16,7 +31,6 @@ if [ "$haveAllPreciseOrbits" = "0" ]; then
     sed  s/\'//g ~/.coias/param/AstMPC.edb |sed -e '1,51d' > AstMPC_tmp.edb 2>&1 | tee -a log.txt
     echo $? 34 304 >> error.txt
     
-    #./getinfo_xephem.py > cand.txt <- old statement, we did not use this from 2020/12
     ## search known dim asteroids in the field and output to cand.txt
     searchB.py 2>&1 | tee -a log.txt
     

@@ -1,5 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
+#Timestamp: 2022/08/04 14:30 sugiura
+##############################################################################
+# ~/.coias/param/AstMPC_dim.edbに記載の暗い既知小惑星の一覧から,
+# 視野内(tract中心から±1.8度以内, cf.HSCの視野直径1.5度)にあるものを探してくる.
+#
+# 入力: ~/.coias/param/AstMPC_dim.edb
+# 　　  warp01_bin.fits (jd, ra, decを取得するのに使用)
+# 出力: cand_dim.txt
+# 　　    視野内の暗い既知小惑星の大雑把な情報を記載したもの(整形前).
+# 　　    書式: jd 天体名 ra[degree] dec[degree] mag
+##############################################################################
 import numpy as np
 
 from astropy.io import fits
