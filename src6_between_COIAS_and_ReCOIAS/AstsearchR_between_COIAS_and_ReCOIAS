@@ -1,13 +1,42 @@
 #!/bin/bash
-#version 2022.5.6 K.S.
+#Timestamp: 2022/08/05 19:30 sugiura
+########################################################################################
+# COIAS.pyのsearchモードで選択した新天体の番号を連番になるように付け替える.
+# さらに既知天体とsearchモードで選択した新天体のみを残す.
+# GUI COIASの探索モードにて探索終了ボタンを押すとこのスクリプトが叩かれる.
+# MPCに報告する番号はH番号であっても重複しない方が望ましいため,
+# このスクリプトの実行時に第二引数に自分が今まで見つけてきた新天体のH番号の最大値+1を指定することで,
+# 今回の探索で見つけた新天体に指定した番号から連番になるようにH番号を付け替えてくれる.
+# 最後にmanual_name_modify_list.txtを削除しているのは, searchモードが再実行されると前回の実行から
+# 新天体が追加/削除され, 新天体の番号が変わってしまうので, その前回の履歴を反映させないようにするため.
+#
+# 入力: memo.txt COIAS.pyのsearchモードで選択した新天体の名前からHを除いたものの番号のリスト
+# 入力 => 出力
+# mpc.txt  => mpc4.txt
+# all.txt  => newall.txt
+# disp.txt => redisp.txt
+########################################################################################
 
 set -o pipefail
 echo AstsearchR_between_COIAS_and_ReCOIAS begins 2>&1 | tee log.txt
 echo $? 65 601 > error.txt
 
-prempedit
+prempedit2.py 2>&1 | tee -a log.txt
+
+makeHlist 2>&1 | tee -a log.txt
+echo $? 64 603 >> error.txt
+
 prempedit3.py $1 2>&1 | tee -a log.txt
-redisp
+
+sort -n mpc3.txt |uniq  >  mpc4.txt 2>&1 | tee -a log.txt
+echo $? 64 605 >> error.txt
+
+redisp.py 2>&1 | tee -a log.txt
+
+awk '{print($1,$2,$5,$6)}' predisp.txt | sort -k 1,1 -k 2n,2 > redisp.txt 2>&1 | tee -a log.txt
+sort -n -o newall.txt newall.txt 2>&1 | tee -a log.txt
+echo $? 64 607 >> error.txt
+
 cat redisp.txt > reredisp.txt
 
 if [ -e "manual_name_modify_list.txt" ]; then

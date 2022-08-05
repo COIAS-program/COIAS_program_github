@@ -1,0 +1,25 @@
+#!/bin/bash
+#Timestamp: 2022/08/05 19:30 sugiura
+##############################################################################################
+# prempedit2.py
+#   既知天体と, memo.txtに番号が記載されている新天体のデータのみを
+#   mpc.txtから抜き出してきてmpc2.txtに書き出す.
+#   入力: memo.txt COIAS.pyのsearchモードで選んだ新天体の名前からHを除いた番号のリスト
+#   　　  mpc.txt  自動検出に引っかかった全天体のMPC 80カラムフォーマットでの情報
+#   出力: mpc2.txt mpc.txtから既知天体とmemo.txtに番号が記載されている新天体の情報のみを取り出したもの.
+#   　　           番号の付け替えはまだなされていない.
+#
+# makeHlist
+#   mpc2.txtの6-12カラム目(新天体の名前部分のみ)を切り取り, Hから始まるもののみを取り出し,
+#   さらに重複しないようにmpc2.txtに記載の新天体の名前の一覧をHlist.txtに書き出す.
+#   入力: mpc2.txt
+#   出力: Hlist.txt
+##############################################################################################
+
+echo prempedit begins 2>&1 | tee -a log.txt
+
+prempedit2.py 2>&1 | tee -a log.txt
+makeHlist 2>&1 | tee -a log.txt
+echo $? 64 603 >> error.txt
+
+echo prempedit ends 2>&1 | tee -a log.txt

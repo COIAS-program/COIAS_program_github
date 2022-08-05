@@ -1,7 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
-#timestamp: 2022/7/12 13:00 sugiura
-
+#Timestamp: 2022/08/05 21:00 sugiura
+############################################################################################
+# mpc3.txtのある行の15-80カラム目(つまり観測日, ra, dec, 等級, フィルター, 観測所まで)と
+# all.txtのある行の15-80カラム目と完全に一致するような行を見つけ出し,
+# mpc3.txtのその行の0-14カラム目(名前部分)とall.txtのその行の15カラム目以降(その他情報)を結合させ,
+# newall.txtに書き出す.
+# 要は, mpc3.txtに記載の天体のみの情報をall.txtから抽出してnewall.txtに書き出す.
+# また, newall.txtのうち 天体名 画像番号 等級 等級誤差 Xpixel Ypixel のみをpredisp.txtに書き出す.
+# 入力: mpc3.txt
+# 　　  all.txt
+# 出力: newall.txt
+# 　　  predisp.txt
+#
+# その後, AstsearchR_between_COIAS_and_ReCOIASで
+# predisp.txtの1, 2, 5, 6カラム目 (天体名 画像番号 Xpixel Ypixel)のみを取り出し, redisp.txtに書き出す.
+############################################################################################
 import traceback
 import os
 import numpy as np

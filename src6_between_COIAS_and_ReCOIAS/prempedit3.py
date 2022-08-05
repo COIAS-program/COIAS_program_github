@@ -1,13 +1,27 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
+#Timestamp: 2022/08/05 20:00 sugiura
+#############################################################################################
+# このスクリプトの実行時には第二引数に自分が今まで見つけてきた新天体のH番号の最大値+1を指定する.
+# (AstsearchR_between_COIAS_and_ReCOIAS実行時の第二引数が自動的にこのスクリプトの第二引数に指定される)
+# Hlist.txtに記載のH番号を第二引数から始まる連番になるようにH番号の変換のリストを作成し,
+# mpc2.txtに記載の新天体の名前をその変換の通りに変えたものをmpc3.txtに出力する.
+# つまり, mpc2.txtに記載の新天体の名前を第二引数から始まる連番になるように付け替える.
+# なお, 既知天体はそのままmpc3.txtに出力される.
+#
+# 入力: Hlist.txt
+# 　　  mpc2.txt
+# 出力: mpc3.txt
+# 　　  H_conversion_list.txt
+# 　　    このスクリプトで変換された, 変換前と変換後(連番)のHから始まる名前の一覧を出力したもの.
+# 　　    書式: 変換前の新天体の名前 変換後に連番となった新天体の名前
+#############################################################################################
 import sys
 import re
 import traceback
 
 try:
     logFile = open("log.txt","a",newline="\n")
-    print("prempedit3.py begins")
-    logFile.write("prempedit3.py begins\n")
 
     # cmd = 'cut -b 6-12 mpc2.txt | grep ^H | uniq > hoge.txt'
     # cmd = 'cut -b 6-12 mpc2.txt' 
@@ -80,8 +94,6 @@ try:
         with open(tmp3,'wt') as f:
             f.writelines(new_list4)
 
-        print("prempedit3.py ends")
-        logFile.write("prempedit3.py ends\n")
         logFile.close()
 
 except FileNotFoundError:
