@@ -1,6 +1,15 @@
 #!/bin/bash
 #S.U made on 2021/7/14
-#version 2022.6.7 K.S.
+#Timestamp: 2022/08/05 22:00 sugiura
+##############################################################################################
+# COIAS.pyのmanual measureモードでの手動測定を元にして,
+# 1. photometry_manual_objects.py 測光する
+# 2. match2E.py 手動測定点と既知天体の照合を行う
+# 3. change_data_to_mpc_format_manual.py MPCフォーマットに変換する
+# 4. make_mpc4_newall_and_redisp_manual.py 手動測定版のmpc4.txt, newall.txt, redisp.txtを作成する.
+# GUI COIASの手動測定モードにて探索終了ボタンを押すとこのスクリプトが叩かれる.
+# 最後にmanual_name_modify_list.txtを削除している理由はAstsearchR_between_COIAS_and_ReCOIASと同じ.
+##############################################################################################
 
 set -o pipefail
 echo AstsearchR_after_manual begins 2>&1 | tee log.txt

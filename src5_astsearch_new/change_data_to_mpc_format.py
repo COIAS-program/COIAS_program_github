@@ -17,6 +17,9 @@
 # 　　  mpc.txtの書式: MPC 80カラムフォーマット
 # 　　  all.txtの書式: MPC 80カラムフォーマット 画像番号 詳細等級 等級誤差 Xpixel Ypixel
 # 　　  disp.txtの書式: 天体名 画像番号 Xpixel Ypixel
+#
+# 　　  MPC 80カラムフォーマットの詳細はこちらを参照:
+# 　　  https://www.minorplanetcenter.net/iau/info/OpticalObs.html
 ###################################################################################
 import os
 import numpy as np

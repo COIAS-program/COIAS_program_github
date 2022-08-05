@@ -1,6 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
-#timestamp 2022/6/7 13:00 sugiura
+#Timestamp: 2022/08/05 22:30 sugiura
+##################################################################################################
+# listb3.txtに記された手動測定天体の位置を, search_astB.txtに記載の既知天体の位置と照合し,
+# 一致したらその天体を既知天体と見なして名前を付け替える.
+# さらに既知天体はmatch_manual.txt, 新天体はnomatch_manual.txtに振り分ける.
+# 入力: listb3.txt
+# 　　  search_astB.txt
+# 出力: match_manual.txt 既知天体の情報
+# 　　    書式: 確定番号or仮符号 jd ra[degree] dec[degree] mag magerr Xpixel Ypixel フィルター 画像番号
+# 　　  nomatch_manual.txt 新天体の情報
+# 　　    書式: 新天体番号(Hなし) jd ra[degree] dec[degree] mag magerr Xpixel Ypixel フィルター 画像番号
+##################################################################################################
 import os
 import numpy as np
 import traceback

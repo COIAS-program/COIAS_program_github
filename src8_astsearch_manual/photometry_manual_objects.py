@@ -1,7 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# timestamp: 2022/6/7 10:00 sugiura
-
+#Timestamp: 2022/08/05 22:00 sugiura
+###################################################################################################
+# memo_manual.txtに記載された手動測定で得られた手動測定天体の長方形アパーチャーの情報を元にして,
+# それらのアパーチャー測光を行い, 手動測定天体の等級とその誤差を計算する.
+# 入力: memo_manual.txt
+# 　　    手動測定の結果を記したファイル
+# 　　    書式: 新天体番号(Hなし) 画像番号 手動天体座標[X Y](pixel) アパーチャーを定義する3点[X Y](pixel)x3組
+# 　　  warp*_bin.fits
+# 　　    ビニング・マスクされた元画像ファイル, 測光のカウント値を得るために必要
+# 出力: listb3.txt
+# 　　    測光の結果および座標をra, decに変換した結果が記入されたファイル
+# 　　    書式: 新天体番号(Hなし) jd ra[degree] dec[degree] mag magerr Xpixel Ypixel フィルター 画像番号
+####################################################################################################
 from astropy.io import fits
 from astropy.wcs import wcs
 from photutils import RectangularAperture
