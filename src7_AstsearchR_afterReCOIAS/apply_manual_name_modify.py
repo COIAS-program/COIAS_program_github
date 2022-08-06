@@ -1,6 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
-#timestamp: 2022/7/21 10:00 sugiura
+#Timestamp: 2022/08/06 19:30 sugiura
+###########################################################################################
+# COIAS.pyのmodify nameモードで設定した名前の付け替えを適用する.
+# manual_name_modify_list.txtには, 全ての自動検出天体と手動測定天体に対して,
+# modify nameモードで付け替えられる前の名前(1列目)と付け替えられた後の名前(2列目)が列挙されている.
+# (付け替えが起きない場合は1列目と2列目に同じ名前が記載される, このファイルが存在しない場合も付け替えなし)
+# このスクリプトではmanual_name_modify_list.txtに記載された名前の付け替えを必要なファイルに適用する.
+#
+# 入力: manual_name_modify_list.txt
+# 入力 => 出力 (名前変更リストの3列目に今回の変更後の名前を追記)
+# H_conversion_list_automanual.txt => H_conversion_list_automanual2.txt
+# 入力 => 出力 (名前の付け替えを実行する)
+# mpc4_automanual.txt => mpc4_automanual2.txt
+# newall_automanual.txt => newall_automanual2.txt
+# redisp_automanual.txt => redisp_automanual2.txt
+###########################################################################################
 import traceback
 import os
 import re

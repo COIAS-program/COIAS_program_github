@@ -1,9 +1,24 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-Access to online Find_Orb.
-timestamp: 2022/6/16 08:00 sugiura
-"""
+#Timestamp: 2022/08/06 19:30 sugiura
+############################################################################################
+# mpc7.txtに記載の検出・測定天体の位置情報を読み込み, findorbにその位置情報から予想される軌道を計算させ,
+# その軌道と位置情報の残差(residual)を計算させる.
+# これによって各天体の測定が妥当であるかどうかを評価したり, 残差の大きすぎるデータ点を除去したりできる.
+# ネットに繋がれている場合はウェブ版のfindorbに位置情報を送って軌道および残差を計算させる.
+# この場合は軌道要素の誤差やサイズなどの情報まで返してくれるので,
+# 詳細な情報をorbital_elements_summary_web.txtに書き出す.
+# 一方でネットに繋がれていない時やウェブ版findorbの使用中にタイムアウトが発生した時などは,
+# 10年ほど前にスペースガード協会の方が手を入れたコマンドライン版findorbを使用する.
+# これはバージョンが古く軌道の誤差や天体サイズまで出力できないので, 残差のみを計算する.
+# (一応軌道情報はorbital_elements_summary.txtに書き出されるが, 誤差が無いので当てにならない)
+#
+# 入力: mpc7.txt
+# 出力: result.txt
+# 　　    書式: MPC 80カラムフォーマット | X方向の残差[arcsec] Y方向の残差[arcsec]
+# 　　  orbital_elements_summary_web.txt (ウェブ版findorbに正しく問い合わせをできた天体のみ)
+# 　　    各天体の軌道長半径a, 離心率e, 傾斜角i, Earth MOIDS, サイズ, 観測アークを書き出したもの
+############################################################################################
 import requests
 from bs4 import BeautifulSoup
 from bs4 import Comment
@@ -80,7 +95,7 @@ def get_imformation_from_findorb_html(htmlDocument, ndata):
     sizeSentence = soup.find("a",href="https://www.minorplanetcenter.net/iau/lists/Sizes.html")["title"]+"\n"
     #-------------------------------------------------
 
-    #---extract obsercation arc-----------------------
+    #---extract observation arc-----------------------
     ## large error
     if orbElemStrList[5].split()[2]!="+/-":
         obsArcSentence = soup.find("a",href="https://www.minorplanetcenter.net/iau/lists/Sizes.html").next_sibling.split("\n")[1]+"\n"

@@ -1,7 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
-#timestamp: 2022/6/26 17:30 sugiura
-
+#Timestamp: 2022/08/06 20:30 sugiura
+###########################################################################################
+# modify_preRepo_as_H_sequential.pyにてH番号が連番になるようにpre_repo.txtのH番号を付け替えたので,
+# その付け替えをnewall_automanual2.txtにも適用してfinal_all.txtを作成し, 最終的なdisp系ファイルも作成する.
+# さらに, 初期の画像ファイルの名前, 新天体の数, ウェブ版findorbで得られた軌道やサイズなどの情報
+# などもfinal_all.txtに追記する.
+#
+# 入力: H_conversion_list_automanual3.txt 名前付け替えの履歴のリスト
+# 出力: final_all.txt
+# 　　    最終的な名前付け替えの結果まで反映されたall系ファイル
+# 　　    初期の画像ファイルの名前, 新天体の数, ウェブ版findorbで得られた軌道やサイズなどの情報も持つ
+# 　　  final_disp.txt
+# 　　    最終的な名前付け替えの結果まで反映されたdisp系ファイル
+###########################################################################################
 import glob
 import os
 import traceback

@@ -1,6 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
-#timestamp: 2022/8/3 13:30 sugiura
+#Timestamp: 2022/08/06 21:00 sugiura
+###########################################################################################
+# カレントディレクトリのpre_repo3.txtを~/.coias/past_pre_repo_data/以下にコピーする.
+# ただし, ファイル探索の高速化のためにこの画像の観測日のyyyy-mm-ddディレクトリ以下に保存する.
+# del_duplicated_line_from_pre_repo2.pyの冒頭にも書いた理由から,
+# ~/.coias/past_pre_repo_data/以下にコピーされたpre_repo3_*.txtの1行目には
+# このファイルを作成したカレントディレクトリの絶対パスを記載しておく.
+# また, pre_repo3_*.txtの重複保存を防ぐため, 同じカレントディレクトリで生成された
+# pre_repo3_*.txtがあれば上書きで保存するようにする.
+#
+# 入力: warp01_bin.fits この画像のyyyy-mm-ddを取得するために使用
+# 　　  ./pre_repo3.txt
+# 出力: ~/.coias/past_pre_repo_data/yyyy-mm-dd/pre_repo3_*.txt
+# 　　    ./pre_repo3.txtと内容は同じコピーだが,
+# 　　    1行目にカレントディレクトリの絶対パスが記載されたもの.
+###########################################################################################
 import traceback
 import os
 import shutil

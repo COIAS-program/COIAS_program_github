@@ -1,7 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#timestamp: 2022/7/8 8:30 sugiura
-
+#Timestamp: 2022/08/06 19:00 sugiura
+###########################################################################################
+# 通常, searchモードで自動検出天体を選んだ後にmanual measureモードにて手動測定を行うと,
+# AstsearchR_between_COIAS_and_ReCOIASおよびAstsearchR_after_manualを正常に動作させれば,
+# 自動検出天体のH番号から手動測定天体のH番号まで連番になっているはずである.
+# ただし, manual_measureモードを終えた後に再びsearchモードにて変更を行い,
+# AstsearchR_after_manualを動作させない場合は番号に重複が起きてしまう.
+# このスクリプトでは, やり直しを繰り返す過程でそのようなことが起きた場合にも連番になる
+# ように手動測定天体のH番号を(必要があれば)振り直す.
+#
+# 入力: redisp.txt 自動検出天体のH番号の最大値を取得するために使用
+# 　　  redisp_manual.txt 手動測定天体のH番号の最小値を取得する
+# H番号が連番になっていなかったら, 連番になるように以下のファイルを書き換える
+# 　　  H_conversion_list_manual.txt
+# 　　  mpc4_m.txt
+# 　　  newall_m.txt
+# 　　  redisp_manual.txt
+###########################################################################################
 import re
 import os
 import traceback

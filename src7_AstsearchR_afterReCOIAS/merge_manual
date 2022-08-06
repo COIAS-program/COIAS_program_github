@@ -1,5 +1,16 @@
 #!/bin/bash
-#timestamp: 2022/6/8 17:30 sugiura
+#Timestamp: 2022/08/06 19:30 sugiura
+###########################################################################################
+# 自動検出天体と手動測定天体の情報をマージしてまとめたファイルを作成する.
+# ただし手動測定は行われないことがあるので, 手動測定で出力されるファイルがなければ
+# 自動検出天体の情報のみを出力先ファイルに書き出す.
+#
+# 入力 + 入力 => 出力
+# mpc4.txt + mpc4_m.txt => mpc4_automanual.txt
+# newall.txt + newall_m.txt => newall_automanual.txt
+# redisp.txt + redisp_manual.txt => redisp_automanual.txt
+# H_conversion_list.txt + H_conversion_list_manual.txt => H_conversion_list_automanual.txt
+###########################################################################################
 
 error=0
 
