@@ -25,13 +25,13 @@ try:
         np.savetxt('nomatch_manual.txt', empty, fmt='%s')
     else:
         tmp1 = str("listb3.txt")
-        data1 = np.loadtxt(tmp1, usecols=[0, 1, 2, 3, 4, 5, 6, 7])
-        data1b = np.loadtxt(tmp1, dtype='str')
+        data1 = np.loadtxt(tmp1, usecols=[0, 1, 2, 3, 4, 5, 6, 7], ndmin=2)
+        data1b = np.loadtxt(tmp1, dtype='str', ndmin=2)
 
         # search list
         tmp2 = str("search_astB.txt")
-        data2 = np.loadtxt(tmp2, usecols=[1, 2, 3, 4])
-        data2b = np.loadtxt(tmp2, dtype='str', usecols=[0, 5])
+        data2 = np.loadtxt(tmp2, usecols=[1, 2, 3, 4], ndmin=2)
+        data2b = np.loadtxt(tmp2, dtype='str', usecols=[0, 5], ndmin=2)
 
         tmp3 = []
         tmp5 = []

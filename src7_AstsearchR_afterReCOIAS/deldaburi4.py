@@ -37,7 +37,7 @@ try:
         # tmp3 = path_name+str("/mpc2.txt")
         data1 = open(tmp1, "r")
         # data2 = open(tmp2,"r")
-        data = np.loadtxt(tmp1, usecols=[3, 4, 5, 6, 7, 8, 9])
+        data = np.loadtxt(tmp1, usecols=[3, 4, 5, 6, 7, 8, 9], ndmin=2)
         ra = data[:, 1] * 15 + data[:, 2] * 15 / 60 + data[:, 3] * 15 / 3600
         dec = data[:, 4] + data[:, 5] / 60 + data[:, 6] / 3600
         ra2 = ra.reshape(len(ra), 1)

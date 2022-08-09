@@ -91,7 +91,7 @@ try:
             raise FileNotFoundError
 
     ## for numbered and named asteroids
-    numberedNamedFullName = np.loadtxt("candNameList_numbered_named.txt",dtype='str')
+    numberedNamedFullName = np.loadtxt("candNameList_numbered_named.txt",dtype='str',ndmin=2)
     numberedNamedShortName = []
     numberedNamedMPCName = []
     for l in range(len(numberedNamedFullName)):
@@ -99,7 +99,7 @@ try:
         numberedNamedMPCName.append(get_MPC_format_name_for_numbered_asteroids(numberedNamedFullName[l][0]))
 
     ## for numbered and unnamed asteroids
-    numberedUnnamedFullName = np.loadtxt("candNameList_numbered_unnamed.txt",dtype='str')
+    numberedUnnamedFullName = np.loadtxt("candNameList_numbered_unnamed.txt",dtype='str',ndmin=2)
     numberedUnnamedShortName = []
     numberedUnnamedMPCName = []
     for l in range(len(numberedUnnamedFullName)):
@@ -107,7 +107,7 @@ try:
         numberedUnnamedMPCName.append(get_MPC_format_name_for_numbered_asteroids(numberedUnnamedFullName[l][0]))
 
     ## for karifugo asteroids
-    karifugoFullName = np.loadtxt("candNameList_karifugo.txt",dtype='str')
+    karifugoFullName = np.loadtxt("candNameList_karifugo.txt",dtype='str',ndmin=2)
     karifugoShortName = []
     karifugoMPCName = []
     for l in range(len(karifugoFullName)):

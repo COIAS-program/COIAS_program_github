@@ -32,7 +32,7 @@ try:
         np.savetxt("unknown_all_m.txt",empty,fmt="%s")
         np.savetxt("unknown_disp_m.txt",empty,fmt="%s")
     else:
-        data = np.loadtxt("nomatch_manual.txt",dtype="str")
+        data = np.loadtxt("nomatch_manual.txt",dtype="str",ndmin=2)
         fileUnknownMpc = open("unknown_mpc_m.txt","w",newline="\n")
         fileUnknownAll = open("unknown_all_m.txt","w",newline="\n")
         fileUnknownDisp = open("unknown_disp_m.txt","w",newline="\n")
@@ -65,7 +65,7 @@ try:
         np.savetxt("numbered_all_m.txt",empty,fmt="%s")
         np.savetxt("numbered_disp_m.txt",empty,fmt="%s")
     else:
-        data = np.loadtxt("match_manual.txt",dtype="str")
+        data = np.loadtxt("match_manual.txt",dtype="str",ndmin=2)
         fileKarifugoMpc = open("karifugo_mpc_m.txt","w",newline="\n")
         fileKarifugoAll = open("karifugo_all_m.txt","w",newline="\n")
         fileKarifugoDisp = open("karifugo_disp_m.txt","w",newline="\n")

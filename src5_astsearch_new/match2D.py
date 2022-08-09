@@ -28,16 +28,16 @@ try:
         np.savetxt('nomatch.txt', empty, fmt='%s')
     else:
         tmp1 = str("listb2.txt")
-        data1 = np.loadtxt(tmp1, usecols=[0, 1, 2, 3, 4, 5, 6, 7])
+        data1 = np.loadtxt(tmp1, usecols=[0, 1, 2, 3, 4, 5, 6, 7], ndmin=2)
         data1ImageNum = np.loadtxt(tmp1, usecols=[9], dtype='int')
-        data1b = np.loadtxt(tmp1, dtype='str')
+        data1b = np.loadtxt(tmp1, dtype='str', ndmin=2)
         # search list
         tmp2List = sorted(glob.glob("search_astB_*.txt"))
         data2  = []
         data2b = []
         for tmp2 in tmp2List:
-            data2.append(np.loadtxt(tmp2, usecols=[1, 2, 3, 4]))
-            data2b.append(np.loadtxt(tmp2, dtype='str', usecols=[0, 5]))
+            data2.append(np.loadtxt(tmp2, usecols=[1, 2, 3, 4], ndmin=2))
+            data2b.append(np.loadtxt(tmp2, dtype='str', usecols=[0, 5], ndmin=2))
 
         tmp3 = []
         tmp5 = []
