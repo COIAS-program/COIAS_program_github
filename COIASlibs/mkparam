@@ -15,7 +15,7 @@ nd="4" # default value for detection number threshold for moving objects
 ar="6" # default value for aparture radius in pixel for photometory
 vt="1.5" # default value for velocity threshold to detect moving objects
 dm="6" #default value for DETECT_MINAREA, i.e., minimum area for detecting sources at SExtractor
-sn="2000" #default value for mean source number detected by SExtractor
+sn="500" #default value for mean source number detected by SExtractor
 
 for arg in "$@"; do
   case $arg in
