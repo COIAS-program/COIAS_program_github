@@ -21,7 +21,7 @@
 2. AstsearchR と打ち込んで同スクリプトを使用し、binning、マスク画像引き、光源検出、視野周辺の既知小惑星取得、移動天体検出、測光、pngファイル生成、などなどを実行する。AstsearchR は以下のスクリプトの羅列であり、AstsearchR を実行することは以下のスクリプトを順に実行することと同じである。途中でエラーが出た時などは、AstsearchR を始めから実行しなくてもエラーが出た箇所から以下のスクリプトを順に実行し直しても良い。
    1. preprocess
    2. startsearch2R [フローチャート](flowcharts/flowchart1-startsearch2R.md)
-   3. prempsearchC-before [フローチャート](flowchart2-prempsearchC-before.md)
+   3. prempsearchC-before [フローチャート](flowcharts/flowchart2-prempsearchC-before.md)
    4. prempsearchC-after
    5. astsearch_new
 3. COIAS.py と打ち込んで、searchモードにてGUIで移動天体を目視で確認する。COIAS.py を実行すると画面が1つ開くが、まずはその画面のCOIAS mode欄の「search」ラジオボタンを選ぶ。お好みに応じてマスクあり画像かマスクなし画像かを「image preference」ラジオボタンから選べる。選んだら「Load img」ボタンを押すとメインGUI画面が開くので。画像をブリンクさせ、移動天体だと思う天体の四角をクリックして、その四角を赤くする。一通り選び終えたら右上の「Output」ボタンを押して memo.txt を出力させる。[詳しい COIAS.py の操作方法はこちら](COIASdocs/READMECOIAS.md)
