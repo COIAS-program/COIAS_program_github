@@ -23,7 +23,7 @@
    2. startsearch2R [フローチャート](flowcharts/flowchart1-startsearch2R.md)
    3. prempsearchC-before [フローチャート](flowcharts/flowchart2-prempsearchC-before.md)
    4. prempsearchC-after [フローチャート](flowcharts/flowchart3-prempsearchC-after.md)
-   5. astsearch_new
+   5. astsearch_new [フローチャート](flowcharts/flowchart4-astsearch_new.md)
 3. COIAS.py と打ち込んで、searchモードにてGUIで移動天体を目視で確認する。COIAS.py を実行すると画面が1つ開くが、まずはその画面のCOIAS mode欄の「search」ラジオボタンを選ぶ。お好みに応じてマスクあり画像かマスクなし画像かを「image preference」ラジオボタンから選べる。選んだら「Load img」ボタンを押すとメインGUI画面が開くので。画像をブリンクさせ、移動天体だと思う天体の四角をクリックして、その四角を赤くする。一通り選び終えたら右上の「Output」ボタンを押して memo.txt を出力させる。[詳しい COIAS.py の操作方法はこちら](COIASdocs/READMECOIAS.md)
 4. AstsearchR_between_COIAS_and_ReCOIAS [新天体の通し番号] と打ち込む。第二引数に今まで自分が見つけた新天体の番号のうち一番大きいもの+1を指定する。この作業で、新天体と同定したもののデータをMPCフォーマットに再整形、名前の付け替え、ReCOIAS を再表示する準備をする。
 5. COIAS.py と打ち込んで、manual measureモードにて自動検出できなかった天体を測定する。詳しい使い方は[こちら](COIASdocs/READMECOIAS.md)に記載するが、自動検出されていないが移動天体だと思う光源をクリックし、拡大画面で3点をクリックし四角形アパーチャーを設置する。一通り選び終えたら右上の「Output」ボタンを押して memo_manual.txt を出力させる。
