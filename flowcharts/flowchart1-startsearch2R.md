@@ -15,6 +15,6 @@ flowchart TD
     click D "../src2_startsearch2R/subm2.py"
     click G "../src2_startsearch2R/search_precise_orbit_directories.py"
     click J "../src2_startsearch2R/findsource_auto_thresh_correct.py"
-    click H "/sample1/precise_orbit_directories_and_have_all_precise_orbits.txt"
-    click K "/sample1/warp01_bin.dat"
+    click H "~/sample1/precise_orbit_directories_and_have_all_precise_orbits.txt"
+    click K "~/sample1/warp01_bin.dat"
 ``````
