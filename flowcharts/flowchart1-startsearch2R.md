@@ -11,10 +11,11 @@ flowchart TD
     G --> H[/precise_orbit_directories.txt\nhave_all_precise_orbits.txt/]
     E --- J[[findsource_auto_thresh_correct.py]]
     J --> K[/warp*_bin.dat/]
-    click B "../src2_startsearch2R/binning.py"
-    click D "../src2_startsearch2R/subm2.py"
-    click G "../src2_startsearch2R/search_precise_orbit_directories.py"
-    click J "../src2_startsearch2R/findsource_auto_thresh_correct.py"
-    click H "~/sample1/precise_orbit_directories_and_have_all_precise_orbits.txt"
-    click K "~/sample1/warp01_bin.dat"
+
+    click B "https://github.com/COIAS-program/COIAS_program_github/blob/main/src2_startsearch2R/binning.py"
+    click D "https://github.com/COIAS-program/COIAS_program_github/blob/main/src2_startsearch2R/subm2.py"
+    click G "https://github.com/COIAS-program/COIAS_program_github/blob/main/src2_startsearch2R/search_precise_orbit_directories.py"
+    click J "https://github.com/COIAS-program/COIAS_program_github/blob/main/src2_startsearch2R/findsource_auto_thresh_correct.py"
+    click H "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample1/precise_orbit_directories_and_have_all_precise_orbits.txt"
+    click K "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample1/warp01_bin.dat"
 ``````

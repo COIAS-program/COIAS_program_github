@@ -20,7 +20,7 @@
 1. 任意の好きなディレクトリに5枚の同一領域を写したwarp画像(warp-*.fits)を用意して、ターミナルでこのディレクトリに移動しておく。ほぼ全ての中間ファイルやpngファイルはこのディレクトリ (カレントディレクトリ) に展開される。2022/5/19追記: プログラム全体は画像5枚の場合で最適化されているが、現在は任意の枚数の解析に対応している。
 2. AstsearchR と打ち込んで同スクリプトを使用し、binning、マスク画像引き、光源検出、視野周辺の既知小惑星取得、移動天体検出、測光、pngファイル生成、などなどを実行する。AstsearchR は以下のスクリプトの羅列であり、AstsearchR を実行することは以下のスクリプトを順に実行することと同じである。途中でエラーが出た時などは、AstsearchR を始めから実行しなくてもエラーが出た箇所から以下のスクリプトを順に実行し直しても良い。
    1. preprocess
-   2. startsearch2R
+   2. startsearch2R [フローチャート](flowcharts/flowchart1-startsearch2R.md)
    3. prempsearchC-before
    4. prempsearchC-after
    5. astsearch_new
