@@ -41,7 +41,7 @@ flowchart TD
     N --- Y
     Z --- b[[del_duplicated_line_from_pre_repo2.py]]
     c[/"~".coias/past_pre_repo_data/\n以下のpre_repo_*.txt/] --- b
-    b --> d[/pre_repo_3.txt/]
+    b --> d[/pre_repo3.txt/]
     d --- e[[komejirushi.py]]
     e --> f[/send_mpc.txt/]
     d --- g[[store_pre_repo3.py]]
