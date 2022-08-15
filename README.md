@@ -29,7 +29,7 @@
 5. COIAS.py と打ち込んで、manual measureモードにて自動検出できなかった天体を測定する。詳しい使い方は[こちら](COIASdocs/READMECOIAS.md)に記載するが、自動検出されていないが移動天体だと思う光源をクリックし、拡大画面で3点をクリックし四角形アパーチャーを設置する。一通り選び終えたら右上の「Output」ボタンを押して memo_manual.txt を出力させる。
 6. AstsearchR_after_manual と打ち込んで、手動測定天体の測光および既知天体との照合を行う。[フローチャート](flowcharts/flowchart6-AstsearchR_after_manual.md)
 7. COIAS.py と打ち込んで、reconfirm/modify nameモードにて選択・測定した天体が本当に移動天体であるかどうか目視で再確認する。他、自動検出である移動天体の光源をいくつか検出し損ねていた時、その検出漏れした光源を手動測定で測定しても天体番号が自動検出のものと変わってしまうので、同じ移動天体とみなさせるために新天体の名前を任意に変更できる。詳しい使い方は[こちら](COIASdocs/READMECOIAS.md)。結果が良さそうなら特段の操作は不要で、画面を閉じて良い。
-8. AstsearchR_afterReCOIAS と打ち込んで同スクリプトを使用し、重複行の削除、findOrbを用いた軌道測定、誤差が大きいデータの削除、新天体に米印をつける、などを実行する。
+8. AstsearchR_afterReCOIAS と打ち込んで同スクリプトを使用し、重複行の削除、findOrbを用いた軌道測定、誤差が大きいデータの削除、新天体に米印をつける、などを実行する。[フローチャート](flowcharts/flowchart7-AstsearchR_afterReCOIAS.md)
 9. 作成された send_mpc.txt が完成形で、MPCに送信する報告メールのデータ部分になる。自分で必要なヘッダ情報を追加してMPCにメールで報告するか、本プロジェクト開発主任の浦川まで send_mpc.txt をメールに添付して送付すること。また、final_all.txt に元fitsファイルの名前や検出された移動天体の詳細情報が記載されている。
 10. send_mpc.txt に記載の天体名は、最終的に連番になるように付け替えられている。またfindOrbによって弾かれた検出点もあったりする。その結果をGUIで視認したければ、COIAS.py の final checkモードを使用すること。
 
