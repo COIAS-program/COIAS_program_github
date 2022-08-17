@@ -1842,6 +1842,7 @@ def make_xdesig_txt():
 try:
     params = readparam.readparam()
     DETECT_MINAREA = params["dm"]
+    readparam.write_used_param("dm", params["dm"])
     
     make_default_conv()
     make_default_sex(DETECT_MINAREA)

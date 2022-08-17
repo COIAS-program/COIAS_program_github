@@ -65,6 +65,7 @@ try:
     findsource_file_name = "findsource"
     params = readparam.readparam()
     SOURCE_NUMBER = params["sn"]
+    readparam.write_used_param("sn", params["sn"])
     #--------------------------------------------------
 
     #---first trial------------------------------------

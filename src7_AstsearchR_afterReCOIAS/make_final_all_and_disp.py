@@ -24,9 +24,17 @@ import re
 try:
     #---open output file and write header-----------------------
     outputFile = open("final_all.txt","w",newline="\n")
+    outputFile.write("---initial fits files---------------------------\n")
     originalImgNames = sorted(glob.glob('warp-*.fits'))
     for i in range(len(originalImgNames)):
         outputFile.write("{:d}: ".format(i)+originalImgNames[i]+"\n")
+    outputFile.write("------------------------------------------------\n\n")
+
+    outputFile.write("---used parameters-------------------------------\n")
+    paramFile = open("used_param.txt","r")
+    parameters = paramFile.read()
+    outputFile.write(parameters)
+    outputFile.write("------------------------------------------------\n\n")
     #-----------------------------------------------------------
 
     #---get number of new objects and name range----------------

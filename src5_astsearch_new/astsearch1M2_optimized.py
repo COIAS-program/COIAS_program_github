@@ -254,8 +254,11 @@ try:
     ### read parameters ######################################
     params = readparam.readparam()
     N_DETECT_THRESH = params["nd"]
+    readparam.write_used_param("nd", params["nd"])
     VEL_THRESH = params["vt"]
+    readparam.write_used_param("vt", params["vt"])
     APARTURE_RADIUS = params["ar"]
+    readparam.write_used_param("ar", params["ar"])
     ##########################################################
     
     

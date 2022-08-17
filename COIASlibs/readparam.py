@@ -1,6 +1,6 @@
 #!/usr/bin/env python3                                                                                                                  
 # -*- coding: UTF-8 -*
-# Timestamp: 2022/08/04 11:00 sugiura
+# Timestamp: 2022/08/17 15:30 sugiura
 ########################################################
 # param.txtを読み込み, パラメータを読み出し,
 # 辞書型に変換して返却する関数readparam()を定義したスクリプト.
@@ -9,7 +9,13 @@
 # params = readparam.readparam()
 # APARTURE_RADIUS = params["ar"]
 # などとして利用できる.
+#
+# また使用したパラメータをused_param.txtに書き出す関数
+# write_used_param(paramDict)も定義している.
+# 引数に辞書型で与えられたパラメータをused_param.txtに
+# 重複の内容に書き出す.
 ########################################################
+import os
 
 def is_num(s):
     try:
@@ -37,3 +43,32 @@ def readparam():
                 params[content[0]] = float(content[1])
 
     return params
+
+def write_used_param(paramKey, paramValue):
+    if not isinstance(paramKey, str) or not is_num(paramValue):
+        raise ValueError("argument is not a pair of a key and a value")
+
+    existParamDict = {}
+    if os.path.isfile("used_param.txt"):
+        f = open("used_param.txt","r")
+        lines = f.readlines()
+        f.close()
+
+        for line in lines:
+            contents = line.split()
+            key = contents[0]
+            if key=="nd" or key=="ar" or key=="dm" or key=="sn":
+                value = int(contents[1])
+            if key=="vt":
+                value = float(contents[1])
+
+            existParamDict[key] = value
+    
+    existParamDict[paramKey] = paramValue
+    f = open("used_param.txt","w")
+    for k in existParamDict:
+        if k=="nd" or k=="ar" or k=="dm" or k=="sn":
+            f.write(k + " " + "{0:d} \n".format(existParamDict[k]))
+        if k=="vt":
+            f.write(k + " " + "{0:.1f} \n".format(existParamDict[k]))
+    f.close()
