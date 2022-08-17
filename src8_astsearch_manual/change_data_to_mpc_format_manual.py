@@ -15,7 +15,7 @@
 # 　　  例えばunknown_*.txtは書式が違うだけでデータ点や数は同じ.
 # 　　  unknown_*.txtの天体名は, H+0左詰6桁にした新天体名
 # 　　  mpc_m.txtの書式: MPC 80カラムフォーマット
-# 　　  all_m.txtの書式: MPC 80カラムフォーマット 画像番号 詳細等級 等級誤差 Xpixel Ypixel
+# 　　  all_m.txtの書式: MPC 80カラムフォーマット 画像番号 詳細等級 等級誤差 Xpixel Ypixel [a or m(自動ならa,手動ならm)]
 # 　　  disp_m.txtの書式: 天体名 画像番号 Xpixel Ypixel
 ##############################################################################################
 import os
@@ -46,7 +46,7 @@ try:
 
             mpc1Row = nameStr + "  " + timeStr + " " + raDecStr + "         " + "{:.1f}".format(float(data[l][4])).rjust(4,'0') + " " + data[l][8] + "      " + "568"
             fileUnknownMpc.write(mpc1Row + "\n")
-            fileUnknownAll.write(mpc1Row + " " + data[l][9] + " " + data[l][4] + " " + data[l][5] + " " + data[l][6] + " " + data[l][7] + "\n")
+            fileUnknownAll.write(mpc1Row + " " + data[l][9] + " " + data[l][4] + " " + data[l][5] + " " + data[l][6] + " " + data[l][7] + " m \n")
             fileUnknownDisp.write(nameStr + " " + data[l][9] + " " + data[l][6] + " " + data[l][7] + "\n")
 
         fileUnknownMpc.close()
@@ -93,7 +93,7 @@ try:
             raDecStr = change_ra_dec_to_MPC_format(float(data[l][2]),float(data[l][3]))
             mpc1Row = nameStr + "  " + timeStr + " " + raDecStr + "         " + "{:.1f}".format(float(data[l][4])).rjust(4,'0') + " " + data[l][8] + "      " + "568"
             fileMpc.write(mpc1Row + "\n")
-            fileAll.write(mpc1Row + " " + data[l][9] + " " + data[l][4] + " " + data[l][5] + " " + data[l][6] + " " + data[l][7] + "\n")
+            fileAll.write(mpc1Row + " " + data[l][9] + " " + data[l][4] + " " + data[l][5] + " " + data[l][6] + " " + data[l][7] + " m \n")
             fileDisp.write(nameStr + " " + data[l][9] + " " + data[l][6] + " " + data[l][7] + "\n")
 
         fileKarifugoMpc.close()
