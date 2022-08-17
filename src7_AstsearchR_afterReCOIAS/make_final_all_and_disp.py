@@ -20,6 +20,7 @@ import glob
 import os
 import traceback
 import re
+from astropy.io import fits
 
 try:
     #---open output file and write header-----------------------
@@ -27,7 +28,9 @@ try:
     outputFile.write("---initial fits files---------------------------\n")
     originalImgNames = sorted(glob.glob('warp-*.fits'))
     for i in range(len(originalImgNames)):
-        outputFile.write("{:d}: ".format(i)+originalImgNames[i]+"\n")
+        hdul = fits.open(originalImgNames[i])
+        expTime = hdul[0].header["EXPTIME"]
+        outputFile.write("{:d}: ".format(i) + originalImgNames[i] + ": exptime[s]={:.1f}".format(expTime) + "\n")
     outputFile.write("------------------------------------------------\n\n")
 
     outputFile.write("---used parameters-------------------------------\n")
