@@ -129,6 +129,7 @@ try:
     fResult  = open("result.txt","w",newline="\n")
     fOrbElem = open("orbital_elements_summary_web.txt","w",newline="\n")
 
+    errorCount=0
     if os.stat("mpc7.txt").st_size != 0:
         prevObsName = lines[0].split()[0]
         obsList = []
@@ -137,8 +138,20 @@ try:
           
                 if l==len(lines)-1:
                     obsList.append(lines[l].rstrip("\n"))
-                
-                findOrbResult = get_imformation_from_findorb_html(request_find_orb(obsList), len(obsList))
+
+                while True:
+                    try:
+                        findOrbResult = get_imformation_from_findorb_html(request_find_orb(obsList), len(obsList))
+                    except requests.exceptions.ConnectionError:
+                        print("Failed to access to online findOrb. Ntry={0:d}. Try again.".format(errorCount))
+                        errorCount+=1
+                        if errorCount>=20:
+                            raise requests.exceptions.ConnectionError
+                    except Exception:
+                        raise Exception
+                    else:
+                        break
+                        
                 if "None" not in findOrbResult:
 
                     if len(prevObsName)==5:
