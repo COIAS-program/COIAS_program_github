@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Timestamp: 2022/08/04 13:00 sugiura
+#Timestamp: 2022/08/19 8:30 sugiura
 ##########################################################
 # ビニングされた画像データにマスク処理を施す.
 # 元画像のHDUList型データにはリストの2番目の要素(hdu[1])として
@@ -29,6 +29,7 @@ from matplotlib import cm
 from PIL import Image
 import subprocess
 import traceback
+import visitsort
 
 #---function---------------------------------------------------------------------
 def fits2png(hdu, pngname):
@@ -49,7 +50,7 @@ def fits2png(hdu, pngname):
 
 try:
     ## warp image list to read ##
-    img_list = sorted(glob.glob('warpbin-*.fits'))  # K.S. modify 2021/7/20
+    img_list = sorted(glob.glob('warpbin-*.fits'), key=visitsort.key_func_for_visit_sort)  # K.S. modify 2021/7/20
     if len(img_list)==0:
         raise FileNotFoundError
 

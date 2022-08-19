@@ -21,12 +21,13 @@ import os
 import traceback
 import re
 from astropy.io import fits
+import visitsort
 
 try:
     #---open output file and write header-----------------------
     outputFile = open("final_all.txt","w",newline="\n")
     outputFile.write("---initial fits files---------------------------\n")
-    originalImgNames = sorted(glob.glob('warp-*.fits'))
+    originalImgNames = sorted(glob.glob('warp-*.fits'), key=visitsort.key_func_for_visit_sort)
     for i in range(len(originalImgNames)):
         hdul = fits.open(originalImgNames[i])
         expTime = hdul[0].header["EXPTIME"]

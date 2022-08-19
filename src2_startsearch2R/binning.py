@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Timestamp: 2022/08/04 13:00 sugiura
+#Timestamp: 2022/08/19 8:30 sugiura
 ##########################################################
 # 元画像のビニング・0フラックスでの等級・ヘッダの移し替えを行う.
 # (元画像が小惑星検出にはオーバースペックなため容量を減らす)
@@ -18,6 +18,7 @@ import traceback
 import numpy as np
 from astropy.io import fits
 from astropy.time import Time
+import visitsort
 
 try:
     ## mode selection ####
@@ -34,7 +35,7 @@ try:
     ########################
 
     # search fits files
-    img_list = sorted(glob.glob('warp-*.fits'))
+    img_list = sorted(glob.glob('warp-*.fits'), key=visitsort.key_func_for_visit_sort)
     if len(img_list)==0:
         raise FileNotFoundError
 
