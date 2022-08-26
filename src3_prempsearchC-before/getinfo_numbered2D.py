@@ -174,7 +174,7 @@ except requests.exceptions.ConnectionError:
     error = 1
     errorReason = 32
 
-except requests.exceptions.ConnectTimeout:
+except (requests.exceptions.ConnectTimeout, requests.exceptions.ReadTimeout):
     print("Connection timeout to NASA JPL in getinfo_numbered2D.py!")
     print(traceback.format_exc())
     error = 1

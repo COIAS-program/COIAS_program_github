@@ -192,7 +192,7 @@ except requests.exceptions.ConnectionError:
     error = 1
     errorReason = 42
 
-except requests.exceptions.ConnectTimeout:
+except (requests.exceptions.ConnectTimeout, requests.exceptions.ReadTimeout):
     print("Connection timeout to NASA JPL in getinfo_karifugo2D!")
     print(traceback.format_exc())
     error = 1
