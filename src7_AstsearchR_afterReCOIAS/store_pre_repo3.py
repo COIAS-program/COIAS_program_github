@@ -10,7 +10,7 @@
 # また, pre_repo3_*.txtの重複保存を防ぐため, 同じカレントディレクトリで生成された
 # pre_repo3_*.txtがあれば上書きで保存するようにする.
 # さらに, 今回の観測で得られた新天体が違う日付の観測でどこにいるのか予測するために,
-# ~/.coias/past_pre_repo_data/yyyy-mm-dd/coefficients-for-predict.txtに
+# ~/.coias/past_pre_repo_data/yyyy-mm-dd/coefficients_for_predict.txtに
 # 各新天体のraとdecをjdに対して線形関数でフィットした時の係数を書き出す。
 #
 # 入力: warp01_bin.fits この画像のyyyy-mm-ddを取得するために使用
@@ -18,7 +18,7 @@
 # 出力: ~/.coias/past_pre_repo_data/yyyy-mm-dd/pre_repo3_*.txt
 # 　　    ./pre_repo3.txtと内容は同じコピーだが,
 # 　　    1行目にカレントディレクトリの絶対パスが記載されたもの.
-# 　　  ~/.coias/past_pre_repo_data/yyyy-mm-dd/coefficients-for-predict.txt
+# 　　  ~/.coias/past_pre_repo_data/yyyy-mm-dd/coefficients_for_predict.txt
 # 　　    各新天体のra,decをjdに対して線形関数でフィットした時の係数を保存したもの.
 # 　　    書式: 新天体名 raの勾配 raの切片 decの勾配 decの切片 以下フィットに用いた時刻をjdで表現したもの
 ###########################################################################################
@@ -95,7 +95,7 @@ try:
     scidata = fits.open(warpFileNames[len(warpFileNames)-1])
     jdLast  = scidata[0].header["JD"]
     
-    coeffFileName = dirName + "/coefficients-for-predict.txt"
+    coeffFileName = dirName + "/coefficients_for_predict.txt"
     if os.path.isfile(coeffFileName):
         f = open(coeffFileName,"r")
         pastCoeffAndJdList = f.readlines()
@@ -125,7 +125,7 @@ try:
                 decCoef = np.polyfit(jdList, decList, 1)
                 outputLine = prevObsName + " " + "{0:.8e}".format(raCoef[0]) + " " + "{0:.8e}".format(raCoef[1]) + " " + "{0:.8e}".format(decCoef[0]) + " " + "{0:.8e} ".format(decCoef[1])
                 for j in range(len(jdList)):
-                    outputLine = outputLine + "{0:.5f} ".format(jdList[j])
+                    outputLine = outputLine + "{0:.4f} ".format(jdList[j])
                 outputLine = outputLine + "\n"
                 if re.search(r"^H......",prevObsName)!=None:
                     coeffAndJdList.append(outputLine)
