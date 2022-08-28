@@ -35,16 +35,16 @@ flowchart TD
     U --- V[[reject_bright_known_asteroids_from_report.py]]
     V --> W[/pre_repo.txt/]
     X[/bright_asteroid_MPC_names_in_the_field.txt/] --- V
-    W --- Y[[modify_preRepo_as_H_sequential.py]]
-    Y --> Z[/pre_repo2.txt/]
+	W --- b[[del_duplicated_line_from_pre_repo.py]]
+	c[/"~".coias/past_pre_repo_data/\n以下のpre_repo_*.txt/] --- b
+	b --> d[/pre_repo2.txt/]
+    d --- Y[[modify_preRepo_as_H_sequential.py]]
+    Y --> Z[/pre_repo3.txt/]
     Y --> a[/H_conversion_list_automanual3.txt/]
     N --- Y
-    Z --- b[[del_duplicated_line_from_pre_repo2.py]]
-    c[/"~".coias/past_pre_repo_data/\n以下のpre_repo_*.txt/] --- b
-    b --> d[/pre_repo3.txt/]
-    d --- e[[komejirushi.py]]
+    Z --- e[[komejirushi.py]]
     e --> f[/send_mpc.txt/]
-    d --- g[[store_pre_repo3.py]]
+    Z --- g[[store_pre_repo3.py]]
     g --> h[/"~"/.coias/past_pre_repo_data/以下にコピー/]
     a --- i[[make_final_all_and_disp.py]]
     L --- i
@@ -79,10 +79,10 @@ flowchart TD
     click U "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample7/pre_repo.txt"
     click W "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample7/pre_repo.txt"
     click X "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample2/bright_asteroid_MPC_names_in_the_field.txt"
-    click Z "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample7/pre_repo2.txt"
+    click Z "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample7/pre_repo3.txt"
     click a "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample7/H_conversion_list_automanual3.txt"
     click c "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample7/pre_repo3_sample.txt"
-    click d "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample7/pre_repo3.txt"
+    click d "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample7/pre_repo2.txt"
     click f "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample7/send_mpc.txt"
     click j "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample7/final_all.txt"
     click k "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample7/final_disp.txt"

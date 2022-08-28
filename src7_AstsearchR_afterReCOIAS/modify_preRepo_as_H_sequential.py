@@ -7,9 +7,9 @@
 # これによって欠番が生じてH番号が連番ではなくなる可能性があるので,
 # このスクリプトでは最終的に連番になるようにさらにH番号の付け替えを行う.
 #
-# 入力: pre_repo.txt
+# 入力: pre_repo2.txt
 # 　　  H_conversion_list_automanual2.txt
-# 出力: pre_repo2.txt
+# 出力: pre_repo3.txt
 # 　　    最終的にH番号が連番になるように名前が付け替えられたもの
 # 　　  H_conversion_list_automanual3.txt
 # 　　    H_conversion_list_automanual2.txtに記載の3列目までの名前の付け替え履歴に加え,
@@ -22,11 +22,11 @@ import re
 import subprocess
 
 try:
-    completed_process = subprocess.run("sort -n -o pre_repo.txt pre_repo.txt", shell=True)
+    completed_process = subprocess.run("sort -n -o pre_repo2.txt pre_repo2.txt", shell=True)
     if completed_process.returncode!=0: raise Exception
 
     #---get H conversion list from pre repo-----------------------
-    filePreRepo = open("pre_repo.txt","r")
+    filePreRepo = open("pre_repo2.txt","r")
     lines = filePreRepo.readlines()
     filePreRepo.close()
 
@@ -68,11 +68,11 @@ try:
 
 
     #---modify pre_repo.txt as H numbers become sequential--------
-    filePreRepo = open("pre_repo.txt","r")
+    filePreRepo = open("pre_repo2.txt","r")
     lines = filePreRepo.readlines()
     filePreRepo.close()
 
-    filePreRepo2 = open("pre_repo2.txt","w",newline="\n")
+    filePreRepo2 = open("pre_repo3.txt","w",newline="\n")
     for line in lines:
         isMatch = False
         for l in range(len(HOldNameList)):

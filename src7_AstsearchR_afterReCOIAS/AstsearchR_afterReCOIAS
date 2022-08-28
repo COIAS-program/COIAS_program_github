@@ -64,11 +64,11 @@ delLargeZansa_and_modPrecision.py 1 2>&1 | tee -a log.txt
 
 reject_bright_known_asteroids_from_report.py 2>&1 | tee -a log.txt
 
+del_duplicated_line_from_pre_repo.py 2>&1 | tee -a log.txt
+
 modify_preRepo_as_H_sequential.py 2>&1 | tee -a log.txt
 
 make_final_all_and_disp.py 2>&1 | tee -a log.txt
-
-del_duplicated_line_from_pre_repo2.py 2>&1 | tee -a log.txt
 
 store_pre_repo3.py 2>&1 | tee -a log.txt
 
