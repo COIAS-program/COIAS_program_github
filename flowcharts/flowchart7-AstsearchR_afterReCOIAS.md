@@ -46,6 +46,7 @@ flowchart TD
     e --> f[/send_mpc.txt/]
     Z --- g[[store_pre_repo3.py]]
     g --> h[/"~"/.coias/past_pre_repo_data/以下にコピー/]
+    g --> m[/"~"/.coias/past_pre_repo_data/\nyyyy-mm-dd/coefficients-for-predict.txt/]
     a --- i[[make_final_all_and_disp.py]]
     L --- i
     i --> j[/final_all.txt/]
@@ -87,4 +88,5 @@ flowchart TD
     click j "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample7/final_all.txt"
     click k "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample7/final_disp.txt"
     click l "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample7/manual_name_modify_list.txt"
+    click m "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample7/coefficients-for-predict.txt"
 ``````
