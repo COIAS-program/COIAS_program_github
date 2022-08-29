@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
 #COIAS ver 1.0
-#timestamp 2022/7/22 20:00 sugiura
+#timestamp 2022/8/30 03:00 sugiura
 
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -218,6 +218,16 @@ class DataOfAllAsteroids:
             for l in range(self.Ndata):
                 if self.astData[l].astName not in self.originalNameList:
                     self.originalNameList.append(self.astData[l].astName)
+
+            if os.path.isfile("predicted_disp.txt") and os.stat("predicted_disp.txt").st_size!=0:
+                f = open("predicted_disp.txt","r")
+                dataLines = f.readlines()
+                f.close()
+
+                for line in dataLines:
+                    name = line.split()[0]
+                    if name not in self.originalNameList:
+                        self.originalNameList.append(name)
         #-----------------------------
     #----------------------------------------------------------
 
@@ -291,6 +301,45 @@ class DataOfAllAsteroids:
 
         f.close()
     #--------------------------------------------------------------
+######################################################################
+
+
+### Class for storing predicted objects###############################
+class DataOfPredictedBodies:
+    #attributes: --------------------------------------------
+    #            NPredict(int)
+    #            predictDictData(list of dictionaly)
+    #            ----contents of dictionaly:
+    #                predictName(str)
+    #                predictImage(int)
+    #                predictPngPosition(int tuple[2])
+    #                isObserved(bool)
+    #--------------------------------------------------------
+
+    def __init__(self):
+        if os.path.isfile("predicted_disp.txt") and os.stat("predicted_disp.txt").st_size!=0:
+            f = open("predicted_disp.txt", "r")
+            datalines = f.readlines()
+            f.close()
+
+            self.NPredict = 0
+            self.predictDictData = []
+            for line in datalines:
+                contents = line.split()
+                predictName  = contents[0]
+                predictImage = int(contents[1])
+                predictPngPosition = convertFits2PngCoords((float(contents[2]),float(contents[3])))
+                if int(contents[4])==1:
+                    isObserved = True
+                if int(contents[4])==0:
+                    isObserved = False
+                tmpdict = {"predictName":predictName, "predictImage":predictImage, "predictPngPosition":predictPngPosition, "isObserved":isObserved}
+                self.NPredict += 1
+                self.predictDictData.append(tmpdict)
+                    
+        else:
+            self.NPredict = 0
+            self.predictDictData = []
 ######################################################################
 
 
@@ -437,6 +486,7 @@ class COIAS:
         #---read asteroid data
         try:
             self.asteroidData = DataOfAllAsteroids(self.COIASMode)
+            self.predictData  = DataOfPredictedBodies()
         except MyFileNotFoundError:
             self.main_win.destroy()
             return
@@ -480,6 +530,7 @@ class COIAS:
         self.canvas.delete("image")
         self.canvas.create_image(PNGSIZES[0]/2, PNGSIZES[1]/2, image=self.pngImages[self.presentImageNumber], tag="image")
         self.drawAsteroidOnly()
+        self.drawPredictOnly()
     #--------------------------------------------------
 
     #---draw asteroid rectangles and names-------------
@@ -508,6 +559,31 @@ class COIAS:
                     self.canvas.create_text(self.asteroidData.astData[i].pngPosition[0]-dispAstName, self.asteroidData.astData[i].pngPosition[1]-dispAstName, text=self.asteroidData.astData[i].astNameModified, fill=color, font=("Purisa",fontSizeAstName), tag="asteroid")
                 else:
                     self.canvas.create_text(self.asteroidData.astData[i].pngPosition[0]-dispAstName, self.asteroidData.astData[i].pngPosition[1]-dispAstName, text=self.asteroidData.astData[i].astName, fill=color, font=("Purisa",fontSizeAstName), tag="asteroid")
+
+        self.main_win.focus_force()
+        self.canvas.focus_force()
+    #--------------------------------------------------
+
+
+    #---draw predicted objects position----------------
+    def drawPredictOnly(self):
+        fontSizeAstName = int(20*WINDOWRATIO)
+        dispAstName = int(40*(0.7+WINDOWRATIO*0.3))
+
+        self.canvas.delete("predict")
+        for i in range(self.predictData.NPredict):
+            if self.predictData.predictDictData[i]["predictImage"]==self.presentImageNumber and self.sqOnOffFlag and self.COIASMode != "FINAL":
+                #---choose color and prefix
+                if self.predictData.predictDictData[i]["isObserved"]:
+                    color = "#cc7db1"
+                    prefix = "done: "
+                else:
+                    color = "#00a760"
+                    prefix = "pre.: "
+
+                #---draw rectangles and names
+                self.canvas.create_oval(self.predictData.predictDictData[i]["predictPngPosition"][0]-30, self.predictData.predictDictData[i]["predictPngPosition"][1]-30, self.predictData.predictDictData[i]["predictPngPosition"][0]+30, self.predictData.predictDictData[i]["predictPngPosition"][1]+30, outline=color, width=3, tag="predict")
+                self.canvas.create_text(self.predictData.predictDictData[i]["predictPngPosition"][0], self.predictData.predictDictData[i]["predictPngPosition"][1]+dispAstName, text=prefix+self.predictData.predictDictData[i]["predictName"], fill=color, font=("Purisa",fontSizeAstName), tag="predict")
 
         self.main_win.focus_force()
         self.canvas.focus_force()
@@ -573,6 +649,7 @@ class COIAS:
             self.sqOnOffButton["text"] = "Sq. Off"
 
         self.drawAsteroidOnly()
+        self.drawPredictOnly()
     #--------------------------------------------------
 
 
