@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*
 #Timestamp: 2022/08/06 20:30 sugiura
 ###########################################################################################
-# modify_preRepo_as_H_sequential.pyにてH番号が連番になるようにpre_repo.txtのH番号を付け替えたので,
+# modify_preRepo_as_H_sequential.pyにてH番号が連番になるようにpre_repo2.txtのH番号を付け替えたので,
 # その付け替えをnewall_automanual2.txtにも適用してfinal_all.txtを作成し, 最終的なdisp系ファイルも作成する.
 # さらに, 初期の画像ファイルの名前, 新天体の数, ウェブ版findorbで得られた軌道やサイズなどの情報
 # などもfinal_all.txtに追記する.
@@ -45,7 +45,7 @@ try:
     HNList = []
     HNMax=0
     HNMin=1000000000 #VERY LARGE VALUE
-    preRepoFile = open("pre_repo2.txt","r")
+    preRepoFile = open("pre_repo3.txt","r")
     preRepoLines = preRepoFile.readlines()
     preRepoFile.close()
     for line in preRepoLines:
@@ -74,7 +74,7 @@ try:
     #-----------------------------------------------------------
 
     #---search newall_automanual2.txt to produce final all------
-    #---we also produce final_disp.txt from pre_repo2.txt-------
+    #---we also produce final_disp.txt from pre_repo3.txt-------
     fileFinalDisp = open("final_disp.txt","w",newline="\n")
     
     fileNewAllAutomanual = open("newall_automanual2.txt","r")
