@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
 #COIAS ver 1.0
-#timestamp 2022/8/30 03:00 sugiura
+#timestamp 2022/8/31 01:00 sugiura
 
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -87,6 +87,7 @@ class DataOfAnAsteroidInAnImage:
     #            isKnownAsteroid(bool)
     #            astNameModified(str)
     #            isModifiedName(bool)
+    #            isDeleted(bool)
     #--------------------------------------------------------
     
     def __init__(self, astName, NImage, fitsPosition, isManualAst=False, aparturePngPoints=[None, None, None]):
@@ -121,6 +122,7 @@ class DataOfAnAsteroidInAnImage:
 
         self.astNameModified = astName
         self.isModifiedName  = False
+        self.isDeleted = False
 ######################################################################
 
 
@@ -189,6 +191,20 @@ class DataOfAllAsteroids:
             for line in lines:
                 contents = line.split()
                 self.addManualAsteroidData(False, int(contents[1]), convertFits2PngCoords([int(contents[2]), int(contents[3])]), [ convertFits2PngCoords([int(contents[4]), int(contents[5])]), convertFits2PngCoords([int(contents[6]), int(contents[7])]), convertFits2PngCoords([int(contents[8]), int(contents[9])]) ], True, int(contents[0]))
+        #-----------------------------
+
+        #---set isDeleted Flag from manual_delete_list.txt for MANUAL mode
+        if mode=="MANUAL" and os.path.isfile("manual_delete_list.txt"):
+            f = open("manual_delete_list.txt","r")
+            lines = f.readlines()
+            f.close()
+
+            for line in lines:
+                name = line.split()[0]
+                image = int(line.split()[1])
+                for l in range(self.Ndata):
+                    if self.astData[l].astName == name and self.astData[l].NImage == image:
+                        self.astData[l].isDeleted = True
         #-----------------------------
 
         #---set HMax------------------
@@ -286,6 +302,16 @@ class DataOfAllAsteroids:
         for i in range(self.Ndata):
             if sortedAstData[i].isManualAst:
                 f.write(sortedAstData[i].astName.lstrip('H')+" "+str(sortedAstData[i].NImage)+" "+str(sortedAstData[i].fitsPosition[0])+" "+str(sortedAstData[i].fitsPosition[1])+" "+str(sortedAstData[i].apartureFitsPoints[0][0])+" "+str(sortedAstData[i].apartureFitsPoints[0][1])+" "+str(sortedAstData[i].apartureFitsPoints[1][0])+" "+str(sortedAstData[i].apartureFitsPoints[1][1])+" "+str(sortedAstData[i].apartureFitsPoints[2][0])+" "+str(sortedAstData[i].apartureFitsPoints[2][1])+"\n")
+
+        f.close()
+    #--------------------------------------------------------------
+
+    #---output manual_delete_list.txt in MANUAL mode---------------
+    def outputManualDeleteListTxt(self):
+        f = open("manual_delete_list.txt","w",newline="\n")
+        for i in range(self.Ndata):
+            if self.astData[i].isDeleted:
+                f.write(self.astData[i].astName + " " + str(self.astData[i].NImage) + "\n")
 
         f.close()
     #--------------------------------------------------------------
@@ -520,6 +546,7 @@ class COIAS:
             self.asteroidData.outputMemoTxt()
         if self.COIASMode == "MANUAL":
             self.asteroidData.outputMemoManualTxt()
+            self.asteroidData.outputManualDeleteListTxt()
         if self.COIASMode == "RECOIAS":
             self.asteroidData.outputManualNameModifyListTxt()
     #--------------------------------------------------
@@ -546,6 +573,8 @@ class COIAS:
                     color = "#FFCC33"
                 elif self.asteroidData.astData[i].isManualAst:
                     color = "#219DDD"
+                elif self.asteroidData.astData[i].isDeleted:
+                    color = "#BFC5CA"
                 elif self.asteroidData.astData[i].isKnownAsteroid:
                     color = "#000000"
                 elif self.asteroidData.astData[i].isSurvive:
@@ -702,8 +731,8 @@ class COIAS:
                     elif self.COIASMode == "RECOIAS":
                         self.modifyAsteroidName(i)
                     elif self.COIASMode == "MANUAL" and  (not self.asteroidData.astData[i].isManualAst):
-                        self.messageBox.delete(0, tk.END)
-                        self.messageBox.insert(tk.END,"message: This is already confirmed object.")
+                        self.delAutoAsteroid(i)
+                        manualSelectFlag = True
                     else:
                         self.delManualAsteroid(i)
                         manualSelectFlag = True
@@ -712,8 +741,11 @@ class COIAS:
                 self.addManualAsteroid(self.coldPresentMousePosition)
 
             self.drawAsteroidOnly()
-            if self.COIASMode == "COIAS":   self.asteroidData.outputMemoTxt()
-            if self.COIASMode == "MANUAL":  self.asteroidData.outputMemoManualTxt()
+            if self.COIASMode == "COIAS":
+                self.asteroidData.outputMemoTxt()
+            if self.COIASMode == "MANUAL":
+                self.asteroidData.outputMemoManualTxt()
+                self.asteroidData.outputManualDeleteListTxt()
     #--------------------------------------------------
 
 
@@ -745,6 +777,22 @@ class COIAS:
     #--------------------------------------------------
 
 
+    #---select deletion of an auto asteroid or not-----
+    def delAutoAsteroid(self, index):
+        if self.asteroidData.astData[index].isDeleted:
+            isYes = messagebox.askyesno("confirmation","Do you really want to cancel the deletion of this auto selected object?")
+            if isYes:
+                self.asteroidData.astData[index].isDeleted = False
+        else:
+            isYes = messagebox.askyesno("confirmation","Do you really want to delete this auto selected object?")
+            if isYes:
+                self.asteroidData.astData[index].isDeleted = True
+
+        self.main_win.focus_force()
+        self.canvas.focus_force()
+    #--------------------------------------------------
+
+
     #---method for output memo--------------------------
     def output(self):
         if self.COIASMode == "COIAS":
@@ -752,7 +800,8 @@ class COIAS:
             outputTxt = "memo.txt"
         elif self.COIASMode == "MANUAL":
             self.asteroidData.outputMemoManualTxt()
-            outputTxt = "memo_manual.txt"
+            self.asteroidData.outputManualDeleteListTxt()
+            outputTxt = "memo_manual.txt and manual_delete_list.txt"
         elif self.COIASMode == "RECOIAS":
             self.asteroidData.outputManualNameModifyListTxt()
             outputTxt = "manual_name_modify_list.txt"
