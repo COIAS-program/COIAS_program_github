@@ -28,12 +28,18 @@ flowchart TD
     Q --> T[/redisp_manual.txt/]
     Q --> U[/H_conversion_list_manual.txt/]
     T --> V[/reredisp.txt/]
-    W[/redisp.txt/] --> V
+    W[/redisp.txt/] --- X[[apply_manual_delete_to_redisp.py]]
+    Y[/manual_delete_list.txt/] --- X
+    Z[/H_conversion_list.txt/] --- X
+    X --> a[/redisp2.txt/]
+    X --> b[/manual_delete_list2.txt/]
+    a --> V
 
     click B "https://github.com/COIAS-program/COIAS_program_github/blob/main/src8_astsearch_manual/photometry_manual_objects.py"
     click E "https://github.com/COIAS-program/COIAS_program_github/blob/main/src8_astsearch_manual/match2E.py"
     click I "https://github.com/COIAS-program/COIAS_program_github/blob/main/src8_astsearch_manual/change_data_to_mpc_format_manual.py"
     click Q "https://github.com/COIAS-program/COIAS_program_github/blob/main/src8_astsearch_manual/make_mpc4_newall_and_redisp_manual.py"
+    click X "https://github.com/COIAS-program/COIAS_program_github/blob/main/src8_astsearch_manual/apply_manual_delete_to_redisp.py"
     
     click A "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample6/memo_manual.txt"
     click D "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample6/listb3.txt"
@@ -52,4 +58,8 @@ flowchart TD
     click U "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample6/H_conversion_list_manual.txt"
     click V "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample6/reredisp.txt"
     click W "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample5/redisp.txt"
+    click Y "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample6/manual_delete_list.txt"
+    click Z "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample5/H_conversion_list.txt"
+    click a "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample6/redisp2.txt"
+    click b "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample6/manual_delete_list2.txt"
 ``````

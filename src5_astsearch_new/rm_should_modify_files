@@ -86,4 +86,18 @@ if [ -e "manual_name_modify_list.txt" ]; then
     fi
 fi
 
+if [ -e "manual_delete_list.txt" ]; then
+	rm manual_delete_list.txt
+	if [ $? -ne 0 ]; then
+		error=1
+    fi
+fi
+
+if [ -e "manual_delete_list2.txt" ]; then
+	rm manual_delete_list2.txt
+	if [ $? -ne 0 ]; then
+		error=1
+    fi
+fi
+
 exit $error

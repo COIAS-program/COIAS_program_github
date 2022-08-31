@@ -36,7 +36,10 @@ cat tmpall2.txt > all_m.txt      2>&1 | tee -a log.txt
 echo $? 84 807 >> error.txt
 
 make_mpc4_newall_and_redisp_manual.py 2>&1 | tee -a log.txt
-cat redisp.txt redisp_manual.txt | sort -k 1,1 -k 2n,2 > reredisp.txt
+
+apply_manual_delete_to_redisp.py 2>&1 | tee -a log.txt
+
+cat redisp2.txt redisp_manual.txt | sort -k 1,1 -k 2n,2 > reredisp.txt
 echo $? 84 809 >> error.txt
 
 sort -n -o mpc4_m.txt mpc4_m.txt 2>&1 | tee -a log.txt
