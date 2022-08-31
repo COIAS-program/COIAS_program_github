@@ -7,40 +7,42 @@
 # 1. adjust_newH_manual.py
 #      manual measureモードをやった後にsearchモードをやり直し, 自動検出天体の数が変わった時,
 #      手動測定天体のH番号もずれてしまうためそれを補正する.
-# 2. merge_manual
+# 2. apply_manual_delete_to_report.py
+#      manual measureモードにて削除された自動検出天体の情報をmpc4.txt, newall.txt, redisp.txtから削除する.
+# 3. merge_manual
 #      自動検出天体と手動測定天体の情報をマージしてまとめたファイルを作成する.
-# 3. apply_manual_name_modify.py
+# 4. apply_manual_name_modify.py
 #      COIAS.pyのmodify nameモードで設定した名前の付け替えを適用する.
-# 4. deldaburi4.py
+# 5. deldaburi4.py
 #      jd, ra, decが一致している行が2行以上あった場合, 2つ目以降をダブりとして削除する.
 #      さらに, 同一の名前の天体のデータで等級が中央値から0.7以上外れているものも削除し,
 #      その上で同一の名前の天体のデータ数が2以下になったらその名前の天体のデータを全て削除する.
-# 5. findorb.py
+# 6. findorb.py
 #      findOrbを使用して, 同じ名前の天体の一連のデータから予測される軌道と各データの座標の残渣を計算する.
 #      ネットに繋がっている時はweb版を使用し, 詳細な起動情報まで取得する.
 #      繋がっていない時かタイムアウトした時はデスクトップ版を使用して主に残差だけ計算する.
-# 6. delLargeZansa_and_modPrecision.py
+# 7. delLargeZansa_and_modPrecision.py
 #      findorb.pyによって計算された残差が0.7"より大きいデータ点を削除する.
 #      削除された結果, ある名前の天体のデータ点が2以下になったらその名前の天体のデータを全て削除する.
 #      さらに, 第二引数が1の場合はdecのarcsecの精度を小数点以下1桁に修正する.
-# 7. reject_bright_known_asteroids_from_report.py
+# 8. reject_bright_known_asteroids_from_report.py
 #      明るい天体は十分に報告されていて再度MPCに報告する必要はないため,
 #      bright_asteroid_MPC_names_in_the_field.txtに記載されている15等級よりも明るくなりうる
 #      天体は報告データから削除する.
-# 8. modify_preRepo_as_H_sequential.py
+# 9. modify_preRepo_as_H_sequential.py
 #      前述の削除の影響で新天体の番号に欠番が生じ連番ではなくなるので,
 #      また連番になるように補正する.
-# 9. make_final_all_and_disp.py
+# 10. make_final_all_and_disp.py
 #      今までの諸々の名前の付け替えやデータの削除を反映させた, 最終的なall.txtとdisp.txtを作成する.
 #      final_all.txtには元画像の名前, 天体の軌道やサイズの情報も記載される.
-# 10. del_duplicated_line_from_pre_repo2.py
+# 11. del_duplicated_line_from_pre_repo2.py
 #      過去にMPCに報告したデータとほとんど同じjd, ra, decを持つデータを再度報告すると怒られる.
 #      これを防ぐため過去の報告データが~/.coias/past_pre_repo_data/以下に保存されているため,
 #      それらとカレントにある報告データの照合を行って一致するデータを削除する.
-# 11. store_pre_repo3.py
+# 12. store_pre_repo3.py
 #      10.の過去との重複データの削除を行うため, カレントの報告データを
 #      ~/.coias/past_pre_repo_data/以下に保存する.
-# 12. komejirushi.py
+# 13. komejirushi.py
 #      新発見天体はそのデータの1行目の名前の直後にアスタリスクを付けなければいけないので,
 #      それを付与する. 最終的な報告ファイルは send_mpc.txt である.
 ############################################################################################
@@ -50,6 +52,8 @@ echo AstsearchR_afterReCOIAS begins 2>&1 | tee log.txt
 echo $? 75 701 > error.txt
 
 adjust_newH_manual.py 2>&1 | tee -a log.txt
+
+apply_manual_delete_to_report.py 2>&1 | tee -a log.txt
 
 merge_manual 2>&1 | tee -a log.txt
 echo $? 75 709 >> error.txt

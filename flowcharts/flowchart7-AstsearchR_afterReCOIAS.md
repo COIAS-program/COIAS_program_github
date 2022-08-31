@@ -1,10 +1,16 @@
-# AstsearchR_after_manual
+# AstsearchR_afterReCOIAS
 
 ```mermaid
 flowchart TD
-    A[/mpc4.txt\nmpc4_m.txt/] --- B[[merge_manual]]
-    C[/newall.txt\nnewall_m.txt/] --- B
-    D[/redisp.txt\nredisp_manual.txt/] --- B
+    n[/mpc4.txt/] --- o[[apply_manual_delete_to_report.py]]
+    p[/newall.txt/] --- o
+    q[/redisp.txt/] --- o
+    o --> A
+    o --> C
+    o --> D
+    A[/mpc4_2.txt\nmpc4_m.txt/] --- B[[merge_manual]]
+    C[/newall_2.txt\nnewall_m.txt/] --- B
+    D[/redisp_2.txt\nredisp_manual.txt/] --- B
     E[/H_conversion_list.txt\nH_conversion_list_manual.txt/] --- B
     B --> F[/mpc4_automanual.txt/]
     B --> G[/newall_automanual.txt/]
@@ -65,6 +71,7 @@ flowchart TD
     click e "https://github.com/COIAS-program/COIAS_program_github/blob/main/src7_AstsearchR_afterReCOIAS/komejirushi.py"
     click g "https://github.com/COIAS-program/COIAS_program_github/blob/main/src7_AstsearchR_afterReCOIAS/store_pre_repo3.py"
     click i "https://github.com/COIAS-program/COIAS_program_github/blob/main/src7_AstsearchR_afterReCOIAS/make_final_all_and_disp.py"
+    click o "https://github.com/COIAS-program/COIAS_program_github/blob/main/src7_AstsearchR_afterReCOIAS/apply_manual_delete_to_report.py"
     
     click F "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample7/mpc4_automanual.txt"
     click G "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample7/newall_automanual.txt"
@@ -89,4 +96,7 @@ flowchart TD
     click k "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample7/final_disp.txt"
     click l "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample7/manual_name_modify_list.txt"
     click m "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample7/coefficients_for_predict.txt"
+    click A "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample7/mpc4_2.txt"
+    click C "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample7/newall_2.txt"
+    click D "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample7/redisp_2.txt"
 ``````

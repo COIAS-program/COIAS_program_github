@@ -6,45 +6,45 @@
 # 自動検出天体の情報のみを出力先ファイルに書き出す.
 #
 # 入力 + 入力 => 出力
-# mpc4.txt + mpc4_m.txt => mpc4_automanual.txt
-# newall.txt + newall_m.txt => newall_automanual.txt
-# redisp.txt + redisp_manual.txt => redisp_automanual.txt
+# mpc4_2.txt + mpc4_m.txt => mpc4_automanual.txt
+# newall_2.txt + newall_m.txt => newall_automanual.txt
+# redisp_2.txt + redisp_manual.txt => redisp_automanual.txt
 # H_conversion_list.txt + H_conversion_list_manual.txt => H_conversion_list_automanual.txt
 ###########################################################################################
 
 error=0
 
 if [ -e "mpc4_m.txt" ]; then
-    cat mpc4.txt mpc4_m.txt | sort -n > mpc4_automanual.txt
+    cat mpc4_2.txt mpc4_m.txt | sort -n > mpc4_automanual.txt
     if [ $? -ne 0 ]; then
 	error=1
     fi
 else
-    cat mpc4.txt | sort -n > mpc4_automanual.txt
+    cat mpc4_2.txt | sort -n > mpc4_automanual.txt
     if [ $? -ne 0 ]; then
 	error=1
     fi
 fi
 
 if [ -e "newall_m.txt" ]; then
-    cat	newall.txt newall_m.txt | sort -n > newall_automanual.txt
+    cat	newall_2.txt newall_m.txt | sort -n > newall_automanual.txt
     if [ $? -ne 0 ]; then
 	error=1
     fi
 else
-    cat	newall.txt | sort -n > newall_automanual.txt
+    cat	newall_2.txt | sort -n > newall_automanual.txt
     if [ $? -ne 0 ]; then
         error=1
     fi
 fi
 
 if [ -e "redisp_manual.txt" ]; then
-    cat redisp.txt redisp_manual.txt | sort -k 1,1 -k 2n,2 > redisp_automanual.txt
+    cat redisp_2.txt redisp_manual.txt | sort -k 1,1 -k 2n,2 > redisp_automanual.txt
     if [ $? -ne 0 ]; then
 	error=1
     fi
 else
-    cat redisp.txt | sort -k 1,1 -k 2n,2 > redisp_automanual.txt
+    cat redisp_2.txt | sort -k 1,1 -k 2n,2 > redisp_automanual.txt
     if [ $? -ne 0 ]; then
 	error=1
     fi
