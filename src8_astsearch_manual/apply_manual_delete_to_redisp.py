@@ -26,7 +26,7 @@ import os
 import shutil
 
 try:
-    if not os.path.isfile("manual_delete_list.txt") or os.stat("manual_delete_list.txt").st_size == 0:
+    if not os.path.isfile("manual_delete_list.txt"):
         shutil.copy2("redisp.txt", "redisp2.txt")
     else:
         #---remove data in manual_delete_list.txt from redisp.txt and produce redisp2.txt------

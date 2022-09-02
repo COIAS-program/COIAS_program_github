@@ -17,7 +17,7 @@ import os
 import shutil
 
 try:
-    if not os.path.isfile("manual_delete_list2.txt") or os.stat("manual_delete_list2.txt").st_size == 0:
+    if not os.path.isfile("manual_delete_list2.txt"):
         shutil.copy2("mpc4.txt", "mpc4_2.txt")
         shutil.copy2("newall.txt", "newall_2.txt")
         shutil.copy2("redisp.txt", "redisp_2.txt")
