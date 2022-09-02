@@ -48,9 +48,10 @@ try:
     f = open(maxHFileName,"r")
     line = f.readline()
     f.close()
-    maxHNumber = int(line.rstrip("\n"))
+    maxHNumber = int(line.split()[0])
+    maxHDir = line.split()[1]
 
-    if isManual:
+    if isManual or maxHDir==os.getcwd():
         kinit = startHNumberThisTime
     else:
         kinit = maxHNumber

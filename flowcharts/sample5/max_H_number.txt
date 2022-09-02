@@ -1,4 +1,5 @@
-22
+27 /Users/sugiuraks/Documents/COIAS/COIAS_workTest/COIAS_workTest_20220902
 
 # 以下コメント
-~/.coias/param以下に保存されている, 全てのユーザーが今までに発見してきたH番号のうちの最大値+1.
+1列目: 全ユーザーが今までに測定した新天体のうちの最大値+1
+2列目: この最大値が出されたディレクトリ名

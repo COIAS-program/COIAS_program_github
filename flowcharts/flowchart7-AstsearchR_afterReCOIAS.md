@@ -59,6 +59,7 @@ flowchart TD
     L --- i
     i --> j[/final_all.txt/]
     i --> k[/final_disp.txt/]
+    i --> t[/"~/.coias/param/max_H_number.txt"/]
     S --- i
 
     click B1 "https://github.com/COIAS-program/COIAS_program_github/blob/main/src7_AstsearchR_afterReCOIAS/adjust_newH_manual.py"
@@ -103,4 +104,5 @@ flowchart TD
     click D "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample7/redisp_2.txt"
     click r "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample5/max_H_number.txt"
     click s "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample5/start_H_number.txt"
+    click t "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample5/max_H_number.txt"
 ``````

@@ -49,7 +49,7 @@ try:
         line = f.readline()
         f.close()
 
-        firstH = int(line.rstrip("\n"))
+        firstH = int(line.split()[0])
         isManual = 0
     elif len(args) == 2:
         firstH = int(args[1])
