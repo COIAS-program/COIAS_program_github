@@ -17,24 +17,25 @@ import os
 import shutil
 
 try:
-    if os.path.isfile("manual_delete_list2.txt") or os.stat("manual_delete_list2.txt").st_size != 0:
-        f = open("manual_delete_list2.txt","r")
-        manualDeleteList2Lines = f.readlines()
-        f.close()
+    if os.path.isfile("manual_delete_list2.txt"):
+        if os.stat("manual_delete_list2.txt").st_size != 0:
+            f = open("manual_delete_list2.txt","r")
+            manualDeleteList2Lines = f.readlines()
+            f.close()
 
-        f = open("H_conversion_list.txt","r")
-        HConversionListLines = f.readlines()
-        f.close()
+            f = open("H_conversion_list.txt","r")
+            HConversionListLines = f.readlines()
+            f.close()
 
-        manualDeleteListLines = []
-        for manualDeleteLine in manualDeleteList2Lines:
-            for HConversionLine in HConversionListLines:
-                if manualDeleteLine.split()[0]==HConversionLine.split()[0]:
-                    manualDeleteListLines.append(HConversionLine.split()[1] + " " + manualDeleteLine.split()[2] + "\n")
+            manualDeleteListLines = []
+            for manualDeleteLine in manualDeleteList2Lines:
+                for HConversionLine in HConversionListLines:
+                    if manualDeleteLine.split()[0]==HConversionLine.split()[0]:
+                        manualDeleteListLines.append(HConversionLine.split()[1] + " " + manualDeleteLine.split()[2] + "\n")
 
-        f = open("manual_delete_list.txt","w",newline="\n")
-        f.writelines(manualDeleteListLines)
-        f.close()
+            f = open("manual_delete_list.txt","w",newline="\n")
+            f.writelines(manualDeleteListLines)
+            f.close()
 
 except FileNotFoundError:
     print("Some previous files are not found in correct_manual_delete_list.py!")
