@@ -12,10 +12,13 @@
 #
 # 入力: Hlist.txt
 # 　　  mpc2.txt
+# 　　  (第二引数が指定された場合には) ~/.coias/param/max_H_number.txt
 # 出力: mpc3.txt
 # 　　  H_conversion_list.txt
 # 　　    このスクリプトで変換された, 変換前と変換後(連番)のHから始まる名前の一覧を出力したもの.
 # 　　    書式: 変換前の新天体の名前 変換後に連番となった新天体の名前
+# 　　  start_H_number.txt
+# 　　    このスクリプトで使用されたH番号の開始値.
 #############################################################################################
 import sys
 import os
@@ -101,6 +104,12 @@ try:
     new_list4 = new_list3 + Hlist3  
     with open(tmp3,'wt') as f:
         f.writelines(new_list4)
+
+    #---output first H number used in this script--------------
+    f = open("start_H_number.txt", "w", newline="\n")
+    f.write(str(firstH))
+    f.close()
+    #----------------------------------------------------------
 
     logFile.close()
 

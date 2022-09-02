@@ -9,8 +9,10 @@ flowchart TD
     E --> F[/Hlist.txt/]
     D --- G[[prempedit3.py]]
     F --- G
+	T[/"(第二引数が省略された場合)\n~/.coias/param/max_H_number.txt"/] --> G
     G --> H[/mpc3.txt/]
     G --> I[/H_conversion_list.txt/]
+    G --> U[/start_H_number.txt/]
     H --- J[[redisp.py]]
     H --> K[/mpc4.txt/]
     L[/all.txt/] --- J
@@ -44,4 +46,6 @@ flowchart TD
     click P "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample6/manual_delete_list2.txt"
     click R "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample5/H_conversion_list.txt"
     click S "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample6/manual_delete_list.txt"
+    click T "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample5/max_H_number.txt"
+    click U "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample5/start_H_number.txt"
 ``````
