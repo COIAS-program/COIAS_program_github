@@ -50,8 +50,10 @@ try:
         f.close()
 
         firstH = int(line.rstrip("\n"))
+        isManual = 0
     elif len(args) == 2:
         firstH = int(args[1])
+        isManual = 1
     else:
         print("please use this script with 0 or 1 arguments!")
         raise ValueError
@@ -107,7 +109,7 @@ try:
 
     #---output first H number used in this script--------------
     f = open("start_H_number.txt", "w", newline="\n")
-    f.write(str(firstH))
+    f.write(str(firstH) + " " + str(isManual))
     f.close()
     #----------------------------------------------------------
 
