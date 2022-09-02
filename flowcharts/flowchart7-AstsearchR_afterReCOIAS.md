@@ -45,6 +45,8 @@ flowchart TD
 	c[/"~".coias/past_pre_repo_data/\n以下のpre_repo_*.txt/] --- b
 	b --> d[/pre_repo2.txt/]
     d --- Y[[modify_preRepo_as_H_sequential.py]]
+    r[/"~/.coias/param/max_H_number.txt"/] --> Y
+    s[/start_H_number.txt/] --> Y
     Y --> Z[/pre_repo3.txt/]
     Y --> a[/H_conversion_list_automanual3.txt/]
     N --- Y
@@ -99,4 +101,6 @@ flowchart TD
     click A "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample7/mpc4_2.txt"
     click C "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample7/newall_2.txt"
     click D "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample7/redisp_2.txt"
+    click r "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample5/max_H_number.txt"
+    click s "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample5/start_H_number.txt"
 ``````

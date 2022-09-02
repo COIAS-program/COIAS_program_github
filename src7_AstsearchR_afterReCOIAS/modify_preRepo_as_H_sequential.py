@@ -6,9 +6,16 @@
 # 天体は報告ファイルから除外される.
 # これによって欠番が生じてH番号が連番ではなくなる可能性があるので,
 # このスクリプトでは最終的に連番になるようにさらにH番号の付け替えを行う.
+# 連番の開始値は, AstsearchR_between_COIAS_and_ReCOIASで第二引数を指定した場合はその数値,
+# 指定しなかった場合はこの時点での~/.coias/param/max_H_number.txtに記載の数値になる.
+# また, 名前修正モードで過去の測定での新天体とH番号を揃えるように修正した場合はその番号は付け替えたくない.
+# 通常そのような番号は今回の測定で指定したH暗号の開始値よりも若いので,
+# そのような若い番号は今回の付け替えの対象としない.
 #
 # 入力: pre_repo2.txt
 # 　　  H_conversion_list_automanual2.txt
+# 　　  start_H_number.txt 今回の測定で指定されたH番号の開始値と, AstsearchR_between_COIAS_and_ReCOIASの実行時に第二引数が指定されたかどうかを知るために使用.
+# 　　  max_H_number.txt 今現在の全ユーザーに測定された新天体のうちH番号の最大値を知るために使用.
 # 出力: pre_repo3.txt
 # 　　    最終的にH番号が連番になるように名前が付け替えられたもの
 # 　　  H_conversion_list_automanual3.txt
@@ -30,19 +37,41 @@ try:
     lines = filePreRepo.readlines()
     filePreRepo.close()
 
+    ### set kinit #########################
+    f = open("start_H_number.txt","r")
+    line = f.readline()
+    f.close()
+    startHNumberThisTime = int(line.split()[0])
+    isManual = int(line.split()[1])
+
+    maxHFileName = os.path.expanduser("~") + "/.coias/param/max_H_number.txt"
+    f = open(maxHFileName,"r")
+    line = f.readline()
+    f.close()
+    maxHNumber = int(line.rstrip("\n"))
+
+    if isManual:
+        kinit = startHNumberThisTime
+    else:
+        kinit = maxHNumber
+    #######################################
+
     HOldNameList = []
     HNewNameList = []
-    k=1
+    k=0
     for line in lines:
         thisName = line.split()[0]
         if (re.search(r'^H......', thisName)!=None) and (thisName not in HOldNameList):
-            if len(HOldNameList)==0:
-                kinit = int(thisName.lstrip("H"))
-                HOldNameList.append(thisName)
-                HNewNameList.append(thisName)
+            if int(thisName.lstrip("H")) < startHNumberThisTime:
+                newName = thisName
+                newFlag = False
             else:
-                HOldNameList.append(thisName)
-                HNewNameList.append("H"+str(kinit+k).rjust(6,"0"))
+                newName = "H"+str(kinit+k).rjust(6,"0")
+                newFlag = True
+            
+            HOldNameList.append(thisName)
+            HNewNameList.append(newName)
+            if newFlag:
                 k += 1
     #-------------------------------------------------------------
 
