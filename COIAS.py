@@ -235,15 +235,16 @@ class DataOfAllAsteroids:
                 if self.astData[l].astName not in self.originalNameList:
                     self.originalNameList.append(self.astData[l].astName)
 
-            if os.path.isfile("predicted_disp.txt") and os.stat("predicted_disp.txt").st_size!=0:
-                f = open("predicted_disp.txt","r")
-                dataLines = f.readlines()
-                f.close()
+            if os.path.isfile("predicted_disp.txt"):
+                if os.stat("predicted_disp.txt").st_size!=0:
+                    f = open("predicted_disp.txt","r")
+                    dataLines = f.readlines()
+                    f.close()
 
-                for line in dataLines:
-                    name = line.split()[0]
-                    if name not in self.originalNameList:
-                        self.originalNameList.append(name)
+                    for line in dataLines:
+                        name = line.split()[0]
+                        if name not in self.originalNameList:
+                            self.originalNameList.append(name)
         #-----------------------------
     #----------------------------------------------------------
 
@@ -343,29 +344,30 @@ class DataOfPredictedBodies:
     #--------------------------------------------------------
 
     def __init__(self):
-        if os.path.isfile("predicted_disp.txt") and os.stat("predicted_disp.txt").st_size!=0:
-            f = open("predicted_disp.txt", "r")
-            datalines = f.readlines()
-            f.close()
+        if os.path.isfile("predicted_disp.txt"):
+            if os.stat("predicted_disp.txt").st_size!=0:
+                f = open("predicted_disp.txt", "r")
+                datalines = f.readlines()
+                f.close()
 
-            self.NPredict = 0
-            self.predictDictData = []
-            for line in datalines:
-                contents = line.split()
-                predictName  = contents[0]
-                predictImage = int(contents[1])
-                predictPngPosition = convertFits2PngCoords((float(contents[2]),float(contents[3])))
-                if int(contents[4])==1:
-                    isObserved = True
-                if int(contents[4])==0:
-                    isObserved = False
-                tmpdict = {"predictName":predictName, "predictImage":predictImage, "predictPngPosition":predictPngPosition, "isObserved":isObserved}
-                self.NPredict += 1
-                self.predictDictData.append(tmpdict)
+                self.NPredict = 0
+                self.predictDictData = []
+                for line in datalines:
+                    contents = line.split()
+                    predictName  = contents[0]
+                    predictImage = int(contents[1])
+                    predictPngPosition = convertFits2PngCoords((float(contents[2]),float(contents[3])))
+                    if int(contents[4])==1:
+                        isObserved = True
+                    if int(contents[4])==0:
+                        isObserved = False
+                    tmpdict = {"predictName":predictName, "predictImage":predictImage, "predictPngPosition":predictPngPosition, "isObserved":isObserved}
+                    self.NPredict += 1
+                    self.predictDictData.append(tmpdict)
                     
-        else:
-            self.NPredict = 0
-            self.predictDictData = []
+            else:
+                self.NPredict = 0
+                self.predictDictData = []
 ######################################################################
 
 
