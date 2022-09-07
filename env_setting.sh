@@ -28,8 +28,8 @@ conda install -c anaconda beautifulsoup4==4.11.1
 conda install -c anaconda lxml==4.8.0
 
 pip install --upgrade pip
-pip install -y julian==0.14
-pip install -y astroquery==0.4.4
+pip install  julian==0.14
+pip install  astroquery==0.4.4
 
 ## COIAS Download
 Install_Location=`pwd`
