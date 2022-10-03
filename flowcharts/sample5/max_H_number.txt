@@ -1,0 +1,5 @@
+27 /Users/sugiuraks/Documents/COIAS/COIAS_workTest/COIAS_workTest_20220902
+
+# 以下コメント
+1列目: 全ユーザーが今までに測定した新天体のうちの最大値+1
+2列目: この最大値が出されたディレクトリ名

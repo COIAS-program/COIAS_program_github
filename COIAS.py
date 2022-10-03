@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
 #COIAS ver 1.0
-#timestamp 2022/7/22 20:00 sugiura
+#timestamp 2022/8/31 01:00 sugiura
 
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -87,6 +87,7 @@ class DataOfAnAsteroidInAnImage:
     #            isKnownAsteroid(bool)
     #            astNameModified(str)
     #            isModifiedName(bool)
+    #            isDeleted(bool)
     #--------------------------------------------------------
     
     def __init__(self, astName, NImage, fitsPosition, isManualAst=False, aparturePngPoints=[None, None, None]):
@@ -121,6 +122,7 @@ class DataOfAnAsteroidInAnImage:
 
         self.astNameModified = astName
         self.isModifiedName  = False
+        self.isDeleted = False
 ######################################################################
 
 
@@ -191,6 +193,20 @@ class DataOfAllAsteroids:
                 self.addManualAsteroidData(False, int(contents[1]), convertFits2PngCoords([int(contents[2]), int(contents[3])]), [ convertFits2PngCoords([int(contents[4]), int(contents[5])]), convertFits2PngCoords([int(contents[6]), int(contents[7])]), convertFits2PngCoords([int(contents[8]), int(contents[9])]) ], True, int(contents[0]))
         #-----------------------------
 
+        #---set isDeleted Flag from manual_delete_list.txt for MANUAL mode
+        if mode=="MANUAL" and os.path.isfile("manual_delete_list.txt"):
+            f = open("manual_delete_list.txt","r")
+            lines = f.readlines()
+            f.close()
+
+            for line in lines:
+                name = line.split()[0]
+                image = int(line.split()[1])
+                for l in range(self.Ndata):
+                    if self.astData[l].astName == name and self.astData[l].NImage == image:
+                        self.astData[l].isDeleted = True
+        #-----------------------------
+
         #---set HMax------------------
         self.NHMax = 0
         f = open("disp.txt","r")
@@ -218,6 +234,17 @@ class DataOfAllAsteroids:
             for l in range(self.Ndata):
                 if self.astData[l].astName not in self.originalNameList:
                     self.originalNameList.append(self.astData[l].astName)
+
+            if os.path.isfile("predicted_disp.txt"):
+                if os.stat("predicted_disp.txt").st_size!=0:
+                    f = open("predicted_disp.txt","r")
+                    dataLines = f.readlines()
+                    f.close()
+
+                    for line in dataLines:
+                        name = line.split()[0]
+                        if name not in self.originalNameList:
+                            self.originalNameList.append(name)
         #-----------------------------
     #----------------------------------------------------------
 
@@ -280,6 +307,16 @@ class DataOfAllAsteroids:
         f.close()
     #--------------------------------------------------------------
 
+    #---output manual_delete_list.txt in MANUAL mode---------------
+    def outputManualDeleteListTxt(self):
+        f = open("manual_delete_list.txt","w",newline="\n")
+        for i in range(self.Ndata):
+            if self.astData[i].isDeleted:
+                f.write(self.astData[i].astName + " " + str(self.astData[i].NImage) + "\n")
+
+        f.close()
+    #--------------------------------------------------------------
+
     #---output manual_name_modify_list.txt in RECOIAS mode---------
     def outputManualNameModifyListTxt(self):
         outputNameList = []
@@ -291,6 +328,46 @@ class DataOfAllAsteroids:
 
         f.close()
     #--------------------------------------------------------------
+######################################################################
+
+
+### Class for storing predicted objects###############################
+class DataOfPredictedBodies:
+    #attributes: --------------------------------------------
+    #            NPredict(int)
+    #            predictDictData(list of dictionaly)
+    #            ----contents of dictionaly:
+    #                predictName(str)
+    #                predictImage(int)
+    #                predictPngPosition(int tuple[2])
+    #                isObserved(bool)
+    #--------------------------------------------------------
+
+    def __init__(self):
+        if os.path.isfile("predicted_disp.txt"):
+            if os.stat("predicted_disp.txt").st_size!=0:
+                f = open("predicted_disp.txt", "r")
+                datalines = f.readlines()
+                f.close()
+
+                self.NPredict = 0
+                self.predictDictData = []
+                for line in datalines:
+                    contents = line.split()
+                    predictName  = contents[0]
+                    predictImage = int(contents[1])
+                    predictPngPosition = convertFits2PngCoords((float(contents[2]),float(contents[3])))
+                    if int(contents[4])==1:
+                        isObserved = True
+                    if int(contents[4])==0:
+                        isObserved = False
+                    tmpdict = {"predictName":predictName, "predictImage":predictImage, "predictPngPosition":predictPngPosition, "isObserved":isObserved}
+                    self.NPredict += 1
+                    self.predictDictData.append(tmpdict)
+                    
+            else:
+                self.NPredict = 0
+                self.predictDictData = []
 ######################################################################
 
 
@@ -437,6 +514,7 @@ class COIAS:
         #---read asteroid data
         try:
             self.asteroidData = DataOfAllAsteroids(self.COIASMode)
+            self.predictData  = DataOfPredictedBodies()
         except MyFileNotFoundError:
             self.main_win.destroy()
             return
@@ -470,6 +548,7 @@ class COIAS:
             self.asteroidData.outputMemoTxt()
         if self.COIASMode == "MANUAL":
             self.asteroidData.outputMemoManualTxt()
+            self.asteroidData.outputManualDeleteListTxt()
         if self.COIASMode == "RECOIAS":
             self.asteroidData.outputManualNameModifyListTxt()
     #--------------------------------------------------
@@ -480,6 +559,7 @@ class COIAS:
         self.canvas.delete("image")
         self.canvas.create_image(PNGSIZES[0]/2, PNGSIZES[1]/2, image=self.pngImages[self.presentImageNumber], tag="image")
         self.drawAsteroidOnly()
+        self.drawPredictOnly()
     #--------------------------------------------------
 
     #---draw asteroid rectangles and names-------------
@@ -495,6 +575,8 @@ class COIAS:
                     color = "#FFCC33"
                 elif self.asteroidData.astData[i].isManualAst:
                     color = "#219DDD"
+                elif self.asteroidData.astData[i].isDeleted:
+                    color = "#BFC5CA"
                 elif self.asteroidData.astData[i].isKnownAsteroid:
                     color = "#000000"
                 elif self.asteroidData.astData[i].isSurvive:
@@ -508,6 +590,31 @@ class COIAS:
                     self.canvas.create_text(self.asteroidData.astData[i].pngPosition[0]-dispAstName, self.asteroidData.astData[i].pngPosition[1]-dispAstName, text=self.asteroidData.astData[i].astNameModified, fill=color, font=("Purisa",fontSizeAstName), tag="asteroid")
                 else:
                     self.canvas.create_text(self.asteroidData.astData[i].pngPosition[0]-dispAstName, self.asteroidData.astData[i].pngPosition[1]-dispAstName, text=self.asteroidData.astData[i].astName, fill=color, font=("Purisa",fontSizeAstName), tag="asteroid")
+
+        self.main_win.focus_force()
+        self.canvas.focus_force()
+    #--------------------------------------------------
+
+
+    #---draw predicted objects position----------------
+    def drawPredictOnly(self):
+        fontSizeAstName = int(20*WINDOWRATIO)
+        dispAstName = int(40*(0.7+WINDOWRATIO*0.3))
+
+        self.canvas.delete("predict")
+        for i in range(self.predictData.NPredict):
+            if self.predictData.predictDictData[i]["predictImage"]==self.presentImageNumber and self.sqOnOffFlag and self.COIASMode != "FINAL":
+                #---choose color and prefix
+                if self.predictData.predictDictData[i]["isObserved"]:
+                    color = "#cc7db1"
+                    prefix = "done: "
+                else:
+                    color = "#00a760"
+                    prefix = "pre.: "
+
+                #---draw rectangles and names
+                self.canvas.create_oval(self.predictData.predictDictData[i]["predictPngPosition"][0]-30, self.predictData.predictDictData[i]["predictPngPosition"][1]-30, self.predictData.predictDictData[i]["predictPngPosition"][0]+30, self.predictData.predictDictData[i]["predictPngPosition"][1]+30, outline=color, width=3, tag="predict")
+                self.canvas.create_text(self.predictData.predictDictData[i]["predictPngPosition"][0], self.predictData.predictDictData[i]["predictPngPosition"][1]+dispAstName, text=prefix+self.predictData.predictDictData[i]["predictName"], fill=color, font=("Purisa",fontSizeAstName), tag="predict")
 
         self.main_win.focus_force()
         self.canvas.focus_force()
@@ -573,6 +680,7 @@ class COIAS:
             self.sqOnOffButton["text"] = "Sq. Off"
 
         self.drawAsteroidOnly()
+        self.drawPredictOnly()
     #--------------------------------------------------
 
 
@@ -625,8 +733,8 @@ class COIAS:
                     elif self.COIASMode == "RECOIAS":
                         self.modifyAsteroidName(i)
                     elif self.COIASMode == "MANUAL" and  (not self.asteroidData.astData[i].isManualAst):
-                        self.messageBox.delete(0, tk.END)
-                        self.messageBox.insert(tk.END,"message: This is already confirmed object.")
+                        self.delAutoAsteroid(i)
+                        manualSelectFlag = True
                     else:
                         self.delManualAsteroid(i)
                         manualSelectFlag = True
@@ -635,8 +743,11 @@ class COIAS:
                 self.addManualAsteroid(self.coldPresentMousePosition)
 
             self.drawAsteroidOnly()
-            if self.COIASMode == "COIAS":   self.asteroidData.outputMemoTxt()
-            if self.COIASMode == "MANUAL":  self.asteroidData.outputMemoManualTxt()
+            if self.COIASMode == "COIAS":
+                self.asteroidData.outputMemoTxt()
+            if self.COIASMode == "MANUAL":
+                self.asteroidData.outputMemoManualTxt()
+                self.asteroidData.outputManualDeleteListTxt()
     #--------------------------------------------------
 
 
@@ -668,6 +779,22 @@ class COIAS:
     #--------------------------------------------------
 
 
+    #---select deletion of an auto asteroid or not-----
+    def delAutoAsteroid(self, index):
+        if self.asteroidData.astData[index].isDeleted:
+            isYes = messagebox.askyesno("confirmation","Do you really want to cancel the deletion of this auto selected object?")
+            if isYes:
+                self.asteroidData.astData[index].isDeleted = False
+        else:
+            isYes = messagebox.askyesno("confirmation","Do you really want to delete this auto selected object?")
+            if isYes:
+                self.asteroidData.astData[index].isDeleted = True
+
+        self.main_win.focus_force()
+        self.canvas.focus_force()
+    #--------------------------------------------------
+
+
     #---method for output memo--------------------------
     def output(self):
         if self.COIASMode == "COIAS":
@@ -675,7 +802,8 @@ class COIAS:
             outputTxt = "memo.txt"
         elif self.COIASMode == "MANUAL":
             self.asteroidData.outputMemoManualTxt()
-            outputTxt = "memo_manual.txt"
+            self.asteroidData.outputManualDeleteListTxt()
+            outputTxt = "memo_manual.txt and manual_delete_list.txt"
         elif self.COIASMode == "RECOIAS":
             self.asteroidData.outputManualNameModifyListTxt()
             outputTxt = "manual_name_modify_list.txt"

@@ -39,6 +39,8 @@ echo $? 64 607 >> error.txt
 
 cat redisp.txt > reredisp.txt
 
+correct_manual_delete_list.py 2>&1 | tee -a log.txt
+
 if [ -e "manual_name_modify_list.txt" ]; then
 	rm manual_name_modify_list.txt
 	echo $? 55 607 >> error.txt

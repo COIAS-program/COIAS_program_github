@@ -24,10 +24,16 @@ flowchart TD
     P --> R[/mpc.txt/]
     P --> S[/disp.txt/]
 
+    subgraph predict
+        A1[/"~"/.coias/past_pre_repo_data/\nyyyy-mm-dd/coefficients_for_predict.txt/] --- B1[[make_predicted_disp.py]]
+        B1 --> C1[/predicted_disp.txt/]
+    end
+
     click B "https://github.com/COIAS-program/COIAS_program_github/blob/main/src5_astsearch_new/make_gathered_search_astB.py"
     click F "https://github.com/COIAS-program/COIAS_program_github/blob/main/src5_astsearch_new/match2D.py"
     click H "https://github.com/COIAS-program/COIAS_program_github/blob/main/src5_astsearch_new/astsearch1M2_optimized.py"
     click L "https://github.com/COIAS-program/COIAS_program_github/blob/main/src5_astsearch_new/change_data_to_mpc_format.py"
+    click B1 "https://github.com/COIAS-program/COIAS_program_github/blob/main/src5_astsearch_new/make_predicted_disp.py"
     
     click A "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample3/search_astB.txt"
     click C "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample2/bright_asteroid_MPC_names_in_the_field.txt"
@@ -42,4 +48,6 @@ flowchart TD
     click Q "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample4/all.txt"
     click R "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample4/mpc.txt"
     click S "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample4/disp.txt"
+    click A1 "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample7/coefficients_for_predict.txt"
+    click C1 "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample4/predicted_disp.txt"
 ``````

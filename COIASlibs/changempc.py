@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
-#Timestamp: 2022/08/04 10:00 sugiura
+#Timestamp: 2022/08/28 13:00 sugiura
 #########################################################################
 # 小惑星の名前やjd, ra, decをMPCフォーマットに整形する関数群を記載したスクリプト.
 #
@@ -36,10 +36,24 @@
 #     decのDD: degree -> 1週の(1/360), ただし範囲は-90 ~ +90
 #     decのMM: minit  -> 1週の(1/360*60) = 分角
 #     decのSS: second -> 1週の(1/360*60*60) = 秒角
+#
+# change_datetime_in_MPC_to_jd()関数:
+#     MPCフォーマットでの時刻(CYYYY MM DD.dddd)の文字列を引数に取り,
+#     それをjdに変換して返す.
+#
+# change_ra_in_MPC_to_degree()関数:
+#     MPCフォーマットでのra(HH MM SS.ss)の文字列を引数に取り,
+#     それをdegree単位に変換して返す.
+#
+# change_dec_in_MPC_to_degree()関数:
+#     MPCフォーマットでのdec(±DD MM SS.ss)の文字列を引数に取り,
+#     それをdegree単位に変換して返す.
 #########################################################################
 from astropy.time import Time
 from astropy import units as u
 from astropy.coordinates import SkyCoord
+import datetime
+import julian
 import re
 import numpy as np
 
@@ -153,4 +167,49 @@ def change_ra_dec_to_MPC_format(raDegreeOrg, decDegreeOrg):
 
     mpcFormatRaDec = raHourStr + " " + raMinitStr + " " + raSecondStr + " " + decDegreeStr + " " + decMinitStr + " " + decSecondStr
     return mpcFormatRaDec
+#-------------------------------------------------------------------------------------------
+
+#---function: input=time in MPC format (CYYYY MM DD.dddd), output=jd------------------------
+def change_datetime_in_MPC_to_jd(datetimeInMPC):
+    contents = datetimeInMPC.split()
+    if len(contents)!=3 or len(contents[2].split("."))!=2:
+        raise ValueError("invalid input for change_datetime_in_MPC_to_jd. input=" + datetimeInMPC)
+
+    year = int(contents[0].lstrip("C"))
+    month = int(contents[1])
+    day = int(contents[2].split(".")[0])
+    dayDecimal = float("0." + contents[2].split(".")[1])
+    hour = int(dayDecimal * 24.0)
+    minute = int( (dayDecimal * 24.0 - hour) * 60.0 )
+    second = int( (dayDecimal * 24.0 * 60.0 - hour * 60.0 - minute) * 60.0 )
+    
+    dt = datetime.datetime(year, month, day, hour=hour, minute=minute, second=second)
+    jd = julian.to_jd(dt, fmt="jd")
+
+    return jd
+#-------------------------------------------------------------------------------------------
+
+#---function: input=ra in MPC format(HH MM SS.ss), output=ra in degree----------------------
+def change_ra_in_MPC_to_degree(raInMPC):
+    contents = raInMPC.split()
+    if len(contents)!=3:
+        raise ValueError("invalid input for change_ra_in_MPC_to_degree. input=" + raInMPC)
+
+    raDegree = (360.0/24.0) * ( int(contents[0]) + int(contents[1])/60.0 + float(contents[2])/3600.0 )
+
+    return raDegree
+#-------------------------------------------------------------------------------------------
+
+#---function: input=dec in MPC format(±DD MM SS.ss), output=dec in degree-------------------
+def change_dec_in_MPC_to_degree(decInMPC):
+    contents = decInMPC.split()
+    if len(contents)!=3 or not (contents[0][0]=="+" or contents[0][0]=="-"):
+        raise ValueError("invalid input for change_dec_in_MPC_to_degree. input=" + decInMPC)
+
+    if contents[0][0]=="+":
+        decDegree = int(contents[0]) + int(contents[1])/60.0 + float(contents[2])/3600.0
+    if contents[0][0]=="-":
+        decDegree = int(contents[0]) - int(contents[1])/60.0 - float(contents[2])/3600.0
+
+    return decDegree
 #-------------------------------------------------------------------------------------------

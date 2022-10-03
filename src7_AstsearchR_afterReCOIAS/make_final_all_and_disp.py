@@ -6,6 +6,7 @@
 # その付け替えをnewall_automanual2.txtにも適用してfinal_all.txtを作成し, 最終的なdisp系ファイルも作成する.
 # さらに, 初期の画像ファイルの名前, 新天体の数, ウェブ版findorbで得られた軌道やサイズなどの情報
 # などもfinal_all.txtに追記する.
+# またH番号の最大値を~/.coias/param/max_H_number.txtに書き出す. その際若返りを起こさないようにする.
 #
 # 入力: H_conversion_list_automanual3.txt 名前付け替えの履歴のリスト
 # 　　  newall_automanual2.txt 出力するall系データの検索に使用
@@ -59,6 +60,18 @@ try:
 
     outputFile.write("The number of new objects: {0:d} \n".format(len(HNList)))
     outputFile.write("Range of new object names: H" + str(HNMin).rjust(6,"0") + " - H" + str(HNMax).rjust(6,"0") + "\n")
+    #-----------------------------------------------------------
+
+    #---output HNMax to ~/.coias/param/max_H_number.txt---------
+    maxHFileName = os.path.expanduser("~") + "/.coias/param/max_H_number.txt"
+    f = open(maxHFileName,"r")
+    line = f.readline()
+    f.close()
+    HNMaxInFile = int(line.split()[0])
+    if HNMax+1 > HNMaxInFile:
+        f = open(maxHFileName,"w",newline="\n")
+        f.write(str(HNMax+1) + " " + os.getcwd() + "\n")
+        f.close()
     #-----------------------------------------------------------
 
     #---get H conversion list-----------------------------------

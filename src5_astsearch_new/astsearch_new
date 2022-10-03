@@ -63,6 +63,8 @@ echo $? 55 515 >> error.txt
 rm_should_modify_files 2>&1 | tee -a log.txt
 echo $? 55 516 >> error.txt
 
+make_predicted_disp.py 2>&1 | tee -a log.txt
+
 echo astsearch_new ends 2>&1 | tee -a log.txt
 
 error_handling.py | tee -a log.txt
