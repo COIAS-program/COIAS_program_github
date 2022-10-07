@@ -22,79 +22,70 @@ import time
 import traceback
 
 # multiprocessing
-from multiprocessing import Pool
+import multiprocessing
 
-#---function--------------------------------------------------------------------
+#---function-------------------------------------------------------------------
 # mp.ra value is radian
-def search(i):
-    tmp4 = []
-    tmp3 = str(data1[i]).replace("\' \'",",").replace("\'\n \'",",").replace(" ","\ '").replace("[","").replace("]","").replace("\'","") 
-    mp = ephem.readdb(tmp3)
-    mp.compute(subaru)
-    ra2 = mp.ra*180/np.pi
-    dec2 = mp.dec*180/np.pi
-    if ra2 > ra_min and ra2 < ra_max and dec2 > dec_min and dec2 < dec_max:
-        # print(subaru.date,mp.name,mp.ra,mp.dec,mp.mag)  
-        # print(mp.mag)
-        tmp5 = [jd1,mp.name,ra2,dec2,mp.mag]
-        # tmp5 = str([subaru.date,mp.mag])
-        tmp4.append(tmp5)
-        # np.append(tmp5,tmp5)
-        # print(tmp5)
-        # return tmp5
-        # print(tmp4)
-    return tmp4
-#-------------------------------------------------------------------------------
-
-try:
-    # ast list
-    tmp1 = str("AstMPC_tmp.edb")
-    data1 = np.loadtxt(tmp1,delimiter = ',',dtype='str')
-
-    # read scidata
-    scidata1 = fits.open('warp01_bin.fits')
-    jd1 = scidata1[0].header['JD']
-
-    # ra dec
-    ra = scidata1[0].header['CRVAL1']
-    dec = scidata1[0].header['CRVAL2']
-    # search region
-    # search region 2 =>1.5 2020.5.29
-    ra_min = ra-1.8
-    ra_max = ra+1.8
-    dec_min =  dec-1.8
-    dec_max =  dec+1.8
-
+def search(args):
     # site information
     subaru = ephem.Observer()
     subaru.lon =  '-155.4767'
     subaru.lat = '19.8256'
-
     subaru.elevation = 4139
-    dt = julian.from_jd(float(jd1),fmt='jd')
-    d = ephem.Date(dt)
-    subaru.date = d
+    subaru.date = args[1]["date"]
+    
+    retList = []
+    mp = ephem.readdb(args[0])
+    mp.compute(subaru)
+    ra2 = mp.ra*180/np.pi
+    dec2 = mp.dec*180/np.pi
+    if ra2 > args[1]["raMin"] and ra2 < args[1]["raMax"] and dec2 > args[1]["decMin"] and dec2 < args[1]["decMax"]:
+        retList.append( [args[1]["jd"],mp.name,ra2,dec2,mp.mag] )
+        
+    return retList
+#------------------------------------------------------------------------------
 
-    t1 = time.time()
-
+try:
     if __name__ == "__main__":
-        with Pool(31) as p:
-            tmp10 = p.map(search,range(len(data1)))
-            tmp11 = [l for l in tmp10 if l]
-            tmp12 = np.array(tmp11)
-            tmp12 = tmp12.reshape(len(tmp12),5)
-            np.savetxt('cand_bright.txt',tmp12,fmt='%s')
+        nthread = multiprocessing.cpu_count()
+    
+        # ast list
+        f = open("AstMPC_tmp.edb","r")
+        data1 = f.readlines()
+        f.close()
 
-            #---save name of bright asteroids in the field------
-            fileBrightAsteriods = open("bright_asteroid_raw_names_in_the_field.txt","w")
-            for i in range(len(tmp12)):
-                fileBrightAsteriods.write(tmp12[i][1]+"\n")
-            fileBrightAsteriods.close()
-            #---------------------------------------------------
+        # read scidata
+        scidata1 = fits.open('warp01_bin.fits')
+        jd1 = scidata1[0].header['JD']
+
+        # ra dec
+        ra = scidata1[0].header['CRVAL1']
+        dec = scidata1[0].header['CRVAL2']
+        # search region
+        ra_min = ra-1.8
+        ra_max = ra+1.8
+        dec_min =  dec-1.8
+        dec_max =  dec+1.8
+
+        dt = julian.from_jd(float(jd1),fmt='jd')
+        d = ephem.Date(dt)
+    
+        argDict = {"raMin":ra_min, "raMax":ra_max, "decMin":dec_min, "decMax":dec_max, "date":d, "jd":jd1}
+        args = [(data1[i], argDict) for i in range(len(data1))]
+        with multiprocessing.Pool(nthread) as p:
+            tmp10 = p.map(search,args)
             
-            t2 = time.time()
-            elapsed_time = t2 -t1
-            # print(elapsed_time)
+        tmp11 = [l for l in tmp10 if l]
+        tmp12 = np.array(tmp11)
+        tmp12 = tmp12.reshape(len(tmp12),5)
+        np.savetxt('cand_bright.txt',tmp12,fmt='%s')
+
+        #---save name of bright asteroids in the field------
+        fileBrightAsteriods = open("bright_asteroid_raw_names_in_the_field.txt","w")
+        for i in range(len(tmp12)):
+            fileBrightAsteriods.write(tmp12[i][1]+"\n")
+        fileBrightAsteriods.close()
+        #---------------------------------------------------
 
 except FileNotFoundError:
     if __name__ == "__main__":

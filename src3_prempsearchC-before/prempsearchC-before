@@ -26,7 +26,7 @@ echo $? 34 302 >> error.txt
 echo; 2>&1 | tee -a log.txt
 haveAllPreciseOrbits=$(cat have_all_precise_orbits.txt )
 if [ "$haveAllPreciseOrbits" = "0" ]; then
-    sed  s/\'//g ~/.coias/param/AstMPC_dim.edb |sed -e '1,51d' > hoge 2>&1 | tee -a log.txt
+    sed  s/\'//g ~/.coias/param/AstMPC_dim.edb |sed -e '1,51d' > AstMPC_dim_tmp.edb 2>&1 | tee -a log.txt
     echo $? 34 303 >> error.txt
     
     sed  s/\'//g ~/.coias/param/AstMPC.edb |sed -e '1,51d' > AstMPC_tmp.edb 2>&1 | tee -a log.txt
