@@ -18,6 +18,7 @@ import glob
 from astropy.io import fits
 from astropy.wcs import wcs
 from astropy.time import Time
+from def_coias_data_path import *
 
 try:
     #---get coefficient file name list----------------------------------------------
@@ -31,7 +32,7 @@ try:
         tInIso = tInTimeObj.iso
         yyyy_mm_dd = tInIso.split()[0]
 
-        coefFileNameList.append( os.path.expanduser("~") + "/.coias/past_pre_repo_data/" + yyyy_mm_dd + "/coefficients_for_predict.txt")
+        coefFileNameList.append( coiasDataPath + "/past_pre_repo_data/" + yyyy_mm_dd + "/coefficients_for_predict.txt")
     #------------------------------------------------------------------------------
 
     #---get jd list of warp files--------------------------------------------------
