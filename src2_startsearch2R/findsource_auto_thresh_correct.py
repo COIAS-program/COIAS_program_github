@@ -17,10 +17,10 @@
 # 　　  (書式はファイルを直接見ればわかる)
 ##############################################################################
 import subprocess
-from os.path import expanduser
 import traceback
 import glob
 import readparam
+from def_coias_data_path import *
 
 ### function #####################################################
 def calc_mean_detection_number(detect_thresh):
@@ -29,8 +29,8 @@ def calc_mean_detection_number(detect_thresh):
     default_sex_lines = file.readlines()
     default_sex_lines[15]="DETECT_THRESH    " + "{:.2f}".format(detect_thresh) + "          # <sigmas> or <threshold>,<ZP> in mag.arcsec-2\n"
 
-    default_sex_lines[9]="PARAMETERS_NAME  " + expanduser("~") + "/.coias/param/default2.param  # name of the file containing catalog contents\n"
-    default_sex_lines[19]="FILTER_NAME      " + expanduser("~") + "/.coias/param/default.conv   # name of the file containing the filter\n"
+    default_sex_lines[9]="PARAMETERS_NAME  " + coiasDataPath + "/param/default2.param  # name of the file containing catalog contents\n"
+    default_sex_lines[19]="FILTER_NAME      " + coiasDataPath + "/param/default.conv   # name of the file containing the filter\n"
     file.close()
 
     file = open(default_sex_file_name, "w")
@@ -60,7 +60,7 @@ def calc_mean_detection_number(detect_thresh):
 
 try:
     #---definition of file and program name------------
-    program_path = expanduser("~") + "/.coias/param/"
+    program_path = coiasDataPath + "/param/"
     default_sex_file_name = program_path+"default.sex"
     findsource_file_name = "findsource"
     params = readparam.readparam()

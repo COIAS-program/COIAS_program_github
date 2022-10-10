@@ -10,7 +10,6 @@
 # その他このスクリプトに記載のパラメータの意味はよくわかっていないので
 # あまり気にする必要はない.
 ###################################################################
-from os.path import expanduser
 import traceback
 import readparam
 from def_coias_data_path import *

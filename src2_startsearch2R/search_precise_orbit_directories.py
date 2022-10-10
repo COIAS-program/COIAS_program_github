@@ -30,6 +30,7 @@ import shutil
 from astropy.io import fits
 from astropy.time import Time
 import traceback
+from def_coias_data_path import *
 
 try:
     #---variables--------------------------------
@@ -60,7 +61,7 @@ try:
 
     #---if directory ~/.coias/orbit_data/yyyy_mm_dd does not exist-
     #---we produce it----------------------------------------------
-    dirName = os.path.expanduser("~") + "/.coias/orbit_data/" + yyyy_mm_dd
+    dirName = coiasDataPath + "/orbit_data/" + yyyy_mm_dd
     if not os.path.isdir(dirName):
         os.mkdir(dirName)
     logFileName = dirName + "/log.txt"

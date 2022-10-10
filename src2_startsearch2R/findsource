@@ -11,6 +11,7 @@
 ####################################################################
 
 set -o pipefail
+. def_coias_data_path
 
 for i in warp*_bin.fits
 do
@@ -18,7 +19,7 @@ echo $i
 t1=$(echo $i|sed "s/.fits/.dat/g")
 echo $? 25 205 >> error.txt
 
-source-extractor $i -c ~/.coias/param/default.sex
+source-extractor $i -c "${COIASDATAPATH}/param/default.sex"
 echo $? 24 206 >> error.txt
 
 echo $t1
