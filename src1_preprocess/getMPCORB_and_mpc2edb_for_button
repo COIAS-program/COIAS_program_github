@@ -9,15 +9,16 @@
 
 set -o pipefail
 echo getMPCORB_and_mpc2edb_for_button begins 2>&1 | tee log.txt
+. def_coias_data_path
 echo $? 15 111 > error.txt
 
-if [ ! -d ~/.coias ]; then
-    mkdir ~/.coias 2>&1 | tee -a log.txt
+if [ ! -d "${COIASDATAPATH}" ]; then
+    mkdir "${COIASDATAPATH}" 2>&1 | tee -a log.txt
     echo $? 15 112 >> error.txt
 fi
 
-if [ ! -d ~/.coias/param ]; then
-    mkdir ~/.coias/param 2>&1 | tee -a log.txt
+if [ ! -d "${COIASDATAPATH}/param" ]; then
+    mkdir "${COIASDATAPATH}/param" 2>&1 | tee -a log.txt
     echo $? 15 113 >> error.txt
 fi
 

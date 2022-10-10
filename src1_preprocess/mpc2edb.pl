@@ -81,22 +81,23 @@ my $dimmag = 15;            # dimmest mag to be saved in "bright" file
 my $MPCSITE = "http://www.minorplanetcenter.net";
 my $MPCFTPDIR = "/iau/MPCORB";
 my $home = $ENV{"HOME"};
-my $MPCFILE = $home . "/.coias/param/MPCORB.DAT";
-my $MPCZIPFILE = $home . "/.coias/param/MPCORB.DAT.gz";
-my $MPCOUTFILE = $home . "/.coias/param/AstMPC";
+my $COIASDATAPATH = $ARGV[1];
+my $MPCFILE = $COIASDATAPATH . "/param/MPCORB.DAT";
+my $MPCZIPFILE = $COIASDATAPATH . "/param/MPCORB.DAT.gz";
+my $MPCOUTFILE = $COIASDATAPATH . "/param/AstMPC";
 # immediate output
 $| = 1;
 
 # crack args.
 # when thru here $fnbase is prefix name and $srcfd is handle to $MPCFILE.
-if (@ARGV == 2) {
+if (@ARGV == 2 && 0) {
     &usage() unless $ARGV[0] eq "-f"; # Changed @ for $
     &fetch();
     open SRCFD, $MPCFILE or die "$MPCFILE: $?\n";
     $ARGV[1] = $MPCOUTFILE if $ARGV[1] =~ /$MPCZIPFILE/; # Correct the output name if gzipped.
     $srcfd = SRCFD;
     $fnbase = $ARGV[1];
-} elsif (@ARGV != 1) {
+} elsif (@ARGV != 1 && 0) {
     &usage();
 } else {
     &usage() if $ARGV[0] =~ /^-/; # Changed @ for $

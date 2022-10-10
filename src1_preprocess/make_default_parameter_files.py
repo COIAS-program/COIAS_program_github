@@ -13,8 +13,9 @@
 from os.path import expanduser
 import traceback
 import readparam
+from def_coias_data_path import *
 
-directory_path = expanduser("~") + "/.coias/param/"
+directory_path = coiasDataPath + "/param/"
 
 #---make default.conv-------------------------------------------------------------
 def make_default_conv():

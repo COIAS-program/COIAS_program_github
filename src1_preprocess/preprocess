@@ -10,39 +10,40 @@
 
 set -o pipefail
 echo preprocess begins 2>&1 | tee log.txt
+. def_coias_data_path
 echo $? 15 101 > error.txt
 
 mkparam "$@" 2>&1 | tee -a log.txt
 echo $? 15 110 >> error.txt
 
-if [ ! -d ~/.coias ]; then
-    mkdir ~/.coias 2>&1 | tee -a log.txt
+if [ ! -d "${COIASDATAPATH}" ]; then
+    mkdir "${COIASDATAPATH}" 2>&1 | tee -a log.txt
     echo $? 15 102 >> error.txt
 fi
 
-if [ ! -d ~/.coias/param ]; then
-    mkdir ~/.coias/param 2>&1 | tee -a log.txt
+if [ ! -d "${COIASDATAPATH}/param" ]; then
+    mkdir "${COIASDATAPATH}/param" 2>&1 | tee -a log.txt
     echo $? 15 103 >> error.txt
 fi
 
-if [ ! -f ~/.coias/param/max_H_number.txt ]; then
-	echo 0 NoMeaning > ~/.coias/param/max_H_number.txt
+if [ ! -f "${COIASDATAPATH}/param/max_H_number.txt" ]; then
+	echo 0 NoMeaning > "${COIASDATAPATH}/param/max_H_number.txt"
 	echo $? 15 111 >> error.txt
 fi
 
-if [ ! -d ~/.coias/orbit_data ]; then
-    mkdir ~/.coias/orbit_data 2>&1 | tee -a log.txt
+if [ ! -d "${COIASDATAPATH}/orbit_data" ]; then
+    mkdir "${COIASDATAPATH}/orbit_data" 2>&1 | tee -a log.txt
     echo $? 15 104 >> error.txt
 fi
 
-if [ ! -d ~/.coias/past_pre_repo_data ]; then
-    mkdir ~/.coias/past_pre_repo_data 2>&1 | tee -a log.txt
+if [ ! -d "${COIASDATAPATH}/past_pre_repo_data" ]; then
+    mkdir "${COIASDATAPATH}/past_pre_repo_data" 2>&1 | tee -a log.txt
     echo $? 15 110 >> error.txt
 fi
     
 make_default_parameter_files.py 2>&1 | tee -a log.txt
 
-if [ ! -f ~/.coias/param/MPCORB.DAT ]; then
+if [ ! -f "${COIASDATAPATH}/param/MPCORB.DAT" ]; then
     getMPCORB_and_mpc2edb 2>&1 | tee -a log.txt
 else
     #even if MPCORB.DAT exists, interruption of previous download leads to incomplete data and we need re-download
@@ -50,7 +51,7 @@ else
     echo $? 12 109 >> error.txt
 
     MSIZE=`grep -oE "\([0-9]*M\)" wgetMPC.txt | sed "s/(//g" | sed "s/)//g" | sed "s/M//g"`
-    MPCMSIZE=`ls -l ~/.coias/param/MPCORB.DAT | awk '{print $5 * 1.1 * 0.000001}' | awk '{printf("%d",$1)}'`
+    MPCMSIZE=`ls -l ${COIASDATAPATH}/param/MPCORB.DAT | awk '{print $5 * 1.1 * 0.000001}' | awk '{printf("%d",$1)}'`
     if [ $MPCMSIZE -lt $MSIZE ]; then
 	echo "previous download of MPCORB.DAT may be interrupted. download again." 2>&1 | tee -a log.txt
 	getMPCORB_and_mpc2edb 2>&1 | tee -a log.txt
