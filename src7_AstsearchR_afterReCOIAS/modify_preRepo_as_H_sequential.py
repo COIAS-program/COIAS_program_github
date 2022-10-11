@@ -27,6 +27,7 @@ import traceback
 import os
 import re
 import subprocess
+from def_coias_data_path import *
 
 try:
     completed_process = subprocess.run("sort -n -o pre_repo2.txt pre_repo2.txt", shell=True)
@@ -44,7 +45,7 @@ try:
     startHNumberThisTime = int(line.split()[0])
     isManual = int(line.split()[1])
 
-    maxHFileName = os.path.expanduser("~") + "/.coias/param/max_H_number.txt"
+    maxHFileName = coiasDataPath + "/param/max_H_number.txt"
     f = open(maxHFileName,"r")
     line = f.readline()
     f.close()

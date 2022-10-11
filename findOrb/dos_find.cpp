@@ -1359,9 +1359,9 @@ int main( const int argc, const char **argv)
    //K.S. 2021/6/14////////////////////////////////
    //const char *option_filename = "options.txt";
    mypath = (char*)malloc(sizeof(char)*256);
-   char home[256];
-   strcpy(home, getenv("HOME"));
-   sprintf(mypath,"%s/.coias/param",home);
+   //char home[256];
+   //strcpy(home, getenv("HOME"));
+   sprintf(mypath,"%s/param",argv[3]);
    
    char option_filename[256];
    const char *option_filename_org = "options.txt";

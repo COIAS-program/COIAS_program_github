@@ -27,6 +27,7 @@ import shutil
 import glob
 from astropy.io import fits
 from astropy.time import Time
+from def_coias_data_path import *
 
 class NothingToDo(Exception):
     pass
@@ -58,7 +59,7 @@ try:
     #---------------------------------------------
 
     #---check ~/.coias/past_pre_repo_data/yyyy-mm-dd directory exists or not
-    dirName = os.path.expanduser("~") + "/.coias/past_pre_repo_data/" + yyyy_mm_dd
+    dirName = coiasDataPath + "/past_pre_repo_data/" + yyyy_mm_dd
     if not os.path.isdir(dirName):
         shutil.copy("pre_repo.txt","pre_repo2.txt")
         raise NothingToDo
@@ -70,7 +71,7 @@ try:
     preRepoInputFile.close()
 
     currentDir = os.getcwd()
-    compareFileNames = sorted(glob.glob(os.path.expanduser("~") + "/.coias/past_pre_repo_data/" + yyyy_mm_dd + "/pre_repo3_*.txt"))
+    compareFileNames = sorted(glob.glob(coiasDataPath + "/past_pre_repo_data/" + yyyy_mm_dd + "/pre_repo3_*.txt"))
     for l in reversed(range(len(inputLines))):
         inputLine = inputLines[l]
         inputLineInfo = extract_jd_ra_dec_info_from_MPC_line(inputLine)

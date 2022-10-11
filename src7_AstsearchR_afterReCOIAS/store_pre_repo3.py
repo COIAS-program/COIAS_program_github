@@ -31,6 +31,7 @@ from astropy.time import Time
 import numpy as np
 import re
 import changempc
+from def_coias_data_path import *
 
 try:
     #---get yyyy-mm-dd of this measurement--------
@@ -42,7 +43,7 @@ try:
     #---------------------------------------------
 
     #---check ~/.coias/past_pre_repo_data/yyyy-mm-dd directory exists or not
-    dirName = os.path.expanduser("~") + "/.coias/past_pre_repo_data/" + yyyy_mm_dd
+    dirName = coiasDataPath + "/past_pre_repo_data/" + yyyy_mm_dd
     logFileName = dirName + "/log.txt"
     if not os.path.isdir(dirName):
         os.mkdir(dirName)
