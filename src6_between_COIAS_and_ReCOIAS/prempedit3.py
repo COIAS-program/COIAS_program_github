@@ -21,9 +21,9 @@
 # 　　    このスクリプトで使用されたH番号の開始値.
 #############################################################################################
 import sys
-import os
 import re
 import traceback
+from def_coias_data_path import *
 
 try:
     logFile = open("log.txt","a",newline="\n")
@@ -44,7 +44,7 @@ try:
     # input first number
     args = sys.argv
     if len(args) == 1:
-        maxHFileName = os.path.expanduser("~") + "/.coias/param/max_H_number.txt"
+        maxHFileName = coiasDataPath + "/param/max_H_number.txt"
         f = open(maxHFileName, "r")
         line = f.readline()
         f.close()
