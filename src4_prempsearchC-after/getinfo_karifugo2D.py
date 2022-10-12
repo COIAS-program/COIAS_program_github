@@ -43,7 +43,8 @@ def getinfo(args):
         objRadec = Horizons(id=args[0],location='568',epochs=args[1],id_type="smallbody").ephemerides()['targetname','datetime_jd','RA','DEC','V']
     except ValueError:
         if args[3]==1:
-            print("missing id="+ args[0] +" probably due to parallelization issue.")
+            pass
+            #print("missing id="+ args[0] +" probably due to parallelization issue.")
         if args[3]==2:
             print("We cannot get information of id="+ args[0] +" from JPL.")
         isLosedAsteroid = True
