@@ -44,11 +44,12 @@ try:
     completed_process = subprocess.run(r"sed -e 's/\\//g' bright_asteroid_raw_names_in_the_field.txt > bright_asteroid_raw_names_in_the_field2.txt",shell=True)
     errorList.append(completed_process.returncode)
     ## subtract number from numbered asteroids and karifugo from karifugo asteroids
-    completed_process = subprocess.run("awk -F' ' '$1 ~ /^[1-9]/ && $2 ~ /^[A-Z]/ && $2 !~ /[A-Z][A-Z][0-9]*/ && $2 != 'P-L' && $2 != 'T-1' && $2 != 'T-2' && $2 != 'T-3' {print $1}' bright_asteroid_raw_names_in_the_field2.txt > bright_asteroid_raw_names_in_the_field3.txt",shell=True)
+    completed_process = subprocess.run("awk -F' ' '( $1 ~ /^[1-9]/ && $2 ~ /^[A-Z]/ && $2 !~ /[A-Z][A-Z][0-9]*/ && $2 != 'P-L' && $2 != 'T-1' && $2 != 'T-2' && $2 != 'T-3' ) || $2 ~ /[A-Z][A-Z][A-Z]/ {print $1}' bright_asteroid_raw_names_in_the_field2.txt > bright_asteroid_raw_names_in_the_field3.txt",shell=True)
     errorList.append(completed_process.returncode)
     completed_process = subprocess.run("awk -F' ' '$1 ~ /^[1-9]/ && $2 ~ /^[1-2]/ || $3 == 'P-L' || $3 == 'T-1' || $3 == 'T-2' || $3 == 'T-3' {print $1}' bright_asteroid_raw_names_in_the_field2.txt >> bright_asteroid_raw_names_in_the_field3.txt",shell=True)
     errorList.append(completed_process.returncode)
-    completed_process = subprocess.run("awk -F' ' '$1 ~ /^[1-2]/ && $2 ~ /[A-Z][A-Z][0-9]*/ || $2 == 'P-L' || $2 == 'T-1' || $2 == 'T-2' || $2 == 'T-3' {print $1,$2}' bright_asteroid_raw_names_in_the_field2.txt >> bright_asteroid_raw_names_in_the_field3.txt",shell=True)
+    completed_process = subprocess.run("awk -F' ' '( $1 ~ /^[1-2]/ && $2 ~ /[A-Z][A-Z][0-9]*/ || $2 == 'P-L' || $2 == 'T-1' || $2 == 'T-2' || $2 == 'T-3' ) && $2 !~ /[A-Z][A-Z][A-Z]/  {print $1,$2}' bright_asteroid_raw_names_in_the_field2.txt >> bright_asteroid_raw_names_in_the_field3.txt",shell=True)
+    errorList.append(completed_process.returncode)
     errorList.append(completed_process.returncode)
     ## remove space between karifugo
     completed_process = subprocess.run("sed 's/ //g' bright_asteroid_raw_names_in_the_field3.txt > bright_asteroid_raw_names_in_the_field4.txt",shell=True)
@@ -79,11 +80,11 @@ try:
 
     #---make name conversion list of all known asteroids in the field in each directory---------
     ## subtract number and name from numbered and karifugo asteroids
-    completed_process = subprocess.run("awk -F' ' '$2 ~ /^[1-9]/ && $3 ~ /^[A-Z]/ && $3 !~ /[A-Z][A-Z][0-9]*/ && $3 != 'P-L' && $3 != 'T-1' && $3 != 'T-2' && $3 != 'T-3' {print $2,$3}' cand2b.txt > candNameList_numbered_named.txt",shell=True)
+    completed_process = subprocess.run("awk -F' ' '( $2 ~ /^[1-9]/ && $3 ~ /^[A-Z]/ && $3 !~ /[A-Z][A-Z][0-9]*/ && $3 != 'P-L' && $3 != 'T-1' && $3 != 'T-2' && $3 != 'T-3' ) || $3 ~ /[A-Z][A-Z][A-Z]/ {print $2,$3}' cand2b.txt > candNameList_numbered_named.txt",shell=True)
     errorList.append(completed_process.returncode)
     completed_process = subprocess.run("awk -F' ' '$2 ~ /^[1-9]/ && $3 ~ /^[1-2]/ || $4 == 'P-L' || $4 == 'T-1' || $4 == 'T-2' || $4 == 'T-3' {print $2,$3,$4}' cand2b.txt > candNameList_numbered_unnamed.txt",shell=True)
     errorList.append(completed_process.returncode)
-    completed_process = subprocess.run("awk -F' ' '$2 ~ /^[1-2]/ && $3 ~ /[A-Z][A-Z][0-9]*/ || $3 == 'P-L' || $3 == 'T-1' || $3 == 'T-2' || $3 == 'T-3' {print $2,$3}' cand2b.txt > candNameList_karifugo.txt",shell=True)
+    completed_process = subprocess.run("awk -F' ' '( $2 ~ /^[1-2]/ && $3 ~ /[A-Z][A-Z][0-9]*/ || $3 == 'P-L' || $3 == 'T-1' || $3 == 'T-2' || $3 == 'T-3' ) && $3 !~ /[A-Z][A-Z][A-Z]/ {print $2,$3}' cand2b.txt > candNameList_karifugo.txt",shell=True)
     errorList.append(completed_process.returncode)
 
     for e in errorList:
