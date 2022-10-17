@@ -48,7 +48,7 @@ if [ "$haveAllPreciseOrbits" = "0" ]; then
     echo $? 34 308 >> error.txt
     
     ## remove the asteroids whose magnitudes are larger than 30 mag (very faint asteroids)
-    awk '$6<30 {print $0}' cand2.txt > cand2b.txt 2>&1 | tee -a log.txt
+    awk '$NF<30 {print $0}' cand2.txt > cand2b.txt 2>&1 | tee -a log.txt
     echo $? 34 309 >> error.txt
     
     ## classify asteroids into two groups, numbered asteroids and those only having karifugo
