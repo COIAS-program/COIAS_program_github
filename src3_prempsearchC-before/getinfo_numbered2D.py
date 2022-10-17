@@ -138,7 +138,13 @@ try:
                     NLoseAsteroids += 1
                     
             nn = nn - NLoseAsteroids
-            tmp5 = np.array(tmp10)
+            if len(tmp10) != 1:
+                tmp5 = np.array(tmp10)
+            else:
+                tmp5 = np.zeros((len(tmp10),len(tmp10[0])),dtype=object)
+                for i1 in range(len(tmp10)):
+                    for i2 in range(len(tmp10[0])):
+                        tmp5[i1][i2] = tmp10[i1][i2]
             tmp5.reshape(nn,1,NShouldGetPreciseOrbit)
             ###############################################################################
                     
