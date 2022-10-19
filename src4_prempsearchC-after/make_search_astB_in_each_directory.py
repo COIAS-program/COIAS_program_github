@@ -15,6 +15,7 @@
 #############################################################################
 import subprocess
 import traceback
+import os
 
 try:
     #---read precise_orbit_directories.txt---------------------------------------
@@ -35,7 +36,8 @@ try:
     for i in range(Ndata):
         if isCorrectDirectory[i]==0:
             completed_process = subprocess.run("grep -E \"^19|^20\" {0}/karifugo_new2B.txt > {0}/karifugo_new2C.txt".format(directoryNames[i]),shell=True)
-            errorList.append(completed_process.returncode)
+            if (not os.path.isfile(directoryNames[i]+"/karifugo_new2B.txt")) or (os.stat(directoryNames[i]+"/karifugo_new2B.txt").st_size!=0):
+                errorList.append(completed_process.returncode)
             completed_process = subprocess.run("cat {0}/numbered_new2B.txt {0}/karifugo_new2C.txt |sort -n > {0}/search_astpre.txt".format(directoryNames[i]),shell=True)
             errorList.append(completed_process.returncode)
             completed_process = subprocess.run("sed 's/--/30.0/g;' {0}/search_astpre.txt |sed 's/ (1999 19 //g;' |sed 's/ (1981 2 //g;'|sed 's/ - / /g;'> {0}/search_astB.txt".format(directoryNames[i]),shell=True)
