@@ -60,8 +60,7 @@ def calc_mean_detection_number(detect_thresh):
 
 try:
     #---definition of file and program name------------
-    program_path = coiasDataPath + "/param/"
-    default_sex_file_name = program_path+"default.sex"
+    default_sex_file_name = "default.sex"
     findsource_file_name = "findsource"
     params = readparam.readparam()
     SOURCE_NUMBER = params["sn"]

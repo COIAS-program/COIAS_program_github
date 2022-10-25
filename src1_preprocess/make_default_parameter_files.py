@@ -32,7 +32,7 @@ def make_default_conv():
 
 #---make default.sex--------------------------------------------------------------
 def make_default_sex(DETECT_MINAREA):
-    filename = directory_path + "default.sex"
+    filename = "default.sex"
     file = open(filename,"w")
 
     file.write("# Default configuration file for SExtractor 2.5.0\n")
@@ -44,7 +44,7 @@ def make_default_sex(DETECT_MINAREA):
     file.write("CATALOG_NAME     test.cat       # name of the output catalog\n")
     file.write("CATALOG_TYPE     ASCII_HEAD     # NONE,ASCII,ASCII_HEAD, ASCII_SKYCAT,\n")
     file.write("                                # ASCII_VOTABLE, FITS_1.0 or FITS_LDAC\n")
-    file.write("PARAMETERS_NAME  /Users/sugiuraks/.coias/param/default2.param  # name of the file containing catalog contents\n")
+    file.write("PARAMETERS_NAME  /path/to/coias/param/default2.param  # name of the file containing catalog contents\n")
     file.write("\n")
     file.write("#------------------------------- Extraction ----------------------------------\n")
     file.write("\n")
@@ -54,7 +54,7 @@ def make_default_sex(DETECT_MINAREA):
     file.write("ANALYSIS_THRESH  1            # <sigmas> or <threshold>,<ZP> in mag.arcsec-2\n")
     file.write("\n")
     file.write("FILTER           Y              # apply filter for detection (Y or N)?\n")
-    file.write("FILTER_NAME      /Users/sugiuraks/.coias/param/default.conv   # name of the file containing the filter\n")
+    file.write("FILTER_NAME      /path/to/coias/param/default.conv   # name of the file containing the filter\n")
     file.write("\n")
     file.write("DEBLEND_NTHRESH  1             # Number of deblending sub-thresholds\n")
     file.write("DEBLEND_MINCONT  1            # Minimum contrast parameter for deblending\n")
