@@ -12,6 +12,7 @@
 # 出力: predicted_disp.txt
 # 　　    書式: 新天体名 画像番号 Xpixel Ypixel 0or1(予測なら0, 既観測なら1)
 ###################################################################################
+import sys
 import traceback
 import os
 import glob
@@ -21,6 +22,11 @@ from astropy.time import Time
 from def_coias_data_path import *
 
 try:
+    ### suppress warnings #########################################################
+    if not sys.warnoptions:
+        import warnings
+        warnings.simplefilter("ignore")
+    
     #---get coefficient file name list----------------------------------------------
     scidata = fits.open("warp01_bin.fits")
     jd0  = scidata[0].header['JD']

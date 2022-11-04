@@ -36,6 +36,7 @@
 ###################################################################################
 
 ### import modules #######################################
+import sys
 import time
 import glob
 import numpy as np
@@ -248,9 +249,11 @@ def detect_points_from_tracklets(trackletClassList, imageIdTrac1, imageIdTrac2, 
 
 
 try:
-    print("astsearch1M2.py starts")
-    start = time.time()
-
+    ### suppress warnings ####################################
+    if not sys.warnoptions:
+        import warnings
+        warnings.simplefilter("ignore")
+    
     ### read parameters ######################################
     params = readparam.readparam()
     N_DETECT_THRESH = params["nd"]
@@ -476,8 +479,6 @@ try:
     np.savetxt("listb2.txt", result2, fmt="%d %.9f %.7f %.7f %.3f %.3f %.2f %.2f %s %d")
     subprocess.run("sort -t ' ' -k 1,1n -k 2,2n listb2.txt -o listb2.txt", shell=True)
     ##########################################################
-    end = time.time()
-    print("astsearch1M2.py ends. elapsed time = {0:.2f} s".format(end-start))
     
 
 except FileNotFoundError:

@@ -38,7 +38,6 @@ def getinfo(args):
     except ValueError:
         if args[3]==1:
             pass
-            #print("missing id="+ args[0] +" probably due to parallelization issue.")
         if args[3]==2:
             print("We cannot get information of id="+ args[0] +" from JPL.")
         isLosedAsteroid = True
@@ -184,7 +183,6 @@ try:
         
             t2 = time.time()    
             elapsed_time = t2 -t1
-            print("getinfo numbered, Elapsed time:", elapsed_time)
 
 except requests.exceptions.ConnectionError:
     print("You do not connect to the internet in getinfo_numbered2D.py!")

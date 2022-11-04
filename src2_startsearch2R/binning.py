@@ -67,7 +67,6 @@ try:
         try:
             FLUXMAG0 = hdu1[0].header['FLUXMAG0']
         except KeyError as e:  ## if header 'FLUXMAG0' does not exist
-            print("Key 'FLUXMAG0' does not exist in the header and calculate it from calibration data.")
             # FLUXMAG0ERR is 10^{-4} mag. Negligible"
             entryHduIndex = hdu1[0].header["AR_HDU"] - 1
             entryHdu = hdu1[entryHduIndex]
@@ -81,8 +80,6 @@ try:
             calibrationErr = photoCalib["calibrationErr"]
             FLUXMAG0 = (1.0e+23 * 10 ** (48.6 / (-2.5)) * 1.0e+9) / calibrationMean
             fluxmag0err = (1.0e+23 * 10 ** (48.6 / (-2.5)) * 1.0e+9) / calibrationMean ** 2 * calibrationErr,
-        else:  ## if header 'FLUXMAG0' exists
-            print("Key 'FLUXMAG0' exists in the header and use the header value.")
 
         zerop1 = 2.5 * np.log10(FLUXMAG0)
 

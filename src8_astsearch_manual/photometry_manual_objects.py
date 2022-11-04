@@ -21,6 +21,7 @@ from photutils import aperture_photometry
 import math
 import glob
 import traceback
+import sys
 import calcrect
 import numpy as np
 ### FUNCTION: PHOTOMETRY AND RADEC ###################
@@ -55,6 +56,11 @@ def get_photometry_and_radec(scidata, threeAparturePoints, nbin, zm):
 ######################################################
 
 try:
+    ### suppress warnings ################################
+    if not sys.warnoptions:
+        import warnings
+        warnings.simplefilter("ignore")
+    
     #---open and store input data-------------------------
     fInput = open("memo_manual.txt","r")
     linesInput = fInput.readlines()
