@@ -100,7 +100,7 @@ def print_progress(nTotalCheckPoints=0, currentButtonName=None, currentCheckPoin
 
     #---write progress to stdout or GUI-----------------------------------------
     progres_percent = str(int((writeCurrentCheckPoint/writeNTotalCheckPoints)*100.0))
-    print(progres_percent + "% ", end="")
+    print(progres_percent + "% ", end="", flush=True)
     if writeCurrentCheckPoint == writeNTotalCheckPoints:
         print()
     #---------------------------------------------------------------------------

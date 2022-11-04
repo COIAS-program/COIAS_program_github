@@ -30,6 +30,7 @@ from PIL import Image
 import subprocess
 import traceback
 import visitsort
+import print_progress
 
 #---function---------------------------------------------------------------------
 def fits2png(hdu, pngname):
@@ -76,6 +77,8 @@ try:
 
     ## load, masking, and output ##
     for i in range(len(img_list)):
+        print_progress.print_progress(nCheckPointsForLoop=5, nForLoop=len(img_list), currentForLoop=i)
+        
         ## load
         hdu = fits.open(img_list[i])
         scidata = hdu[0].data
@@ -111,6 +114,8 @@ try:
         pngname = '{0:02d}_disp-coias'.format(i + 1)  # NM added 2021-08-10
         hdunew.writeto(fitsname + ".fits", overwrite=True)  # output as fits image
         fits2png(output_scidata_masked, pngname + ".png")  # output as png image
+
+        print_progress.print_progress(nCheckPointsForLoop=5, nForLoop=len(img_list), currentForLoop=i)
 
         ## non-masked scidata
         ## masking : image * hanten median

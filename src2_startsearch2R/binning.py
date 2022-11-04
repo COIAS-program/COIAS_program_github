@@ -19,6 +19,7 @@ import numpy as np
 from astropy.io import fits
 from astropy.time import Time
 import visitsort
+import print_progress
 
 try:
     ## mode selection ####
@@ -39,7 +40,10 @@ try:
     if len(img_list)==0:
         raise FileNotFoundError
 
+    nLoopDone = 0
     for i in img_list:
+        print_progress.print_progress(nCheckPointsForLoop=4, nForLoop=len(img_list), currentForLoop=nLoopDone)
+        
         hdu1 = fits.open(i)
         xpix = hdu1[1].header['NAXIS1']
         ypix = hdu1[1].header['NAXIS2']
@@ -119,6 +123,8 @@ try:
         hdunew2 = fits.ImageHDU(maskdata_bin, h1head)
         hdul = fits.HDUList([hdunew, hdunew2])
         hdul.writeto(i.replace('warp-', 'warpbin-'), overwrite=True)  # S.U modify 2021/12/9
+
+        nLoopDone += 1
 
 except FileNotFoundError:
     print("Original 5 fits files do not exist in binning.py! Please upload these files.")
