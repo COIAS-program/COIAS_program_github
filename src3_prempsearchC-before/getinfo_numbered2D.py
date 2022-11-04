@@ -27,9 +27,13 @@ import glob
 from multiprocessing import Pool
 import traceback
 import requests.exceptions
+import print_progress
 
 #--function: get info from jpl horizons for a known asteroid-------------------------------
 def getinfo(args):
+    if args[3]==1:
+        print_progress.print_progress(nCheckPointsForLoop=18, nForLoop=args[5], currentForLoop=args[4])
+    
     radec =[]
     isLosedAsteroid = False
     # tentative prevention of error (2022.4.8 KS)################################
@@ -112,7 +116,7 @@ try:
             NLoseAsteroids = 0
             ###############################################################################
 
-            args = [(name_list[i], time_list2, isCorrectDirectory, 1) for i in range(len(name_list))]
+            args = [(name_list[i], time_list2, isCorrectDirectory, 1, i, len(name_list)) for i in range(len(name_list))]
             with Pool(4) as p:
                 recvDictList = list(p.map(getinfo, args))
 

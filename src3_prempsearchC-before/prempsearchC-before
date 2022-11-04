@@ -21,6 +21,7 @@ set -o pipefail
 echo prempsearchC-before begins 2>&1 | tee log.txt
 . def_coias_data_path
 echo $? 35 301 > error.txt
+print_progress.py -n prempsearchC-before -t 20
 
 echo $? 34 302 >> error.txt
 haveAllPreciseOrbits=$(cat have_all_precise_orbits.txt )
@@ -33,7 +34,8 @@ if [ "$haveAllPreciseOrbits" = "0" ]; then
     
     ## search known dim asteroids in the field and output to cand.txt
     searchB.py 2>&1 | tee -a log.txt
-    
+
+	print_progress.py
     ## search konwn bright asteroids in the field and output to cand_bright.txt
     searchB_AstMPC.py 2>&1 | tee -a log.txt
     
@@ -65,6 +67,7 @@ fi
 
 getinfo_numbered2D.py 2>&1 | tee -a log.txt
 
+print_progress.py -c 20
 echo prempsearchC-before ends 2>&1 | tee -a log.txt
 
 error_handling.py | tee -a log.txt

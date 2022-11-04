@@ -13,11 +13,13 @@
 set -o pipefail
 echo prempsearchC-after begins 2>&1 | tee log.txt
 echo $? 45 401 > error.txt
+print_progress.py -n prempsearchC-after -t 20
 
 getinfo_karifugo2D.py 2>&1 | tee -a log.txt
 
 make_search_astB_in_each_directory.py 2>&1 | tee -a log.txt
 
+print_progress.py -c 20
 echo prempsearchC-after ends 2>&1 | tee -a log.txt
 
 error_handling.py | tee -a log.txt
