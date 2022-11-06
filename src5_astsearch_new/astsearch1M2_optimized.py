@@ -47,6 +47,7 @@ import subprocess
 import traceback
 import mktracklet_opt
 import readparam
+import print_progress
 
 from photutils import CircularAperture
 from photutils import CircularAnnulus
@@ -311,12 +312,24 @@ try:
     for f in range(NImage):
         treeList.append(ss.KDTree(radecList[f], leafsize=10))
     #--------------------------------------------------
-    ##########################################################
 
+    #---count nForLoop for MAIN PART-------------------
+    nLoopTotal = 0
+    for leftTracId in range(NImage-1):
+        for rightTracId in range(leftTracId+1, NImage):
+            if 2 + (NImage - rightTracId - 1) < N_DETECT_THRESH:
+                continue
+            for predictId in range(NImage):
+                if leftTracId==predictId or rightTracId==predictId:
+                    continue
+                nLoopTotal += 1
+    #--------------------------------------------------
+    ##########################################################
 
     ### MAIN PART ############################################
     ##########################################################
     trackletListAll = []
+    nLoopDone = 0
     for leftTracId in range(NImage-1):
         for rightTracId in range(leftTracId+1, NImage):
             #If the maximum detection number for this tracklet is smaller than N_DETECT_THRESH,
@@ -334,7 +347,9 @@ try:
             for predictId in range(NImage):
                 if leftTracId==predictId or rightTracId==predictId:
                     continue
-
+                
+                print_progress.print_progress(nCheckPointsForLoop=12, nForLoop=nLoopTotal, currentForLoop=nLoopDone)
+                nLoopDone += 1
                 #---predict-------------------------------
                 detect_points_from_tracklets(trackletClassList, leftTracId, rightTracId, predictId)
                 #-----------------------------------------
@@ -351,9 +366,11 @@ try:
                 raise ValueError("Something wrong! Tracklets with NDetect < N_DETECT_THRESH survive! this NDetect={0:d}".format(trackletListAll[p][k].NDetect))
     ################################################################
 
-
+    
     ### photometry #################################################
     for image in range(NImage):
+        print_progress.print_progress(nCheckPointsForLoop=2, nForLoop=NImage, currentForLoop=image)
+        
         scidata = fits.open(warpFileNames[image])
     
         for p in range(len(trackletListAll)):

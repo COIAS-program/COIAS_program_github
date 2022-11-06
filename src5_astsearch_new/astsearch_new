@@ -23,6 +23,7 @@
 set -o pipefail
 echo astsearch_new begins 2>&1 | tee log.txt
 echo $? 55 501 > error.txt
+print_progress.py -n astsearch_new -t 20
 
 mkparam "$@" 2>&1 | tee -a log.txt
 echo $? 55 515 >> error.txt
@@ -35,6 +36,7 @@ astsearch1M2_optimized.py 2>&1 | tee -a log.txt
 
 match2D.py 2>&1 | tee -a log.txt
 
+print_progress.py -c 19
 #I merged mpc1b.py and mpc2b.py to change_data_to_mpc_format.py 2022.4.20 K.S.
 change_data_to_mpc_format.py 2>&1 | tee -a log.txt
 
@@ -65,6 +67,7 @@ echo $? 55 516 >> error.txt
 
 make_predicted_disp.py 2>&1 | tee -a log.txt
 
+print_progress.py
 echo astsearch_new ends 2>&1 | tee -a log.txt
 
 error_handling.py | tee -a log.txt

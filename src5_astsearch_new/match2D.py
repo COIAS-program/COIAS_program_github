@@ -18,6 +18,7 @@ import os
 import numpy as np
 import traceback
 import glob
+import print_progress
 
 try:
     # detect list
@@ -42,6 +43,8 @@ try:
         tmp3 = []
         tmp5 = []
         for i in range(len(data1)):
+            print_progress.print_progress(nCheckPointsForLoop=4, nForLoop=len(data1), currentForLoop=i)
+            
             l = 0
             for j in range(len(data2[data1ImageNum[i]])):
                 if data1[i, 2] - 0.0005 < data2[data1ImageNum[i]][j, 1] and data1[i, 2] + 0.0005 > data2[data1ImageNum[i]][j, 1] and \

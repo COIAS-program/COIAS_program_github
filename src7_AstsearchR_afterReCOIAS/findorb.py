@@ -26,6 +26,7 @@ import subprocess
 import traceback
 import requests.exceptions
 import os
+import print_progress
 from def_coias_data_path import *
 
 ### FUNCTIONS #######################################################
@@ -135,6 +136,8 @@ try:
         prevObsName = lines[0].split()[0]
         obsList = []
         for l in range(len(lines)):
+            print_progress.print_progress(nCheckPointsForLoop=9, nForLoop=len(lines), currentForLoop=l)
+            
             if lines[l].split()[0]!= prevObsName or len(lines[l].split())==0 or l==len(lines)-1:
           
                 if l==len(lines)-1:

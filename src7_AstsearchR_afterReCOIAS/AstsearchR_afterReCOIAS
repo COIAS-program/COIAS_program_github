@@ -50,6 +50,7 @@
 set -o pipefail
 echo AstsearchR_afterReCOIAS begins 2>&1 | tee log.txt
 echo $? 75 701 > error.txt
+print_progress.py -n AstsearchR_afterReCOIAS -t 10
 
 adjust_newH_manual.py 2>&1 | tee -a log.txt
 
@@ -78,6 +79,7 @@ store_pre_repo3.py 2>&1 | tee -a log.txt
 
 komejirushi.py 2>&1 | tee -a log.txt
 
+print_progress.py
 echo AstsearchR_afterReCOIAS ends 2>&1 | tee -a log.txt
 
 error_handling.py | tee -a log.txt
