@@ -21,6 +21,7 @@ from photutils import aperture_photometry
 import math
 import glob
 import traceback
+import os
 import sys
 import calcrect
 import numpy as np
@@ -28,6 +29,9 @@ import numpy as np
 def get_photometry_and_radec(scidata, threeAparturePoints, nbin, zm):
     #---calc rect and radec---
     rect = calcrect.calc_rectangle_parameters(threeAparturePoints[0], threeAparturePoints[1], threeAparturePoints[2])
+    if rect==None:
+        return None
+    
     w1 = wcs.WCS(scidata[0].header)
     radec = w1.wcs_pix2world([rect["center"]],1)
 
@@ -60,46 +64,50 @@ try:
     if not sys.warnoptions:
         import warnings
         warnings.simplefilter("ignore")
+
+    if not os.path.isfile("memo_manual.txt"):
+        empty = []
+        np.savetxt("listb3.txt",empty,fmt="%s")
+    else:
+        #---open and store input data-------------------------
+        fInput = open("memo_manual.txt","r")
+        linesInput = fInput.readlines()
+        fInput.close()
+        #-----------------------------------------------------
+
+
+        #---open output file----------------------------------
+        fOutput = open("listb3.txt","w",newline="\n")
+        #-----------------------------------------------------
+
+
+        #---read scidata--------------------------------------
+        scidataNames = sorted(glob.glob("warp*_bin.fits"))
+        #-----------------------------------------------------
+
+
+        #---main loop-----------------------------------------
+        for i in range(len(linesInput)):
+            contents = linesInput[i].split()
+            name = contents[0]
+            NImage = int(contents[1])
+            clickedPosition = [int(contents[2]), int(contents[3])]
+            threeAparturePoints = [ [int(contents[4]), int(contents[5])],
+                                    [int(contents[6]), int(contents[7])],
+                                    [int(contents[8]), int(contents[9])] ]
     
-    #---open and store input data-------------------------
-    fInput = open("memo_manual.txt","r")
-    linesInput = fInput.readlines()
-    fInput.close()
-    #-----------------------------------------------------
-
-
-    #---open output file----------------------------------
-    fOutput = open("listb3.txt","w",newline="\n")
-    #-----------------------------------------------------
-
-
-    #---read scidata--------------------------------------
-    scidataNames = sorted(glob.glob("warp*_bin.fits"))
-    #-----------------------------------------------------
-
-
-    #---main loop-----------------------------------------
-    for i in range(len(linesInput)):
-        contents = linesInput[i].split()
-        name = contents[0]
-        NImage = int(contents[1])
-        clickedPosition = [int(contents[2]), int(contents[3])]
-        threeAparturePoints = [ [int(contents[4]), int(contents[5])],
-                                [int(contents[6]), int(contents[7])],
-                                [int(contents[8]), int(contents[9])] ]
+            #---read fits and related information
+            scidata = fits.open(scidataNames[NImage])
+            fil = scidata[0].header["FILTER"]
+            jd  = scidata[0].header["JD"]
+            zm  = scidata[0].header["Z_P"]
+            nbin = scidata[0].header["NBIN"]
+            photRaDecDict = get_photometry_and_radec(scidata, threeAparturePoints, nbin, zm)
+            if photRaDecDict==None:
+                continue
     
-        #---read fits and related information
-        scidata = fits.open(scidataNames[NImage])
-        fil = scidata[0].header["FILTER"]
-        jd  = scidata[0].header["JD"]
-        zm  = scidata[0].header["Z_P"]
-        nbin = scidata[0].header["NBIN"]
-        photRaDecDict = get_photometry_and_radec(scidata, threeAparturePoints, nbin, zm)
-        if photRaDecDict==None:
-            continue
-    
-        fOutput.write(name + " {0:.9f} {1:.7f} {2:.7f} {3:.3f} {4:.3f} {5:.2f} {6:.2f} ".format(jd, photRaDecDict["ra"], photRaDecDict["dec"], photRaDecDict["mag"], photRaDecDict["mage"], clickedPosition[0], clickedPosition[1])+fil+" "+str(NImage)+"\n")
-    #-----------------------------------------------------
+            fOutput.write(name + " {0:.9f} {1:.7f} {2:.7f} {3:.3f} {4:.3f} {5:.2f} {6:.2f} ".format(jd, photRaDecDict["ra"], photRaDecDict["dec"], photRaDecDict["mag"], photRaDecDict["mage"], clickedPosition[0], clickedPosition[1])+fil+" "+str(NImage)+"\n")
+            #-----------------------------------------------------
 
 
 except FileNotFoundError:
