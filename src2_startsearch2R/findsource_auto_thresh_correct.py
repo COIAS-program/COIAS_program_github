@@ -40,7 +40,7 @@ def calc_mean_detection_number(detect_thresh):
     #---------------------------------------------------
 
     #---point source detection--------------------
-    subprocess.run(findsource_file_name)
+    subprocess.run(f"{findsource_file_name} > /dev/null 2>&1",shell=True)
     #---------------------------------------------
 
     #---calc mean detection number----------------
