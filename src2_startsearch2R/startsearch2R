@@ -11,7 +11,7 @@
 ########################################################
 
 set -o pipefail
-echo startsearch2R begins 2>&1 | tee log.txt
+echo startsearch2R begins 2>&1 | tee -a log.txt
 echo $? 25 201 > error.txt
 print_progress.py -n startsearch2R -t 17
 

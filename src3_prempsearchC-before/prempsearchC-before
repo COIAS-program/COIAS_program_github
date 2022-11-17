@@ -18,7 +18,7 @@
 ##############################################################################
 
 set -o pipefail
-echo prempsearchC-before begins 2>&1 | tee log.txt
+echo prempsearchC-before begins 2>&1 | tee -a log.txt
 . def_coias_data_path
 echo $? 35 301 > error.txt
 print_progress.py -n prempsearchC-before -t 20

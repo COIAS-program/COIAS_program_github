@@ -9,7 +9,7 @@
 #################################################
 
 set -o pipefail
-echo preprocess begins 2>&1 | tee log.txt
+echo preprocess begins 2>&1 | tee -a log.txt
 . def_coias_data_path
 echo $? 15 101 > error.txt
 print_progress.py -n preprocess -t 2

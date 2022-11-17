@@ -11,7 +11,7 @@
 ##############################################################################
 
 set -o pipefail
-echo prempsearchC-after begins 2>&1 | tee log.txt
+echo prempsearchC-after begins 2>&1 | tee -a log.txt
 echo $? 45 401 > error.txt
 print_progress.py -n prempsearchC-after -t 20
 

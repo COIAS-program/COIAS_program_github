@@ -21,7 +21,7 @@
 ###################################################################################
 
 set -o pipefail
-echo astsearch_new begins 2>&1 | tee log.txt
+echo astsearch_new begins 2>&1 | tee -a log.txt
 echo $? 55 501 > error.txt
 print_progress.py -n astsearch_new -t 20
 

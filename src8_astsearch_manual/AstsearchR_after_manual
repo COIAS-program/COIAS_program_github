@@ -12,7 +12,7 @@
 ##############################################################################################
 
 set -o pipefail
-echo AstsearchR_after_manual begins 2>&1 | tee log.txt
+echo AstsearchR_after_manual begins 2>&1 | tee -a log.txt
 echo $? 85 801 > error.txt
 
 photometry_manual_objects.py 2>&1 | tee -a log.txt
