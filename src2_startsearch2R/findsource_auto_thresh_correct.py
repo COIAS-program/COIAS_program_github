@@ -21,6 +21,7 @@ import traceback
 import glob
 import readparam
 import print_progress
+import print_detailed_log
 from def_coias_data_path import *
 
 ### function #####################################################
@@ -120,14 +121,14 @@ try:
     print_progress.print_progress()
 
 except FileNotFoundError:
-    print("Some previous files are not found in findsource_auto_thresh_correct.py!")
-    print(traceback.format_exc())
+    print("Some previous files are not found in findsource_auto_thresh_correct.py!",flush=True)
+    print(traceback.format_exc(),flush=True)
     error = 1
     errorReason = 24
 
 except Exception:
-    print("Some errors occur in findsource_auto_thresh_correct.py!")
-    print(traceback.format_exc())
+    print("Some errors occur in findsource_auto_thresh_correct.py!",flush=True)
+    print(traceback.format_exc(),flush=True)
     error = 1
     errorReason = 25
 
@@ -139,3 +140,6 @@ finally:
     errorFile = open("error.txt","a")
     errorFile.write("{0:d} {1:d} 204 \n".format(error,errorReason))
     errorFile.close()
+
+    if error==1:
+        print_detailed_log.print_detailed_log(dict(globals()))

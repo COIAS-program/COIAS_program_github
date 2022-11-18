@@ -18,6 +18,7 @@ import ephem
 import julian
 import time
 import traceback
+import print_detailed_log
 
 # multiprocessing
 import multiprocessing
@@ -80,15 +81,15 @@ try:
 
 except FileNotFoundError:
     if __name__ == "__main__":
-        print("Some previous files are not found in searchB.py!")
-        print(traceback.format_exc())
+        print("Some previous files are not found in searchB.py!",flush=True)
+        print(traceback.format_exc(),flush=True)
         error = 1
         errorReason = 34
 
 except Exception:
     if __name__ == "__main__":
-        print("Some errors occur in searchB.py!")
-        print(traceback.format_exc())
+        print("Some errors occur in searchB.py!",flush=True)
+        print(traceback.format_exc(),flush=True)
         error = 1
         errorReason = 35
 
@@ -102,3 +103,6 @@ finally:
         errorFile = open("error.txt","a")
         errorFile.write("{0:d} {1:d} 305 \n".format(error,errorReason))
         errorFile.close()
+
+        if error==1:
+            print_detailed_log.print_detailed_log(dict(globals()))

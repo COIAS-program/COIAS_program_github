@@ -34,6 +34,7 @@ from multiprocessing import Pool
 import traceback
 import requests.exceptions
 import print_progress
+import print_detailed_log
 
 #--function: get info from jpl horizons for a known asteroid-------------------------------
 def getinfo(args):
@@ -208,26 +209,26 @@ try:
             elapsed_time = t2 -t1
 
 except requests.exceptions.ConnectionError:
-    print("You do not connect to the internet in getinfo_karifugo2D.py!")
-    print(traceback.format_exc())
+    print("You do not connect to the internet in getinfo_karifugo2D.py!",flush=True)
+    print(traceback.format_exc(),flush=True)
     error = 1
     errorReason = 42
 
 except (requests.exceptions.ConnectTimeout, requests.exceptions.ReadTimeout):
-    print("Connection timeout to NASA JPL in getinfo_karifugo2D!")
-    print(traceback.format_exc())
+    print("Connection timeout to NASA JPL in getinfo_karifugo2D!",flush=True)
+    print(traceback.format_exc(),flush=True)
     error = 1
     errorReason = 43
 
 except FileNotFoundError:
-    print("Some previous files are not found in getinfo_karifugo2D.py!")
-    print(traceback.format_exc())
+    print("Some previous files are not found in getinfo_karifugo2D.py!",flush=True)
+    print(traceback.format_exc(),flush=True)
     error = 1
     errorReason = 44
 
 except Exception:
-    print("Some errors occur in getinfo_karifugo2D.py!")
-    print(traceback.format_exc())
+    print("Some errors occur in getinfo_karifugo2D.py!",flush=True)
+    print(traceback.format_exc(),flush=True)
     error = 1
     errorReason = 45
 
@@ -239,3 +240,6 @@ finally:
     errorFile = open("error.txt","a")
     errorFile.write("{0:d} {1:d} 402 \n".format(error,errorReason))
     errorFile.close()
+
+    if error==1:
+        print_detailed_log.print_detailed_log(dict(globals()))

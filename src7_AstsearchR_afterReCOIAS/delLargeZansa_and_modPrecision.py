@@ -18,6 +18,7 @@
 import sys
 import traceback
 import os
+import print_detailed_log
 
 try:
     argc = len(sys.argv)
@@ -80,14 +81,14 @@ try:
     outputFile.close()
 
 except FileNotFoundError:
-    print("Some previous files are not found in delLargeZansa_and_modPrecision.py!")
-    print(traceback.format_exc())
+    print("Some previous files are not found in delLargeZansa_and_modPrecision.py!",flush=True)
+    print(traceback.format_exc(),flush=True)
     error = 1
     errorReason = 74
 
 except Exception:
-    print("Some errors occur in delLargeZansa_and_modPrecision.py!")
-    print(traceback.format_exc())
+    print("Some errors occur in delLargeZansa_and_modPrecision.py!",flush=True)
+    print(traceback.format_exc(),flush=True)
     error = 1
     errorReason = 75
 
@@ -99,3 +100,6 @@ finally:
     errorFile = open("error.txt","a")
     errorFile.write("{0:d} {1:d} 705 \n".format(error,errorReason))
     errorFile.close()
+
+    if error==1:
+        print_detailed_log.print_detailed_log(dict(globals()))

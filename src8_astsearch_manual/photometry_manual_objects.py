@@ -25,6 +25,7 @@ import os
 import sys
 import calcrect
 import numpy as np
+import print_detailed_log
 ### FUNCTION: PHOTOMETRY AND RADEC ###################
 def get_photometry_and_radec(scidata, threeAparturePoints, nbin, zm):
     #---calc rect and radec---
@@ -109,16 +110,15 @@ try:
             fOutput.write(name + " {0:.9f} {1:.7f} {2:.7f} {3:.3f} {4:.3f} {5:.2f} {6:.2f} ".format(jd, photRaDecDict["ra"], photRaDecDict["dec"], photRaDecDict["mag"], photRaDecDict["mage"], clickedPosition[0], clickedPosition[1])+fil+" "+str(NImage)+"\n")
             #-----------------------------------------------------
 
-
 except FileNotFoundError:
-    print("Some previous files are not found in photometry_manual_objects.py!")
-    print(traceback.format_exc())
+    print("Some previous files are not found in photometry_manual_objects.py!",flush=True)
+    print(traceback.format_exc(),flush=True)
     error = 1
     errorReason = 84
 
 except Exception:
-    print("Some errors occur in photometry_manual_objects.py!")
-    print(traceback.format_exc())
+    print("Some errors occur in photometry_manual_objects.py!",flush=True)
+    print(traceback.format_exc(),flush=True)
     error = 1
     errorReason = 85
 
@@ -130,3 +130,6 @@ finally:
     errorFile = open("error.txt","a")
     errorFile.write("{0:d} {1:d} 802 \n".format(error,errorReason))
     errorFile.close()
+
+    if error==1:
+        print_detailed_log.print_detailed_log(dict(globals()))

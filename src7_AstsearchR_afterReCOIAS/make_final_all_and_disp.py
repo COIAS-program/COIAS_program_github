@@ -23,6 +23,7 @@ import traceback
 import re
 from astropy.io import fits
 import visitsort
+import print_detailed_log
 from def_coias_data_path import *
 
 try:
@@ -135,17 +136,16 @@ try:
     fileFinalDisp.close()
     outputFile.close()
     #-----------------------------------------------------------
-    
 
 except FileNotFoundError:
-    print("Some previous files are not found in make_final_all_and_disp.py!")
-    print(traceback.format_exc())
+    print("Some previous files are not found in make_final_all_and_disp.py!",flush=True)
+    print(traceback.format_exc(),flush=True)
     error = 1
     errorReason = 74
 
 except Exception:
-    print("Some errors occur in make_final_all_and_disp.py!")
-    print(traceback.format_exc())
+    print("Some errors occur in make_final_all_and_disp.py!",flush=True)
+    print(traceback.format_exc(),flush=True)
     error = 1
     errorReason = 75
 
@@ -157,3 +157,6 @@ finally:
     errorFile = open("error.txt","a")
     errorFile.write("{0:d} {1:d} 707 \n".format(error,errorReason))
     errorFile.close()
+
+    if error==1:
+        print_detailed_log.print_detailed_log(dict(globals()))

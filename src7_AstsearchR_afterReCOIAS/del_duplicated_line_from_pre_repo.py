@@ -27,6 +27,7 @@ import shutil
 import glob
 from astropy.io import fits
 from astropy.time import Time
+import print_detailed_log
 from def_coias_data_path import *
 
 class NothingToDo(Exception):
@@ -129,20 +130,19 @@ try:
     preRepoOutputFile.close()
     #---------------------------------------------
 
-
 except NothingToDo:
     error = 0
     errorReason = 74
     
 except FileNotFoundError:
-    print("Some previous files are not found in del_duplicated_line_from_pre_repo.py!")
-    print(traceback.format_exc())
+    print("Some previous files are not found in del_duplicated_line_from_pre_repo.py!",flush=True)
+    print(traceback.format_exc(),flush=True)
     error = 1
     errorReason = 74
 
 except Exception:
-    print("Some errors occur in del_duplicated_line_from_pre_repo.py!")
-    print(traceback.format_exc())
+    print("Some errors occur in del_duplicated_line_from_pre_repo.py!",flush=True)
+    print(traceback.format_exc(),flush=True)
     error = 1
     errorReason = 75
 
@@ -154,3 +154,6 @@ finally:
     errorFile = open("error.txt","a")
     errorFile.write("{0:d} {1:d} 711 \n".format(error,errorReason))
     errorFile.close()
+
+    if error==1:
+        print_detailed_log.print_detailed_log(dict(globals()))

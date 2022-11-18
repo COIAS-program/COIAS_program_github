@@ -11,7 +11,25 @@
 # ひとまず形式と内容は適当. 検討が進めば随時アップデートしていく.
 ######################################################################################################
 import os
+import sys
 import subprocess
+import numpy as np
+
+#---the function to flatten any multidimensional list, tuple, dictionary or set---------
+#---this is used to count total elements of arbitrary shape collection------------------
+def flatten(l):
+    ### for counting the number of void list
+    if isinstance(l, (list,dict,set,tuple,np.ndarray)):
+        if len(l)==0:
+            yield None
+
+    ### recursive pricess
+    for el in l:
+        if isinstance(el, (list,dict,set,tuple,np.ndarray)) and not isinstance(el, (str, bytes)):
+            yield from flatten(el)
+        else:
+            yield el
+#---------------------------------------------------------------------------------------
 
 def print_detailed_log(varDict):
     f = open("log.txt","a")
@@ -27,7 +45,18 @@ def print_detailed_log(varDict):
 
     f.write("###the variable list##############################\n")
     for key in varDict.keys():
-        f.write(f"{key}: {varDict[key]} \n\n")
+        if isinstance(varDict[key], (list,dict,set,tuple,np.ndarray)):
+            try:
+                NElements = len(list(flatten(varDict[key])))
+            except Exception:
+                NElements = 1
+        else:
+            NElements = 1
+            
+        if NElements>1000: #larger than 1000 elements
+            f.write(f"{key}: variable has very large elements: NElements={NElements} \n\n")
+        else:
+            f.write(f"{key}: {varDict[key]} \n\n")
     f.write("##################################################\n\n")
 
     f.close()

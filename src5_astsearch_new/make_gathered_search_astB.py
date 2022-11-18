@@ -19,6 +19,7 @@
 import os
 import subprocess
 import traceback
+import print_detailed_log
 
 try:
     #---read precise_orbit_directories.txt---------------------------------------
@@ -77,14 +78,14 @@ try:
             raise FileNotFoundError
 
 except FileNotFoundError:
-    print("Some previous files are not found in make_gathered_search_astB.py!")
-    print(traceback.format_exc())
+    print("Some previous files are not found in make_gathered_search_astB.py!",flush=True)
+    print(traceback.format_exc(),flush=True)
     error = 1
     errorReason = 54
 
 except Exception:
-    print("Some errors occur in make_gathered_search_astB.py!")
-    print(traceback.format_exc())
+    print("Some errors occur in make_gathered_search_astB.py!",flush=True)
+    print(traceback.format_exc(),flush=True)
     error = 1
     errorReason = 55
 
@@ -96,3 +97,6 @@ finally:
     errorFile = open("error.txt","a")
     errorFile.write("{0:d} {1:d} 502 \n".format(error,errorReason))
     errorFile.close()
+
+    if error==1:
+        print_detailed_log.print_detailed_log(dict(globals()))

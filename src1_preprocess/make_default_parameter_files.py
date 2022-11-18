@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Timestamp: 2022/08/04 11:30 sugiura
+#Timestamp: 2022/11/18 8:00 sugiura
 ###################################################################
 # SExtractor と findOrb で使用するパラメータファイルを
 # ~/.coias/param 以下に生成するスクリプト.
@@ -12,6 +12,7 @@
 ###################################################################
 import traceback
 import readparam
+import print_detailed_log
 from def_coias_data_path import *
 
 directory_path = coiasDataPath + "/param/"
@@ -1853,8 +1854,8 @@ try:
     make_xdesig_txt()
     
 except Exception:
-    print("Some errors occur in make_default_parameter_files.py!")
-    print(traceback.format_exc())
+    print("Some errors occur in make_default_parameter_files.py!",flush=True)
+    print(traceback.format_exc(),flush=True)
     error = 1
     
 else:
@@ -1864,3 +1865,6 @@ finally:
     errorFile = open("error.txt","a")
     errorFile.write("{0:d} 15 106 \n".format(error))
     errorFile.close()
+
+    if error==1:
+        print_detailed_log.print_detailed_log(dict(globals()))

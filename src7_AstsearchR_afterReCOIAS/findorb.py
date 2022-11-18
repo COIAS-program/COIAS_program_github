@@ -27,6 +27,7 @@ import traceback
 import requests.exceptions
 import os
 import print_progress
+import print_detailed_log
 from def_coias_data_path import *
 
 ### FUNCTIONS #######################################################
@@ -182,7 +183,7 @@ try:
         fOrbElem.close()
 
 except requests.exceptions.ConnectionError:
-    print("You do not connect to the internet in findorb.py. We try desktop findorb.")
+    print("You do not connect to the internet in findorb.py. We try desktop findorb.",flush=True)
     completed_process = subprocess.run(f"dos_find mpc7.txt -k {coiasDataPath} | cut -c 2- > result.txt 2>&1 | tee -a log.txt", shell=True)
     if completed_process.returncode!=0:
         error = 1
@@ -191,14 +192,14 @@ except requests.exceptions.ConnectionError:
     errorReason = 75
 
 except FileNotFoundError:
-    print("Some previous files are not found in findorb.py!")
-    print(traceback.format_exc())
+    print("Some previous files are not found in findorb.py!",flush=True)
+    print(traceback.format_exc(),flush=True)
     error = 1
     errorReason = 74
 
 except Exception:
-    print("Some errors occur in findorb.py!")
-    print(traceback.format_exc())
+    print("Some errors occur in findorb.py!",flush=True)
+    print(traceback.format_exc(),flush=True)
     error = 1
     errorReason = 75
 
@@ -210,4 +211,7 @@ finally:
     errorFile = open("error.txt","a")
     errorFile.write("{0:d} {1:d} 704 \n".format(error,errorReason))
     errorFile.close()
+
+    if error==1:
+        print_detailed_log.print_detailed_log(dict(globals()))
 #######################################################################

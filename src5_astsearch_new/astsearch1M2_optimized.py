@@ -48,6 +48,7 @@ import traceback
 import mktracklet_opt
 import readparam
 import print_progress
+import print_detailed_log
 
 from photutils import CircularAperture
 from photutils import CircularAnnulus
@@ -496,17 +497,16 @@ try:
     np.savetxt("listb2.txt", result2, fmt="%d %.9f %.7f %.7f %.3f %.3f %.2f %.2f %s %d")
     subprocess.run("sort -t ' ' -k 1,1n -k 2,2n listb2.txt -o listb2.txt", shell=True)
     ##########################################################
-    
 
 except FileNotFoundError:
-    print("Some previous files are not found in astsearch1M2.py!")
-    print(traceback.format_exc())
+    print("Some previous files are not found in astsearch1M2.py!",flush=True)
+    print(traceback.format_exc(),flush=True)
     error = 1
     errorReason = 54
 
 except Exception:
-    print("Some errors occur in astsearch1M2.py!")
-    print(traceback.format_exc())
+    print("Some errors occur in astsearch1M2.py!",flush=True)
+    print(traceback.format_exc(),flush=True)
     error = 1
     errorReason = 55
 
@@ -518,3 +518,6 @@ finally:
     errorFile = open("error.txt","a")
     errorFile.write("{0:d} {1:d} 503 \n".format(error,errorReason))
     errorFile.close()
+
+    if error==1:
+        print_detailed_log.print_detailed_log(dict(globals()))

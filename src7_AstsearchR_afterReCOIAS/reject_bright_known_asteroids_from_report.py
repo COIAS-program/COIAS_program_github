@@ -13,6 +13,7 @@
 # 出力: pre_repo.txt (上書き保存)
 ###########################################################################################
 import traceback
+import print_detailed_log
 
 try:
     #---get names of bright known asteroids-----------------
@@ -40,14 +41,14 @@ try:
     #---------------------------------------------------------------------
 
 except FileNotFoundError:
-    print("Some previous files are not found in reject_bright_known_asteroids_from_report.py!")
-    print(traceback.format_exc())
+    print("Some previous files are not found in reject_bright_known_asteroids_from_report.py!",flush=True)
+    print(traceback.format_exc(),flush=True)
     error = 1
     errorReason = 74
 
 except Exception:
-    print("Some errors occur in reject_bright_known_asteroids_from_report.py!")
-    print(traceback.format_exc())
+    print("Some errors occur in reject_bright_known_asteroids_from_report.py!",flush=True)
+    print(traceback.format_exc(),flush=True)
     error = 1
     errorReason = 75
 
@@ -59,3 +60,6 @@ finally:
     errorFile = open("error.txt","a")
     errorFile.write("{0:d} {1:d} 706 \n".format(error,errorReason))
     errorFile.close()
+
+    if error==1:
+        print_detailed_log.print_detailed_log(dict(globals()))

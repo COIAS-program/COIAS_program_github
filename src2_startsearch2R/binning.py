@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Timestamp: 2022/08/19 8:30 sugiura
+#Timestamp: 2022/11/18 8:00 sugiura
 ##########################################################
 # 元画像のビニング・0フラックスでの等級・ヘッダの移し替えを行う.
 # (元画像が小惑星検出にはオーバースペックなため容量を減らす)
@@ -20,6 +20,7 @@ from astropy.io import fits
 from astropy.time import Time
 import visitsort
 import print_progress
+import print_detailed_log
 
 try:
     ## mode selection ####
@@ -127,14 +128,14 @@ try:
         nLoopDone += 1
 
 except FileNotFoundError:
-    print("Original 5 fits files do not exist in binning.py! Please upload these files.")
-    print(traceback.format_exc())
+    print("Original 5 fits files do not exist in binning.py! Please upload these files.",flush=True)
+    print(traceback.format_exc(),flush=True)
     error = 1
     errorReason = 21
 
 except Exception:
-    print("Some errors occur in binning.py!")
-    print(traceback.format_exc())
+    print("Some errors occur in binning.py!",flush=True)
+    print(traceback.format_exc(),flush=True)
     error = 1
     errorReason = 25
 
@@ -146,3 +147,6 @@ finally:
     errorFile = open("error.txt","a")
     errorFile.write("{0:d} {1:d} 202 \n".format(error,errorReason))
     errorFile.close()
+
+    if error==1:
+        print_detailed_log.print_detailed_log(dict(globals()))

@@ -16,6 +16,7 @@
 import subprocess
 import traceback
 import os
+import print_detailed_log
 
 try:
     #---read precise_orbit_directories.txt---------------------------------------
@@ -49,14 +50,14 @@ try:
     #----------------------------------------------------------------------------
 
 except FileNotFoundError:
-    print("Some previous files are not found in make_search_astB_in_each_directory.py!")
-    print(traceback.format_exc())
+    print("Some previous files are not found in make_search_astB_in_each_directory.py!",flush=True)
+    print(traceback.format_exc(),flush=True)
     error = 1
     errorReason = 44
 
 except Exception:
-    print("Some errors occur in make_search_astB_in_each_directory.py!")
-    print(traceback.format_exc())
+    print("Some errors occur in make_search_astB_in_each_directory.py!",flush=True)
+    print(traceback.format_exc(),flush=True)
     error = 1
     errorReason = 45
 
@@ -68,3 +69,6 @@ finally:
     errorFile = open("error.txt","a")
     errorFile.write("{0:d} {1:d} 403 \n".format(error,errorReason))
     errorFile.close()
+
+    if error==1:
+        print_detailed_log.print_detailed_log(dict(globals()))

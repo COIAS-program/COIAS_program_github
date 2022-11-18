@@ -15,6 +15,7 @@
 import traceback
 import os
 import shutil
+import print_detailed_log
 
 try:
     if os.path.isfile("manual_delete_list2.txt"):
@@ -38,14 +39,14 @@ try:
             f.close()
 
 except FileNotFoundError:
-    print("Some previous files are not found in correct_manual_delete_list.py!")
-    print(traceback.format_exc())
+    print("Some previous files are not found in correct_manual_delete_list.py!",flush=True)
+    print(traceback.format_exc(),flush=True)
     error = 1
     errorReason = 64
 
 except Exception:
-    print("Some errors occur in correct_manual_delete_list.py!")
-    print(traceback.format_exc())
+    print("Some errors occur in correct_manual_delete_list.py!",flush=True)
+    print(traceback.format_exc(),flush=True)
     error = 1
     errorReason = 65
 
@@ -57,3 +58,6 @@ finally:
     errorFile = open("error.txt","a")
     errorFile.write("{0:d} {1:d} 608 \n".format(error,errorReason))
     errorFile.close()
+
+    if error==1:
+        print_detailed_log.print_detailed_log(dict(globals()))
