@@ -22,6 +22,8 @@
 # 　　    全てあるときこのファイルには1とだけ書かれる, どれかなければ0になる
 # 　　    このファイルに1が書き込まれているとき, prempsearchCは実行しなくても
 # 　　    よいということなので, 1の時はprempsearchCは飛ばされるようになっている.
+# 　　  formatted_time_list.txt
+# 　　    n列目にwarp[n]_bin.fitsのUTC時刻をyyyy-mm-dd HH:MM:SSの形式で書き出したもの.
 #########################################################################
 import os
 import glob
@@ -59,6 +61,16 @@ try:
     tInIso = tInTimeObj.iso
     yyyy_mm_dd = tInIso.split()[0]
     #--------------------------------------------
+
+    #---write out yyyy-mm-dd HH:MM:SS of warp files to the file----
+    f = open("formatted_time_list.txt","w")
+    for i in range(Ndata):
+        tInTimeObj = Time(jdList[i], format="jd")
+        tInIso = tInTimeObj.iso
+        formattedTimeStr = tInIso.split(".")[0]
+        f.write(formattedTimeStr + "\n")
+    f.close()
+    #--------------------------------------------------------------
 
     #---if directory ~/.coias/orbit_data/yyyy_mm_dd does not exist-
     #---we produce it----------------------------------------------
