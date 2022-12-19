@@ -56,6 +56,7 @@ flowchart TD
     g --> h[/"~"/.coias/past_pre_repo_data/以下にコピー/]
     g --> m[/"~"/.coias/past_pre_repo_data/\nyyyy-mm-dd/coefficients_for_predict.txt/]
     a --- i[[make_final_all_and_disp.py]]
+    Z --- i
     L --- i
     i --> j[/final_all.txt/]
     i --> k[/final_disp.txt/]
