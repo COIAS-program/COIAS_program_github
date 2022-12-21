@@ -32,7 +32,7 @@ import numpy as np
 import re
 import changempc
 import print_detailed_log
-from def_coias_data_path import *
+import PARAM
 
 try:
     #---get yyyy-mm-dd of this measurement--------
@@ -44,7 +44,7 @@ try:
     #---------------------------------------------
 
     #---check ~/.coias/past_pre_repo_data/yyyy-mm-dd directory exists or not
-    dirName = coiasDataPath + "/past_pre_repo_data/" + yyyy_mm_dd
+    dirName = PARAM.COIAS_DATA_PATH + "/past_pre_repo_data/" + yyyy_mm_dd
     logFileName = dirName + "/log.txt"
     if not os.path.isdir(dirName):
         os.mkdir(dirName)

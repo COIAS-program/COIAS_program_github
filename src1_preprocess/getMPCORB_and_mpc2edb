@@ -8,12 +8,12 @@
 #    AstMPC_dim.edb: それ以外の暗い小惑星の情報
 #    これら2つのファイルも~/.coias/paramに保存される.
 #####################################################
-. def_coias_data_path
+. PARAM
 
 wget -O "./MPCORB_TEMP.DAT" https://www.minorplanetcenter.net/iau/MPCORB/MPCORB.DAT
 echo $? 12 107 >> error.txt
 
-mv "./MPCORB_TEMP.DAT" "${COIASDATAPATH}/param/MPCORB.DAT"
+mv "./MPCORB_TEMP.DAT" "${COIAS_DATA_PATH}/param/MPCORB.DAT"
 
-mpc2edb.pl "${COIASDATAPATH}/param/MPCORB.DAT" "${COIASDATAPATH}"
+mpc2edb.pl "${COIAS_DATA_PATH}/param/MPCORB.DAT" "${COIAS_DATA_PATH}"
 echo $? 15 108 >> error.txt

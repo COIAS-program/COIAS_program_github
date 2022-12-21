@@ -24,7 +24,7 @@ import sys
 import re
 import traceback
 import print_detailed_log
-from def_coias_data_path import *
+import PARAM
 
 try:
     logFile = open("log.txt","a",newline="\n")
@@ -45,7 +45,7 @@ try:
     # input first number
     args = sys.argv
     if len(args) == 1:
-        maxHFileName = coiasDataPath + "/param/max_H_number.txt"
+        maxHFileName = PARAM.COIAS_DATA_PATH + "/param/max_H_number.txt"
         f = open(maxHFileName, "r")
         line = f.readline()
         f.close()

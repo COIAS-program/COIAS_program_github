@@ -28,7 +28,7 @@ import os
 import re
 import subprocess
 import print_detailed_log
-from def_coias_data_path import *
+import PARAM
 
 try:
     completed_process = subprocess.run("sort -n -o pre_repo2.txt pre_repo2.txt", shell=True)
@@ -46,7 +46,7 @@ try:
     startHNumberThisTime = int(line.split()[0])
     isManual = int(line.split()[1])
 
-    maxHFileName = coiasDataPath + "/param/max_H_number.txt"
+    maxHFileName = PARAM.COIAS_DATA_PATH + "/param/max_H_number.txt"
     f = open(maxHFileName,"r")
     line = f.readline()
     f.close()

@@ -27,7 +27,7 @@ import re
 from astropy.io import fits
 import visitsort
 import print_detailed_log
-from def_coias_data_path import *
+import PARAM
 
 try:
     #---open output file and write header-----------------------
@@ -68,7 +68,7 @@ try:
     #-----------------------------------------------------------
 
     #---output HNMax to ~/.coias/param/max_H_number.txt---------
-    maxHFileName = coiasDataPath + "/param/max_H_number.txt"
+    maxHFileName = PARAM.COIAS_DATA_PATH + "/param/max_H_number.txt"
     f = open(maxHFileName,"r")
     line = f.readline()
     f.close()

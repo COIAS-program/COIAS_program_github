@@ -22,7 +22,7 @@ import glob
 import readparam
 import print_progress
 import print_detailed_log
-from def_coias_data_path import *
+import PARAM
 
 ### function #####################################################
 def calc_mean_detection_number(detect_thresh):
@@ -31,8 +31,8 @@ def calc_mean_detection_number(detect_thresh):
     default_sex_lines = file.readlines()
     default_sex_lines[15]="DETECT_THRESH    " + "{:.2f}".format(detect_thresh) + "          # <sigmas> or <threshold>,<ZP> in mag.arcsec-2\n"
 
-    default_sex_lines[9]="PARAMETERS_NAME  " + coiasDataPath + "/param/default2.param  # name of the file containing catalog contents\n"
-    default_sex_lines[19]="FILTER_NAME      " + coiasDataPath + "/param/default.conv   # name of the file containing the filter\n"
+    default_sex_lines[9]="PARAMETERS_NAME  " + PARAM.COIAS_DATA_PATH + "/param/default2.param  # name of the file containing catalog contents\n"
+    default_sex_lines[19]="FILTER_NAME      " + PARAM.COIAS_DATA_PATH + "/param/default.conv   # name of the file containing the filter\n"
     file.close()
 
     file = open(default_sex_file_name, "w")

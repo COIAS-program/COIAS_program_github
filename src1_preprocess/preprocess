@@ -10,42 +10,42 @@
 
 set -o pipefail
 echo preprocess begins 2>&1 | tee -a log.txt
-. def_coias_data_path
+. PARAM
 echo $? 15 101 > error.txt
 print_progress.py -n preprocess -t 2
 
 mkparam "$@" 2>&1 | tee -a log.txt
 echo $? 15 110 >> error.txt
 
-if [ ! -d "${COIASDATAPATH}" ]; then
-    mkdir "${COIASDATAPATH}" 2>&1 | tee -a log.txt
+if [ ! -d "${COIAS_DATA_PATH}" ]; then
+    mkdir "${COIAS_DATA_PATH}" 2>&1 | tee -a log.txt
     echo $? 15 102 >> error.txt
 fi
 
-if [ ! -d "${COIASDATAPATH}/param" ]; then
-    mkdir "${COIASDATAPATH}/param" 2>&1 | tee -a log.txt
+if [ ! -d "${COIAS_DATA_PATH}/param" ]; then
+    mkdir "${COIAS_DATA_PATH}/param" 2>&1 | tee -a log.txt
     echo $? 15 103 >> error.txt
 fi
 
-if [ ! -f "${COIASDATAPATH}/param/max_H_number.txt" ]; then
-	echo 0 NoMeaning > "${COIASDATAPATH}/param/max_H_number.txt"
+if [ ! -f "${COIAS_DATA_PATH}/param/max_H_number.txt" ]; then
+	echo 0 NoMeaning > "${COIAS_DATA_PATH}/param/max_H_number.txt"
 	echo $? 15 111 >> error.txt
 fi
 
-if [ ! -d "${COIASDATAPATH}/orbit_data" ]; then
-    mkdir "${COIASDATAPATH}/orbit_data" 2>&1 | tee -a log.txt
+if [ ! -d "${COIAS_DATA_PATH}/orbit_data" ]; then
+    mkdir "${COIAS_DATA_PATH}/orbit_data" 2>&1 | tee -a log.txt
     echo $? 15 104 >> error.txt
 fi
 
-if [ ! -d "${COIASDATAPATH}/past_pre_repo_data" ]; then
-    mkdir "${COIASDATAPATH}/past_pre_repo_data" 2>&1 | tee -a log.txt
+if [ ! -d "${COIAS_DATA_PATH}/past_pre_repo_data" ]; then
+    mkdir "${COIAS_DATA_PATH}/past_pre_repo_data" 2>&1 | tee -a log.txt
     echo $? 15 110 >> error.txt
 fi
 
 print_progress.py
 make_default_parameter_files.py 2>&1 | tee -a log.txt
 
-if [ ! -f "${COIASDATAPATH}/param/MPCORB.DAT" ]; then
+if [ ! -f "${COIAS_DATA_PATH}/param/MPCORB.DAT" ]; then
     getMPCORB_and_mpc2edb 2>&1 | tee -a log.txt
 else
     #even if MPCORB.DAT exists, interruption of previous download leads to incomplete data and we need re-download
@@ -53,7 +53,7 @@ else
     echo $? 12 109 >> error.txt
 
     MSIZE=`grep -oE "\([0-9]*M\)" wgetMPC.txt | sed "s/(//g" | sed "s/)//g" | sed "s/M//g"`
-    MPCMSIZE=`ls -l ${COIASDATAPATH}/param/MPCORB.DAT | awk '{print $5 * 1.1 * 0.000001}' | awk '{printf("%d",$1)}'`
+    MPCMSIZE=`ls -l ${COIAS_DATA_PATH}/param/MPCORB.DAT | awk '{print $5 * 1.1 * 0.000001}' | awk '{printf("%d",$1)}'`
     if [ $MPCMSIZE -lt $MSIZE ]; then
 	echo "previous download of MPCORB.DAT may be interrupted. download again." 2>&1 | tee -a log.txt
 	getMPCORB_and_mpc2edb 2>&1 | tee -a log.txt

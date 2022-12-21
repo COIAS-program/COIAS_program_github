@@ -28,7 +28,7 @@ import requests.exceptions
 import os
 import print_progress
 import print_detailed_log
-from def_coias_data_path import *
+import PARAM
 
 ### FUNCTIONS #######################################################
 def request_find_orb(mpcformat, orbit_type=-2):
@@ -184,7 +184,7 @@ try:
 
 except requests.exceptions.ConnectionError:
     print("You do not connect to the internet in findorb.py. We try desktop findorb.",flush=True)
-    completed_process = subprocess.run(f"dos_find mpc7.txt -k {coiasDataPath} | cut -c 2- > result.txt 2>&1 | tee -a log.txt", shell=True)
+    completed_process = subprocess.run(f"dos_find mpc7.txt -k {PARAM.COIAS_DATA_PATH} | cut -c 2- > result.txt 2>&1 | tee -a log.txt", shell=True)
     if completed_process.returncode!=0:
         error = 1
     else:

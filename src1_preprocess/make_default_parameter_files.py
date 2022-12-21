@@ -13,9 +13,9 @@
 import traceback
 import readparam
 import print_detailed_log
-from def_coias_data_path import *
+import PARAM
 
-directory_path = coiasDataPath + "/param/"
+directory_path = PARAM.COIAS_DATA_PATH + "/param/"
 
 #---make default.conv-------------------------------------------------------------
 def make_default_conv():
