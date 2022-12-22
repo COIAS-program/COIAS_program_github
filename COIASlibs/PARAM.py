@@ -13,5 +13,5 @@
 from os.path import expanduser
 
 COIAS_DATA_PATH = expanduser("~") + "/.coias"
-WARP_DATA_PATH="/Users/sugiuraks/Documents/COIAS/COIAS_program/webCOIASRoughDevelopment/disk2/data"
+WARP_DATA_PATH="/Users/sugiuraks/Documents/COIAS/COIAS_program/webCOIASRoughDevelopment/disk2/"
 IS_WEB_COIAS=False

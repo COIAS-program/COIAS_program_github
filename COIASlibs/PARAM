@@ -10,5 +10,5 @@
 #################################################################
 
 COIAS_DATA_PATH="${HOME}/.coias"
-WARP_DATA_PATH="/Users/sugiuraks/Documents/COIAS/COIAS_program/webCOIASRoughDevelopment/disk2/data"
+WARP_DATA_PATH="/Users/sugiuraks/Documents/COIAS/COIAS_program/webCOIASRoughDevelopment/disk2/"
 IS_WEB_COIAS=false
