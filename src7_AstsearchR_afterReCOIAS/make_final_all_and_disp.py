@@ -28,8 +28,15 @@ from astropy.io import fits
 import visitsort
 import print_detailed_log
 import PARAM
+import readparam
 
 try:
+    #---for webCOIAS, we output user id to used_param.txt-------
+    if PARAM.IS_WEB_COIAS:
+        params = readparam.readparam()
+        readparam.write_used_param("id", params["id"])
+    #-----------------------------------------------------------
+    
     #---open output file and write header-----------------------
     outputFile = open("final_all.txt","w",newline="\n")
     outputFile.write("---initial fits files---------------------------\n")
