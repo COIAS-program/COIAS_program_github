@@ -3,6 +3,7 @@
 ```mermaid
 flowchart TD
     A[/初期画像ファイル\nwarp-HSC-フィルタ-tract番号-patch番号,patch番号-*.fits/] --- B[[binning.py]]
+	L[(webCOIASの場合)\nselected_warp_files.txt] --- B
     B --> C[/ビニング済み画像ファイル\nwarpbin-HSC-フィルタ-tract番号-patch番号,patch番号-*.fits/]
     C --- D[[subm2.py]]
     D --> E[/ビニングマスク済み画像ファイル\nwarp*_bin.fits/]
