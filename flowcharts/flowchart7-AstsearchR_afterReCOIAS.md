@@ -62,6 +62,10 @@ flowchart TD
     i --> k[/final_disp.txt/]
     i --> t[/"~/.coias/param/max_H_number.txt"/]
     S --- i
+    j --- u[["(webCOIASの場合)"\nupdate_MySQL_tables.py]]
+    f --- u
+    u --> v[/"(サーバのどこかにも保存)"\nyyyymmddHHMM_id_send_mpc.txt/]
+    u --> w[/"(サーバのどこかにも保存)"\nyyyymmddHHMM_id_final_all.txt/]
 
     click B1 "https://github.com/COIAS-program/COIAS_program_github/blob/main/src7_AstsearchR_afterReCOIAS/adjust_newH_manual.py"
     click B "https://github.com/COIAS-program/COIAS_program_github/blob/main/src7_AstsearchR_afterReCOIAS/merge_manual"
