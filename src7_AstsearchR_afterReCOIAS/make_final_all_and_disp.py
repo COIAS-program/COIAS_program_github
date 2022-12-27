@@ -40,9 +40,26 @@ try:
     #---open output file and write header-----------------------
     outputFile = open("final_all.txt","w",newline="\n")
     outputFile.write("---initial fits files---------------------------\n")
-    originalImgNames = sorted(glob.glob('warp-*.fits'), key=visitsort.key_func_for_visit_sort)
+    if not PARAM.IS_WEB_COIAS:
+        originalImgNames = sorted(glob.glob('warp-*.fits'), key=visitsort.key_func_for_visit_sort)
+    else:
+        f = open("selected_warp_files.txt","r")
+        lines = f.readlines()
+        f.close()
+        originalImgNames = []
+        for line in lines:
+            if line.startswith("data"):
+                originalImgNames.append(line.rstrip("\n").split("/").pop(-1))
+        originalImgNames = sorted(originalImgNames, key=visitsort.key_func_for_visit_sort)
+
+    binnedImgNames = []
     for i in range(len(originalImgNames)):
-        hdul = fits.open(originalImgNames[i])
+        nameFlagmentList = originalImgNames[i].split("-")
+        nameFlagmentList[0] = "warpbin"
+        binnedImgNames.append( "-".join(nameFlagmentList) )
+                
+    for i in range(len(originalImgNames)):
+        hdul = fits.open(binnedImgNames[i])
         expTime = hdul[0].header["EXPTIME"]
         outputFile.write("{:d}: ".format(i) + originalImgNames[i] + ": exptime[s]={:.1f}".format(expTime) + "\n")
     outputFile.write("------------------------------------------------\n\n")
