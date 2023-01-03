@@ -8,13 +8,12 @@
 # 汎用的にするために各行に画像番号の情報が付与されていないため,
 # 行末に画像番号の情報を付加しながらカレントに集めてsearch_astB.txtを生成する.
 # また1枚目の画像に対応するprecise_orbit_directories.txtに記載のディレクトリから
-# bright_asteroid_MPC_names_in_the_field.txtとname_conversion_list_in_the_field.txtを
+# bright_asteroid_MPC_names_in_the_field.txtを
 # カレントディレクトリにコピーする.
 # 入力: precise_orbit_directories.txtに記載のディレクトリ以下にあるsearch_astB.txtたち
 # 出力: search_astB.txt
 # 　　    書式: 確定番号or仮符号 jd ra[degree] dec[degree] mag 画像番号
 # 　　  bright_asteroid_MPC_names_in_the_field.txt
-# 　　  name_conversion_list_in_the_field.txt
 ###################################################################################
 import os
 import subprocess
@@ -68,8 +67,6 @@ try:
 
     #---copy asteroid name list stored in ~/.coias/orbit_data to the current directory-----------------------------------
     completed_process = subprocess.run("cp {0}/bright_asteroid_MPC_names_in_the_field.txt ./".format(directoryNames[0]),shell=True)
-    errorList.append(completed_process.returncode)
-    completed_process = subprocess.run("cp {0}/name_conversion_list_in_the_field.txt ./".format(directoryNames[0]),shell=True)
     errorList.append(completed_process.returncode)
     #--------------------------------------------------------------------------------------------------------------------
 
