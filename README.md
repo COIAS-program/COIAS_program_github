@@ -42,3 +42,19 @@
 3. 事前処理(preprocess)で、SExtractorの解析で何ピクセル以上明るい場所が連結していたら光源と見なすのかを[pixel]単位でオプションにて指定できる。AstsearchR もしくは preprocess を実行する時に、dm=\*、の書式で引数に指定することで設定できる (dm: DETECTION MINAREAの略)。例) AstsearchR dm=15。2.で説明したパラメータと同時に設定できる。例) AstsearchR dm=15 nd=5 ar=7 vt=3.0。特に指定しない時は、dm=6がデフォルトの値として設定される。ノイズが多すぎて解析に支障を来すと思われる時はこの値を増やすと良い。
 4. ビニングマスク(startsearch2R)で、SExtractorによって検出される光源数の平均値の大雑把な上限を指定できる。AstsearchR もしくは startsearch2R を実行する時に、sn=\*、の書式で引数に指定することができる (sn: source numberの略)。 例) AstsearchR sn=300。これも2.3.で説明したパラメータと同時に設定でき、順不同である。特に指定しない時は、sn=500がデフォルトの値として設定される。こちらもノイズの数を少なくする効果があるが、3.よりも小さな移動天体を逃しにくいかもしれない。(試行錯誤が必要) 注: 3.はSExtractorのDETECT_MINAREAを直接指定するパラメータであるが、4.はDETECT_THRESHを調整することで検出光源数をsnの値に近づけるという動作をする。また検出光源数がsnの値よりも少ない時はDETECT_THRESH=1.2をそのまま使用し、あえて検出光源数を増やしてsnの値に近づけるということはしない。
 5. Astsearch_afterReCOIAS の delLargeZansa_and_modPrecision.py の第二引数にて、MPCに報告する赤緯(dec)の秒の小数点以下の精度を指定できる。デフォルトでは1桁で、特に精度を要求される時には2桁にする必要があるらしい。1桁必要なら第二引数に1を、2桁必要なら2を指定する。
+
+## ウェブCOIASに向けた追加機能の実装について
+
+保守管理性の観点から本リポジトリの開発思想として、バックエンド側のスクリプトならば全く同一のスクリプトでもオリジナル・デスクトップ・ウェブCOIASの全てで使い回せるように設計している。しかしながらウェブCOIASではデータベース機能や画像全てを保存しているハードディスクがあったりと、オリジナル・デスクトップCOIASにはない機能が必要になる。加えていくつかのデータ置き場となっているPATHが異なっている場合もある。
+
+これに対応するために、COIASlibs/ に PARAM および PARAM.py を追加し、ウェブCOIASであるか否かのフラグといくつかのデータ置き場へのPATHを定数として記載しておくようにした。定数の一覧は
+
+- IS_WEB_COIAS: ウェブCOIASであるか否か。オリジナル・デスクトップCOIASのリポジトリではこれをFalseに、ウェブCOIASのリポジトリではTrueにしておく
+- COIAS_DATA_PATH: オリジナルCOIASで言うところの \~/.coiasへのPATH
+- WARP_DATA_PATH: warp画像が置いてあるハードディスクがマウントしてあるディレクトリが置いてある場所へのPATH. 2023/1/3現在COIASサーバでは /diskCOIAS/
+
+IS_WEB_COIASがTrueである場合、ウェブCOIASの機能として以下の機能が追加される:
+
+- 解析するwarp画像の一覧はフロントにて選択されたのちにカレントの selected_warp_files.txt に書き出されるものと想定。binning.py と subm2.py にて selected_warp_files.txt に記載の画像に対応するビニング・マスク済みwarp画像とpng画像を WARP_DATA_PATH から探してきてカレントにコピーする機能
+
+- ユーザIDは AstsearchR_afterReCOIAS が叩かれる際に id=\* の書式で引数に指定することでバックエンド側に通知するものと想定。同スクリプトにて呼び出される update_MySQL_tables.py にてMySQLのCOIASデータベースの、image_infoテーブルとdir_structureテーブルに画像の解析情報を、measure_resultテーブルに解析した結果そのものを反映・挿入する機能
