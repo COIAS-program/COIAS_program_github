@@ -193,7 +193,8 @@ try:
                     fList[i] = open(directoryNames[i]+"/karifugo_new2B.txt","w",newline="\n")
 
             for i in range(len(tmp8)):
-                fList[int(tmp8[i,5])].write(tmp8[i,0]+" "+str(tmp8[i,1])+" "+str(tmp8[i,2])+" "+str(tmp8[i,3])+" "+str(tmp8[i,4])+"\n")
+                if isCorrectDirectory[int(tmp8[i,5])]==0:
+                    fList[int(tmp8[i,5])].write(tmp8[i,0]+" "+str(tmp8[i,1])+" "+str(tmp8[i,2])+" "+str(tmp8[i,3])+" "+str(tmp8[i,4])+"\n")
 
             for i in range(Ndata):
                 if isCorrectDirectory[i]==0:
