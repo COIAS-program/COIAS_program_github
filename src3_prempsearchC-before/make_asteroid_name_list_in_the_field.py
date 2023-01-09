@@ -38,7 +38,7 @@ try:
     completed_process = subprocess.run(r"sed -e 's/\\//g' bright_asteroid_raw_names_in_the_field.txt > bright_asteroid_raw_names_in_the_field2.txt",shell=True)
     errorList.append(completed_process.returncode)
     ## subtract number from numbered asteroids and karifugo from karifugo asteroids
-    completed_process = subprocess.run("awk -F' ' '{if( ( ($1 ~ /^18[0-9][0-9]/ || $1 ~ /^19[0-9][0-9]/ || $1 ~ /^20[0-9][0-9]/) && $2 ~ /^[A-Z][A-Z][0-9]*/ ) || $2 == 'P-L' || $2 == 'T-1' || $2 == 'T-2' || $2 == 'T-3' ){print $1,$2}else{print $1}}' bright_asteroid_raw_names_in_the_field2.txt > bright_asteroid_raw_names_in_the_field3.txt",shell=True)
+    completed_process = subprocess.run("awk -F' ' '{if( ( ($1 ~ /^18[0-9][0-9]$/ || $1 ~ /^19[0-9][0-9]$/ || $1 ~ /^20[0-9][0-9]$/) && $2 ~ /^[A-Z][A-Z][0-9]*$/ ) || $2 == 'P-L' || $2 == 'T-1' || $2 == 'T-2' || $2 == 'T-3' ){print $1,$2}else{print $1}}' bright_asteroid_raw_names_in_the_field2.txt > bright_asteroid_raw_names_in_the_field3.txt",shell=True)
     errorList.append(completed_process.returncode)
     ## remove space between karifugo
     completed_process = subprocess.run("sed 's/ //g' bright_asteroid_raw_names_in_the_field3.txt > bright_asteroid_raw_names_in_the_field4.txt",shell=True)
