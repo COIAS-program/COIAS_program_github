@@ -24,34 +24,12 @@ import os
 import glob
 import re
 import shutil
-from os.path import expanduser
 from datetime import datetime, timedelta
 import traceback
 import print_detailed_log
 import readparam
 import changempc
-import pymysql
-
-### function: connect to the database COIAS ###############
-def connect_to_COIAS_database():
-    ## get password
-    pwFileName = expanduser("~") + "/.pw/pwCOIASdb.txt"
-    f = open(pwFileName, "r")
-    pw = f.readline().rstrip("\n")
-    f.close()
-
-    ## connect
-    connection = pymysql.connect(host="localhost",
-                                 user="dataHandler",
-                                 database="COIAS",
-                                 charset="utf8",
-                                 password=pw,
-                                 cursorclass=pymysql.cursors.DictCursor
-                                 )
-    cursor = connection.cursor()
-
-    return (connection, cursor)
-###########################################################
+import COIAS_MySQL
 
 class InvalidIDError(Exception):
     pass
@@ -65,7 +43,7 @@ try:
     #-------------------------------------------------------
 
     ## connect to the COIAS database
-    connection, cursor = connect_to_COIAS_database()
+    connection, cursor = COIAS_MySQL.connect_to_COIAS_database()
     
     #---If this script runs second time in the same analysis,
     #---duplicated data are created, thus we clear such data.
@@ -218,8 +196,7 @@ try:
     shutil.copyfile("final_all.txt", prefixedFinalAllFileName)
     shutil.copyfile("send_mpc.txt", prefixedSendMPCFileName)
 
-    cursor.close()
-    connection.close()
+    COIAS_MySQL.close_COIAS_database(connection, cursor)
     
 except FileNotFoundError:
     print("Some previous files are not found in update_MySQL_tables.py!",flush=True)
