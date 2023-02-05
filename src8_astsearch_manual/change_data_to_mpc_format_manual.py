@@ -45,7 +45,7 @@ try:
             #ra dec
             raDecStr = change_ra_dec_to_MPC_format(float(data[l][2]),float(data[l][3]))
 
-            mpc1Row = nameStr + "  " + timeStr + " " + raDecStr + "         " + "{:.1f}".format(float(data[l][4])).rjust(4,'0') + " " + data[l][8] + "      " + "568"
+            mpc1Row = nameStr + "  " + timeStr + " " + raDecStr + "         " + "{:.1f}".format(float(data[l][4])).rjust(4,'0') + " " + data[l][8] + "      " + "T09"
             fileUnknownMpc.write(mpc1Row + "\n")
             fileUnknownAll.write(mpc1Row + " " + data[l][9] + " " + data[l][4] + " " + data[l][5] + " " + data[l][6] + " " + data[l][7] + " m \n")
             fileUnknownDisp.write(nameStr + " " + data[l][9] + " " + data[l][6] + " " + data[l][7] + "\n")
@@ -92,7 +92,7 @@ try:
             timeStr = change_jd_to_MPC_format_date(float(data[l][1]))
             #ra dec
             raDecStr = change_ra_dec_to_MPC_format(float(data[l][2]),float(data[l][3]))
-            mpc1Row = nameStr + "  " + timeStr + " " + raDecStr + "         " + "{:.1f}".format(float(data[l][4])).rjust(4,'0') + " " + data[l][8] + "      " + "568"
+            mpc1Row = nameStr + "  " + timeStr + " " + raDecStr + "         " + "{:.1f}".format(float(data[l][4])).rjust(4,'0') + " " + data[l][8] + "      " + "T09"
             fileMpc.write(mpc1Row + "\n")
             fileAll.write(mpc1Row + " " + data[l][9] + " " + data[l][4] + " " + data[l][5] + " " + data[l][6] + " " + data[l][7] + " m \n")
             fileDisp.write(nameStr + " " + data[l][9] + " " + data[l][6] + " " + data[l][7] + "\n")
