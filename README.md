@@ -58,3 +58,11 @@ IS_WEB_COIASがTrueである場合、ウェブCOIASの機能として以下の�
 - 解析するwarp画像の一覧はフロントにて選択されたのちにカレントの selected_warp_files.txt に書き出されるものと想定。binning.py と subm2.py にて selected_warp_files.txt に記載の画像に対応するビニング・マスク済みwarp画像とpng画像を WARP_DATA_PATH から探してきてカレントにコピーする機能
 
 - ユーザIDは AstsearchR_afterReCOIAS が叩かれる際に id=\* の書式で引数に指定することでバックエンド側に通知するものと想定。同スクリプトにて呼び出される update_MySQL_tables.py にてMySQLのCOIASデータベースの、image_infoテーブルとdir_structureテーブルに画像の解析情報を、measure_resultテーブルに解析した結果そのものを反映・挿入する機能
+
+さらに、ウェブCOIAS向けの事後処理スクリプト src9_postprocess も追加した(2023/2/7)。こちらはオリジナルCOIASでは全く使用する必要がないが、ウェブCOIASでは必要となる。このディレクトリに含まれる postprocess には以下の機能がある:
+
+- カレントディレクトリにあるyyyymmddHHMM_id_send_mpc.txtの内容をMPCに送信する.
+
+- カレントディレクトリにあるyyyymmddHHMM_id_send_mpc.txtとyyyymmddHHMM_id_final_all.txtを$COIAS_DATA_PATH(~/.coiasに対応する場所)の適切なディレクトリにコピーする.
+
+-カレントディレクトリにある容量の大きいファイルを削除する

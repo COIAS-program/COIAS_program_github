@@ -1,0 +1,26 @@
+#!/bin/bash
+#Timestamp: 2023/01/13 14:30 sugiura
+#################################################
+# 事後処理を統括するスクリプト.
+# ウェブCOIASの最後に「確認完了・メール送信」ボタンで叩かれるスクリプトはこれ.
+# 1. カレントディレクトリにあるyyyymmddHHMM_id_send_mpc.txtの内容をMPCに送信する.
+# 2. カレントディレクトリにあるyyyymmddHHMM_id_send_mpc.txtとyyyymmddHHMM_id_final_all.txtを
+#    $COIAS_DATA_PATH(~/.coiasに対応する場所)の適切なディレクトリにコピーする.
+# 3. カレントディレクトリにある容量の大きいファイルを削除する
+#################################################
+
+set -o pipefail
+echo postprocess begins 2>&1 | tee -a log.txt
+echo $? 95 901 > error.txt
+
+send_mail_to_MPC.py 2>&1 | tee -a log.txt
+TMP_ERROR=$?
+
+copy_sendMpc_and_finalAll_to_data_path.py $TMP_ERROR 2>&1 | tee -a log.txt
+
+delete_large_files 2>&1 | tee -a log.txt
+echo $? 95 904 >> error.txt
+
+echo postprocess ends 2>&1 | tee -a log.txt
+error_handling.py | tee -a log.txt
+exit $?
