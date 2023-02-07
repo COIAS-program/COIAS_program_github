@@ -65,4 +65,4 @@ IS_WEB_COIASがTrueである場合、ウェブCOIASの機能として以下の�
 
 - カレントディレクトリにあるyyyymmddHHMM_id_send_mpc.txtとyyyymmddHHMM_id_final_all.txtを$COIAS_DATA_PATH(~/.coiasに対応する場所)の適切なディレクトリにコピーする.
 
--カレントディレクトリにある容量の大きいファイルを削除する
+- カレントディレクトリにある容量の大きいファイルを削除する
