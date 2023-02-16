@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Timestamp: 2022/08/05 23:00 sugiura
+# Timestamp: 2023/02/16 11:00 sugiura
 ##############################################################################################
 # 手動測定によって得られた新天体のH番号を連番にする.
 # 手動測定天体の始めのH番号は, ノイズも含めた自動検出天体と被らないようにdisp.txtに記載の
@@ -21,82 +21,104 @@
 import re
 import traceback
 import print_detailed_log
+import PARAM
 
 try:
-    #---get maximum H number from redisp.txt---------
-    redispFile = open("redisp.txt","r")
+    # ---get maximum H number from redisp.txt---------
+    redispFile = open("redisp.txt", "r")
     lines = redispFile.readlines()
     redispFile.close()
 
     NHMax = 0
+    noRedispContents = True
     for line in lines:
         contents = line.split()
-        if re.search(r'^H......',contents[0])!=None:
+        if re.search(r"^H......", contents[0]) != None:
             NH = int(contents[0].lstrip("H"))
             if NH > NHMax:
                 NHMax = NH
-    #------------------------------------------------
+                noRedispContents = False
 
+    ### If redisp.txt has no line, we have to determine NHMax from max_H_number.txt
+    if noRedispContents:
+        maxHFileName = PARAM.COIAS_DATA_PATH + "/param/max_H_number.txt"
+        f = open(maxHFileName, "r")
+        line = f.readline()
+        f.close()
 
-    #---get H conversion list and output it----------
-    mpcMFile = open("mpc_m.txt","r")
+        NHMax = int(line.split()[0])
+    # ------------------------------------------------
+
+    # ---get H conversion list and output it----------
+    mpcMFile = open("mpc_m.txt", "r")
     lines = mpcMFile.readlines()
     mpcMFile.close()
 
     oldHList = []
     newHList = []
-    k=1
+    k = 1
     for line in lines:
         contents = line.split()
-        if re.search(r'^H......',contents[0])!=None:
+        if re.search(r"^H......", contents[0]) != None:
             strH = contents[0]
             if strH not in oldHList:
                 oldHList.append(strH)
-                newHList.append("H"+str(NHMax+k).rjust(6,'0'))
+                newHList.append("H" + str(NHMax + k).rjust(6, "0"))
                 k += 1
 
-    HConversionListFile = open("H_conversion_list_manual.txt","w",newline="\n")
+    HConversionListFile = open("H_conversion_list_manual.txt", "w", newline="\n")
     for l in range(len(oldHList)):
-        HConversionListFile.write(oldHList[l]+" "+newHList[l]+"\n")
+        HConversionListFile.write(oldHList[l] + " " + newHList[l] + "\n")
     HConversionListFile.close()
-    #------------------------------------------------
+    # ------------------------------------------------
 
-
-    #---make mpc4_m.txt, newall_m.txt, and redisp_manual.txt--------
-    inputFile = open("all_m.txt","r")
-    mpc4MFile = open("mpc4_m.txt","w",newline="\n")
-    redispMFile = open("redisp_manual.txt","w",newline="\n")
-    newallMFile = open("newall_m.txt","w",newline="\n")
+    # ---make mpc4_m.txt, newall_m.txt, and redisp_manual.txt--------
+    inputFile = open("all_m.txt", "r")
+    mpc4MFile = open("mpc4_m.txt", "w", newline="\n")
+    redispMFile = open("redisp_manual.txt", "w", newline="\n")
+    newallMFile = open("newall_m.txt", "w", newline="\n")
 
     lines = inputFile.readlines()
     inputFile.close()
     for line in lines:
         contents = line.split()
-        replaceHl=0
+        replaceHl = 0
         for l in range(len(oldHList)):
-            if contents[0]==oldHList[l]:
+            if contents[0] == oldHList[l]:
                 replaceHl = l
-        if len(oldHList)!=0:
+        if len(oldHList) != 0:
             line = line.replace(oldHList[replaceHl], newHList[replaceHl])
         contents = line.split()
 
-        mpc4MFile.write(line[0:80]+"\n")
-        redispMFile.write(contents[0]+" "+contents[13]+" "+contents[16]+" "+contents[17]+"\n")
+        mpc4MFile.write(line[0:80] + "\n")
+        redispMFile.write(
+            contents[0]
+            + " "
+            + contents[13]
+            + " "
+            + contents[16]
+            + " "
+            + contents[17]
+            + "\n"
+        )
         newallMFile.write(line)
 
     mpc4MFile.close()
     redispMFile.close()
-    #------------------------------------------------------------------
+    # ------------------------------------------------------------------
 
 except FileNotFoundError:
-    print("Some previous files are not found in make_mpc4_newall_and_redisp_manual.py!",flush=True)
-    print(traceback.format_exc(),flush=True)
+    print(
+        "Some previous files are not found in make_mpc4_newall_and_redisp_manual.py!",
+        flush=True,
+    )
+    print(traceback.format_exc(), flush=True)
     error = 1
     errorReason = 84
 
 except Exception:
-    print("Some errors occur in make_mpc4_newall_and_redisp_manual.py!",flush=True)
-    print(traceback.format_exc(),flush=True)
+    print("Some errors occur in make_mpc4_newall_and_redisp_manual.py!", flush=True)
+    print(traceback.format_exc(), flush=True)
     error = 1
     errorReason = 85
 
@@ -105,9 +127,9 @@ else:
     errorReason = 84
 
 finally:
-    errorFile = open("error.txt","a")
-    errorFile.write("{0:d} {1:d} 808 \n".format(error,errorReason))
+    errorFile = open("error.txt", "a")
+    errorFile.write("{0:d} {1:d} 808 \n".format(error, errorReason))
     errorFile.close()
 
-    if error==1:
+    if error == 1:
         print_detailed_log.print_detailed_log(dict(globals()))
