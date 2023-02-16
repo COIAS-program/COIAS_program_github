@@ -20,8 +20,8 @@ flowchart TD
     M --> N[/all_m.txt/]
     M --> O[/mpc_m.txt/]
     M --> P[/disp_m.txt/]
-    N --- Q[[make_mpc4_newall_and_redisp_manual.py]]
-	c[/"(redisp.txtが空の場合)\n~/.coias/param/max_H_number.txt"/] --- Q
+	c[/"(redisp.txtが空の場合)\n~/.coias/param/max_H_number.txt"/] --- Q[[make_mpc4_newall_and_redisp_manual.py]]
+    N --- Q
     O --- Q
     P --- Q
     Q --> R[/newall_m.txt/]
