@@ -18,6 +18,8 @@ TMP_ERROR=$?
 
 copy_sendMpc_and_finalAll_to_data_path.py $TMP_ERROR 2>&1 | tee -a log.txt
 
+update_N_new_objects.py 2>&1 | tee -a log.txt
+
 delete_large_files 2>&1 | tee -a log.txt
 echo $? 95 904 >> error.txt
 
