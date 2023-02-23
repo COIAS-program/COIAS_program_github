@@ -61,8 +61,10 @@ IS_WEB_COIASがTrueである場合、ウェブCOIASの機能として以下の�
 
 さらに、ウェブCOIAS向けの事後処理スクリプト src9_postprocess も追加した(2023/2/7)。こちらはオリジナルCOIASでは全く使用する必要がないが、ウェブCOIASでは必要となる。このディレクトリに含まれる postprocess には以下の機能がある:
 
-- カレントディレクトリにあるyyyymmddHHMM_id_send_mpc.txtの内容をMPCに送信する.
+- カレントディレクトリにあるyyyymmddHHMM_id_send_mpc.txtの内容をMPCに送信する
 
-- カレントディレクトリにあるyyyymmddHHMM_id_send_mpc.txtとyyyymmddHHMM_id_final_all.txtを$COIAS_DATA_PATH(~/.coiasに対応する場所)の適切なディレクトリにコピーする.
+- カレントディレクトリにあるyyyymmddHHMM_id_send_mpc.txtとyyyymmddHHMM_id_final_all.txtを$COIAS_DATA_PATH(~/.coiasに対応する場所)の適切なディレクトリにコピーする
+
+- 今回の測定の新発見候補天体数を数え、~/.coias/param/N_new_objects.txtに記載の今までにCOIASで発見された新発見候補天体数をアップデートする
 
 - カレントディレクトリにある容量の大きいファイルを削除する
