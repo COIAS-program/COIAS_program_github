@@ -494,7 +494,11 @@ try:
 
 
     result2 = np.array(result, dtype='object')  # revised by N.M 2020.12.14
-    np.savetxt("listb2.txt", result2, fmt="%d %.9f %.7f %.7f %.3f %.3f %.2f %.2f %s %d")
+    if len(result2)==0:
+        empty = []
+        np.savetxt("listb2.txt", empty, fmt="%s")
+    else:
+        np.savetxt("listb2.txt", result2, fmt="%d %.9f %.7f %.7f %.3f %.3f %.2f %.2f %s %d")
     subprocess.run("sort -t ' ' -k 1,1n -k 2,2n listb2.txt -o listb2.txt", shell=True)
     ##########################################################
 
