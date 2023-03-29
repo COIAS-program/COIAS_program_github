@@ -142,7 +142,10 @@ try:
                     NLoseAsteroids += 1
                     
             nn = nn - NLoseAsteroids
-            if len(tmp10) != 1:
+            # 注釈: ここでは単に辞書の3次元配列であるところのtmp10をndarrayのtmp5に変換したいだけである
+            # 　　  しかしtmp10の1次元目の長さ(=天体数)が1か2の時, ndarrayはどのように変換すれば良いか判断できなくてエラーが出る
+            # 　　  そのため自前で変換を行う
+            if len(tmp10) != 1 and len(tmp10) != 2:
                 tmp5 = np.array(tmp10)
             else:
                 tmp5 = np.zeros((len(tmp10),len(tmp10[0])),dtype=object)
