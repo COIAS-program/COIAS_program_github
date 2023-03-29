@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
-#Timestamp: 2022/08/04 13:30 sugiura
+# Timestamp: 2023/03/29 8:30 sugiura
 #########################################################################
 # prempsearchC-beforeとafterで行われる視野内既知天体の精密位置取得は,
 # tractとjdが同じであれば1度実行すればよく, patchが違っても適用可能である.
@@ -36,127 +36,172 @@ import print_detailed_log
 import PARAM
 
 try:
-    #---variables--------------------------------
-    fitsFileNameList = sorted(glob.glob('warp*_bin.fits'))
+    # ---variables--------------------------------
+    fitsFileNameList = sorted(glob.glob("warp*_bin.fits"))
     Ndata = len(fitsFileNameList)
     presentTimeStamp = time.time()
     isCorrectDirectory = [0] * Ndata
-    directoryNames = ['a'] * Ndata
-    preciseOrbitFleshTime = 60*60*24*14
-    #--------------------------------------------
+    directoryNames = ["a"] * Ndata
+    preciseOrbitFleshTime = 60 * 60 * 24 * 14
+    # --------------------------------------------
 
-    #---read ra dec jd of warp files-------------
+    # ---read ra dec jd of warp files-------------
     raList = []
     decList = []
     jdList = []
     for i in range(Ndata):
         scidata = fits.open(fitsFileNameList[i])
-        raList.append(scidata[0].header['CRVAL1'])
-        decList.append(scidata[0].header['CRVAL2'])
-        jdList.append(scidata[0].header['JD'])
-    #--------------------------------------------
+        raList.append(scidata[0].header["CRVAL1"])
+        decList.append(scidata[0].header["CRVAL2"])
+        jdList.append(scidata[0].header["JD"])
+    # --------------------------------------------
 
-    #---get yyyy-mm-dd of jdList[0]--------------
-    tInTimeObj = Time(jdList[0], format="jd")
-    tInIso = tInTimeObj.iso
-    yyyy_mm_dd = tInIso.split()[0]
-    #--------------------------------------------
-
-    #---write out yyyy-mm-dd HH:MM:SS of warp files to the file----
-    f = open("formatted_time_list.txt","w")
+    # ---write out yyyy-mm-dd HH:MM:SS of warp files to the file----
+    f = open("formatted_time_list.txt", "w")
     for i in range(Ndata):
         tInTimeObj = Time(jdList[i], format="jd")
         tInIso = tInTimeObj.iso
         formattedTimeStr = tInIso.split(".")[0]
         f.write(formattedTimeStr + "\n")
     f.close()
-    #--------------------------------------------------------------
+    # --------------------------------------------------------------
 
-    #---if directory ~/.coias/orbit_data/yyyy_mm_dd does not exist-
-    #---we produce it----------------------------------------------
-    dirName = PARAM.COIAS_DATA_PATH + "/orbit_data/" + yyyy_mm_dd
-    if not os.path.isdir(dirName):
-        os.mkdir(dirName)
-    logFileName = dirName + "/log.txt"
-    if not os.path.isfile(logFileName):
-        logFile = open(logFileName, "w")
-        logFile.write("0")
-        logFile.close
-    #--------------------------------------------------------------
-
-    #---read ~/.coias/orbit_data/log.txt---------
-    logFileName = dirName + "/log.txt"
-    logFile = open(logFileName,"r")
-    line = logFile.readline()
-    maxNumOrbitDirectories = int(line.rstrip("\n"))
-    logFile.close()
-    #--------------------------------------------
-    
-    #---check presice orbit directory exists or not-
-    filesInOrbitDataDir = glob.glob(dirName + "/*")
-    for fileName in filesInOrbitDataDir:
-        if os.path.isdir(fileName):
-            if (not os.path.isfile(fileName+"/ra_dec_jd_time.txt")) or (not os.path.isfile(fileName+"/numbered_new2B.txt")) or (not os.path.isfile(fileName+"/karifugo_new2B.txt")) or (not os.path.isfile(fileName+"/search_astB.txt")) or (not os.path.isfile(fileName+"/bright_asteroid_MPC_names_in_the_field.txt")):
-                print("The directory "+fileName+" does not have ra_dec_jd_time.txt, numbered_new2B.txt, karifugo_new2B.txt, search_astB.txt, or bright_asteroid_MPC_names_in_the_field.txt")
-                print("Remove the directory.")
-                shutil.rmtree(fileName)
-            else:
-                raDecJdTimeFile = open(fileName+"/ra_dec_jd_time.txt","r")
-                line = raDecJdTimeFile.readline()
-                content = line.split()
-                ra = float(content[0])
-                dec = float(content[1])
-                jd = float(content[2])
-                fileTime = float(content[3])
-                raDecJdTimeFile.close()
-
-                for i in range(Ndata):
-                    if abs(ra-raList[i])<0.01 and abs(dec-decList[i])<0.01 and abs(jd-jdList[i])<0.00001 and abs(fileTime-presentTimeStamp)<preciseOrbitFleshTime:
-                        # known objects in this file were already searched recently
-                        isCorrectDirectory[i] = 1
-                        directoryNames[i] = fileName
-                    elif abs(ra-raList[i])<0.01 and abs(dec-decList[i])<0.01 and abs(jd-jdList[i])<0.00001 and abs(fileTime-presentTimeStamp)>preciseOrbitFleshTime:
-                        # known objects in this file were searched but long ago
-                        isCorrectDirectory[i] = 0
-                        directoryNames[i] = fileName
-    #-----------------------------------------------
-
-    #---if presice orbit directory does not exist, make it-
+    # ---get distinct yyyy-mm-dd list and yyyy-mm-dd for each image -
+    distinct_yyyy_mm_dd_list = []
+    images_yyyy_mm_dd_list = []
     for i in range(Ndata):
-        if isCorrectDirectory[i]==0 and directoryNames[i]=='a':
+        tInTimeObj = Time(jdList[i], format="jd")
+        tInIso = tInTimeObj.iso
+        yyyy_mm_dd = tInIso.split()[0]
+
+        if yyyy_mm_dd not in distinct_yyyy_mm_dd_list:
+            distinct_yyyy_mm_dd_list.append(yyyy_mm_dd)
+        images_yyyy_mm_dd_list.append(yyyy_mm_dd)
+    # ---------------------------------------------------------------
+
+    for yyyy_mm_dd in distinct_yyyy_mm_dd_list:
+        # ---if directory ~/.coias/orbit_data/yyyy_mm_dd does not exist-
+        # ---we produce it----------------------------------------------
+        dirName = PARAM.COIAS_DATA_PATH + "/orbit_data/" + yyyy_mm_dd
+        if not os.path.isdir(dirName):
+            os.mkdir(dirName)
+        logFileName = dirName + "/log.txt"
+        if not os.path.isfile(logFileName):
+            logFile = open(logFileName, "w")
+            logFile.write("0")
+            logFile.close
+        # --------------------------------------------------------------
+
+        # ---read ~/.coias/orbit_data/log.txt---------
+        logFileName = dirName + "/log.txt"
+        logFile = open(logFileName, "r")
+        line = logFile.readline()
+        maxNumOrbitDirectories = int(line.rstrip("\n"))
+        logFile.close()
+        # --------------------------------------------
+
+        # ---check presice orbit directory exists or not-
+        filesInOrbitDataDir = glob.glob(dirName + "/*")
+        for fileName in filesInOrbitDataDir:
+            if os.path.isdir(fileName):
+                if (
+                    (not os.path.isfile(fileName + "/ra_dec_jd_time.txt"))
+                    or (not os.path.isfile(fileName + "/numbered_new2B.txt"))
+                    or (not os.path.isfile(fileName + "/karifugo_new2B.txt"))
+                    or (not os.path.isfile(fileName + "/search_astB.txt"))
+                    or (
+                        not os.path.isfile(
+                            fileName + "/bright_asteroid_MPC_names_in_the_field.txt"
+                        )
+                    )
+                ):
+                    print(
+                        "The directory "
+                        + fileName
+                        + " does not have ra_dec_jd_time.txt, numbered_new2B.txt, karifugo_new2B.txt, search_astB.txt, or bright_asteroid_MPC_names_in_the_field.txt"
+                    )
+                    print("Remove the directory.")
+                    shutil.rmtree(fileName)
+                else:
+                    raDecJdTimeFile = open(fileName + "/ra_dec_jd_time.txt", "r")
+                    line = raDecJdTimeFile.readline()
+                    content = line.split()
+                    ra = float(content[0])
+                    dec = float(content[1])
+                    jd = float(content[2])
+                    fileTime = float(content[3])
+                    raDecJdTimeFile.close()
+
+                    for i in range(Ndata):
+                        if (
+                            abs(ra - raList[i]) < 0.01
+                            and abs(dec - decList[i]) < 0.01
+                            and abs(jd - jdList[i]) < 0.00001
+                            and abs(fileTime - presentTimeStamp) < preciseOrbitFleshTime
+                        ):
+                            # known objects in this file were already searched recently
+                            isCorrectDirectory[i] = 1
+                            directoryNames[i] = fileName
+                        elif (
+                            abs(ra - raList[i]) < 0.01
+                            and abs(dec - decList[i]) < 0.01
+                            and abs(jd - jdList[i]) < 0.00001
+                            and abs(fileTime - presentTimeStamp) > preciseOrbitFleshTime
+                        ):
+                            # known objects in this file were searched but long ago
+                            isCorrectDirectory[i] = 0
+                            directoryNames[i] = fileName
+        # -----------------------------------------------
+
+    # ---if presice orbit directory does not exist, make it-
+    for i in range(Ndata):
+        if isCorrectDirectory[i] == 0 and directoryNames[i] == "a":
+            dirName = PARAM.COIAS_DATA_PATH + "/orbit_data/" + images_yyyy_mm_dd_list[i]
+            logFileName = dirName + "/log.txt"
+            logFile = open(logFileName, "r")
+            line = logFile.readline()
+            maxNumOrbitDirectories = int(line.rstrip("\n"))
+            logFile.close()
+
             directory = dirName + "/{0:d}".format(maxNumOrbitDirectories)
             os.mkdir(directory)
             isCorrectDirectory[i] = 0
             directoryNames[i] = directory
-            maxNumOrbitDirectories += 1
-    logFile = open(logFileName,"w",newline="\n")
-    logFile.write(str(maxNumOrbitDirectories))
-    logFile.close()
-    #------------------------------------------------------
 
-    #---output precise orbit directory information to current directory-
-    preciseOrbitDirectoryFile = open("precise_orbit_directories.txt","w",newline="\n")
+            maxNumOrbitDirectories += 1
+            logFile = open(logFileName, "w", newline="\n")
+            logFile.write(str(maxNumOrbitDirectories))
+            logFile.close()
+    # ------------------------------------------------------
+
+    # ---output precise orbit directory information to current directory-
+    preciseOrbitDirectoryFile = open("precise_orbit_directories.txt", "w", newline="\n")
     haveAllPreciseOrbit = 1
     for i in range(Ndata):
-        preciseOrbitDirectoryFile.write(directoryNames[i]+" {0:d}\n".format(isCorrectDirectory[i]))
-        if isCorrectDirectory[i]==0:
+        preciseOrbitDirectoryFile.write(
+            directoryNames[i] + " {0:d}\n".format(isCorrectDirectory[i])
+        )
+        if isCorrectDirectory[i] == 0:
             haveAllPreciseOrbit = 0
     preciseOrbitDirectoryFile.close()
 
-    haveAllPreciseOrbitFile = open("have_all_precise_orbits.txt","w",newline="\n")
+    haveAllPreciseOrbitFile = open("have_all_precise_orbits.txt", "w", newline="\n")
     haveAllPreciseOrbitFile.write(str(haveAllPreciseOrbit))
     haveAllPreciseOrbitFile.close()
-    #-------------------------------------------------------------------
+    # -------------------------------------------------------------------
 
 except FileNotFoundError:
-    print("Some previous files are not found in search_precise_orbit_directories.py!",flush=True)
-    print(traceback.format_exc(),flush=True)
+    print(
+        "Some previous files are not found in search_precise_orbit_directories.py!",
+        flush=True,
+    )
+    print(traceback.format_exc(), flush=True)
     error = 1
     errorReason = 24
 
 except Exception:
-    print("Some errors occur in search_precise_orbit_directories.py!",flush=True)
-    print(traceback.format_exc(),flush=True)
+    print("Some errors occur in search_precise_orbit_directories.py!", flush=True)
+    print(traceback.format_exc(), flush=True)
     error = 1
     errorReason = 25
 
@@ -165,9 +210,9 @@ else:
     errorReason = 24
 
 finally:
-    errorFile = open("error.txt","a")
-    errorFile.write("{0:d} {1:d} 208 \n".format(error,errorReason))
+    errorFile = open("error.txt", "a")
+    errorFile.write("{0:d} {1:d} 208 \n".format(error, errorReason))
     errorFile.close()
 
-    if error==1:
+    if error == 1:
         print_detailed_log.print_detailed_log(dict(globals()))

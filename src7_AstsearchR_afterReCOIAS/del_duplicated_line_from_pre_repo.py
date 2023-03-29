@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
-#Timestamp: 2022/08/06 20:30 sugiura
+# Timestamp: 2023/03/29 9:30 sugiura
 ################################################################################################
 # 過去にMPCに報告したデータ(同じファイル内でも違っても)とほとんど同じjd, ra, decを持つデータを再度報告すると,
 # 名前が一致していてもしていなくてもMPCに怒られる.
@@ -30,63 +30,86 @@ from astropy.time import Time
 import print_detailed_log
 import PARAM
 
+
 class NothingToDo(Exception):
     pass
+
 
 def extract_jd_ra_dec_info_from_MPC_line(MPCOneLine):
     jdStr = MPCOneLine[15:31]
 
     raHour = float(MPCOneLine.split()[4])
-    raMin  = float(MPCOneLine.split()[5])
-    raSec  = float(MPCOneLine.split()[6])
-    raArcSec = (360.0/24.0) * (raHour * 60 * 60 + raMin * 60 + raSec)
+    raMin = float(MPCOneLine.split()[5])
+    raSec = float(MPCOneLine.split()[6])
+    raArcSec = (360.0 / 24.0) * (raHour * 60 * 60 + raMin * 60 + raSec)
 
     decDegree = float(MPCOneLine.split()[7])
-    if decDegree<0.0: sign=-1.0
-    else:             sign= 1.0
-    decMin = sign*float(MPCOneLine.split()[8])
-    decSec = sign*float(MPCOneLine.split()[9])
+    if decDegree < 0.0:
+        sign = -1.0
+    else:
+        sign = 1.0
+    decMin = sign * float(MPCOneLine.split()[8])
+    decSec = sign * float(MPCOneLine.split()[9])
     decArcSec = decDegree * 60 * 60 + decMin * 60 + decSec
 
-    return {"jdStr":jdStr, "raArcSec":raArcSec, "decArcSec":decArcSec}
+    return {"jdStr": jdStr, "raArcSec": raArcSec, "decArcSec": decArcSec}
+
 
 try:
-    #---get yyyy-mm-dd of this measurement--------
-    scidata = fits.open("warp01_bin.fits")
-    jd = scidata[0].header['JD']
-    tInTimeObj = Time(jd, format="jd")
-    tInIso = tInTimeObj.iso
-    yyyy_mm_dd = tInIso.split()[0]
-    #---------------------------------------------
+    # ---get distinct yyyy-mm-dd list of this measurement---
+    distinct_yyyy_mm_dd_list = []
+    warpFileNameList = glob.glob("warp*_bin.fits")
+    for warpFileName in warpFileNameList:
+        scidata = fits.open(warpFileName)
+        jd = scidata[0].header["JD"]
+        tInTimeObj = Time(jd, format="jd")
+        tInIso = tInTimeObj.iso
+        yyyy_mm_dd = tInIso.split()[0]
+        if yyyy_mm_dd not in distinct_yyyy_mm_dd_list:
+            distinct_yyyy_mm_dd_list.append(yyyy_mm_dd)
+    # -------------------------------------------------------
 
-    #---check ~/.coias/past_pre_repo_data/yyyy-mm-dd directory exists or not
-    dirName = PARAM.COIAS_DATA_PATH + "/past_pre_repo_data/" + yyyy_mm_dd
-    if not os.path.isdir(dirName):
-        shutil.copy("pre_repo.txt","pre_repo2.txt")
+    # ---check ~/.coias/past_pre_repo_data/yyyy-mm-dd directory exists or not
+    foundCheckDir = False
+    for yyyy_mm_dd in distinct_yyyy_mm_dd_list:
+        dirName = PARAM.COIAS_DATA_PATH + "/past_pre_repo_data/" + yyyy_mm_dd
+        if os.path.isdir(dirName):
+            foundCheckDir = True
+    if not foundCheckDir:
+        shutil.copy("pre_repo.txt", "pre_repo2.txt")
         raise NothingToDo
-    #-----------------------------------------------------------------------
+    # -----------------------------------------------------------------------
 
-    #---remove duplicate--------------------------
-    preRepoInputFile = open("pre_repo.txt","r")
+    # ---remove duplicate--------------------------
+    preRepoInputFile = open("pre_repo.txt", "r")
     inputLines = preRepoInputFile.readlines()
     preRepoInputFile.close()
 
     currentDir = os.getcwd()
-    compareFileNames = sorted(glob.glob(PARAM.COIAS_DATA_PATH + "/past_pre_repo_data/" + yyyy_mm_dd + "/pre_repo3_*.txt"))
+    compareFileNames = []
+    for yyyy_mm_dd in distinct_yyyy_mm_dd_list:
+        compareFileNames += sorted(
+            glob.glob(
+                PARAM.COIAS_DATA_PATH
+                + "/past_pre_repo_data/"
+                + yyyy_mm_dd
+                + "/pre_repo3_*.txt"
+            )
+        )
     for l in reversed(range(len(inputLines))):
         inputLine = inputLines[l]
         inputLineInfo = extract_jd_ra_dec_info_from_MPC_line(inputLine)
         duplicateFlag = False
-        
+
         for fileName in compareFileNames:
-            compareFile = open(fileName,"r")
+            compareFile = open(fileName, "r")
             compareLines = compareFile.readlines()
             compareFile.close()
 
-            if compareLines[0].rstrip("\n")==currentDir:
+            if compareLines[0].rstrip("\n") == currentDir:
                 ### we skip the data produced from the same working directory
                 continue
-                
+
             for lc in range(1, len(compareLines)):
                 compareLineInfo = extract_jd_ra_dec_info_from_MPC_line(compareLines[lc])
                 ### compare compareLine and inputLine
@@ -94,55 +117,62 @@ try:
                 ### we delete the line and do not output it
                 raDiff = abs(inputLineInfo["raArcSec"] - compareLineInfo["raArcSec"])
                 decDiff = abs(inputLineInfo["decArcSec"] - compareLineInfo["decArcSec"])
-                if inputLineInfo["jdStr"]==compareLineInfo["jdStr"] and raDiff<1.0 and decDiff<1.0:
+                if (
+                    inputLineInfo["jdStr"] == compareLineInfo["jdStr"]
+                    and raDiff < 1.0
+                    and decDiff < 1.0
+                ):
                     del inputLines[l]
                     duplicateFlag = True
                     break
 
             if duplicateFlag:
                 break
-    #---------------------------------------------
+    # ---------------------------------------------
 
-    #---remove objects with observation numbers smaller than 2-----
-    if len(inputLines)!=0:
+    # ---remove objects with observation numbers smaller than 2-----
+    if len(inputLines) != 0:
         prevObsName = inputLines[-1][0:12]
-        nObs=0
+        nObs = 0
         for i in reversed(range(len(inputLines))):
             obsName = inputLines[i][0:12]
-            if obsName==prevObsName:
+            if obsName == prevObsName:
                 nObs += 1
             else:
-                if nObs<=2:
+                if nObs <= 2:
                     for n in reversed(range(nObs)):
-                        del inputLines[i+n+1]
-                nObs=1
+                        del inputLines[i + n + 1]
+                nObs = 1
 
-            if i==0 and nObs<=2:
+            if i == 0 and nObs <= 2:
                 for n in reversed(range(nObs)):
                     del inputLines[n]
-            
-            prevObsName = obsName
-    #--------------------------------------------------------------
 
-    #---output------------------------------------
-    preRepoOutputFile = open("pre_repo2.txt","w",newline="\n")
+            prevObsName = obsName
+    # --------------------------------------------------------------
+
+    # ---output------------------------------------
+    preRepoOutputFile = open("pre_repo2.txt", "w", newline="\n")
     preRepoOutputFile.writelines(inputLines)
     preRepoOutputFile.close()
-    #---------------------------------------------
+    # ---------------------------------------------
 
 except NothingToDo:
     error = 0
     errorReason = 74
-    
+
 except FileNotFoundError:
-    print("Some previous files are not found in del_duplicated_line_from_pre_repo.py!",flush=True)
-    print(traceback.format_exc(),flush=True)
+    print(
+        "Some previous files are not found in del_duplicated_line_from_pre_repo.py!",
+        flush=True,
+    )
+    print(traceback.format_exc(), flush=True)
     error = 1
     errorReason = 74
 
 except Exception:
-    print("Some errors occur in del_duplicated_line_from_pre_repo.py!",flush=True)
-    print(traceback.format_exc(),flush=True)
+    print("Some errors occur in del_duplicated_line_from_pre_repo.py!", flush=True)
+    print(traceback.format_exc(), flush=True)
     error = 1
     errorReason = 75
 
@@ -151,9 +181,9 @@ else:
     errorReason = 74
 
 finally:
-    errorFile = open("error.txt","a")
-    errorFile.write("{0:d} {1:d} 711 \n".format(error,errorReason))
+    errorFile = open("error.txt", "a")
+    errorFile.write("{0:d} {1:d} 711 \n".format(error, errorReason))
     errorFile.close()
 
-    if error==1:
+    if error == 1:
         print_detailed_log.print_detailed_log(dict(globals()))
