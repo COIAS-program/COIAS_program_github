@@ -38,6 +38,7 @@ try:
             if NH > NHMax:
                 NHMax = NH
                 noRedispContents = False
+    NHMax += 1
 
     ### If redisp.txt has no line, we have to determine NHMax from max_H_number.txt
     if noRedispContents:
@@ -56,8 +57,7 @@ try:
 
     oldHList = []
     newHList = []
-    if noRedispContents: k = 0
-    else: k = 1
+    k = 0
     for line in lines:
         contents = line.split()
         if re.search(r"^H......", contents[0]) != None:
