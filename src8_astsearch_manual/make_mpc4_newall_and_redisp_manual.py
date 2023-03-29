@@ -56,7 +56,8 @@ try:
 
     oldHList = []
     newHList = []
-    k = 1
+    if noRedispContents: k = 0
+    else: k = 1
     for line in lines:
         contents = line.split()
         if re.search(r"^H......", contents[0]) != None:

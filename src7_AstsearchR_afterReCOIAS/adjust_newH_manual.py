@@ -39,12 +39,18 @@ try:
     redispFile.close()
 
     NHMax = 0
+    noRedispContents = True
     for line in lines:
         contents = line.split()
         if re.search(r'^H......',contents[0])!=None:
             NH = int(contents[0].lstrip("H"))
             if NH > NHMax:
                 NHMax = NH
+                noRedispContents = False
+
+    ## if redisp has no H number objects, we have nothing to do
+    if noRedispContents:
+        raise NothingToDo
     #------------------------------------------------
 
 
