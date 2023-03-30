@@ -142,17 +142,10 @@ try:
                     NLoseAsteroids += 1
                     
             nn = nn - NLoseAsteroids
-            # 注釈: ここでは単に辞書の3次元配列であるところのtmp10をndarrayのtmp5に変換したいだけである
-            # 　　  しかしtmp10の1次元目の長さ(=天体数)が1か2の時, ndarrayはどのように変換すれば良いか判断できなくてエラーが出る
-            # 　　  そのため自前で変換を行う
-            if len(tmp10) != 1 and len(tmp10) != 2:
-                tmp5 = np.array(tmp10)
-            else:
-                tmp5 = np.zeros((len(tmp10),len(tmp10[0])),dtype=object)
-                for i1 in range(len(tmp10)):
-                    for i2 in range(len(tmp10[0])):
-                        tmp5[i1][i2] = tmp10[i1][i2]
-            tmp5.reshape(nn,1,NShouldGetPreciseOrbit)
+            tmp5 = np.zeros((len(tmp10),len(tmp10[0])),dtype=object)
+            for i1 in range(len(tmp10)):
+                for i2 in range(len(tmp10[0])):
+                    tmp5[i1][i2] = tmp10[i1][i2]
             ###############################################################################
                     
             # K.S. modifies 2022/4/13###########################
