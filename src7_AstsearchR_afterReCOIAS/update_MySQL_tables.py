@@ -172,6 +172,7 @@ try:
             obj = {}
             obj['final_all_one_line'] = line
             obj['object_name'] = contents[0]
+            obj['jd'] = changempc.change_datetime_in_MPC_to_jd(contents[1] + " " + contents[2] + " " + contents[3])
             obj['ra_deg'] = changempc.change_ra_in_MPC_to_degree(contents[4] + " " + contents[5] + " " + contents[6])
             obj['dec_deg'] = changempc.change_dec_in_MPC_to_degree(contents[7] + " " + contents[8] + " " + contents[9])
             obj['measured_image_id'] = imageIdList[int(contents[13])]
@@ -185,7 +186,7 @@ try:
         elif re.search("observations",line):
             observationArcLine = line.rstrip("\n")
             for obj in finalAllOneLineInfoObjectList:
-                cursor.execute(f"INSERT INTO measure_result (measured_image_id, measurer_uid, final_all_txt_name, measure_date, work_dir, aparture_radius, final_all_one_line, object_name, ra_deg, dec_deg, mag, mag_err, x_pix, y_pix, is_auto, observation_arc) VALUES({obj['measured_image_id']}, {measurerId}, '{prefixedFinalAllFileName}', '{strToday}', '{currentDirName}', {apartureRadius}, '{obj['final_all_one_line']}', '{obj['object_name']}', {obj['ra_deg']}, {obj['dec_deg']}, {obj['mag']}, {obj['mag_err']}, {obj['x_pix']}, {obj['y_pix']}, {obj['is_auto']}, '{observationArcLine}')")
+                cursor.execute(f"INSERT INTO measure_result (measured_image_id, measurer_uid, final_all_txt_name, measure_date, work_dir, aparture_radius, final_all_one_line, object_name, jd, ra_deg, dec_deg, mag, mag_err, x_pix, y_pix, is_auto, observation_arc) VALUES({obj['measured_image_id']}, {measurerId}, '{prefixedFinalAllFileName}', '{strToday}', '{currentDirName}', {apartureRadius}, '{obj['final_all_one_line']}', '{obj['object_name']}', {obj['jd']}, {obj['ra_deg']}, {obj['dec_deg']}, {obj['mag']}, {obj['mag_err']}, {obj['x_pix']}, {obj['y_pix']}, {obj['is_auto']}, '{observationArcLine}')")
                 connection.commit()
             finalAllOneLineInfoObjectList = []
         
