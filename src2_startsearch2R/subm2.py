@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: 2022/12/24 15:30 sugiura
+# Timestamp: 2023/04/08 3:00 sugiura
 ##########################################################
 # ビニングされた画像データにマスク処理を施す.
 # 元画像のHDUList型データにはリストの2番目の要素(hdu[1])として
@@ -12,19 +12,26 @@
 # 目に悪いpng画像ができたりするので, スカイで埋めることにしている.
 # 表示用のpng画像生成もこのスクリプトで行う.
 #
-# webCOIASでは, カレントディレクトリに存在する全てのビング済み画像データに対応する
+# webCOIASでは, カレントディレクトリに存在する全てのビ二ング済み画像データに対応する
 # マスク済み画像データ・マスク済みpngファイル・マスクなしpngファイルが
 # selected_warp_files.txtに記載の画像データを保存しているディレクトリに存在しているか見に行く.
 # もし全て存在しているならば, 単にそれらをカレントディレクトリに下記出力の名前でコピーする.
+# 1つでも存在しないものがあるのならばエラーを出す.
+#
+# selected_warp_files.txtに記載の元画像に対応するビニング済み画像が1つでもサーバにない場合,
+# カレントディレクトリに全てのビニング済み画像がある状態になっているはずである.
+# その場合は単にそれらを用いてマスク処理を施す.
 #
 # 入力: カレントディレクトリに存在する全てのビニング済み画像データ
 # 　　  warpbin-HSC-[filter]-[tract]-[patch],[patch]-[visit].fits
-# 　　  selected_warp_files.txt (webCOIASの場合)
+# 　　  selected_warp_files.txt (webCOIASの場合かつ全ての画像のビニングマスク後画像がサーバにあった場合)
 # 出力: マスク済み画像データ  warp[1から連番の画像番号]_bin.fits
+# 　　  マスクなし画像データ  warp[1から連番の画像番号]_bin_nonmask.fits
 # 　　  マスク済みpngファイル [1から連番の画像番号]_disp-coias.png
 # 　　  マスクなしpngファイル [1から連番の画像番号]_disp-coias_nonmask.png
 ##########################################################
 import glob
+import sys
 import re
 import os
 import shutil
@@ -63,41 +70,49 @@ def fits2png(hdu, pngname):
 # --------------------------------------------------------------------------------
 
 try:
+    ## check argument
+    if len(sys.argv)!=2:
+        raise ValueError(f"The script requires nbin as the second argument. len(argv)={len(sys.argv)}")
+    elif sys.argv[1]!="2" and sys.argv[1]!="4":
+        raise ValueError(f"nbin should be 2 or 4. nbin={sys.argv[1]}")
+    else:
+        nbin = int(sys.argv[1])
+    
     ## warp image list to read ##
+    ## In web COIAS, len(img_list)==0 means that all binning-masked images exist in the server
     img_list = sorted(
         glob.glob("warpbin-*.fits"), key=visitsort.key_func_for_visit_sort
     )  # K.S. modify 2021/7/20
-    if len(img_list) == 0:
-        raise FileNotFoundError
+    if not PARAM.IS_WEB_COIAS and len(img_list)==0:
+        raise FileNotFoundError("In original or desktop COIAS, there should be warpbin-*.fits in the current directory.")
 
-    ## check all masked-binned warp files, masked png files, and nonmasked png files corresponding to img_list exist in the server
-    if not PARAM.IS_WEB_COIAS:
+    ## check all masked-binned warp files, masked png files, and nonmask png files corresponding to img_list exist in the server
+    if not PARAM.IS_WEB_COIAS or len(img_list)!=0:
         needMask = True
     else:
-        needMask = False
-        # ---get nbin-------------------------------
-        hdu = fits.open(img_list[0])
-        nbin = hdu[0].header["NBIN"]
-        hdu.close()
-        # ------------------------------------------
-
-        # ---get the directory name for images------
         if not os.path.isfile("selected_warp_files.txt"):
             raise FileNotFoundError("selected_warp_files.txt is not found.")
         f = open("selected_warp_files.txt", "r")
         lines = f.readlines()
         f.close()
-        # ------------------------------------------
+
+        img_list = []
+        for line in lines:
+            if line.startswith("data"):
+                img_list.append(line.split("/").pop(-1).rstrip("\n"))
+        img_list = sorted(img_list, key=visitsort.key_func_for_visit_sort)
+    
+        needMask = False
 
         # ---check----------------------------------
         maskedWarpFileNameWithFullPath = []
+        nonMaskedWarpFileNameWithFullPath = []
         maskedPngFileNameWithFullPath = []
         nonMaskedPngFileNameWithFullPath = []
         for img_name in img_list:
             thisDirFound = False
             for line in lines:
-                org_img_name = img_name.replace("warpbin-", "warp-")
-                if line.rstrip("\n").endswith(org_img_name):
+                if line.rstrip("\n").endswith(img_name):
                     dirs = line.split("/")
                     dirs.pop(-1)
                     ### absolute path for the directory storing this image
@@ -106,7 +121,7 @@ try:
                     break
             if not thisDirFound:
                 raise Exception(
-                    f"The image {org_img_name} is not found in selected_warp_files.txt."
+                    f"The image {img_name} is not found in selected_warp_files.txt."
                 )
             if not line.startswith("data"):
                 raise Exception(
@@ -120,6 +135,12 @@ try:
                 thisDataDir + "-".join(fileNameFlagmentList) + ".fits"
             )
             maskedWarpFileNameWithFullPath.append(thisMaskedWarpFileNameWithFullPath)
+
+            fileNameFlagmentList[0] = f"warpbin{nbin}"
+            thisNonMaskedWarpFileNameWithFullPath = (
+                thisDataDir + "-".join(fileNameFlagmentList) + ".fits"
+            )
+            nonMaskedWarpFileNameWithFullPath.append(thisNonMaskedWarpFileNameWithFullPath)
 
             fileNameFlagmentList[0] = f"maskbin{nbin}"
             thisMaskedPngFileNameWithFullPath = (
@@ -137,10 +158,11 @@ try:
 
             if (
                 not os.path.isfile(thisMaskedWarpFileNameWithFullPath)
+                or not os.path.isfile(thisNonMaskedWarpFileNameWithFullPath)
                 or not os.path.isfile(thisMaskedPngFileNameWithFullPath)
                 or not os.path.isfile(thisNonMaskedPngFileNameWithFullPath)
             ):
-                needMask = True
+                raise FileNotFoundError(f"something wrong! some binned/masked png/fits files are not found")
         # ------------------------------------------
 
     ## if all necessary files exist in the server, just copy then to the current directory
@@ -149,6 +171,10 @@ try:
             shutil.copyfile(
                 maskedWarpFileNameWithFullPath[i],
                 "warp{0:02d}_bin".format(i + 1) + ".fits",
+            )
+            shutil.copyfile(
+                nonMaskedWarpFileNameWithFullPath[i],
+                "warp{0:02d}_bin_nonmask".format(i + 1) + ".fits",
             )
             shutil.copyfile(
                 maskedPngFileNameWithFullPath[i],
@@ -235,9 +261,12 @@ try:
             )
 
             ## non-masked scidata
-            ## masking : image * hanten median
+            ## nomasking
             output_scidata = scidata + image_sky_nan
+            hdunew = fits.PrimaryHDU(output_scidata, header)
             ## output
+            fitsname = "warp{0:02d}_bin_nonmask".format(i + 1)
+            hdunew.writeto(fitsname + ".fits", overwrite=True)  # output as nonmasked fits image
             pngname = "{0:02d}_disp-coias_nonmask".format(i + 1)  # NM added 2021-08-10
             fits2png(output_scidata, pngname + ".png")  # output as png image
 

@@ -1,22 +1,31 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: 2022/12/24 14:00 sugiura
+# Timestamp: 2023/4/8 01:00 sugiura
 ##########################################################
 # 元画像のビニング・0フラックスでの等級・ヘッダの移し替えを行う.
 # (元画像が小惑星検出にはオーバースペックなため容量を減らす)
 # ビニングは2x2か4x4のどちらかから選べる.
 #
-# webCOIASの場合は selected_warp_files.txt に記載のwarpファイルを
-# サーバ内のその場所に保存してあるので, コピーしてカレントに置く.
-# その際すでにビニングしてあるファイル(warpbin2-*.fits or warpbin4-*.fits)
-# がサーバ内の同じディレクトリにあった場合, それをwarpbin-*.fitsとしてカレントにコピーする.
-# (ビニング後のファイルがサーバにある場合, ビニング前のファイルはカレントにはコピーしない)
+# webCOIASの場合は selected_warp_files.txt に記載のwarpファイルはサーバ内のその場所に保存してある.
+# 同様にそれらをビニングマスクしてある画像も同じ場所に保存しているはずである.
+# selected_warp_files.txtに記載のwarpファイル全てに対応するビニングマスク済み画像
+# (warpbin2-*.fits or warpbin4-*.fits)がサーバ内の同じディレクトリにあった場合, 何もしない.
+# コピー処理は次のsubm2.pyに任せる.
+# どれか1枚でもビニングマスク済み画像がなかった場合は,
+# selected_warp_files.txtに記載の全ての元ファイルをダウンロードしてきて,
+# それらをビニングマスクしてビニングマスク済み画像 warpbin-*.fits をカレントに置く.
+#
+# ついでにbinningが2か4なのか, sys.exitで次のスクリプトに知らせる.
 #
 # 入力: カレントディレクトリに存在する全ての元画像ファイル (オリジナル・デスクトップCOIASの場合)
 #       warp-HSC-[filter]-[tract]-[patch],[patch]-[visit].fits
-# 　　  selected_warp_files.txt (webCOIASの場合)
-# 出力: 元画像ファイルをビニング・ヘッダ書き換えをした画像ファイル
-#       warpbin-HSC-[filter]-[tract]-[patch],[patch]-[visit].fits
+# 　　   selected_warp_files.txt (webCOIASの場合)
+# 出力: 元画像ファイルをビニング・ヘッダ書き換えをした画像ファイル (オリジナル・デスクトップCOIASもしくはウェブCOIASでサーバに全てのビニング済み画像がなかった場合):
+#         warpbin-HSC-[filter]-[tract]-[patch],[patch]-[visit].fits
+# 　　  ウェブCOIASでサーバに全てのビニング済み画像があった場合:
+# 　　     出力なし
+#
+# sys.exitによる出力: 2か4のビニング値
 ##########################################################
 import glob
 import sys
@@ -73,8 +82,12 @@ try:
 
     # ---binning-------------------------------------------------------------------------
     nLoopDone = 0
+    needBinning = False
+    thisDataDirList = []
     for i in img_list:
-        if PARAM.IS_WEB_COIAS:
+        if not PARAM.IS_WEB_COIAS:
+            thisDataDirList.append("./")
+        else:
             thisDirFound = False
             for line in lines:
                 if line.rstrip("\n").endswith(i):
@@ -82,6 +95,7 @@ try:
                     dirs.pop(-1)
                     ### absolute path for the directory storing this image
                     thisDataDir = PARAM.WARP_DATA_PATH + "/".join(dirs) + "/"
+                    thisDataDirList.append(thisDataDir)
                     thisDirFound = True
                     break
             if not thisDirFound:
@@ -98,30 +112,26 @@ try:
             imageNameFlagmentList[0] = f"warpbin{nbin}"
             binnedImageNameWithFullPath = thisDataDir + "-".join(imageNameFlagmentList)
 
-            imageNameFlagmentList[0] = "warpbin"
-            binnedImageNameInCurrentDir = "-".join(imageNameFlagmentList)
-            ### if exists, copy the binned image to current directory as warpbin-*.fits
-            if os.path.isfile(binnedImageNameWithFullPath):
-                shutil.copyfile(
-                    binnedImageNameWithFullPath, binnedImageNameInCurrentDir
-                )
-                needBinning = False
-            ### if not exist, copy the original image to current directory
-            else:
-                originalImageNameWithFullPath = thisDataDir + i
-                if not os.path.isfile(originalImageNameWithFullPath):
-                    raise FileNotFoundError(
-                        f"Original image {originalImageNameWithFullPath} is not found in the server."
-                    )
-                shutil.copyfile(originalImageNameWithFullPath, i)
+            ### If even one binning-masked file does not exist, we set needBinning flag. 
+            if not os.path.isfile(binnedImageNameWithFullPath):
                 needBinning = True
+            
 
-        if not PARAM.IS_WEB_COIAS or needBinning:
+    ### not IS_WEB_COIAS or if even one binning-masked file does not exist,
+    ### copy the all original images to current directory and binning them
+    if not PARAM.IS_WEB_COIAS or needBinning:
+        for i in range(len(img_list)):
+            originalImageNameWithFullPath = thisDataDirList[i] + img_list[i]
+            if not os.path.isfile(originalImageNameWithFullPath):
+                raise FileNotFoundError(
+                    f"Original image {originalImageNameWithFullPath} is not found in the server."
+                )
+
             print_progress.print_progress(
                 nCheckPointsForLoop=4, nForLoop=len(img_list), currentForLoop=nLoopDone
             )
 
-            hdu1 = fits.open(i)
+            hdu1 = fits.open(originalImageNameWithFullPath)
             xpix = hdu1[1].header["NAXIS1"]
             ypix = hdu1[1].header["NAXIS2"]
             scidata = hdu1[1].data  # science-image
@@ -212,7 +222,7 @@ try:
             hdunew2 = fits.ImageHDU(maskdata_bin, h1head)
             hdul = fits.HDUList([hdunew, hdunew2])
             hdul.writeto(
-                i.replace("warp-", "warpbin-"), overwrite=True
+                img_list[i].replace("warp-", "warpbin-"), overwrite=True
             )  # S.U modify 2021/12/9
 
             nLoopDone += 1
@@ -244,3 +254,5 @@ finally:
 
     if error == 1:
         print_detailed_log.print_detailed_log(dict(globals()))
+
+    sys.exit(nbin)
