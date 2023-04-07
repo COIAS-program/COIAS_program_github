@@ -26,11 +26,12 @@ try:
     ### suppress warnings #########################################################
     if not sys.warnoptions:
         import warnings
+
         warnings.simplefilter("ignore")
-    
-    #---get coefficient file name list----------------------------------------------
+
+    # ---get coefficient file name list----------------------------------------------
     scidata = fits.open("warp01_bin.fits")
-    jd0  = scidata[0].header['JD']
+    jd0 = scidata[0].header["JD"]
     jdDiffList = [0.0, -1.0, 1.0, -2.0, 2.0]
     coefFileNameList = []
     for jdDiff in jdDiffList:
@@ -39,10 +40,15 @@ try:
         tInIso = tInTimeObj.iso
         yyyy_mm_dd = tInIso.split()[0]
 
-        coefFileNameList.append( PARAM.COIAS_DATA_PATH + "/past_pre_repo_data/" + yyyy_mm_dd + "/coefficients_for_predict.txt")
-    #------------------------------------------------------------------------------
+        coefFileNameList.append(
+            PARAM.COIAS_DATA_PATH
+            + "/past_pre_repo_data/"
+            + yyyy_mm_dd
+            + "/coefficients_for_predict.txt"
+        )
+    # ------------------------------------------------------------------------------
 
-    #---get jd list of warp files--------------------------------------------------
+    # ---get jd list of warp files--------------------------------------------------
     warpFileNameList = sorted(glob.glob("warp*_bin.fits"))
     warpJdList = []
     warpJdStrList = []
@@ -51,17 +57,17 @@ try:
         jd = scidata[0].header["JD"]
         warpJdList.append(jd)
         warpJdStrList.append("{0:.4f}".format(jd))
-    #------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------
 
-    #---get range of pixels of png files and set wcs-------------------------------
+    # ---get range of pixels of png files and set wcs-------------------------------
     scidata = fits.open("warp01_bin.fits")
     XPixelMax = scidata[0].header["NAXIS1"]
     YPixelMax = scidata[0].header["NAXIS2"]
 
     wcs0 = wcs.WCS(scidata[0].header)
-    #------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------
 
-    #---output---------------------------------------------------------------------
+    # ---output---------------------------------------------------------------------
     outputFile = open("predicted_disp.txt", "w", newline="\n")
     outputObjNameList = []
     for coefFileName in coefFileNameList:
@@ -76,30 +82,50 @@ try:
                     outputObjNameList.append(contents[0])
 
                     for image in range(len(warpJdList)):
-                        raPre  = float(contents[1]) * warpJdList[image] + float(contents[2])
-                        decPre = float(contents[3]) * warpJdList[image] + float(contents[4])
-                        obsJdStrList = contents[5:len(contents)]
+                        raPre = float(contents[1]) * warpJdList[image] + float(
+                            contents[2]
+                        )
+                        decPre = float(contents[3]) * warpJdList[image] + float(
+                            contents[4]
+                        )
+                        obsJdStrList = contents[5 : len(contents)]
                         xypix = wcs0.wcs_world2pix(raPre, decPre, 1)
-                        if xypix[0]>0 and xypix[1]>0 and xypix[0]<XPixelMax and xypix[1]<YPixelMax:
+                        if (
+                            xypix[0] > 0
+                            and xypix[1] > 0
+                            and xypix[0] < XPixelMax
+                            and xypix[1] < YPixelMax
+                        ):
                             if warpJdStrList[image] in obsJdStrList:
                                 isMeasured = 1
                             else:
                                 isMeasured = 0
 
-                            outputFile.write(contents[0] + " " + "{0:d}".format(image) + " " + "{0:.2f}".format(xypix[0]) + " " + "{0:.2f}".format(xypix[1]) + " " + "{0:d}".format(isMeasured) + "\n")
+                            outputFile.write(
+                                contents[0]
+                                + " "
+                                + "{0:d}".format(image)
+                                + " "
+                                + "{0:.2f}".format(xypix[0])
+                                + " "
+                                + "{0:.2f}".format(xypix[1])
+                                + " "
+                                + "{0:d}".format(isMeasured)
+                                + "\n"
+                            )
 
     outputFile.close()
-    #------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------
 
 except FileNotFoundError:
-    print("Some previous files are not found in make_predicted_disp.py!",flush=True)
-    print(traceback.format_exc(),flush=True)
+    print("Some previous files are not found in make_predicted_disp.py!", flush=True)
+    print(traceback.format_exc(), flush=True)
     error = 1
     errorReason = 54
 
 except Exception:
-    print("Some errors occur in make_predicted_disp.py!",flush=True)
-    print(traceback.format_exc(),flush=True)
+    print("Some errors occur in make_predicted_disp.py!", flush=True)
+    print(traceback.format_exc(), flush=True)
     error = 1
     errorReason = 55
 
@@ -108,9 +134,9 @@ else:
     errorReason = 54
 
 finally:
-    errorFile = open("error.txt","a")
-    errorFile.write("{0:d} {1:d} 517 \n".format(error,errorReason))
+    errorFile = open("error.txt", "a")
+    errorFile.write("{0:d} {1:d} 517 \n".format(error, errorReason))
     errorFile.close()
 
-    if error==1:
+    if error == 1:
         print_detailed_log.print_detailed_log(dict(globals()))

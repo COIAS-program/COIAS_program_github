@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Timestamp: 2022/12/24 15:30 sugiura
+# Timestamp: 2022/12/24 15:30 sugiura
 ##########################################################
 # ビニングされた画像データにマスク処理を施す.
 # 元画像のHDUList型データにはリストの2番目の要素(hdu[1])として
@@ -33,7 +33,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import photutils.datasets
 from astropy.io import fits
-from astropy.visualization import (ZScaleInterval)
+from astropy.visualization import ZScaleInterval
 from matplotlib import cm
 from PIL import Image
 import subprocess
@@ -43,27 +43,31 @@ import print_progress
 import print_detailed_log
 import PARAM
 
-#---function---------------------------------------------------------------------
+# ---function---------------------------------------------------------------------
 def fits2png(hdu, pngname):
     tmpPngName = "temp.png"
-    
+
     cmap = cm.gray
     vmin, vmax = ZScaleInterval().get_limits(hdu)
     plt.imsave(tmpPngName, hdu, vmin=vmin, vmax=vmax, cmap=cmap, origin="lower")
     plt.close()
 
-    #convert to PNG-8 to reduce png file size
+    # convert to PNG-8 to reduce png file size
     im = Image.open(tmpPngName)
     im_p = im.convert("P")
     im_p.save(pngname)
 
     subprocess.run("rm temp.png", shell=True)
-#--------------------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------------------
 
 try:
     ## warp image list to read ##
-    img_list = sorted(glob.glob('warpbin-*.fits'), key=visitsort.key_func_for_visit_sort)  # K.S. modify 2021/7/20
-    if len(img_list)==0:
+    img_list = sorted(
+        glob.glob("warpbin-*.fits"), key=visitsort.key_func_for_visit_sort
+    )  # K.S. modify 2021/7/20
+    if len(img_list) == 0:
         raise FileNotFoundError
 
     ## check all masked-binned warp files, masked png files, and nonmasked png files corresponding to img_list exist in the server
@@ -71,59 +75,89 @@ try:
         needMask = True
     else:
         needMask = False
-        #---get nbin-------------------------------
+        # ---get nbin-------------------------------
         hdu = fits.open(img_list[0])
-        nbin = hdu[0].header['NBIN']
+        nbin = hdu[0].header["NBIN"]
         hdu.close()
-        #------------------------------------------
-        
-        #---get the directory name for images------
+        # ------------------------------------------
+
+        # ---get the directory name for images------
         if not os.path.isfile("selected_warp_files.txt"):
             raise FileNotFoundError("selected_warp_files.txt is not found.")
-        f = open("selected_warp_files.txt","r")
+        f = open("selected_warp_files.txt", "r")
         lines = f.readlines()
         f.close()
+        # ------------------------------------------
 
-        if lines[0].startswith("data"):
-            dirs = lines[0].split("/")
-            dirs.pop(-1)
-            ### absolute path for the directory storing images
-            thisDataDir = PARAM.WARP_DATA_PATH + "/".join(dirs) + "/"
-        else:
-            raise Exception(f"Invalid initial line in selected_warp_files.txt. lines[0]={lines[0]}")
-        #------------------------------------------
-
-        #---check----------------------------------
-        maskedWarpFileNameWithFullPath   = []
-        maskedPngFileNameWithFullPath    = []
+        # ---check----------------------------------
+        maskedWarpFileNameWithFullPath = []
+        maskedPngFileNameWithFullPath = []
         nonMaskedPngFileNameWithFullPath = []
         for img_name in img_list:
-            fileNameFlagmentList = re.split('[-.]',img_name)
+            thisDirFound = False
+            for line in lines:
+                org_img_name = img_name.replace("warpbin-", "warp-")
+                if line.rstrip("\n").endswith(org_img_name):
+                    dirs = line.split("/")
+                    dirs.pop(-1)
+                    ### absolute path for the directory storing this image
+                    thisDataDir = PARAM.WARP_DATA_PATH + "/".join(dirs) + "/"
+                    thisDirFound = True
+                    break
+            if not thisDirFound:
+                raise Exception(
+                    f"The image {org_img_name} is not found in selected_warp_files.txt."
+                )
+            if not line.startswith("data"):
+                raise Exception(
+                    f"Invalid line in selected_warp_files.txt. lines={line}"
+                )
+
+            fileNameFlagmentList = re.split("[-.]", img_name)
             fileNameFlagmentList.pop(-1)
             fileNameFlagmentList[0] = f"warpmaskbin{nbin}"
-            thisMaskedWarpFileNameWithFullPath = thisDataDir + "-".join(fileNameFlagmentList) + ".fits"
-            maskedWarpFileNameWithFullPath.append( thisMaskedWarpFileNameWithFullPath )
+            thisMaskedWarpFileNameWithFullPath = (
+                thisDataDir + "-".join(fileNameFlagmentList) + ".fits"
+            )
+            maskedWarpFileNameWithFullPath.append(thisMaskedWarpFileNameWithFullPath)
 
             fileNameFlagmentList[0] = f"maskbin{nbin}"
-            thisMaskedPngFileNameWithFullPath = thisDataDir + "-".join(fileNameFlagmentList) + ".png"
-            maskedPngFileNameWithFullPath.append( thisMaskedPngFileNameWithFullPath )
+            thisMaskedPngFileNameWithFullPath = (
+                thisDataDir + "-".join(fileNameFlagmentList) + ".png"
+            )
+            maskedPngFileNameWithFullPath.append(thisMaskedPngFileNameWithFullPath)
 
             fileNameFlagmentList[0] = f"nonmaskbin{nbin}"
-            thisNonMaskedPngFileNameWithFullPath = thisDataDir + "-".join(fileNameFlagmentList) + ".png"
-            nonMaskedPngFileNameWithFullPath.append( thisNonMaskedPngFileNameWithFullPath )
+            thisNonMaskedPngFileNameWithFullPath = (
+                thisDataDir + "-".join(fileNameFlagmentList) + ".png"
+            )
+            nonMaskedPngFileNameWithFullPath.append(
+                thisNonMaskedPngFileNameWithFullPath
+            )
 
-            if ( not os.path.isfile(thisMaskedWarpFileNameWithFullPath) or
-                 not os.path.isfile(thisMaskedPngFileNameWithFullPath)  or
-                 not os.path.isfile(thisNonMaskedPngFileNameWithFullPath)):
+            if (
+                not os.path.isfile(thisMaskedWarpFileNameWithFullPath)
+                or not os.path.isfile(thisMaskedPngFileNameWithFullPath)
+                or not os.path.isfile(thisNonMaskedPngFileNameWithFullPath)
+            ):
                 needMask = True
-        #------------------------------------------
+        # ------------------------------------------
 
     ## if all necessary files exist in the server, just copy then to the current directory
     if not needMask:
         for i in range(len(img_list)):
-            shutil.copyfile(maskedWarpFileNameWithFullPath[i], 'warp{0:02d}_bin'.format(i + 1) + ".fits")
-            shutil.copyfile(maskedPngFileNameWithFullPath[i], '{0:02d}_disp-coias'.format(i + 1) + ".png")
-            shutil.copyfile(nonMaskedPngFileNameWithFullPath[i], '{0:02d}_disp-coias_nonmask'.format(i + 1) + ".png")
+            shutil.copyfile(
+                maskedWarpFileNameWithFullPath[i],
+                "warp{0:02d}_bin".format(i + 1) + ".fits",
+            )
+            shutil.copyfile(
+                maskedPngFileNameWithFullPath[i],
+                "{0:02d}_disp-coias".format(i + 1) + ".png",
+            )
+            shutil.copyfile(
+                nonMaskedPngFileNameWithFullPath[i],
+                "{0:02d}_disp-coias_nonmask".format(i + 1) + ".png",
+            )
 
     ## if not exist, we produce then from binned warp files
     else:
@@ -137,7 +171,7 @@ try:
         ## median for mask
         median_maskdata = np.median(maskdata, axis=0)
 
-        ## hanten 
+        ## hanten
         tmp_hanten = np.where(median_maskdata == 0, 1, median_maskdata)
         hanten_image = np.where(tmp_hanten > 1, 0, tmp_hanten)
 
@@ -149,8 +183,10 @@ try:
 
         ## load, masking, and output ##
         for i in range(len(img_list)):
-            print_progress.print_progress(nCheckPointsForLoop=5, nForLoop=len(img_list), currentForLoop=i)
-        
+            print_progress.print_progress(
+                nCheckPointsForLoop=5, nForLoop=len(img_list), currentForLoop=i
+            )
+
             ## load
             hdu = fits.open(img_list[i])
             scidata = hdu[0].data
@@ -163,48 +199,57 @@ try:
             scidata_maskednan = np.ma.array(scidata, mask=nanmask)
 
             # sigma-clipping and measuring statistics to make sky
-            rejection = 3.0  # threshold sigma value of sky 
-            sky_mean, sky_median, sky_stddev = astropy.stats.sigma_clipped_stats(scidata_maskednan, sigma=rejection)
+            rejection = 3.0  # threshold sigma value of sky
+            sky_mean, sky_median, sky_stddev = astropy.stats.sigma_clipped_stats(
+                scidata_maskednan, sigma=rejection
+            )
 
             # make sky background image
-            image_sky = photutils.datasets.make_noise_image((np.shape(scidata)), distribution='gaussian', mean=sky_mean, stddev=sky_stddev)
+            image_sky = photutils.datasets.make_noise_image(
+                (np.shape(scidata)),
+                distribution="gaussian",
+                mean=sky_mean,
+                stddev=sky_stddev,
+            )
 
             # replace nan -> sky background
-            scidata[nanmask] = 0  # replace nan =>0 temporaly        
+            scidata[nanmask] = 0  # replace nan =>0 temporaly
 
-            ## make sky masked (K.S. 2022/6/14) 
-            image_sky_nan_mask  = np.where( (nanmask) | (hanten_image == 0), image_sky, 0)
-            image_sky_nan  = np.where(nanmask, image_sky, 0)
+            ## make sky masked (K.S. 2022/6/14)
+            image_sky_nan_mask = np.where((nanmask) | (hanten_image == 0), image_sky, 0)
+            image_sky_nan = np.where(nanmask, image_sky, 0)
 
             ## masking and output to fits images ##
-            ## masked scidata 
+            ## masked scidata
             ## masking : image * hanten median
             output_scidata_masked = scidata * hanten_image + image_sky_nan_mask
             hdunew = fits.PrimaryHDU(output_scidata_masked, header)
-            ## output 
-            fitsname = 'warp{0:02d}_bin'.format(i + 1)
-            pngname = '{0:02d}_disp-coias'.format(i + 1)  # NM added 2021-08-10
+            ## output
+            fitsname = "warp{0:02d}_bin".format(i + 1)
+            pngname = "{0:02d}_disp-coias".format(i + 1)  # NM added 2021-08-10
             hdunew.writeto(fitsname + ".fits", overwrite=True)  # output as fits image
             fits2png(output_scidata_masked, pngname + ".png")  # output as png image
 
-            print_progress.print_progress(nCheckPointsForLoop=5, nForLoop=len(img_list), currentForLoop=i)
+            print_progress.print_progress(
+                nCheckPointsForLoop=5, nForLoop=len(img_list), currentForLoop=i
+            )
 
             ## non-masked scidata
             ## masking : image * hanten median
             output_scidata = scidata + image_sky_nan
-            ## output 
-            pngname = '{0:02d}_disp-coias_nonmask'.format(i + 1)  # NM added 2021-08-10
+            ## output
+            pngname = "{0:02d}_disp-coias_nonmask".format(i + 1)  # NM added 2021-08-10
             fits2png(output_scidata, pngname + ".png")  # output as png image
 
 except FileNotFoundError:
-    print("Some previous files are not found in subm2.py!",flush=True)
-    print(traceback.format_exc(),flush=True)
+    print("Some previous files are not found in subm2.py!", flush=True)
+    print(traceback.format_exc(), flush=True)
     error = 1
     errorReason = 24
 
 except Exception:
-    print("Some errors occur in subm2.py!",flush=True)
-    print(traceback.format_exc(),flush=True)
+    print("Some errors occur in subm2.py!", flush=True)
+    print(traceback.format_exc(), flush=True)
     error = 1
     errorReason = 25
 
@@ -213,9 +258,9 @@ else:
     errorReason = 24
 
 finally:
-    errorFile = open("error.txt","a")
-    errorFile.write("{0:d} {1:d} 203 \n".format(error,errorReason))
+    errorFile = open("error.txt", "a")
+    errorFile.write("{0:d} {1:d} 203 \n".format(error, errorReason))
     errorFile.close()
 
-    if error==1:
+    if error == 1:
         print_detailed_log.print_detailed_log(dict(globals()))
