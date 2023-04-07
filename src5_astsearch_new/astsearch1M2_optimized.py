@@ -354,7 +354,7 @@ try:
 
     ### read global data #####################################
     textFileNames = sorted(glob.glob("warp*_bin.dat"))
-    warpFileNames = sorted(glob.glob("warp*_bin.fits"))
+    warpFileNames = sorted(glob.glob("warp*_bin_nonmask.fits"))
     NImage = len(warpFileNames)
 
     if N_DETECT_THRESH > NImage:

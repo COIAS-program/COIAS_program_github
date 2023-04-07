@@ -102,7 +102,7 @@ try:
         # -----------------------------------------------------
 
         # ---read scidata--------------------------------------
-        scidataNames = sorted(glob.glob("warp*_bin.fits"))
+        scidataNames = sorted(glob.glob("warp*_bin_nonmask.fits"))
         # -----------------------------------------------------
 
         # ---main loop-----------------------------------------
