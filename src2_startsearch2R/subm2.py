@@ -67,6 +67,21 @@ def fits2png(hdu, pngname):
     subprocess.run("rm temp.png", shell=True)
 
 
+### function for mask: If this pixel should be masked, return 1. Else return 0.
+def is_masked_pixel(anIntegerMaskData):
+    global bitPosDetected
+    global bitPosDetectedNegative
+    
+    binaryMaskStr = format(anIntegerMaskData, "b").rjust(13, "0")
+
+    if binaryMaskStr[-(bitPosDetected+1)]=="1" or binaryMaskStr[-(bitPosDetectedNegative+1)]=="1":
+        retValue = 1
+    else:
+        retValue = 0
+
+    return retValue
+
+is_masked_pixel_for_ndarray = np.frompyfunc(is_masked_pixel, 1, 1)
 # --------------------------------------------------------------------------------
 
 try:
@@ -187,24 +202,27 @@ try:
 
     ## if not exist, we produce then from binned warp files
     else:
-        ## produce median mask #######
+        ## read warp files
         maskdata = []
         for i in range(len(img_list)):
             hdu = fits.open(img_list[i])
-            maskdata.append(hdu[1].data)
+            ## get DETECTED flag bit position
+            if i == 0:
+                bitPosDetected = hdu[1].header["HIERARCH MP_DETECTED"]
+                bitPosDetectedNegative = hdu[1].header["HIERARCH MP_DETECTED_NEGATIVE"]
+
+            maskdata.append(is_masked_pixel_for_ndarray(hdu[1].data))
             hdu.close()
 
         ## median for mask
         median_maskdata = np.median(maskdata, axis=0)
 
-        ## hanten
-        tmp_hanten = np.where(median_maskdata == 0, 1, median_maskdata)
-        hanten_image = np.where(tmp_hanten > 1, 0, tmp_hanten)
+        ## produce median mask (If median == 0 (not detected in median) the pixel should not be masked. Else should be.)
+        mask_image = np.where(median_maskdata == 0, 1, 0)
 
         ## clear
         del maskdata
         del median_maskdata
-        del tmp_hanten
         ##############################
 
         ## load, masking, and output ##
@@ -242,13 +260,13 @@ try:
             scidata[nanmask] = 0  # replace nan =>0 temporaly
 
             ## make sky masked (K.S. 2022/6/14)
-            image_sky_nan_mask = np.where((nanmask) | (hanten_image == 0), image_sky, 0)
+            image_sky_nan_mask = np.where((nanmask) | (mask_image == 0), image_sky, 0)
             image_sky_nan = np.where(nanmask, image_sky, 0)
 
             ## masking and output to fits images ##
             ## masked scidata
             ## masking : image * hanten median
-            output_scidata_masked = scidata * hanten_image + image_sky_nan_mask
+            output_scidata_masked = scidata * mask_image + image_sky_nan_mask
             hdunew = fits.PrimaryHDU(output_scidata_masked, header)
             ## output
             fitsname = "warp{0:02d}_bin".format(i + 1)
