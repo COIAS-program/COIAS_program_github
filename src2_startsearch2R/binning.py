@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: 2023/4/8 01:00 sugiura
+# Timestamp: 2023/4/13 19:00 sugiura
 ##########################################################
 # 元画像のビニング・0フラックスでの等級・ヘッダの移し替えを行う.
 # (元画像が小惑星検出にはオーバースペックなため容量を減らす)
@@ -139,17 +139,19 @@ try:
 
             # bining
             # mean(?) ? is axis number.-1 means horizontal. 1 means vertical.
+            binnedXPix = int(xpix / nbin)
+            binnedYPix = int(ypix / nbin)
             scidata_bin = (
-                scidata.reshape(int(ypix / nbin), nbin, int(xpix / nbin), nbin)
+                scidata.reshape(binnedYPix, nbin, binnedXPix, nbin)
                 .mean(-1)
                 .mean(1)
             )
-            maskdata_bin = (
-                maskdata.reshape(int(ypix / nbin), nbin, int(xpix / nbin), nbin)
-                .mean(-1)
-                .mean(1)
-            )
-            maskdata_bin = np.array(maskdata_bin, dtype="int16")
+
+            maskdata_bin_temp = maskdata.reshape(binnedYPix, nbin, binnedXPix, nbin)
+            maskdata_bin = np.zeros((binnedYPix, binnedXPix), dtype="int16")
+            for ny in range(binnedYPix):
+                for nx in range(binnedXPix):
+                    maskdata_bin[ny][nx] = maskdata_bin_temp[ny][0][nx][0]
 
             # make header
             # obs time
@@ -215,6 +217,10 @@ try:
             hdu1[0].header["CUNIT1A"] = hdu1[1].header["CUNIT1A"]
             hdu1[0].header["CUNIT2A"] = hdu1[1].header["CUNIT2A"]
             hdu1[0].header["NBIN"] = nbin  # K.S. added 2022/5/3
+
+            ### header in mask image K. S. 2023/4/13
+            hdu1[0].header["HIERARCH MP_DETECTED"] = hdu1[2].header["HIERARCH MP_DETECTED"]
+            hdu1[0].header["HIERARCH MP_DETECTED_NEGATIVE"] = hdu1[2].header["HIERARCH MP_DETECTED_NEGATIVE"]
 
             # h1head = hdu1[0].header + hdu1[1].header
             h1head = hdu1[0].header
