@@ -2,34 +2,36 @@
 
 ## 下準備
 
-0.0. (Readme_COIAS2.pdfも参照してください) 3系のpythonのインストール。anaconda(pythonの統合開発環境)をインストールした方が良い。その上で以下のパッケージなどをインストールする: numpy, scipy, matplotlib, astropy, ephem, cython, pandas, pillow, photutils, SExtractor, astroquery, julian, beautifulsoup4, lxml
+0.0. (Readme_COIAS2.pdfも参照してください) 3系のpythonのインストール。anaconda(pythonの統合開発環境)をインストールした方が良い。その上で以下のパッケージなどをインストールする: `numpy, scipy, matplotlib, astropy, ephem, cython, pandas, pillow, photutils, SExtractor, astroquery, julian, beautifulsoup4, lxml`
 
-0.1. より簡単な方法: 3系のpythonがインストールされたanacondaをインストールしたのち、$bash env_setting.sh でほぼ環境構築が終わる。ただし環境によってはうまくインストールできない or 使えないパッケージがあったりするので、それらは手でインストールする。coiasという仮想環境上に環境を構築するので、シェルを開き直した後は $source activate coias で環境を切り替えれば使用可能。=> この方法でインストールした人は下準備6.までの全ての準備をスキップして実行方法から開始できる。
+0.1. より簡単な方法: 3系のpythonがインストールされたanacondaをインストールしたのち、`$ bash env_setting.sh` でほぼ環境構築が終わる。ただし環境によってはうまくインストールできない or 使えないパッケージがあったりするので、それらは手でインストールする。coiasという仮想環境上に環境を構築するので、シェルを開き直した後は `$ source activate coias` で環境を切り替えれば使用可能。=> この方法でインストールした人は下準備6.までの全ての準備をスキップして実行方法から開始できる。
 
 1. githubからこのプログラム一式をダウンロードして、任意のディレクトリに置く。本Readmeではこのディレクトリを /COIAS_program_path と呼ぶ。
 2. /COIAS_program_path 以下の全てのpythonスクリプトとシェルスクリプトにchmodで実行許可を与えておく。
 3. シェルの環境変数PATHに、このディレクトリへのパス (/COIAS_program_path) とfindOrbへのパス (/COIAS_program_path/findOrb) とソースファイルへのパス (/COIAS_program_path/COIASlibs および /COIAS_program_path/src1_preprocess から /COIAS_program_path/src8_astsearch_manual までの8つのディレクトリ) を追加する。使用するシェルはbashが前提のようなので、bashでパスを通す。
 4. シェルの環境変数PYTHONPATHに、/COIAS_program_path/COIASlibs を追加する。
-5. cythonのビルド。/COIAS_program_path/src5_astsearch_new にターミナルで移動して、 python setup12.py build_ext --inplace と入力する。
+5. cythonのビルド。/COIAS_program_path/src5_astsearch_new にターミナルで移動して、 `python setup12.py build_ext --inplace` と入力する。
 6. findOrbのコンパイル。/COIAS_program_path/findOrb にターミナルで移動して、以下のコマンドを打つことでコンパイルを実行する。デフォルトのコンパイラは g++ なので、無い場合はインストールするか、持っているc++用のコンパイラを linlunar.make, linmake ファイル中の CC=コンパイラ名 に指定する必要がある。
-   1. もし一度コンパイルしたことがあったら、rm dos_find、rm lunar.a、rm *.o ですでにある実行ファイル達を削除する
-   2. make -f linlunar.mak
-   3. make -f linmake
+   1. もし一度コンパイルしたことがあったら、`rm dos_find`、`rm lunar.a`、`rm *.o` ですでにある実行ファイル達を削除する
+   2. `make -f linlunar.mak`
+   3. `make -f linmake`
 
 ## 実行方法
 1. 任意の好きなディレクトリに5枚の同一領域を写したwarp画像(warp-*.fits)を用意して、ターミナルでこのディレクトリに移動しておく。ほぼ全ての中間ファイルやpngファイルはこのディレクトリ (カレントディレクトリ) に展開される。2022/5/19追記: プログラム全体は画像5枚の場合で最適化されているが、現在は任意の枚数の解析に対応している。
-2. AstsearchR と打ち込んで同スクリプトを使用し、binning、マスク画像引き、光源検出、視野周辺の既知小惑星取得、移動天体検出、測光、pngファイル生成、などなどを実行する。AstsearchR は以下のスクリプトの羅列であり、AstsearchR を実行することは以下のスクリプトを順に実行することと同じである。途中でエラーが出た時などは、AstsearchR を始めから実行しなくてもエラーが出た箇所から以下のスクリプトを順に実行し直しても良い。
+2. `AstsearchR` と打ち込んで同スクリプトを使用し、binning、マスク画像引き、光源検出、視野周辺の既知小惑星取得、移動天体検出、測光、pngファイル生成、などなどを実行する。AstsearchR は以下のスクリプトの羅列であり、AstsearchR を実行することは以下のスクリプトを順に実行することと同じである。途中でエラーが出た時などは、AstsearchR を始めから実行しなくてもエラーが出た箇所から以下のスクリプトを順に実行し直しても良い。
    1. preprocess [各スクリプトの処理内容](COIASdocs/src1-core-program.md)
    2. startsearch2R [フローチャート](flowcharts/flowchart1-startsearch2R.md) [各スクリプトの処理内容](COIASdocs/src2-core-program.md)
    3. prempsearchC-before [フローチャート](flowcharts/flowchart2-prempsearchC-before.md) [各スクリプトの処理内容](COIASdocs/src3-core-program.md)
    4. prempsearchC-after [フローチャート](flowcharts/flowchart3-prempsearchC-after.md) [各スクリプトの処理内容](COIASdocs/src4-core-program.md)
-   5. astsearch_new [フローチャート](flowcharts/flowchart4-astsearch_new.md)
-3. COIAS.py と打ち込んで、searchモードにてGUIで移動天体を目視で確認する。COIAS.py を実行すると画面が1つ開くが、まずはその画面のCOIAS mode欄の「search」ラジオボタンを選ぶ。お好みに応じてマスクあり画像かマスクなし画像かを「image preference」ラジオボタンから選べる。選んだら「Load img」ボタンを押すとメインGUI画面が開くので。画像をブリンクさせ、移動天体だと思う天体の四角をクリックして、その四角を赤くする。一通り選び終えたら右上の「Output」ボタンを押して memo.txt を出力させる。[詳しい COIAS.py の操作方法はこちら](COIASdocs/READMECOIAS.md)
-4. AstsearchR_between_COIAS_and_ReCOIAS [新天体の通し番号] と打ち込む。第二引数に今まで自分が見つけた新天体の番号のうち一番大きいもの+1を指定する。指定しない場合は ~/.coias/param/max_H_number.txt に記載の今までに測定してきた新天体の番号の最大値+1が自動的に使用される. この作業で、新天体と同定したもののデータをMPCフォーマットに再整形、名前の付け替え、ReCOIAS を再表示する準備をする。[フローチャート](flowcharts/flowchart5-AstsearchR_between_COIAS_and_ReCOIAS.md)
-5. COIAS.py と打ち込んで、manual measureモードにて自動検出できなかった天体を測定する。詳しい使い方は[こちら](COIASdocs/READMECOIAS.md)に記載するが、自動検出されていないが移動天体だと思う光源をクリックし、拡大画面で3点をクリックし四角形アパーチャーを設置する。またこのモードでは自動検出天体のうちノイズを巻き込んで検出しているものの排除も行える。一通り選び終えたら右上の「Output」ボタンを押して memo_manual.txt を出力させる。
-6. AstsearchR_after_manual と打ち込んで、手動測定天体の測光および既知天体との照合を行う。[フローチャート](flowcharts/flowchart6-AstsearchR_after_manual.md)
-7. COIAS.py と打ち込んで、reconfirm/modify nameモードにて選択・測定した天体が本当に移動天体であるかどうか目視で再確認する。他、自動検出である移動天体の光源をいくつか検出し損ねていた時、その検出漏れした光源を手動測定で測定しても天体番号が自動検出のものと変わってしまうので、同じ移動天体とみなさせるために新天体の名前を任意に変更できる。詳しい使い方は[こちら](COIASdocs/READMECOIAS.md)。結果が良さそうなら特段の操作は不要で、画面を閉じて良い。
-8. AstsearchR_afterReCOIAS と打ち込んで同スクリプトを使用し、重複行の削除、findOrbを用いた軌道測定、誤差が大きいデータの削除、新天体に米印をつける、などを実行する。[フローチャート](flowcharts/flowchart7-AstsearchR_afterReCOIAS.md)
+   5. astsearch_new [フローチャート](flowcharts/flowchart4-astsearch_new.md) [各スクリプトの処理内容](COIASdocs/src5-core-program.md)
+3. `COIAS.py` と打ち込んで、searchモードにてGUIで移動天体を目視で確認する。COIAS.py を実行すると画面が1つ開くが、まずはその画面のCOIAS mode欄の「search」ラジオボタンを選ぶ。お好みに応じてマスクあり画像かマスクなし画像かを「image preference」ラジオボタンから選べる。選んだら「Load img」ボタンを押すとメインGUI画面が開くので。画像をブリンクさせ、移動天体だと思う天体の四角をクリックして、その四角を赤くする。一通り選び終えたら右上の「Output」ボタンを押して memo.txt を出力させる。[詳しい COIAS.py の操作方法はこちら](COIASdocs/READMECOIAS.md)
+4. `AstsearchR_between_COIAS_and_ReCOIAS` [新天体の通し番号] と打ち込む。第二引数に今まで自分が見つけた新天体の番号のうち一番大きいもの+1を指定する。指定しない場合は ~/.coias/param/max_H_number.txt に記載の今までに測定してきた新天体の番号の最大値+1が自動的に使用される. この作業で、新天体と同定したもののデータをMPCフォーマットに再整形、名前の付け替え、ReCOIAS を再表示する準備をする。
+   - [フローチャート](flowcharts/flowchart5-AstsearchR_between_COIAS_and_ReCOIAS.md)
+   - [各スクリプトの処理内容](COIASdocs/src6-core-program.md)
+5. `COIAS.py` と打ち込んで、manual measureモードにて自動検出できなかった天体を測定する。詳しい使い方は[こちら](COIASdocs/READMECOIAS.md)に記載するが、自動検出されていないが移動天体だと思う光源をクリックし、拡大画面で3点をクリックし四角形アパーチャーを設置する。またこのモードでは自動検出天体のうちノイズを巻き込んで検出しているものの排除も行える。一通り選び終えたら右上の「Output」ボタンを押して memo_manual.txt を出力させる。
+6. `AstsearchR_after_manual` と打ち込んで、手動測定天体の測光および既知天体との照合を行う。[フローチャート](flowcharts/flowchart6-AstsearchR_after_manual.md)
+7. `COIAS.py` と打ち込んで、reconfirm/modify nameモードにて選択・測定した天体が本当に移動天体であるかどうか目視で再確認する。他、自動検出である移動天体の光源をいくつか検出し損ねていた時、その検出漏れした光源を手動測定で測定しても天体番号が自動検出のものと変わってしまうので、同じ移動天体とみなさせるために新天体の名前を任意に変更できる。詳しい使い方は[こちら](COIASdocs/READMECOIAS.md)。結果が良さそうなら特段の操作は不要で、画面を閉じて良い。
+8. `AstsearchR_afterReCOIAS` と打ち込んで同スクリプトを使用し、重複行の削除、findOrbを用いた軌道測定、誤差が大きいデータの削除、新天体に米印をつける、などを実行する。[フローチャート](flowcharts/flowchart7-AstsearchR_afterReCOIAS.md)
 9. 作成された send_mpc.txt が完成形で、MPCに送信する報告メールのデータ部分になる。自分で必要なヘッダ情報を追加してMPCにメールで報告するか、本プロジェクト開発主任の浦川まで send_mpc.txt をメールに添付して送付すること。また、final_all.txt に元fitsファイルの名前や検出された移動天体の詳細情報が記載されている。
 10. send_mpc.txt に記載の天体名は、最終的に連番になるように付け替えられている。またfindOrbによって弾かれた検出点もあったりする。その結果をGUIで視認したければ、COIAS.py の final checkモードを使用すること。
 
