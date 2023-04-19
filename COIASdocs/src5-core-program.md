@@ -3,7 +3,7 @@
 # src5_astsearch_new
 
 ## `astsearch_new`
-- [`src2_startsearch2R`](./src1-core-program.md)で検出した光源から移動天体と思われる候補を自動検出し，既知天体との照合を行い, MPCフォーマットに変換するシェルスクリプト
+- [`src2_startsearch2R`](./src2-core-program.md)で検出した光源から移動天体と思われる候補を自動検出し，既知天体との照合を行い, MPCフォーマットに変換するシェルスクリプト
 - 実行内容
   1. `make_gathered_search_astB.py` [`src4_prempsearchC-after`](./src4-core-program.md)の最後に生成された既知天体リスト（`search_astB.txt`）をまとめてカレントディレクトリに取り出す
   2. `astsearch1M2_optimized.py` 移動天体候補の自動検出
