@@ -88,6 +88,7 @@ def get_imformation_from_findorb_html(htmlDocument, ndata):
     #-------------------------------------------------
 
     #---extract MOIDs: Ea-----------------------------
+    MOIDsEa = "NoData"
     comments = soup.find_all(string=lambda text: isinstance(text, Comment))
     for c in comments:
         if c.split()[0]=="MOIDs:" and c.split()[1]=="Me":
