@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# timestamp: 2023/04/14 20:00 sugiura
+# timestamp: 2022/08/04 17:00 sugiura
 ###################################################################################
 # 光源の情報から移動天体候補自動検出・測光を行う.
 # (このスクリプトの説明はあまりにも複雑なので詳細は杉浦に聞いて欲しい)
@@ -43,7 +43,6 @@ import numpy as np
 import scipy.spatial as ss
 from astropy.io import fits, ascii
 from astropy.wcs import wcs
-from astropy.stats import sigma_clipped_stats
 import subprocess
 import traceback
 import mktracklet_opt
@@ -480,7 +479,6 @@ try:
         )
 
         scidata = fits.open(warpFileNames[image])
-        bkg_mean, dummy1, dummy2 = sigma_clipped_stats(scidata[0].data, sigma=3.0)
 
         for p in range(len(trackletListAll)):
             for k in reversed(range(len(trackletListAll[p]))):
@@ -508,14 +506,11 @@ try:
                 rawflux_table = aperture_photometry(
                     scidata[0].data, ap, method="subpixel", subpixels=5
                 )
-
-                # 2023.4.14 K.S. revised
-                #bkgflux_table = aperture_photometry(
-                #    scidata[0].data, sap, method="subpixel", subpixels=5
-                #)
-                #bkg_mean = bkgflux_table["aperture_sum"][0] / sap.area
-
-                # bkg_mean is now determined from whole image sky 2023.4.14 K.S.
+                bkgflux_table = aperture_photometry(
+                    scidata[0].data, sap, method="subpixel", subpixels=5
+                )
+                # 2020.11.25 revised
+                bkg_mean = bkgflux_table["aperture_sum"][0] / sap.area
                 bkg_sum = bkg_mean * ap.area
                 final_sum = (
                     nbinList[image]

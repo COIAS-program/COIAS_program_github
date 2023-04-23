@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: 2023/04/14 20:00 sugiura
+# Timestamp: 2022/08/05 22:00 sugiura
 ###################################################################################################
 # memo_manual.txtに記載された手動測定で得られた手動測定天体の長方形アパーチャーの情報を元にして,
 # それらのアパーチャー測光を行い, 手動測定天体の等級とその誤差を計算する.
@@ -15,7 +15,6 @@
 ####################################################################################################
 from astropy.io import fits
 from astropy.wcs import wcs
-from astropy.stats import sigma_clipped_stats
 from photutils import RectangularAperture
 from photutils import RectangularAnnulus
 from photutils import aperture_photometry
@@ -29,7 +28,7 @@ import numpy as np
 import print_detailed_log
 
 ### FUNCTION: PHOTOMETRY AND RADEC ###################
-def get_photometry_and_radec(scidata, threeAparturePoints, nbin, zm, bkg_mean):
+def get_photometry_and_radec(scidata, threeAparturePoints, nbin, zm):
     # ---calc rect and radec---
     rect = calcrect.calc_rectangle_parameters(
         threeAparturePoints[0], threeAparturePoints[1], threeAparturePoints[2]
@@ -56,14 +55,10 @@ def get_photometry_and_radec(scidata, threeAparturePoints, nbin, zm, bkg_mean):
     rawflux_table = aperture_photometry(
         scidata[0].data, ap, method="subpixel", subpixels=5
     )
-    
-    # 2023.4.14 K.S. revised
-    #bkgflux_table = aperture_photometry(
-    #    scidata[0].data, sap, method="subpixel", subpixels=5
-    #)
-    #bkg_mean = bkgflux_table["aperture_sum"][0] / sap.area
-
-    # bkg_mean is now determined from whole image sky 2023.4.14 K.S.
+    bkgflux_table = aperture_photometry(
+        scidata[0].data, sap, method="subpixel", subpixels=5
+    )
+    bkg_mean = bkgflux_table["aperture_sum"][0] / sap.area
     bkg_sum = bkg_mean * ap.area
     final_sum = nbin * nbin * (rawflux_table["aperture_sum"][0] - bkg_sum)
     if final_sum <= 0:
@@ -108,13 +103,6 @@ try:
 
         # ---read scidata--------------------------------------
         scidataNames = sorted(glob.glob("warp*_bin_nonmask.fits"))
-        scidataList = []
-        bkg_mean_list = []
-        for i in range(len(scidataNames)):
-            scidata = fits.open(scidataNames[i])
-            scidataList.append(scidata)
-            bkg_mean, dummy1, dummy2 = sigma_clipped_stats(scidata[0].data, sigma=3.0)
-            bkg_mean_list.append(bkg_mean)
         # -----------------------------------------------------
 
         # ---main loop-----------------------------------------
@@ -130,13 +118,13 @@ try:
             ]
 
             # ---read fits and related information
-            scidata = scidataList[NImage]
+            scidata = fits.open(scidataNames[NImage])
             fil = scidata[0].header["FILTER"]
             jd = scidata[0].header["JD"]
             zm = scidata[0].header["Z_P"]
             nbin = scidata[0].header["NBIN"]
             photRaDecDict = get_photometry_and_radec(
-                scidata, threeAparturePoints, nbin, zm, bkg_mean_list[NImage]
+                scidata, threeAparturePoints, nbin, zm
             )
             if photRaDecDict == None:
                 continue
