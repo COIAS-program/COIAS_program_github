@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
-#Timestamp: 2022/08/06 20:00 sugiura
+# Timestamp: 2022/08/06 20:00 sugiura
 ###########################################################################################
 # findorb.pyによって計算された残差が0.7"より大きいデータ点を削除する.
 # result.txtはMPC 80カラムフォーマットの行末にX方向の残差とY方向の残差が付け加えられているだけなので,
@@ -50,45 +50,48 @@ try:
                 str_list = list(inputLines[i][0:80]) + list("\n")
 
                 if sys.argv[1] == "1":
-                    str_list[55] = ' '
+                    str_list[55] = " "
 
                 outputLines.append("".join(str_list))
 
-        #---remove objects with observation numbers smaller than 2-----
-        if len(outputLines)!=0:
+        # ---remove objects with observation numbers smaller than 2-----
+        if len(outputLines) != 0:
             prevObsName = outputLines[-1][0:12]
-            nObs=0
+            nObs = 0
             for i in reversed(range(len(outputLines))):
                 obsName = outputLines[i][0:12]
-                if obsName==prevObsName:
+                if obsName == prevObsName:
                     nObs += 1
                 else:
-                    if nObs<=2:
+                    if nObs <= 2:
                         for n in reversed(range(nObs)):
-                            del outputLines[i+n+1]
-                    nObs=1
+                            del outputLines[i + n + 1]
+                    nObs = 1
 
-                if i==0 and nObs<=2:
+                if i == 0 and nObs <= 2:
                     for n in reversed(range(nObs)):
                         del outputLines[n]
-            
+
                 prevObsName = obsName
 
             outputFile.writelines(outputLines)
-        #--------------------------------------------------------------
+        # --------------------------------------------------------------
 
     inputFile.close()
     outputFile.close()
 
 except FileNotFoundError:
-    print("Some previous files are not found in delLargeZansa_and_modPrecision.py!",flush=True)
-    print(traceback.format_exc(),flush=True)
+    print(
+        "Some previous files are not found in delLargeZansa_and_modPrecision.py!",
+        flush=True,
+    )
+    print(traceback.format_exc(), flush=True)
     error = 1
     errorReason = 74
 
 except Exception:
-    print("Some errors occur in delLargeZansa_and_modPrecision.py!",flush=True)
-    print(traceback.format_exc(),flush=True)
+    print("Some errors occur in delLargeZansa_and_modPrecision.py!", flush=True)
+    print(traceback.format_exc(), flush=True)
     error = 1
     errorReason = 75
 
@@ -97,9 +100,9 @@ else:
     errorReason = 74
 
 finally:
-    errorFile = open("error.txt","a")
-    errorFile.write("{0:d} {1:d} 705 \n".format(error,errorReason))
+    errorFile = open("error.txt", "a")
+    errorFile.write("{0:d} {1:d} 705 \n".format(error, errorReason))
     errorFile.close()
 
-    if error==1:
+    if error == 1:
         print_detailed_log.print_detailed_log(dict(globals()))

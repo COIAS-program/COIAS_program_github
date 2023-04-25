@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Timestamp: 2022/11/18 8:00 sugiura
+# Timestamp: 2022/11/18 8:00 sugiura
 ###################################################################
 # SExtractor と findOrb で使用するパラメータファイルを
 # ~/.coias/param 以下に生成するスクリプト.
@@ -17,10 +17,10 @@ import PARAM
 
 directory_path = PARAM.COIAS_DATA_PATH + "/param/"
 
-#---make default.conv-------------------------------------------------------------
+# ---make default.conv-------------------------------------------------------------
 def make_default_conv():
     filename = directory_path + "default.conv"
-    file = open(filename,"w")
+    file = open(filename, "w")
 
     file.write("CONV NORM\n")
     file.write("# 3x3 ``all-ground'' convolution mask with FWHM = 2 pixels.\n")
@@ -29,96 +29,166 @@ def make_default_conv():
     file.write("1 2 1\n")
 
     file.close()
-#---------------------------------------------------------------------------------
 
-#---make default.sex--------------------------------------------------------------
+
+# ---------------------------------------------------------------------------------
+
+# ---make default.sex--------------------------------------------------------------
 def make_default_sex(DETECT_MINAREA):
     filename = "default.sex"
-    file = open(filename,"w")
+    file = open(filename, "w")
 
     file.write("# Default configuration file for SExtractor 2.5.0\n")
     file.write("# EB 2007-02-23\n")
     file.write("#\n")
     file.write("\n")
-    file.write("#-------------------------------- Catalog ------------------------------------\n")
+    file.write(
+        "#-------------------------------- Catalog ------------------------------------\n"
+    )
     file.write("\n")
     file.write("CATALOG_NAME     test.cat       # name of the output catalog\n")
-    file.write("CATALOG_TYPE     ASCII_HEAD     # NONE,ASCII,ASCII_HEAD, ASCII_SKYCAT,\n")
-    file.write("                                # ASCII_VOTABLE, FITS_1.0 or FITS_LDAC\n")
-    file.write("PARAMETERS_NAME  /path/to/coias/param/default2.param  # name of the file containing catalog contents\n")
+    file.write(
+        "CATALOG_TYPE     ASCII_HEAD     # NONE,ASCII,ASCII_HEAD, ASCII_SKYCAT,\n"
+    )
+    file.write(
+        "                                # ASCII_VOTABLE, FITS_1.0 or FITS_LDAC\n"
+    )
+    file.write(
+        "PARAMETERS_NAME  /path/to/coias/param/default2.param  # name of the file containing catalog contents\n"
+    )
     file.write("\n")
-    file.write("#------------------------------- Extraction ----------------------------------\n")
+    file.write(
+        "#------------------------------- Extraction ----------------------------------\n"
+    )
     file.write("\n")
-    file.write("DETECT_TYPE      CCD            # CCD (linear) or PHOTO (with gamma correction)\n")
-    file.write("DETECT_MINAREA   {0:d}              # minimum number of pixels above threshold\n".format(DETECT_MINAREA))
-    file.write("DETECT_THRESH    1.20          # <sigmas> or <threshold>,<ZP> in mag.arcsec-2\n")
-    file.write("ANALYSIS_THRESH  1            # <sigmas> or <threshold>,<ZP> in mag.arcsec-2\n")
+    file.write(
+        "DETECT_TYPE      CCD            # CCD (linear) or PHOTO (with gamma correction)\n"
+    )
+    file.write(
+        "DETECT_MINAREA   {0:d}              # minimum number of pixels above threshold\n".format(
+            DETECT_MINAREA
+        )
+    )
+    file.write(
+        "DETECT_THRESH    1.20          # <sigmas> or <threshold>,<ZP> in mag.arcsec-2\n"
+    )
+    file.write(
+        "ANALYSIS_THRESH  1            # <sigmas> or <threshold>,<ZP> in mag.arcsec-2\n"
+    )
     file.write("\n")
-    file.write("FILTER           Y              # apply filter for detection (Y or N)?\n")
-    file.write("FILTER_NAME      /path/to/coias/param/default.conv   # name of the file containing the filter\n")
+    file.write(
+        "FILTER           Y              # apply filter for detection (Y or N)?\n"
+    )
+    file.write(
+        "FILTER_NAME      /path/to/coias/param/default.conv   # name of the file containing the filter\n"
+    )
     file.write("\n")
     file.write("DEBLEND_NTHRESH  1             # Number of deblending sub-thresholds\n")
-    file.write("DEBLEND_MINCONT  1            # Minimum contrast parameter for deblending\n")
+    file.write(
+        "DEBLEND_MINCONT  1            # Minimum contrast parameter for deblending\n"
+    )
     file.write("\n")
-    file.write("CLEAN            Y              # Clean spurious detections? (Y or N)?\n")
+    file.write(
+        "CLEAN            Y              # Clean spurious detections? (Y or N)?\n"
+    )
     file.write("CLEAN_PARAM      2.0            # Cleaning efficiency\n")
     file.write("\n")
-    file.write("MASK_TYPE        CORRECT        # type of detection MASKing: can be one of\n")
+    file.write(
+        "MASK_TYPE        CORRECT        # type of detection MASKing: can be one of\n"
+    )
     file.write("                                # NONE, BLANK or CORRECT\n")
     file.write("\n")
-    file.write("#------------------------------ Photometry -----------------------------------\n")
+    file.write(
+        "#------------------------------ Photometry -----------------------------------\n"
+    )
     file.write("\n")
-    file.write("PHOT_APERTURES   20              # MAG_APER aperture diameter(s) in pixels\n")
-    file.write("PHOT_AUTOPARAMS  2.5, 3.5       # MAG_AUTO parameters: <Kron_fact>,<min_radius>\n")
-    file.write("PHOT_PETROPARAMS 2.0, 3.5       # MAG_PETRO parameters: <Petrosian_fact>,\n")
+    file.write(
+        "PHOT_APERTURES   20              # MAG_APER aperture diameter(s) in pixels\n"
+    )
+    file.write(
+        "PHOT_AUTOPARAMS  2.5, 3.5       # MAG_AUTO parameters: <Kron_fact>,<min_radius>\n"
+    )
+    file.write(
+        "PHOT_PETROPARAMS 2.0, 3.5       # MAG_PETRO parameters: <Petrosian_fact>,\n"
+    )
     file.write("                                # <min_radius>\n")
     file.write("\n")
-    file.write("SATUR_LEVEL      40000.0        # level (in ADUs) at which arises saturation\n")
+    file.write(
+        "SATUR_LEVEL      40000.0        # level (in ADUs) at which arises saturation\n"
+    )
     file.write("\n")
     file.write("MAG_ZEROPOINT   32.0            # magnitude zero-point\n")
-    file.write("MAG_GAMMA        4.0            # gamma of emulsion (for photographic scans)\n")
+    file.write(
+        "MAG_GAMMA        4.0            # gamma of emulsion (for photographic scans)\n"
+    )
     file.write("GAIN             3            # detector gain in e-/ADU\n")
-    file.write("PIXEL_SCALE      0.34            # size of pixel in arcsec (0=use FITS WCS info)\n")
-    file.write("#------------------------- Star/Galaxy Separation ----------------------------\n")
+    file.write(
+        "PIXEL_SCALE      0.34            # size of pixel in arcsec (0=use FITS WCS info)\n"
+    )
+    file.write(
+        "#------------------------- Star/Galaxy Separation ----------------------------\n"
+    )
     file.write("\n")
     file.write("SEEING_FWHM      0.6            # stellar FWHM in arcsec\n")
-    file.write("STARNNW_NAME     default.nnw    # Neural-Network_Weight table filename\n")
+    file.write(
+        "STARNNW_NAME     default.nnw    # Neural-Network_Weight table filename\n"
+    )
     file.write("\n")
-    file.write("#------------------------------ Background -----------------------------------\n")
+    file.write(
+        "#------------------------------ Background -----------------------------------\n"
+    )
     file.write("\n")
-    file.write("BACK_SIZE        64             # Background mesh: <size> or <width>,<height>\n")
-    file.write("BACK_FILTERSIZE  3              # Background filter: <size> or <width>,<height>\n")
+    file.write(
+        "BACK_SIZE        64             # Background mesh: <size> or <width>,<height>\n"
+    )
+    file.write(
+        "BACK_FILTERSIZE  3              # Background filter: <size> or <width>,<height>\n"
+    )
     file.write("\n")
     file.write("BACKPHOTO_TYPE   GLOBAL         # can be GLOBAL or LOCAL\n")
     file.write("\n")
-    file.write("#------------------------------ Check Image ----------------------------------\n")
+    file.write(
+        "#------------------------------ Check Image ----------------------------------\n"
+    )
     file.write("\n")
-    file.write("CHECKIMAGE_TYPE  OBJECTS           # can be NONE, BACKGROUND, BACKGROUND_RMS,\n")
-    file.write("                                # MINIBACKGROUND, MINIBACK_RMS, -BACKGROUND,\n")
-    file.write("                                # FILTERED, OBJECTS, -OBJECTS, SEGMENTATION,\n")
+    file.write(
+        "CHECKIMAGE_TYPE  OBJECTS           # can be NONE, BACKGROUND, BACKGROUND_RMS,\n"
+    )
+    file.write(
+        "                                # MINIBACKGROUND, MINIBACK_RMS, -BACKGROUND,\n"
+    )
+    file.write(
+        "                                # FILTERED, OBJECTS, -OBJECTS, SEGMENTATION,\n"
+    )
     file.write("                                # or APERTURES\n")
     file.write("CHECKIMAGE_NAME  check.fits     # Filename for the check-image\n")
     file.write("\n")
-    file.write("#--------------------- Memory (change with caution!) -------------------------\n")
+    file.write(
+        "#--------------------- Memory (change with caution!) -------------------------\n"
+    )
     file.write("\n")
     file.write("MEMORY_OBJSTACK  3000           # number of objects in stack\n")
     file.write("MEMORY_PIXSTACK  300000         # number of pixels in stack\n")
     file.write("MEMORY_BUFSIZE   1024           # number of lines in buffer\n")
     file.write("\n")
     file.write("\n")
-    file.write("#----------------------------- Miscellaneous ---------------------------------\n")
+    file.write(
+        "#----------------------------- Miscellaneous ---------------------------------\n"
+    )
     file.write("\n")
     file.write("VERBOSE_TYPE     NORMAL         # can be QUIET, NORMAL or FULL\n")
     file.write("WRITE_XML        N              # Write XML file (Y/N)?\n")
     file.write("XML_NAME         sex.xml        # Filename for XML output\n")
-    
-    file.close()
-#--------------------------------------------------------------------------------
 
-#---make default2.param----------------------------------------------------------
+    file.close()
+
+
+# --------------------------------------------------------------------------------
+
+# ---make default2.param----------------------------------------------------------
 def make_default2_param():
     filename = directory_path + "default2.param"
-    file = open(filename,"w")
+    file = open(filename, "w")
 
     file.write("X_IMAGE\n")
     file.write("Y_IMAGE\n")
@@ -141,12 +211,14 @@ def make_default2_param():
     file.write("#YMAX_IMAGE\n")
 
     file.close()
-#---------------------------------------------------------------------------------
 
-#---make ObsCodes.htm-------------------------------------------------------------
+
+# ---------------------------------------------------------------------------------
+
+# ---make ObsCodes.htm-------------------------------------------------------------
 def make_ObsCodes_htm():
     filename = directory_path + "ObsCodes.htm"
-    file = open(filename,"w")
+    file = open(filename, "w")
 
     file.write("<pre>\n")
     file.write("Code  Long.   cos      sin    Name\n")
@@ -183,7 +255,9 @@ def make_ObsCodes_htm():
     file.write("030  11.254460.723534+0.688012Arcetri Observatory, Florence\n")
     file.write("031  11.189850.639061+0.766705Sonneberg\n")
     file.write("032  11.582950.631624+0.772706Jena\n")
-    file.write("033  11.711240.630900+0.773333Karl Schwarzschild Observatory, Tautenburg\n")
+    file.write(
+        "033  11.711240.630900+0.773333Karl Schwarzschild Observatory, Tautenburg\n"
+    )
     file.write("034  12.452460.745176+0.664656Monte Mario Observatory, Rome\n")
     file.write("035  12.575920.565008+0.822321Copenhagen\n")
     file.write("036  12.650400.747247+0.662420Castel Gandolfo\n")
@@ -193,7 +267,9 @@ def make_ObsCodes_htm():
     file.write("040  13.7298 0.63019 +0.77387 Lohrmann Institute, Dresden\n")
     file.write("041  11.380830.679862+0.731012Innsbruck\n")
     file.write("042  13.064280.611721+0.788439Potsdam\n")
-    file.write("043  11.5286 0.69770 +0.71422 Asiago Astrophysical Observatory, Padua\n")
+    file.write(
+        "043  11.5286 0.69770 +0.71422 Asiago Astrophysical Observatory, Padua\n"
+    )
     file.write("044  14.2559 0.75738 +0.65082 Capodimonte Observatory, Naples\n")
     file.write("045  16.3390 0.66739 +0.74227 Vienna (since 1879)\n")
     file.write("046  14.2881 0.65922 +0.74965 Klet Observatory, Ceske Budejovice\n")
@@ -203,7 +279,9 @@ def make_ObsCodes_htm():
     file.write("050  18.0582 0.51118 +0.85660 Stockholm (before 1931)\n")
     file.write("051  18.4766 0.83055 -0.55508 Cape\n")
     file.write("052  18.3083 0.51224 +0.85597 Stockholm-Saltsjobaden\n")
-    file.write("053  18.9642 0.67688 +0.73373 Konkoly Observatory, Budapest (since 1934)\n")
+    file.write(
+        "053  18.9642 0.67688 +0.73373 Konkoly Observatory, Budapest (since 1934)\n"
+    )
     file.write("054  11.6654 0.56595 +0.82169 Brorfelde\n")
     file.write("055  19.9596 0.64321 +0.76316 Cracow\n")
     file.write("056  20.2450 0.65501 +0.75346 Skalnate Pleso\n")
@@ -264,14 +342,20 @@ def make_ObsCodes_htm():
     file.write("111  10.9721 0.72439 +0.68710 Piazzano Observatory, Florence\n")
     file.write("112  10.9039 0.70232 +0.70950 Pleiade Observatory, Verona\n")
     file.write("113  13.0166 0.63502 +0.77001 Volkssternwarte Drebach, Schoenbrunn\n")
-    file.write("114  41.4277 0.72489 +0.68702 Engelhardt Observatory, Zelenchukskaya Station\n")
+    file.write(
+        "114  41.4277 0.72489 +0.68702 Engelhardt Observatory, Zelenchukskaya Station\n"
+    )
     file.write("115  41.4416 0.72492 +0.68699 Zelenchukskaya\n")
     file.write("116  11.5958 0.66893 +0.74094 Giesing\n")
     file.write("117  11.5385 0.66897 +0.74092 Sendling\n")
-    file.write("118  17.2740 0.66558 +0.74394 Astronomical and Geophysical Observatory, Modra\n")
+    file.write(
+        "118  17.2740 0.66558 +0.74394 Astronomical and Geophysical Observatory, Modra\n"
+    )
     file.write("119  42.8253 0.74729 +0.66264 Abastuman\n")
     file.write("120  13.7261 0.70489 +0.70699 Visnjan\n")
-    file.write("121  36.9369 0.64883 +0.75842 Kharkov University, Chuguevskaya Station\n")
+    file.write(
+        "121  36.9369 0.64883 +0.75842 Kharkov University, Chuguevskaya Station\n"
+    )
     file.write("122   3.5035 0.72017 +0.69176 Pises Observatory\n")
     file.write("123  44.2917 0.76352 +0.64398 Byurakan\n")
     file.write("124   2.2550 0.72534 +0.68612 Castres\n")
@@ -333,9 +417,13 @@ def make_ObsCodes_htm():
     file.write("180   3.9519 0.72571 +0.68570 Mauguio\n")
     file.write("181  55.4100 0.93288 -0.35941 Observatoire des Makes, Saint-Louis\n")
     file.write("182  55.2586 0.93394 -0.35634 St. Paul, Reunion\n")
-    file.write("183  41.4200 0.72496 +0.68695 Starlab Observatory, Karachay-Cherkessia\n")
+    file.write(
+        "183  41.4200 0.72496 +0.68695 Starlab Observatory, Karachay-Cherkessia\n"
+    )
     file.write("184   6.0361 0.72081 +0.69097 Valmeca Observatory, Puimichel\n")
-    file.write("185   7.4219 0.67876 +0.73200 Observatoire Astronomique Jurassien-Vicques\n")
+    file.write(
+        "185   7.4219 0.67876 +0.73200 Observatoire Astronomique Jurassien-Vicques\n"
+    )
     file.write("186  66.8821 0.77679 +0.62781 Kitab\n")
     file.write("187  17.0733 0.61314 +0.78735 Astronomical Observatory, Borowiec\n")
     file.write("188  66.895550.782059+0.621762Majdanak\n")
@@ -379,11 +467,15 @@ def make_ObsCodes_htm():
     file.write("226  11.8858 0.70293 +0.70888 Guido Ruggieri Observatory, Padua\n")
     file.write("227 281.2853 0.73683 +0.67392 OrbitJet Observatory, Colden\n")
     file.write("228  13.8750 0.70038 +0.71147 Bruno Zugna Observatory, Trieste\n")
-    file.write("229  14.9743 0.75936 +0.64857 G. C. Gloriosi Astronomical Observatory, Salerno\n")
+    file.write(
+        "229  14.9743 0.75936 +0.64857 G. C. Gloriosi Astronomical Observatory, Salerno\n"
+    )
     file.write("230  12.0133 0.6744  +0.7363  Mt. Wendelstein Observatory\n")
     file.write("231   5.3983 0.64403 +0.76253 Vesqueville\n")
     file.write("232   1.3317 0.7500  +0.6593  Masquefa Observatory\n")
-    file.write("233  10.5403 0.72226 +0.68931 Sauro Donati Astronomical Observatory, San Vito\n")
+    file.write(
+        "233  10.5403 0.72226 +0.68931 Sauro Donati Astronomical Observatory, San Vito\n"
+    )
     file.write("234   1.128330.614951+0.785931Coddenham Observatory\n")
     file.write("235  13.113520.696669+0.714993CAST Observatory, Talmassons\n")
     file.write("236  84.9465 0.55370 +0.82995 Tomsk\n")
@@ -410,16 +502,24 @@ def make_ObsCodes_htm():
     file.write("257 243.124610.816796+0.575252Goldstone DSS 25, Fort Irwin\n")
     file.write("260 149.0661 0.85560 -0.51626 Siding Spring Observatory-DSS\n")
     file.write("261 243.140220.836325+0.546877Palomar Mountain-DSS\n")
-    file.write("262 289.266260.873440-0.486052European Southern Observatory, La Silla-DSS\n")
+    file.write(
+        "262 289.266260.873440-0.486052European Southern Observatory, La Silla-DSS\n"
+    )
     file.write("285   2.3708 0.66135 +0.74759 Flammarion Observatory, Juvisy\n")
     file.write("286 102.7883 0.90694 +0.42057 Yunnan Observatory\n")
     file.write("290 250.107990.842743+0.537438Mt. Graham-VATT\n")
     file.write("291 248.4009 0.84947 +0.52647 LPL/Spacewatch II\n")
     file.write("292 285.1058 0.76630 +0.64033 Burlington, New Jersey\n")
     file.write("293 285.5899 0.76936 +0.63668 Burlington remote site\n")
-    file.write("294 285.8467 0.76031 +0.64739 Astrophysical Obs., College of Staten Island\n")
-    file.write("295 283.0000 0.7789  +0.6251  Catholic University Observatory, Washington\n")
-    file.write("296 286.2515 0.7365  +0.6742  Dudley Observatory, Albany (after 1893)\n")
+    file.write(
+        "294 285.8467 0.76031 +0.64739 Astrophysical Obs., College of Staten Island\n"
+    )
+    file.write(
+        "295 283.0000 0.7789  +0.6251  Catholic University Observatory, Washington\n"
+    )
+    file.write(
+        "296 286.2515 0.7365  +0.6742  Dudley Observatory, Albany (after 1893)\n"
+    )
     file.write("297 286.819  0.7203  +0.6913  Middlebury\n")
     file.write("298 287.3408 0.74943 +0.65988 Van Vleck Observatory\n")
     file.write("299 107.6160 0.99316 -0.11808 Bosscha Observatory, Lembang\n")
@@ -433,7 +533,9 @@ def make_ObsCodes_htm():
     file.write("309 289.595690.909943-0.414336Cerro Paranal\n")
     file.write("312 112.334  0.9574  +0.2877  Tsingtao field station, Xisha Islands\n")
     file.write("318 115.691  0.85206 -0.52170 Quinns Rock\n")
-    file.write("319 116.1350 0.84883 -0.52702 Perth Observatory, Perth-Lowell Telescope\n")
+    file.write(
+        "319 116.1350 0.84883 -0.52702 Perth Observatory, Perth-Lowell Telescope\n"
+    )
     file.write("320 116.4381 0.85859 -0.51102 Chiro Observatory\n")
     file.write("321 115.7571 0.85078 -0.52378 Craigie\n")
     file.write("322 116.1340 0.84882 -0.52703 Perth Observatory, Bickley-MCT\n")
@@ -448,8 +550,12 @@ def make_ObsCodes_htm():
     file.write("341 137.9486 0.80669 +0.58923 Akashina\n")
     file.write("342 134.3189 0.83425 +0.54955 Shishikui\n")
     file.write("343 127.1258 0.78688 +0.61507 Younchun\n")
-    file.write("344 128.9767 0.80841 +0.58695 Bohyunsan Optical Astronomy Observatory\n")
-    file.write("345 128.4575 0.80046 +0.59773 Sobaeksan Optical Astronomy Observatory\n")
+    file.write(
+        "344 128.9767 0.80841 +0.58695 Bohyunsan Optical Astronomy Observatory\n"
+    )
+    file.write(
+        "345 128.4575 0.80046 +0.59773 Sobaeksan Optical Astronomy Observatory\n"
+    )
     file.write("346 127.3854 0.80474 +0.59166 KNUE Astronomical Observatory\n")
     file.write("347 139.9086 0.80417 +0.59244 Utsunomiya-Imaizumi\n")
     file.write("348 135.2669 0.81698 +0.57475 Ayabe\n")
@@ -534,12 +640,16 @@ def make_ObsCodes_htm():
     file.write("427 138.7283 0.82667 -0.56084 Stockport\n")
     file.write("428 153.3970 0.88271 -0.46837 Reedy Creek\n")
     file.write("429 149.0400 0.81761 -0.57402 Hawker\n")
-    file.write("430 149.2123 0.85550 -0.51623 Rainbow Observatory, near Coonabarabran\n")
+    file.write(
+        "430 149.2123 0.85550 -0.51623 Rainbow Observatory, near Coonabarabran\n"
+    )
     file.write("431 149.7578 0.83548 -0.54793 Mt. Tarana Observatory, Bathurst\n")
     file.write("432 153.082220.863790-0.502166Boambee\n")
     file.write("433 152.1078 0.84197 -0.53771 Bagnall Beach Observatory\n")
     file.write("434  10.9206 0.70765 +0.70419 S. Benedetto Po\n")
-    file.write("435  11.8936 0.70330 +0.70852 G. Colombo Astronomical Observatory, Padua\n")
+    file.write(
+        "435  11.8936 0.70330 +0.70852 G. Colombo Astronomical Observatory, Padua\n"
+    )
     file.write("436  11.3356 0.71658 +0.69528 Osservatorio di Livergnano\n")
     file.write("437 284.6971 0.76700 +0.63953 Haverford\n")
     file.write("438 287.3621 0.74059 +0.66978 Smith College Observatory, Northampton\n")
@@ -556,16 +666,22 @@ def make_ObsCodes_htm():
     file.write("449 279.6503 0.82617 +0.56156 Griffin Hunter Observatory, Bethune\n")
     file.write("450 279.3339 0.81857 +0.57254 Carla Jane Observatory, Charlotte\n")
     file.write("451 262.7569 0.79447 +0.60536 West Skies Observatory, Mulvane\n")
-    file.write("452 279.1063 0.8980  +0.4385  Big Cypress Observatory, Fort Lauderdale\n")
+    file.write(
+        "452 279.1063 0.8980  +0.4385  Big Cypress Observatory, Fort Lauderdale\n"
+    )
     file.write("453 242.1331 0.82030 +0.57021 Edwards Raven Observatory\n")
-    file.write("454 283.376780.774542+0.630425Maryland Space Grant Consortium Observatory\n")
+    file.write(
+        "454 283.376780.774542+0.630425Maryland Space Grant Consortium Observatory\n"
+    )
     file.write("455 237.9636 0.78912 +0.61218 CBA Concord\n")
     file.write("456 358.8278 0.61348 +0.78709 Daventry Observatory\n")
     file.write("457  18.3403 0.66221 +0.74685 Partizanske\n")
     file.write("458 355.9806 0.75992 +0.64805 Guadarrama Observatory\n")
     file.write("459 288.1172 0.72607 +0.68538 Smith River Observatory, Danbury\n")
     file.write("460 265.9981 0.83010 +0.55579 Area 52 Observatory, Nashville\n")
-    file.write("461  19.8943 0.67153 +0.73869 University of Szeged, Piszkesteto Stn. (Konkoly)\n")
+    file.write(
+        "461  19.8943 0.67153 +0.73869 University of Szeged, Piszkesteto Stn. (Konkoly)\n"
+    )
     file.write("462 283.0842 0.77905 +0.62488 Mount Belleview Observatory\n")
     file.write("463 254.7375 0.76726 +0.63959 Sommers-Bausch Observatory, Boulder\n")
     file.write("464 288.5013 0.75109 +0.65799 Toby Point Observatory, Narragansett\n")
@@ -587,7 +703,9 @@ def make_ObsCodes_htm():
     file.write("480   0.7733 0.61466 +0.78616 Cockfield\n")
     file.write("481   7.93   0.596   +0.800   Moorwarfen\n")
     file.write("482 357.1854 0.55560 +0.82866 St. Andrews\n")
-    file.write("483 173.8036 0.74734 -0.66254 Carter Observatory, Black Birch Station\n")
+    file.write(
+        "483 173.8036 0.74734 -0.66254 Carter Observatory, Black Birch Station\n"
+    )
     file.write("484 174.75   0.753   -0.657   Happy Valley, Wellington\n")
     file.write("485 174.7654 0.75256 -0.65635 Carter Observatory, Wellington\n")
     file.write("486 175.47   0.765   -0.643   Palmerston North\n")
@@ -729,7 +847,9 @@ def make_ObsCodes_htm():
     file.write("622   7.5680 0.68778 +0.72358 Oberwichtrach\n")
     file.write("623   5.5667 0.63577 +0.76932 Liege\n")
     file.write("624   9.6167 0.64723 +0.75977 Dertingen\n")
-    file.write("625 203.5683 0.93557 +0.35201 Kihei-AMOS Remote Maui Experimental Site\n")
+    file.write(
+        "625 203.5683 0.93557 +0.35201 Kihei-AMOS Remote Maui Experimental Site\n"
+    )
     file.write("626   4.9864 0.62847 +0.77524 Geel\n")
     file.write("627   5.2146 0.72002 +0.69168 Blauvac\n")
     file.write("628   6.8442 0.62477 +0.77820 Mulheim-Ruhr\n")
@@ -758,14 +878,18 @@ def make_ObsCodes_htm():
     file.write("651 249.419160.852069+0.522123Grasslands Observatory, Tucson\n")
     file.write("652 245.9333 0.6291  +0.7749  Rock Finder Observatory, Calgary\n")
     file.write("653 237.8678 0.68091 +0.72996 Torus Observatory, Buckley\n")
-    file.write("654 242.318410.826471+0.561727Table Mountain Observatory, Wrightwood-PHMC\n")
+    file.write(
+        "654 242.318410.826471+0.561727Table Mountain Observatory, Wrightwood-PHMC\n"
+    )
     file.write("655 236.383  0.6656  +0.7438  Sooke\n")
     file.write("656 236.3921 0.66580 +0.74367 Victoria\n")
     file.write("657 236.6903 0.66437 +0.74491 Climenhaga Observatory, Victoria\n")
     file.write("658 236.583000.663631+0.745601National Research Council of Canada\n")
     file.write("659 237.0514 0.66257 +0.74650 Heron Cove Observatory, Orcas\n")
     file.write("660 237.7379 0.79038 +0.61059 Leuschner Observatory, Berkeley\n")
-    file.write("661 245.7117 0.63251 +0.77222 Rothney Astrophysical Observatory, Priddis\n")
+    file.write(
+        "661 245.7117 0.63251 +0.77222 Rothney Astrophysical Observatory, Priddis\n"
+    )
     file.write("662 238.3545 0.79619 +0.60335 Lick Observatory, Mount Hamilton\n")
     file.write("663 248.3136 0.83483 +0.54879 Red Mountain Observatory\n")
     file.write("664 239.2775 0.6840  +0.7273  Manastash Ridge Observatory\n")
@@ -792,10 +916,14 @@ def make_ObsCodes_htm():
     file.write("685 247.84   0.816   +0.575   Williams\n")
     file.write("686 249.2092 0.84512 +0.53359 U. of Minn. Infrared Obs., Mt. Lemmon\n")
     file.write("687 248.3473 0.81848 +0.57318 Northern Arizona University, Flagstaff\n")
-    file.write("688 248.4645 0.81938 +0.57193 Lowell Observatory, Anderson Mesa Station\n")
+    file.write(
+        "688 248.4645 0.81938 +0.57193 Lowell Observatory, Anderson Mesa Station\n"
+    )
     file.write("689 248.2601 0.81851 +0.57319 U.S. Naval Observatory, Flagstaff\n")
     file.write("690 248.3367 0.81832 +0.57344 Lowell Observatory, Flagstaff\n")
-    file.write("691 248.4010 0.84951 +0.52642 Steward Observatory, Kitt Peak-Spacewatch\n")
+    file.write(
+        "691 248.4010 0.84951 +0.52642 Steward Observatory, Kitt Peak-Spacewatch\n"
+    )
     file.write("692 249.0513 0.84679 +0.53036 Steward Observatory, Tucson\n")
     file.write("693 249.267450.845317+0.533211Catalina Station, Tucson\n")
     file.write("694 248.9943 0.84700 +0.53009 Tumamoc Hill, Tucson\n")
@@ -806,7 +934,9 @@ def make_ObsCodes_htm():
     file.write("699 248.463310.819380+0.571930Lowell Observatory-LONEOS\n")
     file.write("700 250.3817 0.80656 +0.58960 Chinle\n")
     file.write("701 249.797160.853823+0.519224Junk Bond Observatory, Sierra Vista\n")
-    file.write("702 252.8117 0.8305  +0.5561  Joint Obs. for cometary research, Socorro\n")
+    file.write(
+        "702 252.8117 0.8305  +0.5561  Joint Obs. for cometary research, Socorro\n"
+    )
     file.write("703 249.267360.845315+0.533213Catalina Sky Survey\n")
     file.write("704 253.340930.831869+0.553542Lincoln Laboratory ETS, New Mexico\n")
     file.write("705 254.179420.841945+0.538563Apache Point\n")
@@ -816,11 +946,15 @@ def make_ObsCodes_htm():
     file.write("709 254.228820.840250+0.541096W & B Observatory, Cloudcroft\n")
     file.write("710 254.7336 0.77980 +0.62458 MPO Observatory, Florissant\n")
     file.write("711 255.9785 0.86114 +0.50731 McDonald Observatory, Fort Davis\n")
-    file.write("712 255.118650.778364+0.626251USAF Academy Observatory, Colorado Springs\n")
+    file.write(
+        "712 255.118650.778364+0.626251USAF Academy Observatory, Colorado Springs\n"
+    )
     file.write("713 254.9897 0.76865 +0.63793 Thornton\n")
     file.write("714 246.8173 0.82444 +0.56439 Bagdad\n")
     file.write("715 253.2759 0.84546 +0.53264 Jornada Observatory, Las Cruces\n")
-    file.write("716 255.2489 0.77753 +0.62731 Palmer Divide Observatory, Colorado Springs\n")
+    file.write(
+        "716 255.2489 0.77753 +0.62731 Palmer Divide Observatory, Colorado Springs\n"
+    )
     file.write("717 256.0481 0.86160 +0.50636 Prude Ranch\n")
     file.write("718 247.7125 0.76004 +0.64802 Wiggins Observatory, Tooele\n")
     file.write("719 253.086080.829384+0.557204Etscorn Observatory\n")
@@ -833,8 +967,12 @@ def make_ObsCodes_htm():
     file.write("726 265.6933 0.69024 +0.72120 Brainerd\n")
     file.write("727 262.538720.813941+0.579096Zeno Observatory, Edmond\n")
     file.write("728 262.6084 0.88610 +0.46194 Corpus Christi\n")
-    file.write("729 262.878580.648804+0.758451Glenlea Astronomical Observatory, Winnipeg\n")
-    file.write("730 262.841430.671544+0.738537University of North Dakota, Grand Forks\n")
+    file.write(
+        "729 262.878580.648804+0.758451Glenlea Astronomical Observatory, Winnipeg\n"
+    )
+    file.write(
+        "730 262.841430.671544+0.738537University of North Dakota, Grand Forks\n"
+    )
     file.write("731 272.6711 0.77290 +0.63244 Rose-Hulman Observatory, Terre Haute\n")
     file.write("732 263.2300 0.95591 +0.29359 Oaxaca\n")
     file.write("733 263.3546 0.83802 +0.54387 Allen, Texas\n")
@@ -842,7 +980,9 @@ def make_ObsCodes_htm():
     file.write("735 264.406400.872133+0.487634George Observatory, Needville\n")
     file.write("736 263.3357 0.87006 +0.49132 Houston\n")
     file.write("737 275.6633 0.8282  +0.5586  New Bullpen Observatory, Alpharetta\n")
-    file.write("738 267.6733 0.7788  +0.6252  Observatory of the State University of Missouri\n")
+    file.write(
+        "738 267.6733 0.7788  +0.6252  Observatory of the State University of Missouri\n"
+    )
     file.write("739 265.2440 0.77965 +0.62419 Sunflower Observatory, Olathe\n")
     file.write("740 265.3383 0.8511  +0.5233  SFA Observatory, Nacogdoches\n")
     file.write("741 266.8503 0.71493 +0.69692 Goodsell Observatory, Northfield\n")
@@ -870,35 +1010,57 @@ def make_ObsCodes_htm():
     file.write("763 280.4658 0.72157 +0.69009 King City\n")
     file.write("764 275.1439 0.83264 +0.55205 Puckett Observatory, Stone Mountain\n")
     file.write("765 275.5775 0.77669 +0.62784 Cincinnati\n")
-    file.write("766 275.5167 0.73600 +0.67477 Michigan State University Obs., East Lansing\n")
+    file.write(
+        "766 275.5167 0.73600 +0.67477 Michigan State University Obs., East Lansing\n"
+    )
     file.write("767 276.2697 0.74102 +0.66930 Ann Arbor\n")
     file.write("768 272.325000.743590+0.666435Dearborn Observatory\n")
     file.write("769 276.9892 0.76716 +0.63936 McMillin Observatory, Columbus\n")
     file.write("770 274.0786 0.77573 +0.62900 Crescent Moon Observatory, Columbus\n")
     file.write("771 277.57   0.922   +0.389   Boyeros Observatory, Havana\n")
     file.write("772 284.0865 0.70517 +0.70669 Boltwood Observatory, Stittsville\n")
-    file.write("773 278.4318 0.74966 +0.65966 Warner and Swasey Observatory, Cleveland\n")
-    file.write("774 278.9250 0.74905 +0.66039 Warner and Swasey Nassau Station, Chardon\n")
+    file.write(
+        "773 278.4318 0.74966 +0.65966 Warner and Swasey Observatory, Cleveland\n"
+    )
+    file.write(
+        "774 278.9250 0.74905 +0.66039 Warner and Swasey Nassau Station, Chardon\n"
+    )
     file.write("775 284.6168 0.76029 +0.64743 Sayre Observatory, South Bethlehem\n")
     file.write("776 284.4669 0.73472 +0.67619 Foggy Bottom, Hamilton\n")
     file.write("777 280.6017 0.72454 +0.68695 Toronto\n")
     file.write("778 279.9778 0.76172 +0.64582 Allegheny Observatory, Pittsburgh\n")
-    file.write("779 280.5779 0.72219 +0.68943 David Dunlap Observatory, Richmond Hill\n")
-    file.write("780 281.4778 0.78868 +0.61280 Leander McCormick Observatory, Charlottesville\n")
+    file.write(
+        "779 280.5779 0.72219 +0.68943 David Dunlap Observatory, Richmond Hill\n"
+    )
+    file.write(
+        "780 281.4778 0.78868 +0.61280 Leander McCormick Observatory, Charlottesville\n"
+    )
     file.write("781 281.5075 1.00045 -0.00405 Quito\n")
     file.write("782 281.65   0.999   +0.000   Quito, comet astrograph station\n")
     file.write("783 282.02   0.783   +0.622   Rixeyville\n")
     file.write("784 282.2146 0.74140 +0.66895 Stull Observatory, Alfred University\n")
     file.write("785 285.3542 0.76323 +0.64397 Fitz-Randolph Observatory, Princeton\n")
-    file.write("786 282.9345 0.77906 +0.62487 U.S. Naval Obs., Washington (since 1893)\n")
-    file.write("787 282.9494 0.77934 +0.62451 U.S. Naval Obs., Washington (before 1893)\n")
+    file.write(
+        "786 282.9345 0.77906 +0.62487 U.S. Naval Obs., Washington (since 1893)\n"
+    )
+    file.write(
+        "787 282.9494 0.77934 +0.62451 U.S. Naval Obs., Washington (before 1893)\n"
+    )
     file.write("788 284.3667 0.76953 +0.63650 Mount Cuba Observatory, Wilmington\n")
     file.write("789 284.5940 0.73188 +0.67922 Litchfield Observatory, Clinton\n")
     file.write("790 284.2835 0.70343 +0.70840 Dominion Observatory, Ottawa\n")
-    file.write("791 284.5236 0.76713 +0.63937 Flower and Cook Observatory, Philadelphia\n")
-    file.write("792 288.30   0.753   +0.657   University of Rhode Island, Quonochontaug\n")
-    file.write("793 286.2200 0.73660 +0.67407 Dudley Observatory, Albany (before 1893)\n")
-    file.write("794 286.1100 0.74789 +0.66161 Vassar College Observatory, Poughkeepsie\n")
+    file.write(
+        "791 284.5236 0.76713 +0.63937 Flower and Cook Observatory, Philadelphia\n"
+    )
+    file.write(
+        "792 288.30   0.753   +0.657   University of Rhode Island, Quonochontaug\n"
+    )
+    file.write(
+        "793 286.2200 0.73660 +0.67407 Dudley Observatory, Albany (before 1893)\n"
+    )
+    file.write(
+        "794 286.1100 0.74789 +0.66161 Vassar College Observatory, Poughkeepsie\n"
+    )
     file.write("795 286.0123 0.7589  +0.6491  Rutherford\n")
     file.write("796 286.45   0.755   +0.654   Stamford\n")
     file.write("797 287.0751 0.75218 +0.65676 Yale Observatory, New Haven\n")
@@ -913,7 +1075,9 @@ def make_ObsCodes_htm():
     file.write("806 289.4513 0.83584 -0.54738 Santiago-Cerro Calan\n")
     file.write("807 289.1941 0.86560 -0.49980 Cerro Tololo Observatory, La Serena\n")
     file.write("808 290.6708 0.85098 -0.52414 El Leoncito\n")
-    file.write("809 289.266260.873440-0.486052European Southern Observatory, La Silla\n")
+    file.write(
+        "809 289.266260.873440-0.486052European Southern Observatory, La Silla\n"
+    )
     file.write("810 288.5154 0.73712 +0.67352 Wallace Observatory, Westford\n")
     file.write("811 289.895650.752586+0.656289Maria Mitchell Observatory, Nantucket\n")
     file.write("812 288.4543 0.83992 -0.54093 Vina del Mar\n")
@@ -935,9 +1099,13 @@ def make_ObsCodes_htm():
     file.write("828 288.9758 0.74656 +0.66310 Assonet\n")
     file.write("829 290.6979 0.85102 -0.52411 Complejo Astronomico El Leoncito\n")
     file.write("830 288.5697 0.73491 +0.67590 Hudson\n")
-    file.write("831 277.4134 0.87191 +0.48804 Rosemary Hill Observatory, University of Florida\n")
+    file.write(
+        "831 277.4134 0.87191 +0.48804 Rosemary Hill Observatory, University of Florida\n"
+    )
     file.write("832 283.1850 0.7653  +0.6416  Etters\n")
-    file.write("833 301.4633 0.82373 -0.56508 Obs. Astronomico de Mercedes, Buenos Aires\n")
+    file.write(
+        "833 301.4633 0.82373 -0.56508 Obs. Astronomico de Mercedes, Buenos Aires\n"
+    )
     file.write("834 301.5654 0.82398 -0.56473 Buenos Aires-AAAA\n")
     file.write("835 288.6428 0.73709 +0.67354 Drum Hill Station, Chelmsford\n")
     file.write("836 288.5011 0.74708 +0.66252 Furnace Brook Observatory, Cranston\n")
@@ -950,7 +1118,9 @@ def make_ObsCodes_htm():
     file.write("843 273.0648 0.82481 +0.56357 Emerald Lane Observatory, Decatur\n")
     file.write("844 303.809820.822499-0.566884Los Molinos\n")
     file.write("845 283.5058 0.73942 +0.67107 Ford Observatory, Ithaca\n")
-    file.write("846 269.655010.779842+0.623926Principia Astronomical Observatory, Elsah\n")
+    file.write(
+        "846 269.655010.779842+0.623926Principia Astronomical Observatory, Elsah\n"
+    )
     file.write("847 275.9750 0.7078  +0.7041  Lunar Cafe Observator, Flint\n")
     file.write("848 237.0219 0.72412 +0.68741 Tenagra Observatory, Cottage Grove\n")
     file.write("849 265.1694 0.77927 +0.62467 Everstar Observatory, Olathe\n")
@@ -1015,20 +1185,28 @@ def make_ObsCodes_htm():
     file.write("908 137.2467 0.80352 +0.59330 Toyama\n")
     file.write("909 237.8717 0.6711  +0.7389  Snohomish Hilltop Observatory\n")
     file.write("910   6.9267 0.72368 +0.68811 Caussols-ODAS\n")
-    file.write("911 282.9233 0.7429  +0.6672  Collins Observatory, Corning Community College\n")
+    file.write(
+        "911 282.9233 0.7429  +0.6672  Collins Observatory, Corning Community College\n"
+    )
     file.write("912 288.2342 0.74769 +0.66186 Carbuncle Hill Observatory, Greene\n")
     file.write("913 303.8161 0.82093 -0.56912 Observatorio Kappa Crucis, Montevideo\n")
     file.write("914 288.0108 0.73809 +0.67254 Underwood Observatory, Hubbardston\n")
     file.write("915 261.8789 0.86861 +0.49393 River Oaks Observatory, New Braunfels\n")
     file.write("916 272.6836 0.77287 +0.63248 Oakley Observatory, Terre Haute\n")
-    file.write("917 237.5522 0.68140 +0.72948 Pacific Lutheran University Keck Observatory\n")
+    file.write(
+        "917 237.5522 0.68140 +0.72948 Pacific Lutheran University Keck Observatory\n"
+    )
     file.write("918 257.8694 0.72071 +0.69110 Badlands Observatory, Quinn\n")
     file.write("919 248.3183 0.8419  +0.5379  Desert Beaver Observatory\n")
     file.write("920 282.3353 0.73161 +0.67947 RIT Observatory, Rochester\n")
-    file.write("921 254.4725 0.83988 +0.54159 SW Institute for Space Research, Cloudcroft\n")
+    file.write(
+        "921 254.4725 0.83988 +0.54159 SW Institute for Space Research, Cloudcroft\n"
+    )
     file.write("922 272.8333 0.82335 +0.56569 Timberland Observatory, Decatur\n")
     file.write("923 284.6300 0.76655 +0.64006 The Bradstreet Observatory, St. Davids\n")
-    file.write("924 287.6769 0.68988 +0.72150 Observatoire du Cegep de Trois-Rivieres\n")
+    file.write(
+        "924 287.6769 0.68988 +0.72150 Observatoire du Cegep de Trois-Rivieres\n"
+    )
     file.write("925 249.8589 0.85450 +0.51811 Palominas Observatory\n")
     file.write("926 249.1209 0.85394 +0.51902 Tenagra II Observatory\n")
     file.write("927 270.5619 0.73509 +0.67593 Madison-YRS\n")
@@ -1069,7 +1247,9 @@ def make_ObsCodes_htm():
     file.write("962 359.8188 0.77845 +0.62561 Gandia\n")
     file.write("963 359.7333 0.6084  +0.7909  Werrington\n")
     file.write("964 358.8433 0.62471 +0.77826 Southend Bradfield\n")
-    file.write("965 351.4008 0.79761 +0.60118 Observacao Astronomica no Algarve, Portimao\n")
+    file.write(
+        "965 351.4008 0.79761 +0.60118 Observacao Astronomica no Algarve, Portimao\n"
+    )
     file.write("966 357.204230.609591+0.790100Church Stretton\n")
     file.write("967 358.9778 0.61508 +0.78585 Greens Norton\n")
     file.write("968   0.4250 0.6158  +0.7853  Haverhill\n")
@@ -1142,12 +1322,16 @@ def make_ObsCodes_htm():
     file.write("A35  12.8978 0.63511 +0.76995 Hormersdorf Observatory\n")
     file.write("A36   9.7911 0.69856 +0.71340 Ganda di Aviatico\n")
     file.write("A37  13.6634 0.61128 +0.78877 Mueggelheim\n")
-    file.write("A38  13.3747 0.74706 +0.66266 Campocatino Automated Telescope, Collepardo\n")
+    file.write(
+        "A38  13.3747 0.74706 +0.66266 Campocatino Automated Telescope, Collepardo\n"
+    )
     file.write("A39  12.4186 0.63084 +0.77336 Altenburg\n")
     file.write("A40  14.4978 0.81104 +0.58306 Pieta\n")
     file.write("A41  14.5911 0.69290 +0.71871 Rezman Observatory, Kamnik\n")
     file.write("A42   9.5019 0.61280 +0.78760 Gehrden\n")
-    file.write("A43  13.0897 0.61201 +0.78821 Inastars Observatory, Potsdam (before 2006)\n")
+    file.write(
+        "A43  13.0897 0.61201 +0.78821 Inastars Observatory, Potsdam (before 2006)\n"
+    )
     file.write("A44  13.6972 0.66609 +0.74346 Altschwendt\n")
     file.write("A45   9.3620 0.62525 +0.77786 Karrenkneul\n")
     file.write("A46  16.5825 0.65349 +0.75447 Lelekovice\n")
@@ -1159,9 +1343,13 @@ def make_ObsCodes_htm():
     file.write("A52  18.7553 0.67756 +0.73304 Etyek\n")
     file.write("A53  10.6883 0.70294 +0.70889 Peschiera del Garda\n")
     file.write("A54  16.6217 0.60828 +0.79108 Ostrorog\n")
-    file.write("A55  13.1181 0.73871 +0.67204 Osservatorio Astronomico Vallemare di Borbona\n")
+    file.write(
+        "A55  13.1181 0.73871 +0.67204 Osservatorio Astronomico Vallemare di Borbona\n"
+    )
     file.write("A56  10.3197 0.71406 +0.69784 Parma\n")
-    file.write("A57  11.1031 0.72364 +0.68791 Osservatorio Astron. Margherita Hack, Firenze\n")
+    file.write(
+        "A57  11.1031 0.72364 +0.68791 Osservatorio Astron. Margherita Hack, Firenze\n"
+    )
     file.write("A58   2.4694 0.66135 +0.74758 Observatoire de Chalandray-Canotiers\n")
     file.write("A59  12.9071 0.64123 +0.76490 Karlovy Vary Observatory\n")
     file.write("A60  20.8106 0.84556 -0.53260 YSTAR-NEOPAT Station, Sutherland\n")
@@ -1170,7 +1358,9 @@ def make_ObsCodes_htm():
     file.write("A63   4.7567 0.69879 +0.71298 Cosmosoz Obs., Tassin la Demi Lune\n")
     file.write("A64   6.1151 0.69034 +0.72132 Couvaloup de St-Cergue\n")
     file.write("A65   2.4083 0.71939 +0.69239 Le Couvent de Lentin\n")
-    file.write("A66  10.3161 0.72613 +0.68526 Stazione Osservativa Astronomica, Livorno\n")
+    file.write(
+        "A66  10.3161 0.72613 +0.68526 Stazione Osservativa Astronomica, Livorno\n"
+    )
     file.write("A67   7.6785 0.71665 +0.69522 Chiusa di Pesio\n")
     file.write("A68   9.6533 0.57755 +0.81362 Swedenborg Obs., Bockholmwik\n")
     file.write("A69  11.3300 0.7287  +0.6826  Osservatorio Palazzo Bindi Sergardi\n")
@@ -1189,7 +1379,9 @@ def make_ObsCodes_htm():
     file.write("A82  13.8744 0.70037 +0.71148 Osservatorio Astronomico di Trieste\n")
     file.write("A83  29.9969 0.45945 +0.88525 Jakokoski Observatory\n")
     file.write("A84  30.3333 0.80175 +0.59632 TUBITAK National Observatory\n")
-    file.write("A85  30.8065 0.68881 +0.72252 Odessa Astronomical Observatory, Kryzhanovka\n")
+    file.write(
+        "A85  30.8065 0.68881 +0.72252 Odessa Astronomical Observatory, Kryzhanovka\n"
+    )
     file.write("A86   4.3547 0.70170 +0.71021 Albigneux\n")
     file.write("A87   8.7662 0.64935 +0.75798 Rimbach\n")
     file.write("A88   8.901330.714961+0.696835Bolzaneto\n")
@@ -1219,8 +1411,12 @@ def make_ObsCodes_htm():
     file.write("B12   4.4906 0.61329 +0.78721 Koschny Observatory, Noordwijkerhout\n")
     file.write("B13   8.9311 0.69950 +0.71231 Osservatorio di Tradate\n")
     file.write("B14   9.0758 0.71061 +0.70138 Ca del Monte\n")
-    file.write("B15  13.0129 0.61111 +0.78890 Inastars Observatory, Potsdam (since 2006)\n")
-    file.write("B16  36.9547 0.56382 +0.82317 1st Moscow Gymnasium Observatory, Lipki\n")
+    file.write(
+        "B15  13.0129 0.61111 +0.78890 Inastars Observatory, Potsdam (since 2006)\n"
+    )
+    file.write(
+        "B16  36.9547 0.56382 +0.82317 1st Moscow Gymnasium Observatory, Lipki\n"
+    )
     file.write("B17  33.1633 0.70559 +0.70625 AZT-8 Evpatoria\n")
     file.write("B18  42.5008 0.72958 +0.68232 Terskol\n")
     file.write("B19   2.4414 0.74963 +0.65966 Observatorio Iluro, Mataro\n")
@@ -1230,18 +1426,24 @@ def make_ObsCodes_htm():
     file.write("B23  10.9710 0.70124 +0.71069 Fiamene\n")
     file.write("B24   2.5983 0.66317 +0.74598 Cesson\n")
     file.write("B25  15.0557 0.79386 +0.60614 Catania\n")
-    file.write("B26   5.6667 0.72204 +0.68966 Observatoire des Terres Blanches, Reillanne\n")
+    file.write(
+        "B26   5.6667 0.72204 +0.68966 Observatoire des Terres Blanches, Reillanne\n"
+    )
     file.write("B27  14.1544 0.66425 +0.74516 Picard Observatory, St. Veit\n")
     file.write("B28  13.1836 0.69466 +0.71696 Mandi Observatory, Pagnacco\n")
     file.write("B29   0.6701 0.75801 +0.65008 L'Ampolla Observatory, Tarragona\n")
     file.write("B30  16.5689 0.60872 +0.79074 Szamotuly-Galowo\n")
-    file.write("B31  20.8108 0.84560 -0.53254 Southern African Large Telescope, Sutherland\n")
+    file.write(
+        "B31  20.8108 0.84560 -0.53254 Southern African Large Telescope, Sutherland\n"
+    )
     file.write("B32  12.9486 0.63467 +0.77030 Gelenau\n")
     file.write("B33  10.7783 0.72588 +0.68555 Libbiano Observatory, Peccioli\n")
     file.write("B34  33.7258 0.81748 +0.57405 Green Island Observatory, Gecitkale\n")
     file.write("B35  35.0317 0.84991 +0.52524 Bareket Observatory, Macabim\n")
     file.write("B36  13.7125 0.66684 +0.74278 Redshed Observatory, Kallham\n")
-    file.write("B37   2.259340.748338+0.661147Obs. de L' Ametlla del Valles, Barcelona\n")
+    file.write(
+        "B37   2.259340.748338+0.661147Obs. de L' Ametlla del Valles, Barcelona\n"
+    )
     file.write("B38  11.857460.724995+0.686523Santa Mama\n")
     file.write("B39   8.9072 0.69950 +0.71231 Tradate\n")
     file.write("B40  15.0706 0.79331 +0.60690 Skylive Observatory, Catania\n")
@@ -1261,7 +1463,9 @@ def make_ObsCodes_htm():
     file.write("B54   0.7439 0.74413 +0.66597 Ager\n")
     file.write("B55  12.876000.689553+0.721975Comeglians\n")
     file.write("B56   2.449350.749614+0.659663Observatorio Sant Pere, Mataro\n")
-    file.write("B57   2.224390.749316+0.660019Laietania Observatory, Parets del Valles\n")
+    file.write(
+        "B57   2.224390.749316+0.660019Laietania Observatory, Parets del Valles\n"
+    )
     file.write("B58  19.025290.676156+0.734318Polaris Observatory, Budapest\n")
     file.write("B59   6.878810.619231+0.782586Borken\n")
     file.write("B60   7.175310.612824+0.787576Deep Sky Observatorium, Bad Bentheim\n")
@@ -1273,13 +1477,19 @@ def make_ObsCodes_htm():
     file.write("B66   9.006930.710595+0.701332Osservatorio di Casasco\n")
     file.write("B67   9.224190.685858+0.725582Sternwarte Mirasteilas, Falera\n")
     file.write("B68  13.539500.693458+0.718372Mount Matajur Observatory\n")
-    file.write("B69   9.017190.662152+0.746956Owls and Ravens Observatory, Holzgerlingen\n")
+    file.write(
+        "B69   9.017190.662152+0.746956Owls and Ravens Observatory, Holzgerlingen\n"
+    )
     file.write("B70   2.4937 0.74787 +0.66165 Sant Celoni\n")
     file.write("B71   1.5213 0.75363 +0.65510 Observatorio El Vendrell\n")
     file.write("B72   7.6811 0.63470 +0.77022 Soerth\n")
-    file.write("B73   8.985030.662074+0.747029Mauren Valley Observatory, Holzgerlingen\n")
+    file.write(
+        "B73   8.985030.662074+0.747029Mauren Valley Observatory, Holzgerlingen\n"
+    )
     file.write("B74   1.105360.747550+0.662053Santa Maria de Montmagastrell\n")
-    file.write("B75   8.805190.701074+0.710741Stazione Astronomica Betelgeuse, Magnago\n")
+    file.write(
+        "B75   8.805190.701074+0.710741Stazione Astronomica Betelgeuse, Magnago\n"
+    )
     file.write("B76  13.8944 0.63019 +0.77390 Sternwarte Schonfeld, Dresden\n")
     file.write("B77   7.950830.677934+0.732833Schafmatt Observatory, Aarau\n")
     file.write("B78  14.128110.670885+0.739158Astrophoton Observatory, Audorf\n")
@@ -1315,15 +1525,25 @@ def make_ObsCodes_htm():
     file.write("D21 115.8150 0.8492  -0.5263  Shenton Park\n")
     file.write("D24 117.089690.844095-0.534439LightBuckets Observatory, Pingelly\n")
     file.write("D25 117.089780.844104-0.534424Tzec Maun Observatory, Pingelly\n")
-    file.write("D29 118.4639 0.84204 +0.53767 Purple Mountain Observatory, XuYi Station\n")
-    file.write("D32 119.599750.862770+0.504193JiangNanTianChi Observatory, Mt. Getianling\n")
+    file.write(
+        "D29 118.4639 0.84204 +0.53767 Purple Mountain Observatory, XuYi Station\n"
+    )
+    file.write(
+        "D32 119.599750.862770+0.504193JiangNanTianChi Observatory, Mt. Getianling\n"
+    )
     file.write("D34 120.7839 0.92796 +0.37148 Kenting Observatory, Hengchun\n")
     file.write("D35 120.8736 0.91818 +0.39597 Lulin Observatory\n")
     file.write("D36 120.8897 0.91801 +0.39625 Tataka, Mt. Yu-Shan National Park\n")
-    file.write("D39 122.049000.793974+0.605939Shandong University Observatory, Weihai\n")
+    file.write(
+        "D39 122.049000.793974+0.605939Shandong University Observatory, Weihai\n"
+    )
     file.write("D44 124.139280.911427+0.410157Ishigakijima Astronomical Observatory\n")
-    file.write("D55 127.9747 0.79571 +0.60370 Kangwon Science High School Observatory, Ksho\n")
-    file.write("D57 128.887440.817572+0.573996Gimhae Astronomical Observatory, Uhbang-dong\n")
+    file.write(
+        "D55 127.9747 0.79571 +0.60370 Kangwon Science High School Observatory, Ksho\n"
+    )
+    file.write(
+        "D57 128.887440.817572+0.573996Gimhae Astronomical Observatory, Uhbang-dong\n"
+    )
     file.write("D58 129.025000.818419+0.572736KSA SEM Observatory, Danggam-dong\n")
     file.write("D61 134.9131 0.82671 +0.56075 Suntopia Marina, Sumoto\n")
     file.write("D62 130.4494 0.83676 +0.54575 Miyaki-Argenteus\n")
@@ -1352,7 +1572,9 @@ def make_ObsCodes_htm():
     file.write("E04 145.7403 0.96545 +0.25977 Pacific Sky Observatory, Saipan\n")
     file.write("E05 145.697210.957625-0.287092Earl Hill Observatory, Trinity Beach\n")
     file.write("E08 149.334310.855971-0.515472Wobblesock Observatory, Coonabarabran\n")
-    file.write("E09 149.0814 0.85551 -0.51630 Oakley Southern Sky Observatory, Coonabarabran\n")
+    file.write(
+        "E09 149.0814 0.85551 -0.51630 Oakley Southern Sky Observatory, Coonabarabran\n"
+    )
     file.write("E10 149.070280.855623-0.516200Siding Spring-Faulkes Telescope South\n")
     file.write("E11 149.6627 0.84469 -0.53362 Frog Rock Observatory, Mudgee\n")
     file.write("E12 149.0642 0.85563 -0.51621 Siding Spring Survey\n")
@@ -1365,7 +1587,9 @@ def make_ObsCodes_htm():
     file.write("E19 151.0958 0.83042 -0.55528 Kingsgrove\n")
     file.write("E20 151.103200.832146-0.552728Marsfield\n")
     file.write("E21 151.5667 0.8838  -0.4665  Norma Rose Observatory, Leyburn\n")
-    file.write("E22 151.855000.885337-0.463616Univ. of Southern Queensland Obs., Mt. Kent\n")
+    file.write(
+        "E22 151.855000.885337-0.463616Univ. of Southern Queensland Obs., Mt. Kent\n"
+    )
     file.write("E25 153.1170 0.88713 -0.45997 Rochedale (APTA)\n")
     file.write("E26 153.3971 0.88414 -0.46566 RAS Observatory, Biggera Waters\n")
     file.write("E27 153.2667 0.8871  -0.4600  Thornlands\n")
@@ -1380,14 +1604,20 @@ def make_ObsCodes_htm():
     file.write("F86 210.383810.953304-0.301004Moana Observatory, Punaauia\n")
     file.write("G56 237.9294 0.78983 +0.61128 Walnut Creek\n")
     file.write("G57 236.8564 0.70171 +0.71009 Dilbert Observatory, Forest Grove\n")
-    file.write("G58 237.8180 0.79100 +0.60988 Chabot Space and Science Center, Oakland\n")
+    file.write(
+        "G58 237.8180 0.79100 +0.60988 Chabot Space and Science Center, Oakland\n"
+    )
     file.write("G59 237.4530 0.67475 +0.73559 Maiden Lane Obs., Bainbridge Island\n")
     file.write("G60 240.338880.825544+0.562496Carroll Observatory, Montecito\n")
     file.write("G61 238.1524 0.79270 +0.60760 Pleasanton\n")
-    file.write("G62 238.5469 0.72214 +0.68971 Sunriver Nature Center Observatory, Sunriver\n")
+    file.write(
+        "G62 238.5469 0.72214 +0.68971 Sunriver Nature Center Observatory, Sunriver\n"
+    )
     file.write("G63 238.6858 0.70152 +0.71031 Mill Creek Observatory, The Dalles\n")
     file.write("G64 239.2911 0.77535 +0.62979 Blue Canyon Observatory\n")
-    file.write("G65 238.3612 0.79616 +0.60338 Vulcan North, Lick Observatory, Mount Hamilton\n")
+    file.write(
+        "G65 238.3612 0.79616 +0.60338 Vulcan North, Lick Observatory, Mount Hamilton\n"
+    )
     file.write("G66 238.9169 0.78135 +0.62206 Lake Forest Observatory, Forest Hills\n")
     file.write("G67 239.3650 0.78134 +0.62225 Rancho Del Sol, Camino\n")
     file.write("G68 240.2250 0.78044 +0.62355 Sierra Stars Observatory, Markleeville\n")
@@ -1397,11 +1627,15 @@ def make_ObsCodes_htm():
     file.write("G72 241.824080.829301+0.556970University Hills\n")
     file.write("G73 241.9400 0.82804 +0.55925 Mount Wilson-TIE\n")
     file.write("G74 242.8854 0.83743 +0.54485 Escondido\n")
-    file.write("G75 243.2783 0.8351  +0.5487  Starry Knight Observatory, Coto de Caza\n")
+    file.write(
+        "G75 243.2783 0.8351  +0.5487  Starry Knight Observatory, Coto de Caza\n"
+    )
     file.write("G76 242.4178 0.83388 +0.55015 Altimira Observatory, Coto de Caza\n")
     file.write("G77 243.7183 0.8274  +0.5603  Baldwin Lake\n")
     file.write("G78 244.3127 0.84158 +0.53832 Desert Wanderer Observatory, El Centro\n")
-    file.write("G79 243.6165 0.82718 +0.56030 Goat Mountain Astronomical Research Station\n")
+    file.write(
+        "G79 243.6165 0.82718 +0.56030 Goat Mountain Astronomical Research Station\n"
+    )
     file.write("G80 240.5873 0.79904 +0.59962 Sierra Remote Observatories, Auberry\n")
     file.write("G81 242.913000.834904+0.548639Temecula\n")
     file.write("G82 248.400250.849488+0.526449SARA Observatory, Kitt Peak\n")
@@ -1409,17 +1643,23 @@ def make_ObsCodes_htm():
     file.write("G84 249.210840.845112+0.533610Mount Lemmon SkyCenter\n")
     file.write("G85 247.565180.799502+0.599067Vermillion Cliffs Observatory, Kanab\n")
     file.write("G86 249.0697 0.84645 +0.53090 Tucson-Winterhaven\n")
-    file.write("G87 248.1894 0.74666 +0.66331 Calvin M. Hooper Memorial Observatory, Hyde Park\n")
+    file.write(
+        "G87 248.1894 0.74666 +0.66331 Calvin M. Hooper Memorial Observatory, Hyde Park\n"
+    )
     file.write("G88 247.8881 0.83064 +0.55514 LAMP Observatory, New River\n")
     file.write("G89 248.3069 0.81933 +0.57197 Kachina Observatory, Flagstaff\n")
     file.write("G90 248.9658 0.84301 +0.53639 Three Buttes Observatory, Tucson\n")
-    file.write("G91 249.1154 0.85205 +0.52249 Whipple Observatory, Mt. Hopkins--2MASS\n")
+    file.write(
+        "G91 249.1154 0.85205 +0.52249 Whipple Observatory, Mt. Hopkins--2MASS\n"
+    )
     file.write("G92 249.2814 0.84920 +0.52660 Jarnac Observatory, Vail\n")
     file.write("G93 249.3726 0.85215 +0.52201 Sonoita Research Observatory, Sonoita\n")
     file.write("G94 249.9267 0.84971 +0.52594 Sonoran Skies Observatory, St. David\n")
     file.write("G95 249.7622 0.85404 +0.51888 Hereford Arizona Observatory, Hereford\n")
     file.write("G96 249.211280.845111+0.533614Mt. Lemmon Survey\n")
-    file.write("G97 250.8694 0.84965 +0.52600 Astronomical League Alpha Observatory, Portal\n")
+    file.write(
+        "G97 250.8694 0.84965 +0.52600 Astronomical League Alpha Observatory, Portal\n"
+    )
     file.write("G98 251.343540.815037+0.578012Calvin-Rehoboth Observatory, Rehoboth\n")
     file.write("G99 251.8104 0.84192 +0.53835 NF Observatory, Silver City\n")
     file.write("H00 251.6987 0.84247 +0.53746 Tyrone\n")
@@ -1439,18 +1679,26 @@ def make_ObsCodes_htm():
     file.write("H23 273.498580.862319+0.504671Pear Tree Observatory, Valparaiso\n")
     file.write("H24 274.598810.733648+0.677310J. C. Veen Observatory, Lowell\n")
     file.write("H25 266.870820.714467+0.697388Harvest Moon Observatory, Northfield\n")
-    file.write("H26 270.789220.735075+0.675789Doc Greiner Research Observatory, Janesvillle\n")
+    file.write(
+        "H26 270.789220.735075+0.675789Doc Greiner Research Observatory, Janesvillle\n"
+    )
     file.write("H27 266.231340.780074+0.623645Moonglow Observatory, Warrensburg\n")
     file.write("H28 263.231500.836912+0.545569Preston Hills Observatory, Celina\n")
     file.write("H29 262.5494 0.81372 +0.57940 Ivywood Observatory, Edmond\n")
-    file.write("H30 262.5558 0.81808 +0.57328 University of Oklahoma Observatory, Norman\n")
+    file.write(
+        "H30 262.5558 0.81808 +0.57328 University of Oklahoma Observatory, Norman\n"
+    )
     file.write("H31 263.3300 0.87011 +0.49123 Star Ridge Observatory, Weimar\n")
-    file.write("H32 263.6334 0.86174 +0.50567 Texas A&M Physics Observatory, College Station\n")
+    file.write(
+        "H32 263.6334 0.86174 +0.50567 Texas A&M Physics Observatory, College Station\n"
+    )
     file.write("H33 264.1217 0.80990 +0.58466 Bixhoma Observatory, Bixby\n")
     file.write("H34 264.8258 0.84600 +0.53143 Chapel Hill\n")
     file.write("H35 264.9517 0.77423 +0.63085 Leavenworth\n")
     file.write("H36 264.2936 0.78043 +0.62323 Sandlot Observatory, Scranton\n")
-    file.write("H37 265.2003 0.72947 +0.68182 Grems Timmons Observatories, Graettinger\n")
+    file.write(
+        "H37 265.2003 0.72947 +0.68182 Grems Timmons Observatories, Graettinger\n"
+    )
     file.write("H38 265.9864 0.75079 +0.65840 Timberline Observatory, Urbandale\n")
     file.write("H39 266.6828 0.70944 +0.70247 S.O.S. Observatory, Minneapolis\n")
     file.write("H40 266.7306 0.82519 +0.56302 Nubbin Ridge Observatory\n")
@@ -1458,26 +1706,38 @@ def make_ObsCodes_htm():
     file.write("H42 267.5078 0.73568 +0.67512 Wartburg College Observatory, Waverly\n")
     file.write("H43 267.4998 0.81918 +0.57163 Conway\n")
     file.write("H44 267.7982 0.81880 +0.57220 Cascade Mountain\n")
-    file.write("H45 267.0831 0.81890 +0.57210 Arkansas Sky Obs., Petit Jean Mountain South\n")
+    file.write(
+        "H45 267.0831 0.81890 +0.57210 Arkansas Sky Obs., Petit Jean Mountain South\n"
+    )
     file.write("H46 265.7297 0.77818 +0.62602 Ricky Observatory, Blue Springs\n")
     file.write("H47 269.1439 0.84639 +0.53079 Vicksburg\n")
     file.write("H48 265.0139 0.79424 +0.60565 PSU Greenbush Observatory, Pittsburg\n")
-    file.write("H49 266.8636 0.81712 +0.57457 ATU Astronomical Observatory, Russellville\n")
-    file.write("H50 267.541390.819253+0.571536University of Central Arkansas Obs., Conway\n")
+    file.write(
+        "H49 266.8636 0.81712 +0.57457 ATU Astronomical Observatory, Russellville\n"
+    )
+    file.write(
+        "H50 267.541390.819253+0.571536University of Central Arkansas Obs., Conway\n"
+    )
     file.write("H51 270.4003 0.73117 +0.68011 Greiner Research Observatory, Verona\n")
     file.write("H52 270.673560.739151+0.671335Hawkeye Observatory, Durand\n")
     file.write("H53 271.228420.789618+0.611581Thompsonville\n")
     file.write("H54 271.6514 0.71305 +0.69883 Cedar Drive Observatory, Pulaski\n")
-    file.write("H55 271.8558 0.77283 +0.63254 Astronomical Research Observatory, Charleston\n")
+    file.write(
+        "H55 271.8558 0.77283 +0.63254 Astronomical Research Observatory, Charleston\n"
+    )
     file.write("H56 272.167640.742693+0.667433Northbrook Meadow Observatory\n")
-    file.write("H57 275.972460.758850+0.649150Ohio State University Observatory, Lima\n")
+    file.write(
+        "H57 275.972460.758850+0.649150Ohio State University Observatory, Lima\n"
+    )
     file.write("H58 273.3353 0.82349 +0.56548 NASA/MSFC ALaMO, Redstone Arsenal\n")
     file.write("H59 273.3651 0.76362 +0.64356 Prairie Grass Observatory, Camp Cullom\n")
     file.write("H60 273.865420.767435+0.639034Shadowbox Observatory, Carmel\n")
     file.write("H61 281.416890.721533+0.690080Newcastle\n")
     file.write("H62 274.4117 0.73335 +0.67763 Calvin College Observatory\n")
     file.write("H63 274.9276 0.75227 +0.65672 DeKalb Observatory, Auburn\n")
-    file.write("H64 275.4364 0.77796 +0.62623 Thomas More College Observatory, Crestview Hills\n")
+    file.write(
+        "H64 275.4364 0.77796 +0.62623 Thomas More College Observatory, Crestview Hills\n"
+    )
     file.write("H65 275.4364 0.77995 +0.62381 Waltonfields Observatory, Walton\n")
     file.write("H66 276.1460 0.76956 +0.63651 Yellow Springs\n")
     file.write("H67 276.162410.740813+0.669522Stonegate Observatory, Ann Arbor\n")
@@ -1486,12 +1746,18 @@ def make_ObsCodes_htm():
     file.write("H70 277.4458 0.81412 +0.57897 Asheville\n")
     file.write("H71 276.482820.852885+0.520378Chula\n")
     file.write("H72 278.2258 0.89584 +0.44289 Evelyn L. Egan Observatory, Fort Myers\n")
-    file.write("H73 278.6351 0.74850 +0.66097 Lakeland Astronomical Observatory, Kirtland\n")
+    file.write(
+        "H73 278.6351 0.74850 +0.66097 Lakeland Astronomical Observatory, Kirtland\n"
+    )
     file.write("H74 278.8747 0.87602 +0.48066 Bar J Observatory, New Smyrna Beach\n")
-    file.write("H75 278.918560.749551+0.659816Indian Hill North Observatory, Huntsburg\n")
+    file.write(
+        "H75 278.918560.749551+0.659816Indian Hill North Observatory, Huntsburg\n"
+    )
     file.write("H76 279.4133 0.90197 +0.43036 Oakridge Observatory, Miami\n")
     file.write("H77 279.7653 0.89877 +0.43695 Buehler Observatory\n")
-    file.write("H78 282.708961.000183+0.021030University of Narino Observatory, Pasto\n")
+    file.write(
+        "H78 282.708961.000183+0.021030University of Narino Observatory, Pasto\n"
+    )
     file.write("H79 280.492700.723258+0.688308York University Observatory, Toronto\n")
     file.write("H80 285.335670.763194+0.644015Halstead Observatory, Princeton\n")
     file.write("H81 283.6161 0.73896 +0.67161 Hartung-Boothroyd Observatory, Ithaca\n")
@@ -1515,15 +1781,23 @@ def make_ObsCodes_htm():
     file.write("H99 288.8036 0.74040 +0.66992 Sunhill Observatory, Newton\n")
     file.write("I00 288.2294 0.74794 +0.66157 Carbuncle Hill Observatory, Coventry\n")
     file.write("I01 288.862530.740677+0.669630Clay Center Observatory, Brookline\n")
-    file.write("I02 289.1941 0.86560 -0.49980 Cerro Tololo Observatory, La Serena--2MASS\n")
-    file.write("I03 289.266260.873440-0.486052European Southern Obs., La Silla--ASTROVIRTEL\n")
+    file.write(
+        "I02 289.1941 0.86560 -0.49980 Cerro Tololo Observatory, La Serena--2MASS\n"
+    )
+    file.write(
+        "I03 289.266260.873440-0.486052European Southern Obs., La Silla--ASTROVIRTEL\n"
+    )
     file.write("I04 289.3152 0.86693 -0.49697 Mamalluca Observatory\n")
     file.write("I05 289.2980 0.87559 -0.48217 Las Campanas Observatory-TIE\n")
-    file.write("I06 289.8061 0.74801 +0.66147 Werner Schmidt Obs., Dennis-Yarmouth Regional HS\n")
+    file.write(
+        "I06 289.8061 0.74801 +0.66147 Werner Schmidt Obs., Dennis-Yarmouth Regional HS\n"
+    )
     file.write("I07 288.0971 0.74279 +0.66735 Conlin Hill Observatory, Oxford\n")
     file.write("I08 290.6932 0.85116 -0.52394 Alianza S4, Cerro Burek\n")
     file.write("I09 289.803770.910166-0.413875Cerro Armazones\n")
-    file.write("I10 291.8200 0.92165 -0.38770 Campo Catino Austral Obs., San Pedro de Atacama\n")
+    file.write(
+        "I10 291.8200 0.92165 -0.38770 Campo Catino Austral Obs., San Pedro de Atacama\n"
+    )
     file.write("I11 289.263450.865020-0.500901Gemini South Observatory, Cerro Pachon\n")
     file.write("I12 288.870530.736679+0.673998Phillips Academy Observatory, Andover\n")
     file.write("I13 282.930060.779116+0.624793Washington D.C.\n")
@@ -1532,9 +1806,13 @@ def make_ObsCodes_htm():
     file.write("I19 295.407110.854834-0.517422Tanti\n")
     file.write("I20 295.681610.838551-0.543122Rio Cuarto\n")
     file.write("I21 295.8281 0.85465 -0.51760 El Condor Observatory, Cordoba\n")
-    file.write("I22 296.1740 0.71212 +0.69973 Abbey Ridge Observatory, Stillwater Lake\n")
+    file.write(
+        "I22 296.1740 0.71212 +0.69973 Abbey Ridge Observatory, Stillwater Lake\n"
+    )
     file.write("I30 299.3417 0.83966 -0.54131 Observatorio Geminis Austral\n")
-    file.write("I31 299.3649 0.83995 -0.54086 Observatorio Astronomico del Colegio Cristo Rey\n")
+    file.write(
+        "I31 299.3649 0.83995 -0.54086 Observatorio Astronomico del Colegio Cristo Rey\n"
+    )
     file.write("I32 299.3464 0.83969 -0.54125 Observatorio Beta Orionis, Rosario\n")
     file.write("I36 301.2827 0.81998 -0.57048 Observatorio Los Campitos, Canuelas\n")
     file.write("I37 301.352750.825603-0.562360Astrodomi Observatory, Santa Rita\n")
@@ -1543,8 +1821,12 @@ def make_ObsCodes_htm():
     file.write("I77 316.0025 0.94119 -0.33714 CEAMIG-REA Observatory, Belo Horizonte\n")
     file.write("J04 343.488170.881463+0.471461ESA Optical Ground Station, Tenerife\n")
     file.write("J05 355.296390.749617+0.659822Bootes Observatory, Boecillo\n")
-    file.write("J06 358.812470.604374+0.794039Trent Astronomical Observatory, Clifton\n")
-    file.write("J07 353.895430.767881+0.638546Observatorio SPAG Monfrague, Palazuelo-Empalme\n")
+    file.write(
+        "J06 358.812470.604374+0.794039Trent Astronomical Observatory, Clifton\n"
+    )
+    file.write(
+        "J07 353.895430.767881+0.638546Observatorio SPAG Monfrague, Palazuelo-Empalme\n"
+    )
     file.write("J08 359.6549 0.77127 +0.63439 Observatorio Zonalunar, Puzol\n")
     file.write("J09 353.7917 0.59450 +0.80141 Balbriggan\n")
     file.write("J10 359.598390.784437+0.618151Alicante\n")
@@ -1570,7 +1852,9 @@ def make_ObsCodes_htm():
     file.write("J30 356.293000.761925+0.645666Observatorio Ventilla, Madrid\n")
     file.write("J31 355.774110.802445+0.594759La Axarquia\n")
     file.write("J32 352.977690.796769+0.602268Aljaraque\n")
-    file.write("J33 359.906000.620040+0.781953University of Hertfordshire Obs., Bayfordbury\n")
+    file.write(
+        "J33 359.906000.620040+0.781953University of Hertfordshire Obs., Bayfordbury\n"
+    )
     file.write("J34 355.227110.748695+0.660858La Fecha\n")
     file.write("J35 356.029110.792167+0.608432Tucci Observatory, Martos\n")
     file.write("J36 356.945310.765252+0.641721Observatorio El Olivo, Illana\n")
@@ -1582,7 +1866,9 @@ def make_ObsCodes_htm():
     file.write("J42 359.6989 0.77138 +0.63425 Puzol\n")
     file.write("J43 352.1189 0.85642 +0.51538 Oukaimeden Observatory\n")
     file.write("J44 357.6552 0.73506 +0.67596 Observatorio Iturrieta, Alava\n")
-    file.write("J45 344.6779 0.88370 +0.46678 Observatorio Montana Cabreja, Vega de San Mateo\n")
+    file.write(
+        "J45 344.6779 0.88370 +0.46678 Observatorio Montana Cabreja, Vega de San Mateo\n"
+    )
     file.write("J46 346.3594 0.87569 +0.48131 Observatorio Montana Blanca, Tias\n")
     file.write("J47 346.4440 0.87501 +0.48260 Observatorio Nazaret\n")
     file.write("J48 343.6960 0.87977 +0.47393 Observatory Mackay, La Laguna\n")
@@ -1594,8 +1880,12 @@ def make_ObsCodes_htm():
     file.write("J54 343.4906 0.88149 +0.47142 Bradford Robotic Telescope\n")
     file.write("J55 344.3144 0.88549 +0.46313 Los Altos de Arguineguin Observatory\n")
     file.write("J56 344.4536 0.88416 +0.46624 Observatorio La Avejerilla\n")
-    file.write("J57 358.890890.767817+0.638833Centro Astronomico Alto Turia, Valencia\n")
-    file.write("J58 356.6644 0.62304 +0.77959 Brynllefrith Observatory, Llantwit Fardre\n")
+    file.write(
+        "J57 358.890890.767817+0.638833Centro Astronomico Alto Turia, Valencia\n"
+    )
+    file.write(
+        "J58 356.6644 0.62304 +0.77959 Brynllefrith Observatory, Llantwit Fardre\n"
+    )
     file.write("J59 356.202560.726956+0.684386Observatorio Linceo, Santander\n")
     file.write("J60 354.3406 0.74773 +0.66201 Tocororo Observatory, Arquillinos\n")
     file.write("J61 353.4264 0.59719 +0.79942 Brownstown Observatory, Kilcloon\n")
@@ -1607,14 +1897,18 @@ def make_ObsCodes_htm():
     file.write("J67 359.4667 0.77114 +0.63457 Observatorio La Puebla de Vallbona\n")
     file.write("J68 357.7055 0.61813 +0.78345 Tweenhills Observatory, Hartpury\n")
     file.write("J69 358.9803 0.63144 +0.77286 North Observatory, Clanfield\n")
-    file.write("J70 358.8404 0.78968 +0.61149 Obs. Astronomico Vega del Thader, El Palmar\n")
+    file.write(
+        "J70 358.8404 0.78968 +0.61149 Obs. Astronomico Vega del Thader, El Palmar\n"
+    )
     file.write("J71 357.8947 0.59350 +0.80217 Willow Bank Observatory\n")
     file.write("J72 358.9664 0.79065 +0.61028 Valle del Sol\n")
     file.write("J73 359.0833 0.6187  +0.7830  Quainton\n")
     file.write("J74 357.0961 0.72950 +0.68169 Bilbao\n")
     file.write("J75 357.434710.789388+0.612222OAM Observatory, La Sagra\n")
     file.write("J76 358.797180.790771+0.610163La Murta\n")
-    file.write("J77 357.5947 0.63154 +0.77276 Golden Hill Observatory, Stourton Caundle\n")
+    file.write(
+        "J77 357.5947 0.63154 +0.77276 Golden Hill Observatory, Stourton Caundle\n"
+    )
     file.write("J78 358.8244 0.78887 +0.61253 Murcia\n")
     file.write("J79 358.380660.795516+0.603908Observatorio Calarreona, Aguilas\n")
     file.write("J80 359.1083 0.70862 +0.70323 Sainte Helene\n")
@@ -1638,14 +1932,16 @@ def make_ObsCodes_htm():
     file.write("J98 359.5344 0.77275 +0.63259 Observatorio Manises\n")
     file.write("J99 359.578080.772589+0.632790Burjassot\n")
     file.write("</pre>\n")
-    
-    file.close()
-#---------------------------------------------------------------------------------
 
-#---make options.txt-------------------------------------------------------------
+    file.close()
+
+
+# ---------------------------------------------------------------------------------
+
+# ---make options.txt-------------------------------------------------------------
 def make_options_txt():
     filename = directory_path + "options.txt"
-    file = open(filename,"w")
+    file = open(filename, "w")
 
     file.write("500 0 15 35 1\n")
     file.write("help Full Herget epheM Vaisa resiD Gauss constr New Quit\n")
@@ -1653,48 +1949,80 @@ def make_options_txt():
     file.write("now\n")
     file.write("1\n")
     file.write("10 oct 2010\n")
-    
-    file.close()
-#---------------------------------------------------------------------------------
 
-#---make rovers.txt---------------------------------------------------------------
+    file.close()
+
+
+# ---------------------------------------------------------------------------------
+
+# ---make rovers.txt---------------------------------------------------------------
 def make_rovers_txt():
     filename = directory_path + "rovers.txt"
-    file = open(filename,"w")
+    file = open(filename, "w")
 
-    file.write("     Roving observer file.  This contains \"MPC codes\" for observers who\n")
-    file.write("  don't really have MPC codes,  mostly satellite observers.  They could\n")
-    file.write("  be handled using code 247 (Roving Observer),  but it's more convenient\n")
+    file.write(
+        '     Roving observer file.  This contains "MPC codes" for observers who\n'
+    )
+    file.write(
+        "  don't really have MPC codes,  mostly satellite observers.  They could\n"
+    )
+    file.write(
+        "  be handled using code 247 (Roving Observer),  but it's more convenient\n"
+    )
     file.write("  if they have their own codes.\n")
     file.write("\n")
-    file.write("     Locations can be in the MPC standard longitude/rho_cos_phi/rho_sin_phi\n")
+    file.write(
+        "     Locations can be in the MPC standard longitude/rho_cos_phi/rho_sin_phi\n"
+    )
     file.write("  triplet format,  or as lon/lat/altitude.\n")
     file.write("\n")
-    file.write("     Any line starting with a space is assumed to be a comment.  Negative\n")
-    file.write("  longitudes (and those between 180 and 360) are in the Western Hemisphere.\n")
+    file.write(
+        "     Any line starting with a space is assumed to be a comment.  Negative\n"
+    )
+    file.write(
+        "  longitudes (and those between 180 and 360) are in the Western Hemisphere.\n"
+    )
     file.write("\n")
     file.write("MMc 262.1339 0.86573 +0.49912 Mike McCants\n")
-    file.write("Ber 138.6333 0.82043 -0.56986 Anthony Beresford, Adelaide, South Australia\n")
+    file.write(
+        "Ber 138.6333 0.82043 -0.56986 Anthony Beresford, Adelaide, South Australia\n"
+    )
     file.write("GRR  18.5129 -33.94058 10     Greg Roberts, South Africa\n")
-    file.write("Fet -75.6910 44.6062  100     Kevin Fetter, Brockville, Ontario, Canada\n")
-    file.write("PGa -98.2161 26.24316  36     Paul Gabriel, McAllen, Texas USA 78504-2940\n")
+    file.write(
+        "Fet -75.6910 44.6062  100     Kevin Fetter, Brockville, Ontario, Canada\n"
+    )
+    file.write(
+        "PGa -98.2161 26.24316  36     Paul Gabriel, McAllen, Texas USA 78504-2940\n"
+    )
     file.write("GeS -70.73669 -30.24075 2722  Gemini South\n")
     file.write("IHN -81.081444 41.547806 300  Indian Hill North\n")
     file.write("E20 151.103197 -33.770505 208 Marsfield\n")
     file.write("Pav 151.103197 -33.770505 208 Marsfield\n")
     file.write("ITE   8.87444 46.178771 210   Marco Iten Gaggiole\n")
     file.write("\n")
-    file.write("   When 2008 TC3 impacted the earth on 7 Oct 2008,  I added the impact point\n")
-    file.write("   as an \"observatory\" so I could get impact-centered ephemerides easily:\n")
+    file.write(
+        "   When 2008 TC3 impacted the earth on 7 Oct 2008,  I added the impact point\n"
+    )
+    file.write(
+        '   as an "observatory" so I could get impact-centered ephemerides easily:\n'
+    )
     file.write("\n")
     file.write("Sud  33.13003  20.59026 10    Sudan impact site\n")
     file.write("     32.84311  20.5983 10     Sudan impact site\n")
     file.write("     32.84976  20.59616 10    Sudan alt impact site\n")
     file.write("\n")
-    file.write("    The centers of the Sun,  moon,  and planets are treated as 'rovers'.\n")
-    file.write("    (Note that right now,  Find_Orb doesn't support observers on the surfaces\n")
-    file.write("    of other planets.  That might be useful someday;  for example,  Mars-\n")
-    file.write("    based observations of Deimos and Phobos could be used and the orbits\n")
+    file.write(
+        "    The centers of the Sun,  moon,  and planets are treated as 'rovers'.\n"
+    )
+    file.write(
+        "    (Note that right now,  Find_Orb doesn't support observers on the surfaces\n"
+    )
+    file.write(
+        "    of other planets.  That might be useful someday;  for example,  Mars-\n"
+    )
+    file.write(
+        "    based observations of Deimos and Phobos could be used and the orbits\n"
+    )
     file.write("    of those objects computed.  But it's not there yet.)\n")
     file.write("\n")
     file.write("Sun   0.0000 0.00000  0.00000 @00Sun\n")
@@ -1707,28 +2035,48 @@ def make_rovers_txt():
     file.write("Nep   0.0000 0.00000  0.00000 @08Neptune\n")
     file.write("Plu   0.0000 0.00000  0.00000 @09Pluto\n")
     file.write("Lun   0.0000 0.00000  0.00000 @10Luna\n")
-    
-    file.close()
-#---------------------------------------------------------------------------------
 
-#---make xdesig.txt---------------------------------------------------------------
+    file.close()
+
+
+# ---------------------------------------------------------------------------------
+
+# ---make xdesig.txt---------------------------------------------------------------
 def make_xdesig_txt():
     filename = directory_path + "xdesig.txt"
-    file = open(filename,"w")
+    file = open(filename, "w")
 
-    file.write("; Used in the xref_designation() function in 'mpc_obs.cpp'.  The idea\n")
-    file.write("; is that if you've an object listed under two different designations,\n")
-    file.write("; you can tell Find_Orb to replace one designation with another.  For\n")
+    file.write(
+        "; Used in the xref_designation() function in 'mpc_obs.cpp'.  The idea\n"
+    )
+    file.write(
+        "; is that if you've an object listed under two different designations,\n"
+    )
+    file.write(
+        "; you can tell Find_Orb to replace one designation with another.  For\n"
+    )
     file.write("; example,  the satellite Jupiter XVII = Jupiter 17 = Callirrhoe was\n")
     file.write("; originally given the designation S/1999 J 1.  The first line below\n")
     file.write("; maps that original designation to the permanent J17 one.\n")
-    file.write(";   In practice,  this has been used almost exclusively to handle the\n")
-    file.write("; nomenclature changes for natural satellites.  But it can also be useful\n")
-    file.write("; in testing linkages.  Suppose you're thinking that J75X99X = K08Z41Z.\n")
-    file.write("; Just add the line '    J75X99X    K08Z41Z',  and the observations of\n")
-    file.write("; the two will be loaded as if they were one object,  and you can try to\n")
+    file.write(
+        ";   In practice,  this has been used almost exclusively to handle the\n"
+    )
+    file.write(
+        "; nomenclature changes for natural satellites.  But it can also be useful\n"
+    )
+    file.write(
+        "; in testing linkages.  Suppose you're thinking that J75X99X = K08Z41Z.\n"
+    )
+    file.write(
+        "; Just add the line '    J75X99X    K08Z41Z',  and the observations of\n"
+    )
+    file.write(
+        "; the two will be loaded as if they were one object,  and you can try to\n"
+    )
     file.write("; link them.\n")
-    file.write(";   Any line starting with ';' is a comment,  and you can add text freely\n")
+    file.write(
+        ";   Any line starting with ';' is a comment,  and you can add text freely\n"
+    )
     file.write("; after the two designations/line.\n")
     file.write(";\n")
     file.write("    SJ99J010 J017S        Callirrhoe\n")
@@ -1828,23 +2176,29 @@ def make_xdesig_txt():
     file.write("    SK02N040 N013S        Neptune XIII = S/2002 N4 = Neso\n")
     file.write("J049SK03J140 J049S        Jupiter XLIX\n")
     file.write("\n")
-    file.write(";  When Herschel/Planck launched in May 2009,  there was some initial\n")
-    file.write("; confusion as to which object was which.  So five of them got temporary\n")
+    file.write(
+        ";  When Herschel/Planck launched in May 2009,  there was some initial\n"
+    )
+    file.write(
+        "; confusion as to which object was which.  So five of them got temporary\n"
+    )
     file.write("; designations HPO1 through HPO5.\n")
     file.write("HPO1         2009-026D    Sylda\n")
     file.write("HPO2         Herschel     Herschel\n")
     file.write("HPO3         2009-026C    Booster\n")
     file.write("HPO4         2009-026E    object5\n")
     file.write("HPO5         2009-026F    object6 (the accelerating one)\n")
-    
+
     file.close()
-#---------------------------------------------------------------------------------
+
+
+# ---------------------------------------------------------------------------------
 
 try:
     params = readparam.readparam()
     DETECT_MINAREA = params["dm"]
     readparam.write_used_param("dm", params["dm"])
-    
+
     make_default_conv()
     make_default_sex(DETECT_MINAREA)
     make_default2_param()
@@ -1852,19 +2206,19 @@ try:
     make_options_txt()
     make_rovers_txt()
     make_xdesig_txt()
-    
+
 except Exception:
-    print("Some errors occur in make_default_parameter_files.py!",flush=True)
-    print(traceback.format_exc(),flush=True)
+    print("Some errors occur in make_default_parameter_files.py!", flush=True)
+    print(traceback.format_exc(), flush=True)
     error = 1
-    
+
 else:
     error = 0
-    
+
 finally:
-    errorFile = open("error.txt","a")
+    errorFile = open("error.txt", "a")
     errorFile.write("{0:d} 15 106 \n".format(error))
     errorFile.close()
 
-    if error==1:
+    if error == 1:
         print_detailed_log.print_detailed_log(dict(globals()))

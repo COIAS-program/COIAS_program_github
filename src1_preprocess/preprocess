@@ -41,6 +41,26 @@ if [ ! -d "${COIAS_DATA_PATH}/past_pre_repo_data" ]; then
     mkdir "${COIAS_DATA_PATH}/past_pre_repo_data" 2>&1 | tee -a log.txt
     echo $? 15 110 >> error.txt
 fi
+if [ ! -d "${COIAS_DATA_PATH}/final_all_files" ]; then
+    mkdir "${COIAS_DATA_PATH}/final_all_files" 2>&1 | tee -a log.txt
+    echo $? 15 110 >> error.txt
+fi
+if [ ! -d "${COIAS_DATA_PATH}/send_mpc_files" ]; then
+    mkdir "${COIAS_DATA_PATH}/send_mpc_files" 2>&1 | tee -a log.txt
+    echo $? 15 110 >> error.txt
+fi
+if [ ! -d "${COIAS_DATA_PATH}/send_mpc_files/succeeded_to_be_sent" ]; then
+    mkdir "${COIAS_DATA_PATH}/send_mpc_files/succeeded_to_be_sent" 2>&1 | tee -a log.txt
+    echo $? 15 110 >> error.txt
+fi
+if [ ! -d "${COIAS_DATA_PATH}/send_mpc_files/failed_to_be_sent" ]; then
+    mkdir "${COIAS_DATA_PATH}/send_mpc_files/failed_to_be_sent" 2>&1 | tee -a log.txt
+    echo $? 15 110 >> error.txt
+fi
+if [ ! -d "${COIAS_DATA_PATH}/send_mpc_files/failed_to_be_sent/already_downloaded" ]; then
+    mkdir "${COIAS_DATA_PATH}/send_mpc_files/failed_to_be_sent/already_downloaded" 2>&1 | tee -a log.txt
+    echo $? 15 110 >> error.txt
+fi
 
 print_progress.py
 make_default_parameter_files.py 2>&1 | tee -a log.txt

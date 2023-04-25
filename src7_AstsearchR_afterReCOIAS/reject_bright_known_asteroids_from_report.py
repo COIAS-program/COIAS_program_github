@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
-#Timestamp: 2022/08/06 20:00 sugiura
+# Timestamp: 2022/08/06 20:00 sugiura
 ###########################################################################################
 # 明るい天体は十分に報告されていて再度MPCに報告する必要はないため,
 # bright_asteroid_MPC_names_in_the_field.txtに記載されている15等級よりも明るくなりうる
@@ -16,39 +16,44 @@ import traceback
 import print_detailed_log
 
 try:
-    #---get names of bright known asteroids-----------------
-    fileBrightKnownAsteroids = open("bright_asteroid_MPC_names_in_the_field.txt","r")
+    # ---get names of bright known asteroids-----------------
+    fileBrightKnownAsteroids = open("bright_asteroid_MPC_names_in_the_field.txt", "r")
     lines = fileBrightKnownAsteroids.readlines()
     namesOfBrightKnownAsteroids = []
     for l in range(len(lines)):
         namesOfBrightKnownAsteroids.append(lines[l].rstrip("\n"))
     fileBrightKnownAsteroids.close()
-    #-------------------------------------------------------
+    # -------------------------------------------------------
 
-    #---get data in pre_repo.txt----------------------------
-    inputfileSendMpc = open("pre_repo.txt","r")
+    # ---get data in pre_repo.txt----------------------------
+    inputfileSendMpc = open("pre_repo.txt", "r")
     lines = inputfileSendMpc.readlines()
     inputfileSendMpc.close()
-    #-------------------------------------------------------
+    # -------------------------------------------------------
 
-    #---compare names in pre_repo.txt and reject bright known asteroids---
-    outputfileSendMpc = open("pre_repo.txt","w",newline="\n")
+    # ---compare names in pre_repo.txt and reject bright known asteroids---
+    outputfileSendMpc = open("pre_repo.txt", "w", newline="\n")
     for l in range(len(lines)):
         oneLineList = lines[l].split()
         if oneLineList[0] not in namesOfBrightKnownAsteroids:
             outputfileSendMpc.write(lines[l])
     outputfileSendMpc.close()
-    #---------------------------------------------------------------------
+    # ---------------------------------------------------------------------
 
 except FileNotFoundError:
-    print("Some previous files are not found in reject_bright_known_asteroids_from_report.py!",flush=True)
-    print(traceback.format_exc(),flush=True)
+    print(
+        "Some previous files are not found in reject_bright_known_asteroids_from_report.py!",
+        flush=True,
+    )
+    print(traceback.format_exc(), flush=True)
     error = 1
     errorReason = 74
 
 except Exception:
-    print("Some errors occur in reject_bright_known_asteroids_from_report.py!",flush=True)
-    print(traceback.format_exc(),flush=True)
+    print(
+        "Some errors occur in reject_bright_known_asteroids_from_report.py!", flush=True
+    )
+    print(traceback.format_exc(), flush=True)
     error = 1
     errorReason = 75
 
@@ -57,9 +62,9 @@ else:
     errorReason = 74
 
 finally:
-    errorFile = open("error.txt","a")
-    errorFile.write("{0:d} {1:d} 706 \n".format(error,errorReason))
+    errorFile = open("error.txt", "a")
+    errorFile.write("{0:d} {1:d} 706 \n".format(error, errorReason))
     errorFile.close()
 
-    if error==1:
+    if error == 1:
         print_detailed_log.print_detailed_log(dict(globals()))

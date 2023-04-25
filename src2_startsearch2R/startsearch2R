@@ -1,5 +1,5 @@
 #!/bin/bash
-#Timestamp: 2022/08/04 13:00 sugiura
+#Timestamp: 2023/04/08 3:00 sugiura
 ########################################################
 # ビニング・マスク・光源検出などを統括するスクリプト.
 # GUI COIASのビニングマスクボタンで叩かれるのはこれ.
@@ -20,7 +20,7 @@ echo $? 25 209 >> error.txt
 
 binning.py 2>&1 | tee -a log.txt
 
-subm2.py 2>&1 | tee -a log.txt
+subm2.py $? 2>&1 | tee -a log.txt
 
 findsource_auto_thresh_correct.py 2>&1 | tee -a log.txt
 
