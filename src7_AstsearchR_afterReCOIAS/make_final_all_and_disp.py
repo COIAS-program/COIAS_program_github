@@ -58,9 +58,7 @@ try:
 
     binnedImgNames = []
     for i in range(len(originalImgNames)):
-        nameFlagmentList = originalImgNames[i].split("-")
-        nameFlagmentList[0] = "warpbin"
-        binnedImgNames.append("-".join(nameFlagmentList))
+        binnedImgNames.append("warp{0:02d}_bin.fits".format(i + 1))
 
     for i in range(len(originalImgNames)):
         hdul = fits.open(binnedImgNames[i])
