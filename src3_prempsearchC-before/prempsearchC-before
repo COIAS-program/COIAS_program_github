@@ -19,6 +19,7 @@
 
 set -o pipefail
 echo prempsearchC-before begins 2>&1 | tee -a log.txt
+echo $$ > latest_process_pid.txt
 . PARAM
 echo $? 35 301 > error.txt
 print_progress.py -n prempsearchC-before -t 20

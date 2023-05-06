@@ -22,6 +22,7 @@
 
 set -o pipefail
 echo astsearch_new begins 2>&1 | tee -a log.txt
+echo $$ > latest_process_pid.txt
 echo $? 55 501 > error.txt
 print_progress.py -n astsearch_new -t 20
 

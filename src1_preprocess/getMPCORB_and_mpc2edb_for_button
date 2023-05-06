@@ -9,6 +9,7 @@
 
 set -o pipefail
 echo getMPCORB_and_mpc2edb_for_button begins 2>&1 | tee log.txt
+echo $$ > latest_process_pid.txt
 . PARAM
 echo $? 15 111 > error.txt
 
