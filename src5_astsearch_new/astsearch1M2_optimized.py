@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # timestamp: 2022/08/04 17:00 sugiura
+# timestamp: 2023/06/01 17:00 urakawa
 ###################################################################################
 # 光源の情報から移動天体候補自動検出・測光を行う.
 # (このスクリプトの説明はあまりにも複雑なので詳細は杉浦に聞いて欲しい)
@@ -29,10 +30,12 @@
 # anotherのtrackletの中央の時刻に移動したとき, anotherのtrackletと並行かつそれを囲う長方形の内部にいたら近いと見なす.
 #
 # 入力: warp*_bin.dat 光源の位置の一覧を取得する.
-# 　　  warp*_bin.fits jdを取得したり, 測光したりするために使用する.
+# 　　  warp*_bin_nonmask.fits jdを取得したり, 測光したりするために使用する.
 # 出力: listb2.txt
 # 　　    移動天体候補と見なされた天体の各画像におけるデータを全て列挙したもの
 # 　　    書式: trackletID jd ra[degree] dec[degree] mag magerr Xpixel Ypixel フィルター 画像番号
+# Sky noise are estimated from the sky deviation **2 of local anulus area.
+# If sky noise can not be estimated due to the edge of image, sky noise is estimated from a typical sky deviaion of full image. S.U 2023/6/1
 ###################################################################################
 
 ### import modules #######################################
@@ -55,6 +58,8 @@ from photutils import CircularAnnulus
 
 from astropy import units as u
 from photutils import aperture_photometry
+#S.U modified
+from scipy.stats import sigmaclip
 
 ##########################################################
 
@@ -479,7 +484,10 @@ try:
         )
 
         scidata = fits.open(warpFileNames[image])
-
+        #Estimation of sky deviation from full image
+        img_stat = scidata[0].data[~np.isnan(scidata[0].data)]
+        img_sky  = sigmaclip(img_stat,3,3)
+        img_sky2 = np.std(img_sky[0])**2
         for p in range(len(trackletListAll)):
             for k in reversed(range(len(trackletListAll[p]))):
 
@@ -499,6 +507,25 @@ try:
                 w_out = (w + 8) * u.pix
 
                 position = (xypix[0], xypix[1])
+                #select local area
+                select = scidata[0].data[int(position[1]) - w*2:int(position[1])
+                        + w*2,int(position[0]) - w*2 :int(position[0]) + w*2]
+                #center of local area
+                center_x, center_y = w*2, w*2
+                #estimation of background noise
+                selected_elements = []
+                for m in range(len(select)):
+                    for n in range(len(select[1])):
+                        element_x, element_y = m, n
+                        distance = np.sqrt((element_x - center_x)**2 +
+                                           (element_y - center_y)**2)
+                #select annulus area
+                        if distance <= w + 8 and distance >= w + 2:
+                            selected_elements.append(select[m][n])
+                #3 sigma clip
+                new_elements = sigmaclip(selected_elements,3,3)
+                new_elements2 = np.std(selected_elements)
+                
                 # aperture phot
                 ap = CircularAperture(position, wa.value)
                 sap = CircularAnnulus(position, w_in.value, w_out.value)
@@ -509,7 +536,13 @@ try:
                 bkgflux_table = aperture_photometry(
                     scidata[0].data, sap, method="subpixel", subpixels=5
                 )
-                # 2020.11.25 revised
+                # 2020.11.25 revised => 2023.5.26 revised
+                bkg_std2 = np.std(new_elements[0])**2
+                #
+                #If local sky can not be estimated due to the edge of image,
+                #img_sky2 (typical skynoise) is used
+                if np.isnan(bkg_std2):
+                    bkg_std2 =  img_sky2    
                 bkg_mean = bkgflux_table["aperture_sum"][0] / sap.area
                 bkg_sum = bkg_mean * ap.area
                 final_sum = (
@@ -517,13 +550,14 @@ try:
                     * nbinList[image]
                     * (rawflux_table["aperture_sum"][0] - bkg_sum)
                 )  # K.S. modified 2022/5/3
+                
+               
                 if final_sum <= 0:
                     trackletListAll[p][k].del_data(image)
                     if trackletListAll[p][k].NDetect < 2:
                         del trackletListAll[p][k]
                     continue
                 mag = np.round(zmList[image] - 2.5 * np.log10(final_sum), decimals=3)
-                # error
                 sigma_ron = (
                     4.5 * nbinList[image] * nbinList[image]
                 )  # read out noise of HSC /nobining :4.5e S.U modified 2022/5/4
@@ -532,9 +566,9 @@ try:
                 )  # gain of HSC/nobining :3.0  S.U modified 2022/5/4
                 S_star = gain * final_sum
                 Noise = np.sqrt(
-                    S_star + ap.area * (gain * bkg_mean + sigma_ron * sigma_ron)
-                )  # S.U modified 2022/7/16
-                SNR = np.sqrt(S_star / Noise)  # S.U modified 2022/7/16
+                    S_star + ap.area * (gain * bkg_std2 + sigma_ron * sigma_ron)
+                )  # S.U modified 2023/5/26
+                SNR = S_star / Noise  # S.U modified 2023/5/26
                 # error in magnitude m_err = 1.0857/SNR
                 # Noise in ADU
                 mage = np.round(1.0857 / SNR, decimals=3)
