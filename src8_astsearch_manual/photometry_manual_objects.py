@@ -65,8 +65,9 @@ def get_photometry_and_radec(scidata, threeAparturePoints, nbin, zm):
     #Estimation of sky deviation from full image
     img_sky  = sigmaclip(scidata[0].data,3,3)
     img_sky2 = np.std(img_sky[0])**2
-    
-    center_x, center_y = int(w_out*2), int(w_out*2)
+
+    size = w_out if w_out > h_out else h_out
+    center_x, center_y = int(size*2), int(size*2)
     ax = w_out * math.cos(theta) - h_out * math.sin(theta) + center_x
     ay = w_out * math.sin(theta) + h_out * math.cos(theta) + center_y
     bx = w_out * math.cos(theta) * (-1) - h_out * math.sin(theta) + center_x
@@ -87,7 +88,9 @@ def get_photometry_and_radec(scidata, threeAparturePoints, nbin, zm):
     vector_cd = vector_d - vector_c
     vector_da = vector_a - vector_d
     
-    #   inner rectangle coordinate 
+    #   inner rectangle coordinate
+    fx = w_in * math.cos(theta) - h_in * math.sin(theta) + center_x
+    fy = w_in * math.sin(theta) + h_in * math.cos(theta) + center_y
     gx = w_in * np.cos(theta) * (-1) - h_in * np.sin(theta) + center_x
     gy = w_in * np.sin(theta) * (-1) + h_in * np.cos(theta) + center_y
     hx = w_in * np.cos(theta) * (-1) + h_in * np.sin(theta) + center_x
@@ -96,10 +99,10 @@ def get_photometry_and_radec(scidata, threeAparturePoints, nbin, zm):
     iy = w_in * np.sin(theta) - h_in * np.cos(theta) + center_y
      
     # make vector from inner rectangle
-    vector_f = np.array([ax,ay])
-    vector_g = np.array([bx,by])
-    vector_h = np.array([cx,cy])
-    vector_i = np.array([dx,dy])
+    vector_f = np.array([fx,fy])
+    vector_g = np.array([gx,gy])
+    vector_h = np.array([hx,hy])
+    vector_i = np.array([ix,iy])
     
     vector_fg = vector_g - vector_f
     vector_gh = vector_h - vector_g
@@ -107,8 +110,8 @@ def get_photometry_and_radec(scidata, threeAparturePoints, nbin, zm):
     vector_if = vector_f - vector_i
     
     #select local area
-    select = scidata[0].data[int(rect["center"][1]) - int(w_out*2):int(rect["center"][1]) + int(w_out*2),
-                             int(rect["center"][0]) - int(w_out*2):int(rect["center"][0]) + int(w_out*2)]
+    select = scidata[0].data[int(rect["center"][1]) - int(size*2) : int(rect["center"][1]) + int(size*2),
+                             int(rect["center"][0]) - int(size*2) : int(rect["center"][0]) + int(size*2)]
     
     extracted_region = []
     for k in range(len(select)):
@@ -138,8 +141,9 @@ def get_photometry_and_radec(scidata, threeAparturePoints, nbin, zm):
             vector_cross_if_ie = np.cross(vector_if,vector_ie)
             if vector_cross_fg_fe > 0 and  vector_cross_gh_ge  > 0 and vector_cross_hi_he > 0 and vector_cross_if_ie > 0:                
                 pass
-            elif vector_cross_ab_ae > 0 and vector_cross_bc_be > 0 and vector_cross_bc_be > 0 and vector_cross_da_de:
+            elif vector_cross_ab_ae > 0 and vector_cross_bc_be > 0 and vector_cross_cd_ce > 0 and vector_cross_da_de > 0:
                 extracted_region.append(select[k][l])
+                
     new_elements = sigmaclip(extracted_region,3,3)
 #   bkg_std2 is estimated from local sky area deviation**2
     bkg_std2 = np.std(new_elements[0])**2
