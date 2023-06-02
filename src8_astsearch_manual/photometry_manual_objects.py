@@ -68,7 +68,7 @@ def get_photometry_and_radec(scidata, threeAparturePoints, nbin, zm):
 
     ### 以下の箇所では、点eが内側の矩形と外側の矩形の間にあるかどうかの判定をしている ##########################################
     ### ここで内側の矩形は点(f,g,h,i)で、外側の矩形は点(a,b,c,d)で定義されている   ##########################################
-    ### 詳しくは大坪さんのpdfを参照 (URL)                                      ##########################################
+    ### 詳しくは大坪さんのpdfを参照: https://github.com/COIAS-program/COIAS_program_github/blob/main/矩形内判断.pdf ######
     size = w_out if w_out > h_out else h_out
     center_x, center_y = int(size*2), int(size*2)
     ax = w_out * math.cos(theta) - h_out * math.sin(theta) + center_x
