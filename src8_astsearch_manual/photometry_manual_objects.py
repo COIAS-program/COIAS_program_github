@@ -66,6 +66,9 @@ def get_photometry_and_radec(scidata, threeAparturePoints, nbin, zm):
     img_sky  = sigmaclip(scidata[0].data,3,3)
     img_sky2 = np.std(img_sky[0])**2
 
+    ### 以下の箇所では、点eが内側の矩形と外側の矩形の間にあるかどうかの判定をしている ##########################################
+    ### ここで内側の矩形は点(f,g,h,i)で、外側の矩形は点(a,b,c,d)で定義されている   ##########################################
+    ### 詳しくは大坪さんのpdfを参照 (URL)                                      ##########################################
     size = w_out if w_out > h_out else h_out
     center_x, center_y = int(size*2), int(size*2)
     ax = w_out * math.cos(theta) - h_out * math.sin(theta) + center_x
@@ -143,6 +146,7 @@ def get_photometry_and_radec(scidata, threeAparturePoints, nbin, zm):
                 pass
             elif vector_cross_ab_ae > 0 and vector_cross_bc_be > 0 and vector_cross_cd_ce > 0 and vector_cross_da_de > 0:
                 extracted_region.append(select[k][l])
+    ##############################################################################################################################
                 
     new_elements = sigmaclip(extracted_region,3,3)
 #   bkg_std2 is estimated from local sky area deviation**2
