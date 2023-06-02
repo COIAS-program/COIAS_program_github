@@ -485,8 +485,7 @@ try:
 
         scidata = fits.open(warpFileNames[image])
         #Estimation of sky deviation from full image
-        img_stat = scidata[0].data[~np.isnan(scidata[0].data)]
-        img_sky  = sigmaclip(img_stat,3,3)
+        img_sky  = sigmaclip(scidata[0].data,3,3)
         img_sky2 = np.std(img_sky[0])**2
         for p in range(len(trackletListAll)):
             for k in reversed(range(len(trackletListAll[p]))):
@@ -508,8 +507,7 @@ try:
 
                 position = (xypix[0], xypix[1])
                 #select local area
-                select = scidata[0].data[int(position[1]) - w*2:int(position[1])
-                        + w*2,int(position[0]) - w*2 :int(position[0]) + w*2]
+                select = scidata[0].data[int(position[1]) - w*2 : int(position[1]) + w*2, int(position[0]) - w*2 :int(position[0]) + w*2]
                 #center of local area
                 center_x, center_y = w*2, w*2
                 #estimation of background noise
@@ -524,7 +522,6 @@ try:
                             selected_elements.append(select[m][n])
                 #3 sigma clip
                 new_elements = sigmaclip(selected_elements,3,3)
-                new_elements2 = np.std(selected_elements)
                 
                 # aperture phot
                 ap = CircularAperture(position, wa.value)
