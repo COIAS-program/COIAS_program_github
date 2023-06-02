@@ -91,12 +91,12 @@ def get_photometry_and_radec(scidata, threeAparturePoints, nbin, zm):
     #   inner rectangle coordinate
     fx = w_in * math.cos(theta) - h_in * math.sin(theta) + center_x
     fy = w_in * math.sin(theta) + h_in * math.cos(theta) + center_y
-    gx = w_in * np.cos(theta) * (-1) - h_in * np.sin(theta) + center_x
-    gy = w_in * np.sin(theta) * (-1) + h_in * np.cos(theta) + center_y
-    hx = w_in * np.cos(theta) * (-1) + h_in * np.sin(theta) + center_x
-    hy = w_in * np.sin(theta) * (-1) - h_in * np.cos(theta) + center_y
-    ix = w_in * np.cos(theta) + h_in * np.sin(theta) + center_x
-    iy = w_in * np.sin(theta) - h_in * np.cos(theta) + center_y
+    gx = w_in * math.cos(theta) * (-1) - h_in * math.sin(theta) + center_x
+    gy = w_in * math.sin(theta) * (-1) + h_in * math.cos(theta) + center_y
+    hx = w_in * math.cos(theta) * (-1) + h_in * math.sin(theta) + center_x
+    hy = w_in * math.sin(theta) * (-1) - h_in * math.cos(theta) + center_y
+    ix = w_in * math.cos(theta) + h_in * math.sin(theta) + center_x
+    iy = w_in * math.sin(theta) - h_in * math.cos(theta) + center_y
      
     # make vector from inner rectangle
     vector_f = np.array([fx,fy])
