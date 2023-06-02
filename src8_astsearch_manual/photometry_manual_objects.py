@@ -57,42 +57,36 @@ def get_photometry_and_radec(scidata, threeAparturePoints, nbin, zm):
         theta=rect["angle"],
     )
     # outer rectangle coordinate
-    w_in=rect["width"] + 2,
-    w_out=rect["width"] + 4,
-    h_in=rect["height"] + 2,
-    h_out=rect["height"] + 4,
-    theta=rect["angle"],
+    w_in=rect["width"] + 2
+    w_out=rect["width"] + 4
+    h_in=rect["height"] + 2
+    h_out=rect["height"] + 4
+    theta=rect["angle"]
     #Estimation of sky deviation from full image
-    img_stat = scidata[0].data[~np.isnan(scidata[0].data)]
-    img_sky  = sigmaclip(img_stat,3,3)
+    img_sky  = sigmaclip(scidata[0].data,3,3)
     img_sky2 = np.std(img_sky[0])**2
-    #select local area 
-    select = scidata[0].data[int(rect["center"][1]) - int(np.array(w_out)*2)
-                             :int(rect["center"][1]) + int(np.array(w_out)*2),
-                             int(rect["center"][0]) - int(np.array(w_out)*2)
-                             :int(rect["center"][0]) + int(np.array(w_out)*2)]
-    center_x, center_y = int(np.array(w_out)*2),int(np.array(w_out)*2)
-    ax = w_out * np.cos(theta) - h_out * np.sin(theta) + center_x
-    ay = w_out * np.sin(theta) + h_out * np.cos(theta) + center_y
-    bx = w_out * np.cos(theta) * (-1) - h_out * np.sin(theta) + center_x
-    by = w_out * np.sin(theta) * (-1) + h_out * np.cos(theta) + center_y
-    cx = w_out * np.cos(theta) * (-1) + h_out * np.sin(theta) + center_x 
-    cy = w_out * np.sin(theta) * (-1) - h_out * np.cos(theta) + center_y
-    dx = w_out * np.cos(theta) + h_out * np.sin(theta) + center_x 
-    dy = w_out * np.sin(theta) - h_out * np.cos(theta) + center_y
+    
+    center_x, center_y = int(w_out*2), int(w_out*2)
+    ax = w_out * math.cos(theta) - h_out * math.sin(theta) + center_x
+    ay = w_out * math.sin(theta) + h_out * math.cos(theta) + center_y
+    bx = w_out * math.cos(theta) * (-1) - h_out * math.sin(theta) + center_x
+    by = w_out * math.sin(theta) * (-1) + h_out * math.cos(theta) + center_y
+    cx = w_out * math.cos(theta) * (-1) + h_out * math.sin(theta) + center_x 
+    cy = w_out * math.sin(theta) * (-1) - h_out * math.cos(theta) + center_y
+    dx = w_out * math.cos(theta) + h_out * math.sin(theta) + center_x 
+    dy = w_out * math.sin(theta) - h_out * math.cos(theta) + center_y
+    
     # make vector from outer rectangle
-    vector_a = np.array((ax,ay))
-    vector_a = vector_a.flatten()
-    vector_b = np.array((bx,by))
-    vector_b = vector_b.flatten()
-    vector_c = np.array((cx,cy))
-    vector_c = vector_c.flatten()
-    vector_d = np.array((dx,dy))
-    vector_d = vector_d.flatten()
+    vector_a = np.array([ax,ay])
+    vector_b = np.array([bx,by])
+    vector_c = np.array([cx,cy])
+    vector_d = np.array([dx,dy])
+    
     vector_ab = vector_b - vector_a
     vector_bc = vector_c - vector_b
     vector_cd = vector_d - vector_c
     vector_da = vector_a - vector_d
+    
     #   inner rectangle coordinate 
     gx = w_in * np.cos(theta) * (-1) - h_in * np.sin(theta) + center_x
     gy = w_in * np.sin(theta) * (-1) + h_in * np.cos(theta) + center_y
@@ -102,28 +96,25 @@ def get_photometry_and_radec(scidata, threeAparturePoints, nbin, zm):
     iy = w_in * np.sin(theta) - h_in * np.cos(theta) + center_y
      
     # make vector from inner rectangle
-    vector_f = np.array((ax,ay))
-    vector_f = vector_f.flatten()
-    vector_g = np.array((bx,by))
-    vector_g = vector_g.flatten()
-    vector_h = np.array((cx,cy))
-    vector_h = vector_h.flatten()
-    vector_i = np.array((dx,dy))
-    vector_i = vector_i.flatten()
+    vector_f = np.array([ax,ay])
+    vector_g = np.array([bx,by])
+    vector_h = np.array([cx,cy])
+    vector_i = np.array([dx,dy])
+    
     vector_fg = vector_g - vector_f
     vector_gh = vector_h - vector_g
     vector_hi = vector_i - vector_h
     vector_if = vector_f - vector_i
-    #select local area 
-    select = scidata[0].data[int(rect["center"][1]) - int(np.array(w_out)*2)
-                             :int(rect["center"][1]) + int(np.array(w_out)*2),
-                             int(rect["center"][0]) - int(np.array(w_out)*2)
-                             :int(rect["center"][0]) + int(np.array(w_out)*2)]
+    
+    #select local area
+    select = scidata[0].data[int(rect["center"][1]) - int(w_out*2):int(rect["center"][1]) + int(w_out*2),
+                             int(rect["center"][0]) - int(w_out*2):int(rect["center"][0]) + int(w_out*2)]
+    
     extracted_region = []
     for k in range(len(select)):
         for l in range(len(select[1])):
             element_x, element_y = k,l
-            vector_e = np.array((k,l))
+            vector_e = np.array([k,l])
 #outer area
             vector_ae = vector_e - vector_a
             vector_be = vector_e - vector_b
