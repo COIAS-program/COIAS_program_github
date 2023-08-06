@@ -20,6 +20,7 @@
 # 出力: pre_repo2.txt
 # 　　    過去の計測で出力されたpre_repo3_*.txtと照合を行い, jd, ra, decがほぼ一致したデータを
 # 　　    pre_repo.txtから削除したもの.
+# L123 L124 raDiff, decDiffを4.0秒角に変更
 ################################################################################################
 import traceback
 import os
@@ -119,8 +120,8 @@ try:
                 decDiff = abs(inputLineInfo["decArcSec"] - compareLineInfo["decArcSec"])
                 if (
                     inputLineInfo["jdStr"] == compareLineInfo["jdStr"]
-                    and raDiff < 1.0
-                    and decDiff < 1.0
+                    and raDiff < 4.0
+                    and decDiff < 4.0
                 ):
                     del inputLines[l]
                     duplicateFlag = True
