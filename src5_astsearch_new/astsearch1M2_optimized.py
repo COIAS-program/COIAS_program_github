@@ -353,6 +353,8 @@ try:
     readparam.write_used_param("nd", params["nd"])
     VEL_THRESH = params["vt"]
     readparam.write_used_param("vt", params["vt"])
+    VEL_LOWER_THRESH = params["vl"]
+    readparam.write_used_param("vl", params["vl"])
     APARTURE_RADIUS = params["ar"]
     readparam.write_used_param("ar", params["ar"])
     ##########################################################
@@ -438,6 +440,7 @@ try:
                 radecbList[rightTracId],
                 abs(jdList[rightTracId] - jdList[leftTracId]) * MINITS_IN_A_DAY,
                 abs(VEL_THRESH),
+                abs(VEL_LOWER_THRESH)
             )
             trackletClassList = []
             for k in range(len(tracList)):

@@ -14,6 +14,7 @@
 nd="4" # default value for detection number threshold for moving objects
 ar="6" # default value for aparture radius in pixel for photometory
 vt="1.5" # default value for velocity threshold to detect moving objects
+vl="0.3" # default value for velocity lower threshold to detect moving objects
 dm="6" #default value for DETECT_MINAREA, i.e., minimum area for detecting sources at SExtractor
 sn="500" #default value for mean source number detected by SExtractor
 id="-1" #default value for user id for webCOIAS
@@ -23,9 +24,10 @@ for arg in "$@"; do
     nd=*) nd=${arg#???}                 ;;
     ar=*) ar=${arg#???}                 ;;
     vt=*) vt=${arg#???}                 ;;
-	dm=*) dm=${arg#???}                 ;;
-	sn=*) sn=${arg#???}                 ;;
-	id=*) id=${arg#???}                 ;;
+    vl=*) vl=${arg#???}                 ;;
+	  dm=*) dm=${arg#???}                 ;;
+	  sn=*) sn=${arg#???}                 ;;
+	  id=*) id=${arg#???}                 ;;
        *) echo "Invalid option" 1>&2    ;;
   esac
 done
@@ -33,6 +35,7 @@ done
 echo nd $nd >  param.txt
 echo ar $ar >> param.txt
 echo vt $vt >> param.txt
+echo vl $vl >> param.txt
 echo dm $dm >> param.txt
 echo sn $sn >> param.txt
 echo id $id >> param.txt
