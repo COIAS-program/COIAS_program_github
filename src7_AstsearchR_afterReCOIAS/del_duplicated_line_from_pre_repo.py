@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
-# Timestamp: 2023/03/29 9:30 sugiura
+# Timestamp: 2023/03/29 9:30 sugiura 　=> 2023/08/10 20:00 urakawa
 ################################################################################################
 # 過去にMPCに報告したデータ(同じファイル内でも違っても)とほとんど同じjd, ra, decを持つデータを再度報告すると,
 # 名前が一致していてもしていなくてもMPCに怒られる.
@@ -20,7 +20,8 @@
 # 出力: pre_repo2.txt
 # 　　    過去の計測で出力されたpre_repo3_*.txtと照合を行い, jd, ra, decがほぼ一致したデータを
 # 　　    pre_repo.txtから削除したもの.
-# L123 L124 raDiff, decDiffを4.0秒角に変更
+# 2023/08/10 20:00 urakawa
+# L123 L124 raDiff, decDiffを4.0秒角に変更=>DUPLICATE_THRESH_ARCSEC で定義に変更 
 ################################################################################################
 import traceback
 import os
@@ -30,6 +31,9 @@ from astropy.io import fits
 from astropy.time import Time
 import print_detailed_log
 import PARAM
+
+#Define thresh arcsec
+DUPLICATE_THRESH_ARCSEC = 6.0
 
 
 class NothingToDo(Exception):
@@ -120,8 +124,8 @@ try:
                 decDiff = abs(inputLineInfo["decArcSec"] - compareLineInfo["decArcSec"])
                 if (
                     inputLineInfo["jdStr"] == compareLineInfo["jdStr"]
-                    and raDiff < 4.0
-                    and decDiff < 4.0
+                    and raDiff < DUPLICATE_THRESH_ARCSEC
+                    and decDiff < DUPLICATE_THRESH_ARCSEC
                 ):
                     del inputLines[l]
                     duplicateFlag = True

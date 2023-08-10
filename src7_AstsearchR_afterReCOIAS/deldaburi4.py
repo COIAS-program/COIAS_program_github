@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
-# Timestamp: 2022/08/06 19:30 sugiura
+# Timestamp: 2022/08/06 19:30 sugiura　=> 2023/08/10 20:00 urakawa
 ###########################################################################################
 # jd, ra, decが一致している行が2行以上あった場合, 2つ目以降をダブりとして削除する.
 # さらに, 同一の名前の天体のデータで等級が中央値から0.7以上外れているものも削除し,
@@ -10,6 +10,8 @@
 # 出力: mpc7.txt
 # 　　    mpc4_automanual2.txtに対して上記のダブり除去, 等級が大きずれているもの除去,
 # 　　    データが2行以下になる天体の除去を行った結果を書き出したもの.
+# 2023/08/10 20:00 urakawa
+#DUPLICATE_THRESH_ARCSEC = 6 を追加
 ###########################################################################################
 import itertools
 import re
@@ -19,6 +21,10 @@ import pandas as pd
 import traceback
 import os
 import print_detailed_log
+
+#Define thresh arcsec
+DUPLICATE_THRESH_ARCSEC = 6.0
+
 
 try:
     # detect list
@@ -68,10 +74,10 @@ try:
 
             # condition
             time = data2[i, 0]
-            lra = data2[i, 7] - 0.0005
-            hra = data2[i, 7] + 0.0005
-            ldec = data2[i, 8] - 0.0005
-            hdec = data2[i, 8] + 0.0005
+            lra = data2[i, 7] - DUPLICATE_THRESH_ARCSEC/3600.0
+            hra = data2[i, 7] +  DUPLICATE_THRESH_ARCSEC/3600.0
+            ldec = data2[i, 8] -  DUPLICATE_THRESH_ARCSEC/3600.0
+            hdec = data2[i, 8] +  DUPLICATE_THRESH_ARCSEC/3600.0
             # print(np.where((data2[:,0] == time) & (data2[:,7] > lra) & (data2[:,7] < hra)& (data2[:,8] > ldec) & (data2[:,8] < hdec))
             tmp = np.where(
                 (data2[:, 0] == time)
