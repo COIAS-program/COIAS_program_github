@@ -91,12 +91,18 @@ try:
                 list1.append(tmp2)
 
         # convert to tuple and then convert to list due to delete duplicate
+        # 注: mpc4_automanual2.txtに記載のデータ列のうち, 重複していると見做せるほど近い列のindexの組の配列がlist1になる.
+        # 　  例えば, 3列目と5列目, 4列目と6列目がそれぞれ近い場合, list1 = [[3,5], [4,6], [3,5], [4,6]] となる. (np.whereは条件に合致する要素のindexを返す)
+        # 　  ここで, 上記の走査方法では同じ組み合わせが少なくとも2回ずつ現れてしまうことに注意. arrはそのような同じ組を消された後の配列になる.
+        # 　  上記の例では arr = [[3,5], [4,6]] となる.
         arr = list(map(list, set(map(tuple, list1))))
         arr.sort()
         list2 = []
         for i in range(len(arr)):
             list2.append(arr[i][1:])
         # duplication index number
+        # 注: list5は, 重複している列の組みのうち最もindexが若いものを残すとして, 消すべきindexのリストになる
+        # 　  上記の例ではlist5 = [5, 6] となる.
         list5 = list(itertools.chain.from_iterable(list2))
 
         # delete duplicate
