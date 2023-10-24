@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: 2022/08/06 19:00 sugiura
+# Timestamp: 2023/10/24 20:00 sugiura
 ###########################################################################################
 # 通常, searchモードで自動検出天体を選んだ後にmanual measureモードにて手動測定を行うと,
 # AstsearchR_between_COIAS_and_ReCOIASおよびAstsearchR_after_manualを正常に動作させれば,
@@ -17,6 +17,7 @@
 # 　　  mpc4_m.txt
 # 　　  newall_m.txt
 # 　　  redisp_manual.txt
+#      manual_name_modify_list.txt (これについてはなければ無視する)
 ###########################################################################################
 import re
 import os
@@ -158,6 +159,30 @@ try:
                     break
             fileRedispM.write(line.replace(newHList[l], adjustedNewHList[l]))
     fileRedispM.close()
+
+    ## manual_name_modify_list.txt
+    ## このファイルはない場合もあるので、ない時は何もしない
+    ## このファイルは名前修正モードにおける名前修正結果を記しており、1列目に修正前の、2列目に修正後の名前が記されているため
+    ## 基本的に1列目のH番号をここでの変更と整合的になるように直せば良い
+    ## ただし、名前修正モードに入ったものの修正しなかったH番号がある場合、同じ番号を2列目にも書くことにしている。
+    ## そのため、1列目と2列目が同じだった場合は、ここでの変更を2列目にも反映しなければいけない。
+    if os.path.isfile("manual_name_modify_list.txt"):
+        fileManualNameModify = open("manual_name_modify_list.txt", "r")
+        lines = fileManualNameModify.readlines()
+        fileManualNameModify.close()
+
+        fileManualNameModify = open("manual_name_modify_list.txt", "w", newline="\n")
+        for line in lines:
+            if len(adjustedNewHList) == 0:
+                fileManualNameModify.write(line)
+            else:
+                for l in range(len(adjustedNewHList)):
+                    if line.split()[0] == newHList[l]:
+                        break
+                fileManualNameModify.write(
+                    line.replace(newHList[l], adjustedNewHList[l])
+                )
+        fileManualNameModify.close()
     # ------------------------------------------------
 
 except NothingToDo:
