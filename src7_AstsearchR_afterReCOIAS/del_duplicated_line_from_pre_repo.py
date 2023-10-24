@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
-# Timestamp: 2023/03/29 9:30 sugiura 　=> 2023/08/10 20:00 urakawa
+# Timestamp: 2023/10/02 22:30 sugiura 　=> 2023/08/10 20:00 urakawa
 ################################################################################################
 # 過去にMPCに報告したデータ(同じファイル内でも違っても)とほとんど同じjd, ra, decを持つデータを再度報告すると,
 # 名前が一致していてもしていなくてもMPCに怒られる.
@@ -15,13 +15,17 @@
 # 2回目の実行時にこれを削除の照合対象にしたらカレントのpre_repo.txtと全て一致して全部消えてしまうからである.
 # (原則として画像を変えたら作業ディレクトリも変えるということを念頭に置いている)
 #
+# 2023/10/2 2日連続の測定がなされた場合, 弾くべきデータがこの日の前後にも存在する可能性があるため,
+#           最初の画像の前日と最後の画像の翌日も比較の対象にすることにした.
+#           将来的に速度の面で問題になるようならこの措置は取り消しても構わない.
+#
 # 入力: warp01_bin.fits 今回測定した画像観測日のyyyy-mm-ddを取得するために使用
 # 　　  pre_repo.txt
 # 出力: pre_repo2.txt
 # 　　    過去の計測で出力されたpre_repo3_*.txtと照合を行い, jd, ra, decがほぼ一致したデータを
 # 　　    pre_repo.txtから削除したもの.
 # 2023/08/10 20:00 urakawa
-# L123 L124 raDiff, decDiffを4.0秒角に変更=>DUPLICATE_THRESH_ARCSEC で定義に変更 
+# L123 L124 raDiff, decDiffを4.0秒角に変更=>DUPLICATE_THRESH_ARCSEC で定義に変更
 ################################################################################################
 import traceback
 import os
@@ -32,7 +36,7 @@ from astropy.time import Time
 import print_detailed_log
 import PARAM
 
-#Define thresh arcsec
+# Define thresh arcsec
 DUPLICATE_THRESH_ARCSEC = 6.0
 
 
@@ -62,11 +66,19 @@ def extract_jd_ra_dec_info_from_MPC_line(MPCOneLine):
 
 try:
     # ---get distinct yyyy-mm-dd list of this measurement---
-    distinct_yyyy_mm_dd_list = []
     warpFileNameList = glob.glob("warp*_bin.fits")
-    for warpFileName in warpFileNameList:
-        scidata = fits.open(warpFileName)
+    jdList = []
+    for i in range(len(warpFileNameList)):
+        scidata = fits.open(warpFileNameList[i])
         jd = scidata[0].header["JD"]
+        jdList.append(jd)
+        if i == 0:
+            jdList.append(jd - 1)
+        if i == len(warpFileNameList) - 1:
+            jdList.append(jd + 1)
+
+    distinct_yyyy_mm_dd_list = []
+    for jd in jdList:
         tInTimeObj = Time(jd, format="jd")
         tInIso = tInTimeObj.iso
         yyyy_mm_dd = tInIso.split()[0]
@@ -118,7 +130,7 @@ try:
             for lc in range(1, len(compareLines)):
                 compareLineInfo = extract_jd_ra_dec_info_from_MPC_line(compareLines[lc])
                 ### compare compareLine and inputLine
-                ### if jd exactly match, differences of ra and dec are smaller than 1 arcsec
+                ### if jd exactly match, differences of ra and dec are smaller than 6 arcsec
                 ### we delete the line and do not output it
                 raDiff = abs(inputLineInfo["raArcSec"] - compareLineInfo["raArcSec"])
                 decDiff = abs(inputLineInfo["decArcSec"] - compareLineInfo["decArcSec"])

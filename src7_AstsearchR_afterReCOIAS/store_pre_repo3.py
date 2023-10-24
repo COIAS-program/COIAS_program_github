@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
-# Timestamp: 2023/03/29 9:30 sugiura
+# Timestamp: 2023/10/02 14:00 sugiura
 ###########################################################################################
 # カレントディレクトリのpre_repo3.txtを~/.coias/past_pre_repo_data/以下にコピーする.
 # ただし, ファイル探索の高速化のためにこの画像の観測日のyyyy-mm-ddディレクトリ以下に保存する.
@@ -15,8 +15,13 @@
 #
 # 注: 1つのpre_repo3.txtには複数日の観測結果が含まれる可能性があるので,
 # 　  pre_repo3.txtの各行ごとに振り分けるyyyy-mm-ddを変えるのが本来の正しいやり方かもしれない. (coefficientsも同様)
-# 　  しかしそれをやるとあまりにも複雑になりすぎるので,あくまでも1枚目の画像の観測日のyyyy-mm-ddディレクトリに保存することにする.
-# 　  これでもおそらくは問題ないはずである. K.S. 2023/3/29
+# 　  (しかしそれをやるとあまりにも複雑になりすぎるので,あくまでも1枚目の画像の観測日のyyyy-mm-ddディレクトリに保存することにする.
+# 　   これでもおそらくは問題ないはずである. K.S. 2023/3/29)
+#     2023/10/2 修正
+#     やはり問題なので, 画像を複数日から選んだ場合は, 複数のyyyy-mm-ddディレクトリに今回のpre_repo3.txtをそのままコピーする.
+#     各行ごとに振り分けたりはしないため荒い方法だが, これでも有効なはずである.
+#     coefficients_for_predict.txtに関しては, ややこしくなるし重要なファイルでもないので,
+#     今まで通り1枚目のyyyy-mm-ddのみに保存する.
 #
 # 入力: warp01_bin.fits この画像のyyyy-mm-ddを取得するために使用
 # 　　  ./pre_repo3.txt
@@ -40,60 +45,68 @@ import print_detailed_log
 import PARAM
 
 try:
-    # ---get yyyy-mm-dd of this measurement--------
-    scidata = fits.open("warp01_bin.fits")
-    jd = scidata[0].header["JD"]
-    tInTimeObj = Time(jd, format="jd")
-    tInIso = tInTimeObj.iso
-    yyyy_mm_dd = tInIso.split()[0]
-    # ---------------------------------------------
+    # ---get distinct yyyy-mm-dd list of this measurement--
+    distinct_yyyy_mm_dd_list = []
+    warpFileNameList = sorted(glob.glob("warp*_bin.fits"))
+    for warpFileName in warpFileNameList:
+        scidata = fits.open(warpFileName)
+        jd = scidata[0].header["JD"]
+        tInTimeObj = Time(jd, format="jd")
+        tInIso = tInTimeObj.iso
+        yyyy_mm_dd = tInIso.split()[0]
+        if yyyy_mm_dd not in distinct_yyyy_mm_dd_list:
+            distinct_yyyy_mm_dd_list.append(yyyy_mm_dd)
+    # -----------------------------------------------------
 
-    # ---check ~/.coias/past_pre_repo_data/yyyy-mm-dd directory exists or not
-    dirName = PARAM.COIAS_DATA_PATH + "/past_pre_repo_data/" + yyyy_mm_dd
-    logFileName = dirName + "/log.txt"
-    if not os.path.isdir(dirName):
-        os.mkdir(dirName)
-        logFile = open(logFileName, "w", newline="\n")
-        logFile.write("0")
+    ### start yyyy_mm_dd roop for pre_repo3.txt ##################################
+    for yyyy_mm_dd in distinct_yyyy_mm_dd_list:
+        # ---check ~/.coias/past_pre_repo_data/yyyy-mm-dd directory exists or not
+        dirName = PARAM.COIAS_DATA_PATH + "/past_pre_repo_data/" + yyyy_mm_dd
+        logFileName = dirName + "/log.txt"
+        if not os.path.isdir(dirName):
+            os.mkdir(dirName)
+            logFile = open(logFileName, "w", newline="\n")
+            logFile.write("0")
+            logFile.close()
+        # -----------------------------------------------------------------------
+
+        # ---get maximum number of pre_repo3_*.txt-----
+        logFile = open(logFileName, "r")
+        maxFileN = int(logFile.readline())
         logFile.close()
-    # -----------------------------------------------------------------------
+        # ---------------------------------------------
 
-    # ---get maximum number of pre_repo3_*.txt-----
-    logFile = open(logFileName, "r")
-    maxFileN = int(logFile.readline())
-    logFile.close
-    # ---------------------------------------------
+        # ---check the file produced from the same working directory exists or not
+        currentDir = os.getcwd()
+        compareFileNames = sorted(glob.glob(dirName + "/pre_repo3_*.txt"))
+        duplicateFlag = False
+        for fileName in compareFileNames:
+            compareFile = open(fileName, "r")
+            compareFileOrigin = compareFile.readlines()[0].rstrip("\n")
+            compareFile.close()
+            if compareFileOrigin == currentDir:
+                newFileName = fileName
+                duplicateFlag = True
+        if not duplicateFlag:
+            maxFileN += 1
+            newFileName = dirName + "/pre_repo3_{0:d}.txt".format(maxFileN)
+        # ------------------------------------------------------------------------
 
-    # ---check the file produced from the same working directory exists or not
-    currentDir = os.getcwd()
-    compareFileNames = sorted(glob.glob(dirName + "/pre_repo3_*.txt"))
-    duplicateFlag = False
-    for fileName in compareFileNames:
-        compareFile = open(fileName, "r")
-        compareFileOrigin = compareFile.readlines()[0].rstrip("\n")
-        compareFile.close()
-        if compareFileOrigin == currentDir:
-            newFileName = fileName
-            duplicateFlag = True
-    if not duplicateFlag:
-        maxFileN += 1
-        newFileName = dirName + "/pre_repo3_{0:d}.txt".format(maxFileN)
-    # ------------------------------------------------------------------------
+        # ---output maxFileN to log.txt and copy pre_repo3.txt--------------------
+        logFile = open(logFileName, "w", newline="\n")
+        logFile.write(str(maxFileN))
+        logFile.close()
 
-    # ---output maxFileN to log.txt and copy pre_repo3.txt--------------------
-    logFile = open(logFileName, "w", newline="\n")
-    logFile.write(str(maxFileN))
-    logFile.close()
+        preRepoInputFile = open("pre_repo3.txt", "r")
+        inputLines = preRepoInputFile.readlines()
+        preRepoInputFile.close()
 
-    preRepoInputFile = open("pre_repo3.txt", "r")
-    inputLines = preRepoInputFile.readlines()
-    preRepoInputFile.close()
-
-    preRepoOutputFile = open(newFileName, "w", newline="\n")
-    preRepoOutputFile.write(currentDir + "\n")
-    preRepoOutputFile.writelines(inputLines)
-    preRepoOutputFile.close()
-    # ------------------------------------------------------------------------
+        preRepoOutputFile = open(newFileName, "w", newline="\n")
+        preRepoOutputFile.write(currentDir + "\n")
+        preRepoOutputFile.writelines(inputLines)
+        preRepoOutputFile.close()
+        # ------------------------------------------------------------------------
+    ### end yyyy_mm_dd roop for pre_repo3.txt ####################################
 
     # ---calculate coefficients for linear fit of jd vs ra and dec------------
     warpFileNames = sorted(glob.glob("warp*_bin.fits"))
@@ -101,6 +114,11 @@ try:
     jdFirst = scidata[0].header["JD"]
     scidata = fits.open(warpFileNames[len(warpFileNames) - 1])
     jdLast = scidata[0].header["JD"]
+
+    tInTimeObj = Time(jdFirst, format="jd")
+    tInIso = tInTimeObj.iso
+    yyyy_mm_dd = tInIso.split()[0]
+    dirName = PARAM.COIAS_DATA_PATH + "/past_pre_repo_data/" + yyyy_mm_dd
 
     coeffFileName = dirName + "/coefficients_for_predict.txt"
     if os.path.isfile(coeffFileName):
