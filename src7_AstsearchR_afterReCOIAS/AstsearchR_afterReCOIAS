@@ -29,16 +29,16 @@
 #      明るい天体は十分に報告されていて再度MPCに報告する必要はないため,
 #      bright_asteroid_MPC_names_in_the_field.txtに記載されている15等級よりも明るくなりうる
 #      天体は報告データから削除する.
-# 9. modify_preRepo_as_H_sequential.py
-#      前述の削除の影響で新天体の番号に欠番が生じ連番ではなくなるので,
-#      また連番になるように補正する.
-# 10. make_final_all_and_disp.py
-#      今までの諸々の名前の付け替えやデータの削除を反映させた, 最終的なall.txtとdisp.txtを作成する.
-#      final_all.txtには元画像の名前, 天体の軌道やサイズの情報も記載される.
-# 11. del_duplicated_line_from_pre_repo2.py
+# 9. del_duplicated_line_from_pre_repo2.py
 #      過去にMPCに報告したデータとほとんど同じjd, ra, decを持つデータを再度報告すると怒られる.
 #      これを防ぐため過去の報告データが~/.coias/past_pre_repo_data/以下に保存されているため,
 #      それらとカレントにある報告データの照合を行って一致するデータを削除する.
+# 10. modify_preRepo_as_H_sequential.py
+#      前述の削除の影響で新天体の番号に欠番が生じ連番ではなくなるので,
+#      また連番になるように補正する.
+# 11. make_final_all_and_disp.py
+#      今までの諸々の名前の付け替えやデータの削除を反映させた, 最終的なall.txtとdisp.txtを作成する.
+#      final_all.txtには元画像の名前, 天体の軌道やサイズの情報も記載される.
 # 12. store_pre_repo3.py
 #      10.の過去との重複データの削除を行うため, カレントの報告データを
 #      ~/.coias/past_pre_repo_data/以下に保存する.
