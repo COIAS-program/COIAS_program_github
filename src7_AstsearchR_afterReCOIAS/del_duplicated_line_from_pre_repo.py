@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
-# Timestamp: 2023/10/02 22:30 sugiura 　=> 2023/08/10 20:00 urakawa
+# Timestamp: 2023/10/25 21:30 sugiura 　=> 2023/08/10 20:00 urakawa
 ################################################################################################
 # 過去にMPCに報告したデータ(同じファイル内でも違っても)とほとんど同じjd, ra, decを持つデータを再度報告すると,
 # 名前が一致していてもしていなくてもMPCに怒られる.
@@ -19,6 +19,11 @@
 #           最初の画像の前日と最後の画像の翌日も比較の対象にすることにした.
 #           将来的に速度の面で問題になるようならこの措置は取り消しても構わない.
 #
+# 2023/10/25 たとえ同時に複数枚測定をしていてある天体名の測定が十分にあったとしても,
+#            その天体の測定のうち測定点が1つしかないような測定日が1つでもあった場合,
+#            MPCにレポートごと丸ごとrejectされてしまう.
+#            そのため, 1 object / 1 night になるような測定もここで弾く.
+#
 # 入力: warp01_bin.fits 今回測定した画像観測日のyyyy-mm-ddを取得するために使用
 # 　　  pre_repo.txt
 # 出力: pre_repo2.txt
@@ -29,7 +34,6 @@
 ################################################################################################
 import traceback
 import os
-import shutil
 import glob
 from astropy.io import fits
 from astropy.time import Time
@@ -38,10 +42,6 @@ import PARAM
 
 # Define thresh arcsec
 DUPLICATE_THRESH_ARCSEC = 6.0
-
-
-class NothingToDo(Exception):
-    pass
 
 
 def extract_jd_ra_dec_info_from_MPC_line(MPCOneLine):
@@ -85,17 +85,6 @@ try:
         if yyyy_mm_dd not in distinct_yyyy_mm_dd_list:
             distinct_yyyy_mm_dd_list.append(yyyy_mm_dd)
     # -------------------------------------------------------
-
-    # ---check ~/.coias/past_pre_repo_data/yyyy-mm-dd directory exists or not
-    foundCheckDir = False
-    for yyyy_mm_dd in distinct_yyyy_mm_dd_list:
-        dirName = PARAM.COIAS_DATA_PATH + "/past_pre_repo_data/" + yyyy_mm_dd
-        if os.path.isdir(dirName):
-            foundCheckDir = True
-    if not foundCheckDir:
-        shutil.copy("pre_repo.txt", "pre_repo2.txt")
-        raise NothingToDo
-    # -----------------------------------------------------------------------
 
     # ---remove duplicate--------------------------
     preRepoInputFile = open("pre_repo.txt", "r")
@@ -147,6 +136,26 @@ try:
                 break
     # ---------------------------------------------
 
+    # ---remove 1 object / 1 night data -----------
+    # 各測定行は例えば
+    # "     H238748  C2019 09 27.27542 ......"
+    # のようになるため, 0 - 24 番目の文字で同じ天体・同じ測定日であるか判断できる
+
+    ### 各天体・各測定日ごとの測定行数をカウント
+    NObsPerObjectPerNight = {}
+    for i in range(len(inputLines)):
+        thisObjectNightStr = inputLines[i][0:25]
+        if thisObjectNightStr not in NObsPerObjectPerNight:
+            NObsPerObjectPerNight[thisObjectNightStr] = 0
+        NObsPerObjectPerNight[thisObjectNightStr] += 1
+
+    ### 各天体・各測定日の測定行数が1行しかないデータを削除
+    for i in reversed(range(len(inputLines))):
+        thisObjectNightStr = inputLines[i][0:25]
+        if NObsPerObjectPerNight[thisObjectNightStr] == 1:
+            del inputLines[i]
+    # ---------------------------------------------
+
     # ---remove objects with observation numbers smaller than 2-----
     if len(inputLines) != 0:
         prevObsName = inputLines[-1][0:12]
@@ -173,10 +182,6 @@ try:
     preRepoOutputFile.writelines(inputLines)
     preRepoOutputFile.close()
     # ---------------------------------------------
-
-except NothingToDo:
-    error = 0
-    errorReason = 74
 
 except FileNotFoundError:
     print(
