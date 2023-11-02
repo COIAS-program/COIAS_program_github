@@ -134,6 +134,7 @@ def get_imformation_from_findorb_html(htmlDocument, ndata):
             soup.find("a", href=hrefStr)
             .next_sibling.next_sibling.next_sibling.replace("(", "")
             .replace(")", "")
+            .replace("'", "")
             .split()
         )
         residX = residOrgs[0][len(residOrgs[0]) - 1] + "{0:.2f}".format(
