@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
-#Timestamp: 2022/11/4 8:30 sugiura
+# Timestamp: 2022/11/4 8:30 sugiura
 ######################################################################################################
 # print_progress()関数を記載したスクリプト.
 # またシェルスクリプトから直接呼び出せるようにif __name__ == "__main__":
@@ -18,58 +18,81 @@
 # 現在までに回ったfor文の回数をcurrentForLoopに指定する.
 #
 # このスクリプトが書き出す・読み込むprogress.txtの書式は以下:
-#    [ボタン名] [今までに通過したチェックポイント数] [ボタン内の全チェックポイント数] [ユーザーid]
+#    [ボタン名] [今までに通過したチェックポイント数] [ボタン内の全チェックポイント数]
 #######################################################################################################
 import os
 import argparse
 
-def print_progress(nTotalCheckPoints=0, currentButtonName=None, currentCheckPoint=0, nCheckPointsForLoop=0, nForLoop=0, currentForLoop=0):
+
+def print_progress(
+    nTotalCheckPoints=0,
+    currentButtonName=None,
+    currentCheckPoint=0,
+    nCheckPointsForLoop=0,
+    nForLoop=0,
+    currentForLoop=0,
+):
     progressFileName = "progress.txt"
-    
-    #---argument check----------------------------------------------------------
-    if nTotalCheckPoints<0 or currentCheckPoint<0 or nCheckPointsForLoop<0 or nForLoop<0 or currentForLoop<0:
-        raise ValueError(f"invalid arguments! nTotalCheckPoints={nTotalCheckPoints}, currentCheckPoint={currentCheckPoint}, nCheckPointsForLoop={nCheckPointsForLoop}, nForLoop={nForLoop}, currentForLoop={currentForLoop}")
 
-    if currentButtonName!=None:
+    # ---argument check----------------------------------------------------------
+    if (
+        nTotalCheckPoints < 0
+        or currentCheckPoint < 0
+        or nCheckPointsForLoop < 0
+        or nForLoop < 0
+        or currentForLoop < 0
+    ):
+        raise ValueError(
+            f"invalid arguments! nTotalCheckPoints={nTotalCheckPoints}, currentCheckPoint={currentCheckPoint}, nCheckPointsForLoop={nCheckPointsForLoop}, nForLoop={nForLoop}, currentForLoop={currentForLoop}"
+        )
+
+    if currentButtonName != None:
         if type(currentButtonName) is not str:
-            raise ValueError(f"not None currentButtonName should be string: currentButtonName={currentButtonName}")
-    
+            raise ValueError(
+                f"not None currentButtonName should be string: currentButtonName={currentButtonName}"
+            )
+
     modeFlagList = [nTotalCheckPoints, currentCheckPoint, nCheckPointsForLoop]
-    nNonZeroFlag = sum(flag>=1 for flag in modeFlagList)
-    if nNonZeroFlag>=2:
-        raise ValueError(f"number of non-zero flag argments should be 0 or 1. nTotalCheckPoints={nTotalCheckPoints}, currentCheckPoint={currentCheckPoint}, nCheckPointsForLoop={nCheckPointsForLoop}")
+    nNonZeroFlag = sum(flag >= 1 for flag in modeFlagList)
+    if nNonZeroFlag >= 2:
+        raise ValueError(
+            f"number of non-zero flag argments should be 0 or 1. nTotalCheckPoints={nTotalCheckPoints}, currentCheckPoint={currentCheckPoint}, nCheckPointsForLoop={nCheckPointsForLoop}"
+        )
 
-    if (nTotalCheckPoints!=0 and currentButtonName==None) or (nTotalCheckPoints==0 and currentButtonName!=None):
-        raise ValueError(f"For none-zero nTotalCheckPoints, currentButtonName should be specified. nTotalCheckPoints={nTotalCheckPoints}, currentButtonName={currentButtonName}")
+    if (nTotalCheckPoints != 0 and currentButtonName == None) or (
+        nTotalCheckPoints == 0 and currentButtonName != None
+    ):
+        raise ValueError(
+            f"For none-zero nTotalCheckPoints, currentButtonName should be specified. nTotalCheckPoints={nTotalCheckPoints}, currentButtonName={currentButtonName}"
+        )
 
-    if not os.path.isfile(progressFileName) and nTotalCheckPoints==0:
-        raise ValueError("If progress.txt does not exist, i.e., initial done, nTotalCheckPoints should be not zero: nTotalCheckPoints={nTotalCheckPoints}")
-    #---------------------------------------------------------------------------
-    
-    #---mode selection----------------------------------------------------------
+    if not os.path.isfile(progressFileName) and nTotalCheckPoints == 0:
+        raise ValueError(
+            "If progress.txt does not exist, i.e., initial done, nTotalCheckPoints should be not zero: nTotalCheckPoints={nTotalCheckPoints}"
+        )
+    # ---------------------------------------------------------------------------
+
+    # ---mode selection----------------------------------------------------------
     isCheckPointLoop = False
-    if nTotalCheckPoints==0 and currentCheckPoint==0 and nCheckPointsForLoop==0:
+    if nTotalCheckPoints == 0 and currentCheckPoint == 0 and nCheckPointsForLoop == 0:
         mode = "normal"
-    elif nTotalCheckPoints!=0:
+    elif nTotalCheckPoints != 0:
         mode = "initialize"
-    elif currentCheckPoint!=0:
+    elif currentCheckPoint != 0:
         mode = "specifyCurrentCheckPoint"
-    elif nCheckPointsForLoop!=0:
+    elif nCheckPointsForLoop != 0:
         mode = "forLoop"
-        if int(currentForLoop % (nForLoop/nCheckPointsForLoop)) == 0:
+        if int(currentForLoop % (nForLoop / nCheckPointsForLoop)) == 0:
             isCheckPointLoop = True
-    #---------------------------------------------------------------------------
+    # ---------------------------------------------------------------------------
 
     ### In forLoop mode, if not isCheckPointLoop, nothing to do
-    if mode=="forLoop" and not isCheckPointLoop:
+    if mode == "forLoop" and not isCheckPointLoop:
         return
 
-    #---get information in progress.txt-----------------------------------------
-    #---if progress.txt does not exist, we only set uid-------------------------
-    if not os.path.isfile(progressFileName):
-        uid = 0
-    else:
-        f = open(progressFileName,"r")
+    # ---get information in progress.txt-----------------------------------------
+    if os.path.isfile(progressFileName):
+        f = open(progressFileName, "r")
         line = f.readline()
         f.close()
 
@@ -77,10 +100,9 @@ def print_progress(nTotalCheckPoints=0, currentButtonName=None, currentCheckPoin
         readCurrentButtonName = contents[0]
         readCurrentCheckPoint = int(contents[1])
         readNTotalCheckPoints = int(contents[2])
-        uid = int(contents[3])
-    #---------------------------------------------------------------------------
+    # ---------------------------------------------------------------------------
 
-    #---modify information------------------------------------------------------
+    # ---modify information------------------------------------------------------
     ### normal or forLoop mode
     if mode == "normal" or mode == "forLoop":
         writeCurrentButtonName = readCurrentButtonName
@@ -96,28 +118,53 @@ def print_progress(nTotalCheckPoints=0, currentButtonName=None, currentCheckPoin
         writeCurrentButtonName = readCurrentButtonName
         writeCurrentCheckPoint = currentCheckPoint
         writeNTotalCheckPoints = readNTotalCheckPoints
-    #---------------------------------------------------------------------------
+    # ---------------------------------------------------------------------------
 
-    #---write progress to stdout or GUI-----------------------------------------
-    progres_percent = str(int((writeCurrentCheckPoint/writeNTotalCheckPoints)*100.0))
+    # ---write progress to stdout or GUI-----------------------------------------
+    progres_percent = str(
+        int((writeCurrentCheckPoint / writeNTotalCheckPoints) * 100.0)
+    )
     print(progres_percent + "% ", end="", flush=True)
     if writeCurrentCheckPoint == writeNTotalCheckPoints:
         print()
-    #---------------------------------------------------------------------------
+    # ---------------------------------------------------------------------------
 
-    #---write information to progress.txt---------------------------------------
-    f = open(progressFileName,"w")
-    f.write(f"{writeCurrentButtonName} {writeCurrentCheckPoint} {writeNTotalCheckPoints} {uid}")
+    # ---write information to progress.txt---------------------------------------
+    f = open(progressFileName, "w")
+    f.write(
+        f"{writeCurrentButtonName} {writeCurrentCheckPoint} {writeNTotalCheckPoints}"
+    )
     f.close()
-    #---------------------------------------------------------------------------
-
+    # ---------------------------------------------------------------------------
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("-c", "--currentcheck", type=int, default=0,    help="give a current check point for specify current check point mode")
-    parser.add_argument("-t", "--totalchecks",  type=int, default=0,    help="give a number of total check points for initialize mode")
-    parser.add_argument("-n", "--name",         type=str, default=None, help="give a current button name for inialize mode")
+    parser.add_argument(
+        "-c",
+        "--currentcheck",
+        type=int,
+        default=0,
+        help="give a current check point for specify current check point mode",
+    )
+    parser.add_argument(
+        "-t",
+        "--totalchecks",
+        type=int,
+        default=0,
+        help="give a number of total check points for initialize mode",
+    )
+    parser.add_argument(
+        "-n",
+        "--name",
+        type=str,
+        default=None,
+        help="give a current button name for inialize mode",
+    )
     args = parser.parse_args()
 
-    print_progress(nTotalCheckPoints=args.totalchecks, currentButtonName=args.name, currentCheckPoint=args.currentcheck)
+    print_progress(
+        nTotalCheckPoints=args.totalchecks,
+        currentButtonName=args.name,
+        currentCheckPoint=args.currentcheck,
+    )
