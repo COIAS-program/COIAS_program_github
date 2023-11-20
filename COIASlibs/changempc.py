@@ -48,6 +48,14 @@
 # change_dec_in_MPC_to_degree()関数:
 #     MPCフォーマットでのdec(±DD MM SS.ss)の文字列を引数に取り,
 #     それをdegree単位に変換して返す.
+#
+# parse_MPC80_and_get_jd_ra_dec()関数:
+#     MPC80行を引数に取り, 以下の5つのキーを持つ辞書を返す.
+#     first14Chars: 最初の14文字 (Cの左の4を含めて4まで) の文字列をそのまま格納 (str)
+#     jd:           時刻部分をjdに変換したもの (float)
+#     raDegree:     赤経部分をdegree単位に変換したもの (float)
+#     decDegree:    赤緯部分をdegree単位に変換したもの (float)
+#     last24Chars:  最後の24文字 (赤緯の小数点以下2桁目の右の空白を含めてそこから最後まで) の文字列をそのまま格納 (str). なお, 赤緯は小数点2桁目が省略されていることがあるため注意.
 #########################################################################
 from astropy.time import Time
 from astropy import units as u
@@ -212,4 +220,24 @@ def change_dec_in_MPC_to_degree(decInMPC):
         decDegree = int(contents[0]) - int(contents[1])/60.0 - float(contents[2])/3600.0
 
     return decDegree
+#-------------------------------------------------------------------------------------------
+
+#---function: input=MPC80line, output=dictionary with first14Chars, jd, ra[degree], dec[degree], last24Chars
+def parse_MPC80_and_get_jd_ra_dec(MPC80Line):
+    name = MPC80Line.split()[0]
+    if len(MPC80Line) != 80 or (len(name) != 5 and len(name) != 7) or MPC80Line[14] != "C":
+        raise ValueError(f"input line {MPC80Line} is not a valid MPC 80 Line!")
+
+    first14Chars = MPC80Line[0:14]
+    timePart =     MPC80Line[14:31]
+    raPart =       MPC80Line[32:43]
+    decPart =      MPC80Line[44:56]
+    last24Chars  = MPC80Line[56:81]
+
+    jd = change_datetime_in_MPC_to_jd(timePart)
+    raDegree = change_ra_in_MPC_to_degree(raPart)
+    decDegree = change_dec_in_MPC_to_degree(decPart)
+
+    returnDictionary = {"first14Chars": first14Chars, "jd": jd, "raDegree": raDegree, "decDegree": decDegree, "last24Chars": last24Chars}
+    return returnDictionary
 #-------------------------------------------------------------------------------------------
