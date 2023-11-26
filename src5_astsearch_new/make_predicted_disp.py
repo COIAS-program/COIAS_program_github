@@ -89,7 +89,7 @@ try:
                             contents[4]
                         )
                         obsJdStrList = contents[5 : len(contents)]
-                        xypix = wcs0.wcs_world2pix(raPre, decPre, 1)
+                        xypix = wcs0.wcs_world2pix(raPre, decPre, 0)
                         if (
                             xypix[0] > 0
                             and xypix[1] > 0
