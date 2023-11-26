@@ -161,7 +161,7 @@ try:
             if "TIME-MID" in hdu1[0].header:
                 t1 = Time(hdu1[0].header["TIME-MID"], format="isot", scale="utc")
             else:
-                t1 = Time(hdu1[0].header["DATE-AVG"], format="isot", scale="utc")
+                t1 = Time(hdu1[0].header["DATE-AVG"], format="isot", scale="tai")
             hdu1[0].header["JD"] = t1.jd
 
             ## Check existence of 'FLUXMAG0' in the header. (2021.12.24 NM)
