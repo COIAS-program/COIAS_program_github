@@ -49,7 +49,7 @@ def convertFits2PngCoords(fitsPosition):
     fitsYRelPos = float(fitsPosition[1])/float(FITSSIZES[1])
 
     pngXRelPos = fitsXRelPos
-    pngYRelPos = 1.0 - fitsYRelPos
+    pngYRelPos = (PNGSIZES[1] - 1) / PNGSIZES[1] - fitsYRelPos
 
     pngXPosition = int(pngXRelPos*PNGSIZES[0])
     pngYPosition = int(pngYRelPos*PNGSIZES[1])
@@ -64,7 +64,7 @@ def convertPng2FitsCoords(pngPosition):
     pngYRelPos = float(pngPosition[1])/float(PNGSIZES[1])
 
     fitsXRelPos = pngXRelPos
-    fitsYRelPos = 1.0 - pngYRelPos
+    fitsYRelPos = (FITSSIZES[1] - 1) / FITSSIZES[1] - pngYRelPos
 
     fitsXPosition = int(fitsXRelPos*FITSSIZES[0])
     fitsYPosition = int(fitsYRelPos*FITSSIZES[1])
