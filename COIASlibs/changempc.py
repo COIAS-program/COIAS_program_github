@@ -225,7 +225,7 @@ def change_dec_in_MPC_to_degree(decInMPC):
 #---function: input=MPC80line, output=dictionary with first14Chars, jd, ra[degree], dec[degree], last24Chars
 def parse_MPC80_and_get_jd_ra_dec(MPC80Line):
     name = MPC80Line.split()[0]
-    if len(MPC80Line) != 80 or (len(name) != 5 and len(name) != 7) or MPC80Line[14] != "C":
+    if len(MPC80Line) != 80 or MPC80Line[14] != "C":
         raise ValueError(f"input line {MPC80Line} is not a valid MPC 80 Line!")
 
     first14Chars = MPC80Line[0:14]
