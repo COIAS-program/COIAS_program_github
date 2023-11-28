@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
-# Timestamp: 2022/08/06 19:30 sugiura　=> 2023/08/10 20:00 urakawa
+# Timestamp: 2022/08/06 19:30 sugiura　=> 2023/08/10 20:00 urakawa => 2023/11/29 03:00 urakawa
 ###########################################################################################
 # jd, ra, decが一致している行が2行以上あった場合, 2つ目以降をダブりとして削除する.
 # さらに, 同一の名前の天体のデータで等級が中央値から0.7以上外れているものも削除し,
@@ -12,6 +12,8 @@
 # 　　    データが2行以下になる天体の除去を行った結果を書き出したもの.
 # 2023/08/10 20:00 urakawa
 #DUPLICATE_THRESH_ARCSEC = 6 を追加
+# 2023/11/29 03:00 urakawa
+# decがマイナスの場合の数値が間違っていたので修正
 ###########################################################################################
 import itertools
 import re
@@ -64,7 +66,11 @@ try:
         # data2 = open(tmp2,"r")
         data = np.loadtxt(tmp1, usecols=[3, 4, 5, 6, 7, 8, 9], ndmin=2)
         ra = data[:, 1] * 15 + data[:, 2] * 15 / 60 + data[:, 3] * 15 / 3600
-        dec = data[:, 4] + data[:, 5] / 60 + data[:, 6] / 3600
+        dec = np.abs(data[:, 4]) + data[:, 5] / 60 + data[:, 6] / 3600
+        if '-' in str(data[:, 4]):
+            dec = -1.0 * dec
+        else:
+            pass
         ra2 = ra.reshape(len(ra), 1)
         dec2 = dec.reshape(len(dec), 1)
         data2 = np.hstack((data, ra2, dec2))
