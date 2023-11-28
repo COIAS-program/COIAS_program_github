@@ -160,9 +160,10 @@ try:
             # S.U modify 2021/10/28 Correspondence both fits header keyword 'TIME-MID' and 'DATE-AVG')
             if "TIME-MID" in hdu1[0].header:
                 t1 = Time(hdu1[0].header["TIME-MID"], format="isot", scale="utc")
+                hdu1[0].header["JD"] = t1.jd
             else:
                 t1 = Time(hdu1[0].header["DATE-AVG"], format="isot", scale="tai")
-            hdu1[0].header["JD"] = t1.jd
+                hdu1[0].header["JD"] = t1.utc.jd
 
             ## Check existence of 'FLUXMAG0' in the header. (2021.12.24 NM)
             try:
