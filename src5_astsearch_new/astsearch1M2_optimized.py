@@ -396,8 +396,9 @@ try:
     for f in range(NImage):
         textFNamesList.append(ascii.read(textFileNames[f]))
         xy = np.array([textFNamesList[f]["X_IMAGE"], textFNamesList[f]["Y_IMAGE"]])
+        xy -= 1 # 1-indexed to 0-indexed
         xy = xy.T
-        radecList.append(wcs0.wcs_pix2world(xy, 1))
+        radecList.append(wcs0.wcs_pix2world(xy, 0))
         magList = np.array(textFNamesList[f]["MAG_BEST"])
         gyou = len(radecList[f])
         tt = np.zeros(gyou) + jdList[f]
@@ -499,7 +500,7 @@ try:
                 xypix = wcs0.wcs_world2pix(
                     trackletListAll[p][k].data[image][1],
                     trackletListAll[p][k].data[image][2],
-                    1,
+                    0,
                 )
 
                 # param of aperture
@@ -655,7 +656,7 @@ try:
                 xypix = wcs0.wcs_world2pix(
                     trackletListAll[p][k].data[image][1],
                     trackletListAll[p][k].data[image][2],
-                    1,
+                    0,
                 )
                 result.append(
                     [

@@ -44,15 +44,9 @@ WINDOWRATIO  = float(WINDOWWIDTH)/1440.0
 def convertFits2PngCoords(fitsPosition):
     if fitsPosition[0]>FITSSIZES[0] or fitsPosition[1]>FITSSIZES[1]:
         raise ValueError("invalid fits positions! X={0:d} Xmax={1:d} Y={2:d} Ymax={3:d}".format(fitsPosition[0],FITSSIZES[0],fitsPosition[1],FITSSIZES[1]))
-    
-    fitsXRelPos = float(fitsPosition[0])/float(FITSSIZES[0])
-    fitsYRelPos = float(fitsPosition[1])/float(FITSSIZES[1])
 
-    pngXRelPos = fitsXRelPos
-    pngYRelPos = 1.0 - fitsYRelPos
-
-    pngXPosition = int(pngXRelPos*PNGSIZES[0])
-    pngYPosition = int(pngYRelPos*PNGSIZES[1])
+    pngXPosition = fitsPosition[0]
+    pngYPosition = PNGSIZES[1] - fitsPosition[1] - 1
 
     return (pngXPosition, pngYPosition)
 
@@ -60,14 +54,8 @@ def convertPng2FitsCoords(pngPosition):
     if pngPosition[0]>PNGSIZES[0] or pngPosition[1]>PNGSIZES[1]:
         raise ValueError("invalid png positions! X={0:d} Xmax={1:d} Y={2:d} Ymax={3:d}".format(pngPosition[0],PNGSIZES[0],pngPosition[1],PNGSIZES[1]))
 
-    pngXRelPos = float(pngPosition[0])/float(PNGSIZES[0])
-    pngYRelPos = float(pngPosition[1])/float(PNGSIZES[1])
-
-    fitsXRelPos = pngXRelPos
-    fitsYRelPos = 1.0 - pngYRelPos
-
-    fitsXPosition = int(fitsXRelPos*FITSSIZES[0])
-    fitsYPosition = int(fitsYRelPos*FITSSIZES[1])
+    fitsXPosition = pngPosition[0]
+    fitsYPosition = FITSSIZES[1] - pngPosition[1] - 1
 
     return (fitsXPosition, fitsYPosition)
 ######################################################################

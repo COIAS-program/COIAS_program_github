@@ -42,7 +42,7 @@ def get_photometry_and_radec(scidata, threeAparturePoints, nbin, zm):
         return None
 
     w1 = wcs.WCS(scidata[0].header)
-    radec = w1.wcs_pix2world([rect["center"]], 1)
+    radec = w1.wcs_pix2world([rect["center"]], 0)
 
     # ---photometry------------
     ap = RectangularAperture(
