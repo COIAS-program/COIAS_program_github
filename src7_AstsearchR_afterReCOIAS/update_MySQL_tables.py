@@ -77,7 +77,7 @@ try:
         if len(contents) != 0:
             if (
                 re.fullmatch("\w[0-9]{4}", contents[0])
-                or re.fullmatch("~[0-9]{4}", contents[0])
+                or re.fullmatch("~....", contents[0])
                 or re.fullmatch("J......", contents[0])
                 or re.fullmatch("K......", contents[0])
                 or re.fullmatch("H[0-9]{6}", contents[0])
@@ -199,7 +199,7 @@ try:
         ## line including mpc format information
         elif (
             re.fullmatch("\w[0-9]{4}", contents[0])
-            or re.fullmatch("~[0-9]{4}", contents[0])
+            or re.fullmatch("~....", contents[0])
             or re.fullmatch("J......", contents[0])
             or re.fullmatch("K......", contents[0])
             or re.fullmatch("H[0-9]{6}", contents[0])
