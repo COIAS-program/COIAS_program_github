@@ -39,13 +39,17 @@ from astropy.io import fits
 from astropy.time import Time
 import print_detailed_log
 import PARAM
+import changempc
 
 # Define thresh arcsec
 DUPLICATE_THRESH_ARCSEC = 6.0
+# Define thresh jd (40秒に対応する時間をjd単位で設定する)
+DUPLICATE_THRESH_JD = 40.0 / (24 * 60 * 60)
 
 
 def extract_jd_ra_dec_info_from_MPC_line(MPCOneLine):
-    jdStr = MPCOneLine[15:31]
+    jdStr = MPCOneLine[14:31]
+    jd = changempc.change_datetime_in_MPC_to_jd(jdStr)
 
     raHour = float(MPCOneLine.split()[4])
     raMin = float(MPCOneLine.split()[5])
@@ -61,7 +65,7 @@ def extract_jd_ra_dec_info_from_MPC_line(MPCOneLine):
     decSec = sign * float(MPCOneLine.split()[9])
     decArcSec = decDegree * 60 * 60 + decMin * 60 + decSec
 
-    return {"jdStr": jdStr, "raArcSec": raArcSec, "decArcSec": decArcSec}
+    return {"jd": jd, "raArcSec": raArcSec, "decArcSec": decArcSec}
 
 
 try:
@@ -123,8 +127,9 @@ try:
                 ### we delete the line and do not output it
                 raDiff = abs(inputLineInfo["raArcSec"] - compareLineInfo["raArcSec"])
                 decDiff = abs(inputLineInfo["decArcSec"] - compareLineInfo["decArcSec"])
+                jdDiff = abs(inputLineInfo["jd"] - compareLineInfo["jd"])
                 if (
-                    inputLineInfo["jdStr"] == compareLineInfo["jdStr"]
+                    jdDiff < DUPLICATE_THRESH_JD
                     and raDiff < DUPLICATE_THRESH_ARCSEC
                     and decDiff < DUPLICATE_THRESH_ARCSEC
                 ):
