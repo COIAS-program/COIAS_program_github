@@ -149,7 +149,7 @@ def change_ra_dec_to_MPC_format(raDegreeOrg, decDegreeOrg):
     raHourStr = "{:02d}".format(raHour)
     raMinit = int(coord.ra.hms[1])
     raMinitStr = "{:02d}".format(raMinit)
-    raSecond = np.round(coord.ra.hms[2],decimals=2)
+    raSecond = int(coord.ra.hms[2]*100.0)/100.0 #小数点以下3桁目で切り捨てる
     raSecondStr = "{:.2f}".format(raSecond)
     raSecondStr = raSecondStr.rjust(5,'0')
 
@@ -157,7 +157,7 @@ def change_ra_dec_to_MPC_format(raDegreeOrg, decDegreeOrg):
     decDegree = coord.dec.dms[0]
     decDegreeInt = int(decDegree)
     decMinit = int(coord.dec.dms[1])
-    decSecond = np.round(coord.dec.dms[2],decimals=2)
+    decSecond = int(coord.dec.dms[2]*100.0)/100.0 #小数点以下3桁目で切り捨てる
     
     if decDegreeOrg > 0.0:
         decDegreeStr = '+'+"{:02d}".format(decDegreeInt)
