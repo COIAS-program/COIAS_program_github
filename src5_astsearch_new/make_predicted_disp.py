@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# timestamp: 2022/08/28 15:30 sugiura
+# timestamp: 2023/12/29 8:00 sugiura
 ###################################################################################
 # 過去に測定したデータのうち, 今回の測定の観測日から2日以内のデータを用いて,
 # それら過去のデータで検出された新天体が今回の観測画像のどこにいるか予測して座標を書き出す.
 # 同じ観測日から予測することもあり得る. またその予測が過去にすでに測定された時刻になされるなら,
 # それは予測ではなく「すでに観測した」ということを示すことに使える. その区別もつける.
+#
+# 2023/12/29 UTC => 2023年11月の修正時, coefficients_for_predict.txtファイルは修正していない.
+#                   「すでに観測した」という判定は, 今測定している画像のjdがこのファイルに厳密一致で含まれているかどうかで判定するため,
+#                   TAI => UTCの変換によりjdがずれるとその判定ができなくなる. (=全て予測になってしまう)
+#                   これを避けるため, jdの厳密一致ではなく40秒までの差なら一致していると見做すようにする.
 #
 # 入力: ~/.coias/past_pre_repo_data/以下の今回の測定の観測日から2日以内の
 # 　　  coefficients_for_predict.txt
@@ -21,6 +26,20 @@ from astropy.wcs import wcs
 from astropy.time import Time
 import print_detailed_log
 import PARAM
+
+# Define thresh jd (40秒に対応する時間をjd単位で設定する)
+DUPLICATE_THRESH_JD = 40.0 / (24 * 60 * 60)
+
+# 第一引数のjd(str)が, 第2引数のjd(str)のリストに含まれているかどうかを判定する
+# ここで含まれているとは, 差が DUPLICATE_THRESH_JD 以下であることを言う
+def isJdIncluded(thisJdStr, compareJdStrList):
+    isIncluded = False
+    for compareJdStr in compareJdStrList:
+        diffJd = abs(float(thisJdStr) - float(compareJdStr))
+        if diffJd < DUPLICATE_THRESH_JD:
+            isIncluded = True
+
+    return isIncluded
 
 try:
     ### suppress warnings #########################################################
@@ -96,7 +115,7 @@ try:
                             and xypix[0] < XPixelMax
                             and xypix[1] < YPixelMax
                         ):
-                            if warpJdStrList[image] in obsJdStrList:
+                            if isJdIncluded(warpJdStrList[image], obsJdStrList):
                                 isMeasured = 1
                             else:
                                 isMeasured = 0
