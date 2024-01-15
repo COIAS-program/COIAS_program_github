@@ -26,6 +26,7 @@ import subprocess
 import traceback
 import requests.exceptions
 import os
+import time
 import print_progress
 import print_detailed_log
 import PARAM
@@ -207,17 +208,17 @@ try:
                         findOrbResult = get_imformation_from_findorb_html(
                             request_find_orb(obsList), len(obsList)
                         )
-                    except requests.exceptions.ConnectionError:
+                    except Exception as e:
                         print(
                             "Failed to access to online findOrb. Ntry={0:d}. Try again.".format(
                                 errorCount
                             )
                         )
                         errorCount += 1
+                        time.sleep(1)
                         if errorCount >= 20:
-                            raise requests.exceptions.ConnectionError
-                    except Exception:
-                        raise Exception
+                            print(e)
+                            raise Exception
                     else:
                         break
 
