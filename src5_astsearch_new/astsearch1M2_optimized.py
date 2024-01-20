@@ -386,7 +386,7 @@ try:
             wcs0 = wcs.WCS(scidata[0].header)
 
     if nbinList[0] == 4:
-        APARTURE_RADIUS = APARTURE_RADIUS / 2.0
+        APARTURE_RADIUS = int(APARTURE_RADIUS // 2)
     # --------------------------------------------------
 
     # ---read ascii source list-------------------------
