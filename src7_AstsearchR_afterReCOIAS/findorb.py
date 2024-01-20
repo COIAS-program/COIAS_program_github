@@ -30,6 +30,11 @@ import print_progress
 import print_detailed_log
 import PARAM
 
+
+class FindOrbError(Exception):
+    pass
+
+
 ### FUNCTIONS #######################################################
 def request_find_orb(mpcformat, orbit_type=-2):
     """
@@ -68,8 +73,15 @@ def get_imformation_from_findorb_html(htmlDocument, ndata):
     ).next_sibling.split("\n")
 
     ## hyperbolic orbit or insane observations
+    ## 双曲線軌道は貴重なので, 誤差0として返す
     if orbElemStrList[3][0] == "q":
-        retDict = {"None": None}
+        residuals = [["0.00", "0.00"] for i in range(ndata)]
+        retDict = {
+            "orbElemSentence": "We do not calculate orbital elements for a possible hyperbolic object.\n",
+            "sizeSentence": "We do not calculate its size for a possible hyperbolic object.\n",
+            "obsArcSentence": "We do not calculate observatinal arc for a possible hyperbolic object.\n",
+            "residuals": residuals,
+        }
         return retDict
 
     ## large error
@@ -90,7 +102,7 @@ def get_imformation_from_findorb_html(htmlDocument, ndata):
         di = orbElemStrList[6].split()[7]
     # -------------------------------------------------
 
-    #---extract MOIDs: Ea-----------------------------
+    # ---extract MOIDs: Ea-----------------------------
     MOIDsEa = "NoData"
     comments = soup.find_all(string=lambda text: isinstance(text, Comment))
     for c in comments:
@@ -193,15 +205,18 @@ try:
                 nCheckPointsForLoop=9, nForLoop=len(lines), currentForLoop=l
             )
 
+            # --- 天体名が切り替わった直後の行でこのif文の中に入る --------------------------------------------------
             if (
                 lines[l].split()[0] != prevObsName
                 or len(lines[l].split()) == 0
                 or l == len(lines) - 1
             ):
-
                 if l == len(lines) - 1:
                     obsList.append(lines[l].rstrip("\n"))
 
+                # --- online findOrbから情報を得る ------------------------------------------
+                # --- 接続不調と思われるエラーの場合は20回試行を繰り返す --------------------------
+                # --- それでもダメか, 別の原因の場合は, desktop findOrbを試す部分に飛ばす ---------
                 while True:
                     try:
                         findOrbResult = get_imformation_from_findorb_html(
@@ -215,45 +230,40 @@ try:
                         )
                         errorCount += 1
                         if errorCount >= 20:
-                            raise requests.exceptions.ConnectionError
+                            raise FindOrbError
                     except Exception:
-                        raise Exception
+                        raise FindOrbError
                     else:
                         break
+                # --- online findOrb終了 -------------------------------------------------
 
-                if "None" not in findOrbResult:
+                # --- findOrbで得られた情報書き出し -----------------------------------------
+                if len(prevObsName) == 5:
+                    fOrbElem.write(
+                        prevObsName.ljust(12) + ": " + findOrbResult["orbElemSentence"]
+                    )
+                    fOrbElem.write("              " + findOrbResult["sizeSentence"])
+                    fOrbElem.write("              " + findOrbResult["obsArcSentence"])
 
-                    if len(prevObsName) == 5:
-                        fOrbElem.write(
-                            prevObsName.ljust(12)
-                            + ": "
-                            + findOrbResult["orbElemSentence"]
-                        )
-                        fOrbElem.write("              " + findOrbResult["sizeSentence"])
-                        fOrbElem.write(
-                            "              " + findOrbResult["obsArcSentence"]
-                        )
+                elif len(prevObsName) == 7:
+                    fOrbElem.write(
+                        prevObsName.ljust(7) + ": " + findOrbResult["orbElemSentence"]
+                    )
+                    fOrbElem.write("         " + findOrbResult["sizeSentence"])
+                    fOrbElem.write("         " + findOrbResult["obsArcSentence"])
 
-                    elif len(prevObsName) == 7:
-                        fOrbElem.write(
-                            prevObsName.ljust(7)
-                            + ": "
-                            + findOrbResult["orbElemSentence"]
-                        )
-                        fOrbElem.write("         " + findOrbResult["sizeSentence"])
-                        fOrbElem.write("         " + findOrbResult["obsArcSentence"])
+                for o in range(len(obsList)):
+                    fResult.write(
+                        obsList[o]
+                        + " |"
+                        + findOrbResult["residuals"][o][0].rjust(10)
+                        + findOrbResult["residuals"][o][1].rjust(10)
+                        + "\n"
+                    )
+                # --- findOrb情報書き出し終了 ----------------------------------------------
 
-                    for o in range(len(obsList)):
-                        fResult.write(
-                            obsList[o]
-                            + " |"
-                            + findOrbResult["residuals"][o][0].rjust(10)
-                            + findOrbResult["residuals"][o][1].rjust(10)
-                            + "\n"
-                        )
-
-                    obsList = [lines[l].rstrip("\n")]
-
+                obsList = [lines[l].rstrip("\n")]
+            # --- 天体名切り替わりif文終了 -------------------------------------------------------------------
             else:
                 obsList.append(lines[l].rstrip("\n"))
 
@@ -262,9 +272,9 @@ try:
         fResult.close()
         fOrbElem.close()
 
-except requests.exceptions.ConnectionError:
+except FindOrbError:
     print(
-        "You do not connect to the internet in findorb.py. We try desktop findorb.",
+        "You do not connect to the internet or failed to fetch result in findorb.py. We try desktop findorb.",
         flush=True,
     )
     completed_process = subprocess.run(
