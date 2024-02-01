@@ -25,7 +25,7 @@ flowchart TD
     P --> S[/disp.txt/]
 
     subgraph predict
-        A1[/"~"/.coias/past_pre_repo_data/\nyyyy-mm-dd/coefficients_for_predict.txt/] --- B1[[make_predicted_disp.py]]
+        A1[MySQLのmeasure_resultテーブル] --- B1[[make_predicted_disp.py]]
         B1 --> C1[/predicted_disp.txt/]
     end
 
