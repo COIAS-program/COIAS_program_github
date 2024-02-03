@@ -32,6 +32,8 @@ N_SEARCH_PATCHES = 5
 N_INTERPOLATION_VALID_PATCHES = 3
 # Define thresh jd (40秒に対応する時間をjd単位で設定する)
 DUPLICATE_THRESH_JD = 40.0 / (24 * 60 * 60)
+# 何日先のデータまでなら問答無用で予測円に使用するか
+ABSOLUTE_PREDICT_LIMIT_DAY = 2.5
 
 
 class NothingToDo(Exception):
@@ -152,7 +154,7 @@ try:
         warpAndObjectJdDiff = calcWarpAndObjectJdDiff(
             warpJdMin, warpJdMax, objectJdMinInfo["jd"], objectJdMaxInfo["jd"]
         )
-        if warpAndObjectJdDiff < 2.5:
+        if warpAndObjectJdDiff < ABSOLUTE_PREDICT_LIMIT_DAY:
             continue
 
         # 概ね 速度 x |選択画像時刻 - その天体の測定時刻| > 数patch な天体は消す
