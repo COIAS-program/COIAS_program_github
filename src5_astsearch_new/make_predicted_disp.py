@@ -158,7 +158,10 @@ try:
             continue
 
         # 概ね 速度 x |選択画像時刻 - その天体の測定時刻| > 数patch な天体は消す
-        if speed * warpAndObjectJdDiff > N_INTERPOLATION_VALID_PATCHES * PATCH_SIZE_ROUGH_DEGREE:
+        if (
+            speed * warpAndObjectJdDiff
+            > N_INTERPOLATION_VALID_PATCHES * PATCH_SIZE_ROUGH_DEGREE
+        ):
             deleteObjectNames.append(objectName)
 
     # 実際の削除処理

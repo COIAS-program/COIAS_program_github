@@ -42,7 +42,7 @@ flowchart TD
     V --> W[/pre_repo.txt/]
     X[/bright_asteroid_MPC_names_in_the_field.txt/] --- V
 	W --- b[[del_duplicated_line_from_pre_repo.py]]
-	c[/"~".coias/past_pre_repo_data/\n以下のpre_repo_*.txt/] --- b
+	c[/measure_resultテーブル/] --- b
 	b --> d[/pre_repo2.txt/]
     d --- Y[[modify_preRepo_as_H_sequential.py]]
     r[/"~/.coias/param/max_H_number.txt"/] --> Y
@@ -52,9 +52,9 @@ flowchart TD
     N --- Y
     Z --- e[[komejirushi.py]]
     e --> f[/send_mpc.txt/]
-    Z --- g[[store_pre_repo3.py]]
-    g --> h[/"~"/.coias/past_pre_repo_data/以下にコピー/]
-    g --> m[/"~"/.coias/past_pre_repo_data/\nyyyy-mm-dd/coefficients_for_predict.txt/]
+    Z --- g[[store_pre_repo3.py\n未使用]]
+    g --> h[/"~"/.coias/past_pre_repo_data/以下にコピー\n未使用/]
+    g --> m[/"~"/.coias/past_pre_repo_data/\nyyyy-mm-dd/coefficients_for_predict.txt\n未使用/]
     a --- i[[make_final_all_and_disp.py]]
     Z --- i
     L --- i

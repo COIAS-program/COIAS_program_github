@@ -1,147 +1,159 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
-# Timestamp: 2023/10/25 21:30 sugiura 　=> 2023/08/10 20:00 urakawa
+# Timestamp: 2024/2/3 14:00 sugiura, 2023/08/10 20:00 urakawa
 ################################################################################################
 # 過去にMPCに報告したデータ(同じファイル内でも違っても)とほとんど同じjd, ra, decを持つデータを再度報告すると,
 # 名前が一致していてもしていなくてもMPCに怒られる.
-# これを防ぐため過去の報告データ(pre_repo3_*.txt)が~/.coias/past_pre_repo_data/以下に保存されているので,
-# それらとカレントにある報告データ(pre_repo.txt)の照合を行って一致するデータを削除する.
-# 削除の結果カレントに書き出されるファイルがpre_repo3.txtである.
-# なお, ~/.coias/past_pre_repo_data/以下のpre_repo3_*.txtの一行目にはこのファイルの作成を行った
-# ディレクトリの絶対パスが記載されている.
-# この記載ディレクトリとカレントディレクトリが一致している場合は, 削除を行わない.
+# これを防ぐため過去の報告データ(measure_resultテーブル)とカレントにある報告データ(pre_repo.txt)の照合を行って一致するデータを削除する.
+# 削除の結果カレントに書き出されるファイルがpre_repo2.txtである.
+# measure_resultテーブルに記載のディレクトリとカレントディレクトリが一致している場合は, 削除を行わない.
 # なぜならば, AstsearchR_afterReCOIASを何らかの理由でカレントディレクトリで2回連続で実行した場合,
-# 1回目の実行時に現在のpre_repo3.txtが~/.coias/past_pre_repo_data/以下に保存されるが,
+# 1回目の実行時に測定データがmeasure_resultテーブルに保存されるが,
 # 2回目の実行時にこれを削除の照合対象にしたらカレントのpre_repo.txtと全て一致して全部消えてしまうからである.
 # (原則として画像を変えたら作業ディレクトリも変えるということを念頭に置いている)
-#
-# 2023/10/2 2日連続の測定がなされた場合, 弾くべきデータがこの日の前後にも存在する可能性があるため,
-#           最初の画像の前日と最後の画像の翌日も比較の対象にすることにした.
-#           将来的に速度の面で問題になるようならこの措置は取り消しても構わない.
 #
 # 2023/10/25 たとえ同時に複数枚測定をしていてある天体名の測定が十分にあったとしても,
 #            その天体の測定のうち測定点が1つしかないような測定日が1つでもあった場合,
 #            MPCにレポートごと丸ごとrejectされてしまう.
 #            そのため, 1 object / 1 night になるような測定もここで弾く.
 #
-# 入力: warp01_bin.fits 今回測定した画像観測日のyyyy-mm-ddを取得するために使用
-# 　　  pre_repo.txt
+# 入力: warp*_bin.fits 今回測定した画像の中心座標と時刻一覧を取得するのに使用
+# 　　  measure_resultテーブル
 # 出力: pre_repo2.txt
-# 　　    過去の計測で出力されたpre_repo3_*.txtと照合を行い, jd, ra, decがほぼ一致したデータを
-# 　　    pre_repo.txtから削除したもの.
+# 　　    measure_resultテーブルの過去のデータと照合を行い,
+# 　　    jd, ra, decがほぼ一致したデータをpre_repo.txtから削除したもの.
 # 2023/08/10 20:00 urakawa
-# L123 L124 raDiff, decDiffを4.0秒角に変更=>DUPLICATE_THRESH_ARCSEC で定義に変更
+# raDiff, decDiffを6.0秒角に変更=>DUPLICATE_THRESH_ARCSEC で定義に変更
 ################################################################################################
 import traceback
+import sys
 import os
 import glob
 from astropy.io import fits
-from astropy.time import Time
+from astropy.wcs import wcs
 import print_detailed_log
 import PARAM
 import changempc
+import COIAS_MySQL
 
-# Define thresh arcsec
-DUPLICATE_THRESH_ARCSEC = 6.0
+
+# Define thresh degree (6.0秒角に対応する角度をdegree単位で設定する)
+DUPLICATE_THRESH_DEGREE = 6.0 / 3600.0
 # Define thresh jd (40秒に対応する時間をjd単位で設定する)
 DUPLICATE_THRESH_JD = 40.0 / (24 * 60 * 60)
+# measure_resultテーブルからデータを拾ってくるra, decの範囲(degree)
+SEARCH_RA_DEC_RANGE_DEGREE = 0.4
 
 
-def extract_jd_ra_dec_info_from_MPC_line(MPCOneLine):
-    jdStr = MPCOneLine[14:31]
-    jd = changempc.change_datetime_in_MPC_to_jd(jdStr)
-
-    raHour = float(MPCOneLine.split()[4])
-    raMin = float(MPCOneLine.split()[5])
-    raSec = float(MPCOneLine.split()[6])
-    raArcSec = (360.0 / 24.0) * (raHour * 60 * 60 + raMin * 60 + raSec)
-
-    decDegree = float(MPCOneLine.split()[7])
-    if decDegree < 0.0:
-        sign = -1.0
-    else:
-        sign = 1.0
-    decMin = sign * float(MPCOneLine.split()[8])
-    decSec = sign * float(MPCOneLine.split()[9])
-    decArcSec = decDegree * 60 * 60 + decMin * 60 + decSec
-
-    return {"jd": jd, "raArcSec": raArcSec, "decArcSec": decArcSec}
+class NothingToDo(Exception):
+    pass
 
 
 try:
-    # ---get distinct yyyy-mm-dd list of this measurement---
-    warpFileNameList = glob.glob("warp*_bin.fits")
-    jdList = []
-    for i in range(len(warpFileNameList)):
-        scidata = fits.open(warpFileNameList[i])
+    ### suppress warnings #########################################################
+    if not sys.warnoptions:
+        import warnings
+
+        warnings.simplefilter("ignore")
+
+    # ---MySQL DBのmeasure_resultテーブルが必須なため, web COIASでない場合は何もしない---
+    if not PARAM.IS_WEB_COIAS:
+        print("This script that removes near duplicates requires COIAS MySQL table.")
+        print("So that we ignore this script for NON WEB COIAS mode.")
+        raise NothingToDo
+    # ----------------------------------------------------------------------------
+
+    # ---測定している画像の中心のra, decおよびjdの最大・最小値を取得--
+    ### 中心座標取得
+    # ピクセル最大値取得
+    scidata = fits.open("warp01_bin.fits")
+    XPixelMax = scidata[0].header["NAXIS1"]
+    YPixelMax = scidata[0].header["NAXIS2"]
+
+    # WCS情報取得
+    wcs0 = wcs.WCS(scidata[0].header)
+
+    # 画像中央のra・dec取得
+    raDecCenter = wcs0.wcs_pix2world(XPixelMax / 2.0, YPixelMax / 2.0, 0)
+    raCenterDeg = raDecCenter[0]
+    decCenterDeg = raDecCenter[1]
+
+    ### jdの最大値と最小値を取得
+    # 画像の時刻の一覧を取得
+    warpFileNameList = sorted(glob.glob("warp*_bin.fits"))
+    warpJdList = []
+    for fileName in warpFileNameList:
+        scidata = fits.open(fileName)
         jd = scidata[0].header["JD"]
-        jdList.append(jd)
-        if i == 0:
-            jdList.append(jd - 1)
-        if i == len(warpFileNameList) - 1:
-            jdList.append(jd + 1)
+        warpJdList.append(jd)
 
-    distinct_yyyy_mm_dd_list = []
-    for jd in jdList:
-        tInTimeObj = Time(jd, format="jd")
-        tInIso = tInTimeObj.iso
-        yyyy_mm_dd = tInIso.split()[0]
-        if yyyy_mm_dd not in distinct_yyyy_mm_dd_list:
-            distinct_yyyy_mm_dd_list.append(yyyy_mm_dd)
-    # -------------------------------------------------------
+    # 最大値と最小値取得
+    jdMax = max(warpJdList)
+    jdMin = min(warpJdList)
+    # --------------------------------------------------------
 
-    # ---remove duplicate--------------------------
+    # ---measure_resultテーブルから近いデータを取得----------------
+    # ---検索範囲は, ra・decに関して画像中心からSEARCH_RA_DEC_RANGE_DEGREE以内,
+    # ---jdに関して選択画像のjdの最大・最小よりさらにDUPLICATE_THRESH_JD違うjd以内.
+    # ---ただし, work_dirがカレントディレクトリと一致するものは除外
+    currentDir = os.getcwd()
+    searchJdMax = jdMax + DUPLICATE_THRESH_JD
+    searchJdMin = jdMin - DUPLICATE_THRESH_JD
+    searchRaMax = raCenterDeg + SEARCH_RA_DEC_RANGE_DEGREE
+    searchRaMin = raCenterDeg - SEARCH_RA_DEC_RANGE_DEGREE
+    searchDecMax = decCenterDeg + SEARCH_RA_DEC_RANGE_DEGREE
+    searchDecMin = decCenterDeg - SEARCH_RA_DEC_RANGE_DEGREE
+
+    # jdの検索条件
+    jdConditionStr = f"(jd > {searchJdMin} AND jd < {searchJdMax})"
+    # raについては周期的になっているため、範囲を超えた場合のケアが必要
+    if searchRaMin < 0.0:
+        searchRaMin2 = searchRaMin + 360.0
+        raConditionStr = f"((ra_deg > {searchRaMin} AND ra_deg < {searchRaMax}) OR ra_deg > {searchRaMin2})"
+    elif searchRaMax > 360.0:
+        searchRaMax2 = searchRaMax - 360.0
+        raConditionStr = f"((ra_deg > {searchRaMin} AND ra_deg < {searchRaMax}) OR ra_deg < {searchRaMax2})"
+    else:
+        raConditionStr = f"(ra_deg > {searchRaMin} AND ra_deg < {searchRaMax})"
+    # decの検索条件
+    decConditionStr = f"(dec_deg > {searchDecMin} AND dec_deg < {searchDecMax})"
+    # work_dirの検索条件
+    dirConditionStr = f"(work_dir != '{currentDir}')"
+
+    # 検索実行
+    connection, cursor = COIAS_MySQL.connect_to_COIAS_database()
+    cursor.execute(
+        f"SELECT jd, ra_deg, dec_deg FROM measure_result WHERE {jdConditionStr} AND {raConditionStr} AND {decConditionStr} AND {dirConditionStr}"
+    )
+    queryResult = cursor.fetchall()
+    # ---------------------------------------------------------
+
+    # ---remove duplicate--------------------------------------
     preRepoInputFile = open("pre_repo.txt", "r")
     inputLines = preRepoInputFile.readlines()
     preRepoInputFile.close()
 
-    currentDir = os.getcwd()
-    compareFileNames = []
-    for yyyy_mm_dd in distinct_yyyy_mm_dd_list:
-        compareFileNames += sorted(
-            glob.glob(
-                PARAM.COIAS_DATA_PATH
-                + "/past_pre_repo_data/"
-                + yyyy_mm_dd
-                + "/pre_repo3_*.txt"
-            )
-        )
     for l in reversed(range(len(inputLines))):
         inputLine = inputLines[l]
-        inputLineInfo = extract_jd_ra_dec_info_from_MPC_line(inputLine)
-        duplicateFlag = False
+        inputLineInfo = changempc.parse_MPC80_and_get_jd_ra_dec(inputLine.rstrip("\n"))
 
-        for fileName in compareFileNames:
-            compareFile = open(fileName, "r")
-            compareLines = compareFile.readlines()
-            compareFile.close()
-
-            if compareLines[0].rstrip("\n") == currentDir:
-                ### we skip the data produced from the same working directory
-                continue
-
-            for lc in range(1, len(compareLines)):
-                compareLineInfo = extract_jd_ra_dec_info_from_MPC_line(compareLines[lc])
-                ### compare compareLine and inputLine
-                ### if jd exactly match, differences of ra and dec are smaller than 6 arcsec
-                ### we delete the line and do not output it
-                raDiff = abs(inputLineInfo["raArcSec"] - compareLineInfo["raArcSec"])
-                decDiff = abs(inputLineInfo["decArcSec"] - compareLineInfo["decArcSec"])
-                jdDiff = abs(inputLineInfo["jd"] - compareLineInfo["jd"])
-                if (
-                    jdDiff < DUPLICATE_THRESH_JD
-                    and raDiff < DUPLICATE_THRESH_ARCSEC
-                    and decDiff < DUPLICATE_THRESH_ARCSEC
-                ):
-                    del inputLines[l]
-                    duplicateFlag = True
-                    break
-
-            if duplicateFlag:
+        for aResult in queryResult:
+            ### compare aResult and inputLine
+            ### if difference of jd is smaller than 40 sec and differences of ra and dec are smaller than 6 arcsec
+            ### we delete the line and do not output it
+            raDiff = abs(inputLineInfo["raDegree"] - aResult["ra_deg"])
+            decDiff = abs(inputLineInfo["decDegree"] - aResult["dec_deg"])
+            jdDiff = abs(inputLineInfo["jd"] - aResult["jd"])
+            if (
+                jdDiff < DUPLICATE_THRESH_JD
+                and raDiff < DUPLICATE_THRESH_DEGREE
+                and decDiff < DUPLICATE_THRESH_DEGREE
+            ):
+                del inputLines[l]
                 break
-    # ---------------------------------------------
+    # --------------------------------------------------------
 
-    # ---remove 1 object / 1 night data -----------
+    # ---remove 1 object / 1 night data ----------------------
     # 各測定行は例えば
     # "     H238748  C2019 09 27.27542 ......"
     # のようになるため, 0 - 24 番目の文字で同じ天体・同じ測定日であるか判断できる
@@ -159,7 +171,7 @@ try:
         thisObjectNightStr = inputLines[i][0:25]
         if NObsPerObjectPerNight[thisObjectNightStr] == 1:
             del inputLines[i]
-    # ---------------------------------------------
+    # --------------------------------------------------------
 
     # ---remove objects with observation numbers smaller than 2-----
     if len(inputLines) != 0:
@@ -187,6 +199,10 @@ try:
     preRepoOutputFile.writelines(inputLines)
     preRepoOutputFile.close()
     # ---------------------------------------------
+
+except NothingToDo:
+    error = 0
+    errorReason = 74
 
 except FileNotFoundError:
     print(

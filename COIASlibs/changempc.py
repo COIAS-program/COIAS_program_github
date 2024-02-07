@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
-#Timestamp: 2022/08/28 13:00 sugiura
+# Timestamp: 2022/08/28 13:00 sugiura
 #########################################################################
 # 小惑星の名前やjd, ra, decをMPCフォーマットに整形する関数群を記載したスクリプト.
 #
@@ -65,104 +65,255 @@ import julian
 import re
 import numpy as np
 
-#---function: input = asteroid number(str) for numbered asteroid, return = MPC format name--
+# ---function: input = asteroid number(str) for numbered asteroid, return = MPC format name--
 def get_MPC_format_name_for_numbered_asteroids(ast_num):
     ast_num_int = int(ast_num)
-    nameFragmentList = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+    nameFragmentList = [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H",
+        "I",
+        "J",
+        "K",
+        "L",
+        "M",
+        "N",
+        "O",
+        "P",
+        "Q",
+        "R",
+        "S",
+        "T",
+        "U",
+        "V",
+        "W",
+        "X",
+        "Y",
+        "Z",
+        "a",
+        "b",
+        "c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h",
+        "i",
+        "j",
+        "k",
+        "l",
+        "m",
+        "n",
+        "o",
+        "p",
+        "q",
+        "r",
+        "s",
+        "t",
+        "u",
+        "v",
+        "w",
+        "x",
+        "y",
+        "z",
+    ]
     ################ over 620000 ####################
     if ast_num_int >= 620000:
         diff = ast_num_int - 620000
         modList = []
         for i in range(4):
-            modList.append(diff%62)
-            diff = diff//62
-        name = "~" + nameFragmentList[modList[3]] + nameFragmentList[modList[2]] + nameFragmentList[modList[1]] + nameFragmentList[modList[0]]
+            modList.append(diff % 62)
+            diff = diff // 62
+        name = (
+            "~"
+            + nameFragmentList[modList[3]]
+            + nameFragmentList[modList[2]]
+            + nameFragmentList[modList[1]]
+            + nameFragmentList[modList[0]]
+        )
     ################ any other ######################
     else:
         num = ast_num_int
         modList = []
         for i in range(4):
-            modList.append(num%10)
-            num = num//10
-        modList.append(num%62)
-        name = nameFragmentList[modList[4]] + nameFragmentList[modList[3]] + nameFragmentList[modList[2]] + nameFragmentList[modList[1]] + nameFragmentList[modList[0]]
+            modList.append(num % 10)
+            num = num // 10
+        modList.append(num % 62)
+        name = (
+            nameFragmentList[modList[4]]
+            + nameFragmentList[modList[3]]
+            + nameFragmentList[modList[2]]
+            + nameFragmentList[modList[1]]
+            + nameFragmentList[modList[0]]
+        )
 
     return name
-#-------------------------------------------------------------------------------------------
 
-#---function: input = karifugo without space, return = MPC format name----------------------
+
+# -------------------------------------------------------------------------------------------
+
+# ---function: input = karifugo without space, return = MPC format name----------------------
 def get_MPC_format_name_for_karifugo_asteroids(karifugo):
-    nameFragmentList = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
-    if karifugo[4:7]=="P-L" or karifugo[4:7]=="T-1" or karifugo[4:7]=="T-2" or karifugo[4:7]=="T-3":
+    nameFragmentList = [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H",
+        "I",
+        "J",
+        "K",
+        "L",
+        "M",
+        "N",
+        "O",
+        "P",
+        "Q",
+        "R",
+        "S",
+        "T",
+        "U",
+        "V",
+        "W",
+        "X",
+        "Y",
+        "Z",
+        "a",
+        "b",
+        "c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h",
+        "i",
+        "j",
+        "k",
+        "l",
+        "m",
+        "n",
+        "o",
+        "p",
+        "q",
+        "r",
+        "s",
+        "t",
+        "u",
+        "v",
+        "w",
+        "x",
+        "y",
+        "z",
+    ]
+    if (
+        karifugo[4:7] == "P-L"
+        or karifugo[4:7] == "T-1"
+        or karifugo[4:7] == "T-2"
+        or karifugo[4:7] == "T-3"
+    ):
         name = karifugo[4] + karifugo[6] + "S" + karifugo[0:4]
     else:
-        if karifugo[0:2]=="18":
+        if karifugo[0:2] == "18":
             firstThreeLetters = "I" + karifugo[2:4]
-        elif karifugo[0:2]=="19":
+        elif karifugo[0:2] == "19":
             firstThreeLetters = "J" + karifugo[2:4]
-        elif karifugo[0:2]=="20":
+        elif karifugo[0:2] == "20":
             firstThreeLetters = "K" + karifugo[2:4]
 
-        if len(karifugo)==6:
+        if len(karifugo) == 6:
             lastFourLetters = karifugo[4] + "00" + karifugo[5]
-        elif len(karifugo)==7:
+        elif len(karifugo) == 7:
             lastFourLetters = karifugo[4] + "0" + karifugo[6] + karifugo[5]
-        elif len(karifugo)==8:
+        elif len(karifugo) == 8:
             lastFourLetters = karifugo[4] + karifugo[6] + karifugo[7] + karifugo[5]
-        elif len(karifugo)==9:
+        elif len(karifugo) == 9:
             num = int(karifugo[6:8])
-            lastFourLetters = karifugo[4] + nameFragmentList[num] + karifugo[8] + karifugo[5]
+            lastFourLetters = (
+                karifugo[4] + nameFragmentList[num] + karifugo[8] + karifugo[5]
+            )
 
         name = firstThreeLetters + lastFourLetters
 
     return name
-#-------------------------------------------------------------------------------------------
 
-#---function: input = jd(float), return = time in MPC format--------------------------------
+
+# -------------------------------------------------------------------------------------------
+
+# ---function: input = jd(float), return = time in MPC format--------------------------------
 def change_jd_to_MPC_format_date(jd):
     ##data modification
-    tInTimeObj = Time(jd,format='jd')
+    tInTimeObj = Time(jd, format="jd")
     tInIso = tInTimeObj.iso
     rMatch = re.compile("(.*)( )(.*)")
     matchRes = rMatch.match(tInIso)
     matchGro = matchRes.group(1)
     ##get year month day
-    tYYYYMMDD = matchGro.replace('-',' ')
+    tYYYYMMDD = matchGro.replace("-", " ")
     ##get decimal jd
     jdInt = int(jd)
     jdDecimal = jd - jdInt - 0.5
     if jdDecimal < 0.0:
         jdDecimal = jdDecimal + 1.0
-    jdDecimal = np.around(jdDecimal,decimals=5)
-    jdDecimalStr = str(jdDecimal).lstrip('0').ljust(6,'0')
+    jdDecimal = np.around(jdDecimal, decimals=5)
+    jdDecimalStr = str(jdDecimal).lstrip("0").ljust(6, "0")
 
-    mpcFormatDate = 'C' + tYYYYMMDD + jdDecimalStr
-    return(mpcFormatDate)
-#-------------------------------------------------------------------------------------------
+    mpcFormatDate = "C" + tYYYYMMDD + jdDecimalStr
+    return mpcFormatDate
 
-#---function: input = ra(degree), dec(degree), output = ra and dec in MPC format------------
+
+# -------------------------------------------------------------------------------------------
+
+# ---function: input = ra(degree), dec(degree), output = ra and dec in MPC format------------
 def change_ra_dec_to_MPC_format(raDegreeOrg, decDegreeOrg):
-    coord = SkyCoord(ra = raDegreeOrg*u.degree, dec = decDegreeOrg*u.degree)
+    coord = SkyCoord(ra=raDegreeOrg * u.degree, dec=decDegreeOrg * u.degree)
 
     ##convert ra
     raHour = int(coord.ra.hms[0])
     raHourStr = "{:02d}".format(raHour)
     raMinit = int(coord.ra.hms[1])
     raMinitStr = "{:02d}".format(raMinit)
-    raSecond = int(coord.ra.hms[2]*100.0)/100.0 #小数点以下3桁目で切り捨てる
+    raSecond = int(coord.ra.hms[2] * 100.0) / 100.0  # 小数点以下3桁目で切り捨てる
     raSecondStr = "{:.2f}".format(raSecond)
-    raSecondStr = raSecondStr.rjust(5,'0')
+    raSecondStr = raSecondStr.rjust(5, "0")
 
     ##convert dec
     decDegree = coord.dec.dms[0]
     decDegreeInt = int(decDegree)
     decMinit = int(coord.dec.dms[1])
-    decSecond = int(coord.dec.dms[2]*100.0)/100.0 #小数点以下3桁目で切り捨てる
-    
+    decSecond = int(coord.dec.dms[2] * 100.0) / 100.0  # 小数点以下3桁目で切り捨てる
+
     if decDegreeOrg > 0.0:
-        decDegreeStr = '+'+"{:02d}".format(decDegreeInt)
+        decDegreeStr = "+" + "{:02d}".format(decDegreeInt)
     elif decDegreeOrg > -1.0 and decDegreeOrg < 0.0:
-        decDegreeStr = '-0'+"{:01d}".format(decDegreeInt)
+        decDegreeStr = "-0" + "{:01d}".format(decDegreeInt)
         decMinit *= -1
         decSecond *= -1
     else:
@@ -171,73 +322,113 @@ def change_ra_dec_to_MPC_format(raDegreeOrg, decDegreeOrg):
         decSecond *= -1
 
     decMinitStr = "{:02d}".format(decMinit)
-    decSecondStr = "{:.2f}".format(decSecond).rjust(5,'0')
+    decSecondStr = "{:.2f}".format(decSecond).rjust(5, "0")
 
-    mpcFormatRaDec = raHourStr + " " + raMinitStr + " " + raSecondStr + " " + decDegreeStr + " " + decMinitStr + " " + decSecondStr
+    mpcFormatRaDec = (
+        raHourStr
+        + " "
+        + raMinitStr
+        + " "
+        + raSecondStr
+        + " "
+        + decDegreeStr
+        + " "
+        + decMinitStr
+        + " "
+        + decSecondStr
+    )
     return mpcFormatRaDec
-#-------------------------------------------------------------------------------------------
 
-#---function: input=time in MPC format (CYYYY MM DD.dddd), output=jd------------------------
+
+# -------------------------------------------------------------------------------------------
+
+# ---function: input=time in MPC format (CYYYY MM DD.dddd), output=jd------------------------
 def change_datetime_in_MPC_to_jd(datetimeInMPC):
     contents = datetimeInMPC.split()
-    if len(contents)!=3 or len(contents[2].split("."))!=2:
-        raise ValueError("invalid input for change_datetime_in_MPC_to_jd. input=" + datetimeInMPC)
+    if len(contents) != 3 or len(contents[2].split(".")) != 2:
+        raise ValueError(
+            "invalid input for change_datetime_in_MPC_to_jd. input=" + datetimeInMPC
+        )
 
     year = int(contents[0].lstrip("C"))
     month = int(contents[1])
     day = int(contents[2].split(".")[0])
     dayDecimal = float("0." + contents[2].split(".")[1])
     hour = int(dayDecimal * 24.0)
-    minute = int( (dayDecimal * 24.0 - hour) * 60.0 )
-    second = int( (dayDecimal * 24.0 * 60.0 - hour * 60.0 - minute) * 60.0 )
-    
+    minute = int((dayDecimal * 24.0 - hour) * 60.0)
+    second = int((dayDecimal * 24.0 * 60.0 - hour * 60.0 - minute) * 60.0)
+
     dt = datetime.datetime(year, month, day, hour=hour, minute=minute, second=second)
     jd = julian.to_jd(dt, fmt="jd")
 
     return jd
-#-------------------------------------------------------------------------------------------
 
-#---function: input=ra in MPC format(HH MM SS.ss), output=ra in degree----------------------
+
+# -------------------------------------------------------------------------------------------
+
+# ---function: input=ra in MPC format(HH MM SS.ss), output=ra in degree----------------------
 def change_ra_in_MPC_to_degree(raInMPC):
     contents = raInMPC.split()
-    if len(contents)!=3:
-        raise ValueError("invalid input for change_ra_in_MPC_to_degree. input=" + raInMPC)
+    if len(contents) != 3:
+        raise ValueError(
+            "invalid input for change_ra_in_MPC_to_degree. input=" + raInMPC
+        )
 
-    raDegree = (360.0/24.0) * ( int(contents[0]) + int(contents[1])/60.0 + float(contents[2])/3600.0 )
+    raDegree = (360.0 / 24.0) * (
+        int(contents[0]) + int(contents[1]) / 60.0 + float(contents[2]) / 3600.0
+    )
 
     return raDegree
-#-------------------------------------------------------------------------------------------
 
-#---function: input=dec in MPC format(±DD MM SS.ss), output=dec in degree-------------------
+
+# -------------------------------------------------------------------------------------------
+
+# ---function: input=dec in MPC format(±DD MM SS.ss), output=dec in degree-------------------
 def change_dec_in_MPC_to_degree(decInMPC):
     contents = decInMPC.split()
-    if len(contents)!=3 or not (contents[0][0]=="+" or contents[0][0]=="-"):
-        raise ValueError("invalid input for change_dec_in_MPC_to_degree. input=" + decInMPC)
+    if len(contents) != 3 or not (contents[0][0] == "+" or contents[0][0] == "-"):
+        raise ValueError(
+            "invalid input for change_dec_in_MPC_to_degree. input=" + decInMPC
+        )
 
-    if contents[0][0]=="+":
-        decDegree = int(contents[0]) + int(contents[1])/60.0 + float(contents[2])/3600.0
-    if contents[0][0]=="-":
-        decDegree = int(contents[0]) - int(contents[1])/60.0 - float(contents[2])/3600.0
+    if contents[0][0] == "+":
+        decDegree = (
+            int(contents[0]) + int(contents[1]) / 60.0 + float(contents[2]) / 3600.0
+        )
+    if contents[0][0] == "-":
+        decDegree = (
+            int(contents[0]) - int(contents[1]) / 60.0 - float(contents[2]) / 3600.0
+        )
 
     return decDegree
-#-------------------------------------------------------------------------------------------
 
-#---function: input=MPC80line, output=dictionary with first14Chars, jd, ra[degree], dec[degree], last24Chars
+
+# -------------------------------------------------------------------------------------------
+
+# ---function: input=MPC80line, output=dictionary with first14Chars, jd, ra[degree], dec[degree], last24Chars
 def parse_MPC80_and_get_jd_ra_dec(MPC80Line):
-    name = MPC80Line.split()[0]
     if len(MPC80Line) != 80 or MPC80Line[14] != "C":
         raise ValueError(f"input line {MPC80Line} is not a valid MPC 80 Line!")
 
     first14Chars = MPC80Line[0:14]
-    timePart =     MPC80Line[14:31]
-    raPart =       MPC80Line[32:43]
-    decPart =      MPC80Line[44:56]
-    last24Chars  = MPC80Line[56:81]
+    timePart = MPC80Line[14:31]
+    raPart = MPC80Line[32:43]
+    decPart = MPC80Line[44:56]
+    last24Chars = MPC80Line[56:81]
 
     jd = change_datetime_in_MPC_to_jd(timePart)
     raDegree = change_ra_in_MPC_to_degree(raPart)
     decDegree = change_dec_in_MPC_to_degree(decPart)
 
-    returnDictionary = {"first14Chars": first14Chars, "jd": jd, "raDegree": raDegree, "decDegree": decDegree, "last24Chars": last24Chars}
+    returnDictionary = {
+        "first14Chars": first14Chars,
+        "jd": jd,
+        "raDegree": raDegree,
+        "decDegree": decDegree,
+        "last24Chars": last24Chars,
+    }
     return returnDictionary
-#-------------------------------------------------------------------------------------------
+
+
+# -------------------------------------------------------------------------------------------
+
