@@ -10,7 +10,7 @@
 
 import os
 import glob
-import datetime
+from datetime import datetime
 import shutil
 import traceback
 import readparam
