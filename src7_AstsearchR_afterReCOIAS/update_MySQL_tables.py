@@ -32,10 +32,6 @@ import changempc
 import COIAS_MySQL
 
 
-class InvalidIDError(Exception):
-    pass
-
-
 try:
     # ---check the input user id is valid--------------------
     params = readparam.readparam()
@@ -248,13 +244,6 @@ except FileNotFoundError:
     error = 1
     errorReason = 74
 
-except InvalidIDError:
-    print(
-        f"Invalid ID: id={measurerId}. In webCOIAS, please specify valid id as follows: AstsearchR_afterReCOIAS id=yourUserID."
-    )
-    print(traceback.format_exc(), flush=True)
-    error = 1
-    errorReason = 75
 
 except Exception:
     print("Some errors occur in update_MySQL_tables.py!", flush=True)

@@ -46,6 +46,8 @@
 # 13. komejirushi.py
 #      新発見天体はそのデータの1行目の名前の直後にアスタリスクを付けなければいけないので,
 #      それを付与する. 最終的な報告ファイルは send_mpc.txt である.
+# 14. make_prefixed_sendMpc_and_finalAll.py
+#      send_mpc.txtとfinal_all.txtを, ファイル名にyyyymmddHHMM_uidの接頭辞をつけてコピーする.
 ############################################################################################
 
 set -o pipefail
@@ -84,9 +86,7 @@ store_pre_repo3.py 2>&1 | tee -a log.txt
 
 komejirushi.py 2>&1 | tee -a log.txt
 
-if "${IS_WEB_COIAS}"; then
-	update_MySQL_tables.py 2>&1 | tee -a log.txt
-fi
+make_prefixed_sendMpc_and_finalAll.py 2>&1 | tee -a log.txt
 
 print_progress.py
 echo AstsearchR_afterReCOIAS ends 2>&1 | tee -a log.txt
