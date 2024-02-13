@@ -1,30 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
-# Timestamp: 2022/12/26 11:00 sugiura
+# Timestamp: 2024/2/13 17:00 sugiura
 ################################################################################################################
-# webCOIASにて今回の測定結果に基づいてMySQLのデータベースを更新し, サーバ内に保存する用のsend_mpc.txtとfinal_all.txtとして
-# それらのファイル名の頭にyyyymmddHHMM_id_を付与したファイルとしてカレントにコピーする.
+# webCOIASにて今回の測定結果に基づいてMySQLのデータベースを更新する。
 #
-# 最初に重複したファイル作成やデータベース登録を防ぐため, カレントにあるyyyymmddHHMM_id_send_mpc.txt or final_all.txtを削除し,
-# measure_resultテーブルのwork_dirが同じかつmeasure_dataがこのスクリプトを走らせている日, 前日, 翌日に該当するレコードは削除する.
-# 削除されたレコードが存在した場合, 今回のデータでのレポート作成は2回目と見なしsecondDone=Trueとする.
-#
-# selected_warp_files.txtに記載の今回解析した画像について, image_infoテーブルの当該画像のis_auto_measuredをtrueにし,
-# secondDone==Falseの時はmeasurer_uidにユーザーidを追記する.
+# selected_warp_files.txtに記載の今回解析した画像について,
+# image_infoテーブルの当該画像のis_auto_measuredをtrueにし, measurer_uidにユーザーidを追記する.
 # final_all.txtに手動測定点が1つでもあった場合, image_infoテーブルの当該画像のis_manual_measuredもtrueにする.
 # 当該画像について, このスクリプト実施前はis_auto_measured=falseだった場合, 新規解析なのでdir_structureテーブルの
 # この画像が含まれている上位のディレクトリ全てのn_measured_imagesを1ずつ増やす.
 #
 # final_all.txtに記載の情報を元にmeasure_resultテーブルにデータを追加する.
 # mpcフォーマットの情報が含まれている行が1レコードに対応するようにデータを追加する.
-#
-# 最後に, send_mpc.txtとfinal_all.txtをコピーしてファイルにyyyymmddHHMM_id_の接頭辞をつける.
 ################################################################################################################
-import os
 import glob
 import re
-import shutil
-from datetime import datetime, timedelta
 import traceback
 import print_detailed_log
 import readparam
@@ -33,31 +23,12 @@ import COIAS_MySQL
 
 
 try:
-    # ---check the input user id is valid--------------------
-    params = readparam.readparam()
-    measurerId = params["id"]
-    # -------------------------------------------------------
-
     ## connect to the COIAS database
     connection, cursor = COIAS_MySQL.connect_to_COIAS_database()
 
-    # ---If this script runs second time in the same analysis,
-    # ---duplicated data are created, thus we clear such data.
-    shouldRmSendMPCFileName = glob.glob("????????????_*_send_mpc.txt")
-    for fileName in shouldRmSendMPCFileName:
-        os.remove(fileName)
-    shouldRmFinalAllFileName = glob.glob("????????????_*_final_all.txt")
-    for fileName in shouldRmFinalAllFileName:
-        os.remove(fileName)
-
-    strToday = datetime.strftime(datetime.today(), "%Y-%m-%d")
-    strTomorrow = datetime.strftime(datetime.today() + timedelta(days=1), "%Y-%m-%d")
-    strYesterday = datetime.strftime(datetime.today() - timedelta(days=1), "%Y-%m-%d")
-    currentDirName = os.getcwd()
-    cursor.execute(
-        f"DELETE FROM measure_result WHERE work_dir = '{currentDirName}' AND (measure_date = '{strYesterday}' OR measure_date = '{strToday}' OR measure_date = '{strTomorrow}')"
-    )
-    secondDone = cursor.rowcount != 0
+    # ---get user id ----------------------------------------
+    params = readparam.readparam()
+    measurerId = params["id"]
     # -------------------------------------------------------
 
     ## read all contents of final_all.txt
@@ -109,34 +80,25 @@ try:
         directParentDirId = result[0]["direct_parent_dir_id"]
         previousMeasurerUidStr = result[0]["measurer_uid"]
 
-        if not isAlreadyMeasuredImage and secondDone:
-            raise Exception(
-                "something wrong! image_info table says this image is not yet analyzed, but secondDone flag is true."
-            )
-
         ## update is_auto_measured field of image_info table
         cursor.execute(
             f"UPDATE image_info SET is_auto_measured=true WHERE image_name='{imageName}'"
         )
-        connection.commit()
 
         ## update is_manual_measured field of image_info table
         if isManualMeasured:
             cursor.execute(
                 f"UPDATE image_info SET is_manual_measured=true WHERE image_name='{imageName}'"
             )
-            connection.commit()
 
         ## update measurer_uid field of image_info table
-        if not secondDone:
-            if previousMeasurerUidStr == "":
-                measurerUidStr = f"{measurerId}"
-            else:
-                measurerUidStr = previousMeasurerUidStr + f",{measurerId}"
-            cursor.execute(
-                f"UPDATE image_info SET measurer_uid='{measurerUidStr}' WHERE image_name='{imageName}'"
-            )
-            connection.commit()
+        if previousMeasurerUidStr == "":
+            measurerUidStr = f"{measurerId}"
+        else:
+            measurerUidStr = previousMeasurerUidStr + f",{measurerId}"
+        cursor.execute(
+            f"UPDATE image_info SET measurer_uid='{measurerUidStr}' WHERE image_name='{imageName}'"
+        )
 
         ## update n_measured_images field of dir_structure table
         if not isAlreadyMeasuredImage:
@@ -162,7 +124,6 @@ try:
                 cursor.execute(
                     f"UPDATE dir_structure SET n_measured_images={updatedNMeasuredImages} WHERE this_dir_id={thisDirId}"
                 )
-                connection.commit()
 
                 if level == 0:
                     break
@@ -170,11 +131,15 @@ try:
                 parentDirId = result[0]["parent_dir_id"]
     # -------------------------------------------------------
 
-    ## set name of final_all.txt with prefix
-    dtNow = datetime.now()
-    prefix = datetime.strftime(dtNow, "%Y%m%d%H%M") + f"_{measurerId}_"
-    prefixedFinalAllFileName = prefix + "final_all.txt"
-    prefixedSendMPCFileName = prefix + "send_mpc.txt"
+    ## get the name of prefixed final_all.txt
+    finalAllCandidateNames = glob.glob("????????????_*_final_all.txt")
+    if len(finalAllCandidateNames) == 0:
+        raise FileNotFoundError("cannot find any prefixed final_all.txt")
+    if len(finalAllCandidateNames) >= 2:
+        raise Exception(
+            f"There is more than two prefixed final_all.txt. N={len(finalAllCandidateNames)}"
+        )
+    prefixedFinalAllFileName = finalAllCandidateNames[0]
 
     ## get aparture radius from final_all.txt
     while not finalAllLines[currentLine].startswith("---used parameters"):
@@ -226,21 +191,17 @@ try:
                 cursor.execute(
                     f"INSERT INTO measure_result (measured_image_id, measurer_uid, final_all_txt_name, measure_date, work_dir, aparture_radius, final_all_one_line, object_name, jd, ra_deg, dec_deg, mag, mag_err, x_pix, y_pix, is_auto, observation_arc) VALUES({obj['measured_image_id']}, '{measurerId}', '{prefixedFinalAllFileName}', '{strToday}', '{currentDirName}', {apartureRadius}, '{obj['final_all_one_line']}', '{obj['object_name']}', {obj['jd']}, {obj['ra_deg']}, {obj['dec_deg']}, {obj['mag']}, {obj['mag_err']}, {obj['x_pix']}, {obj['y_pix']}, {obj['is_auto']}, '{observationArcLine}')"
                 )
-                connection.commit()
             finalAllOneLineInfoObjectList = []
 
         currentLine += 1
     # ------------------------------------------------------------
 
-    ## copy send_mpc.txt and final_all.txt as file with prefixed name
-    shutil.copyfile("final_all.txt", prefixedFinalAllFileName)
-    shutil.copyfile("send_mpc.txt", prefixedSendMPCFileName)
-
-    COIAS_MySQL.close_COIAS_database(connection, cursor)
 
 except FileNotFoundError:
     print("Some previous files are not found in update_MySQL_tables.py!", flush=True)
     print(traceback.format_exc(), flush=True)
+    # エラー時はrollback
+    connection.rollback()
     error = 1
     errorReason = 74
 
@@ -248,14 +209,19 @@ except FileNotFoundError:
 except Exception:
     print("Some errors occur in update_MySQL_tables.py!", flush=True)
     print(traceback.format_exc(), flush=True)
+    # エラー時はrollback
+    connection.rollback()
     error = 1
     errorReason = 75
 
 else:
+    # 成功時のみcommitを実行
+    connection.commit()
     error = 0
     errorReason = 74
 
 finally:
+    COIAS_MySQL.close_COIAS_database(connection, cursor)
     errorFile = open("error.txt", "a")
     errorFile.write("{0:d} {1:d} 714 \n".format(error, errorReason))
     errorFile.close()
