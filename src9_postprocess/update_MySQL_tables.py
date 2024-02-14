@@ -229,7 +229,7 @@ else:
 finally:
     COIAS_MySQL.close_COIAS_database(connection, cursor)
     errorFile = open("error.txt", "a")
-    errorFile.write("{0:d} {1:d} 714 \n".format(error, errorReason))
+    errorFile.write("{0:d} {1:d} 914 \n".format(error, errorReason))
     errorFile.close()
 
     if error == 1:

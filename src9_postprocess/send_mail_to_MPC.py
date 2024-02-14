@@ -14,10 +14,9 @@ import sys
 import traceback
 import glob
 import print_detailed_log
-from os.path import expanduser
+import send_email_from_sakura
 from email.mime.text import MIMEText
 from email.utils import formatdate
-from smtplib import SMTP
 
 try:
     sendMpcFileName = glob.glob("????????????_*_send_mpc.txt")
@@ -38,42 +37,29 @@ try:
     msg = MIMEText(message, "plain", "utf-8")
     msg["Subject"] = sendMpcFileName[0]
     msg["From"] = "coias@jsga.sakura.ne.jp"
-    msg["To"] = "coias@jsga.sakura.ne.jp,sugiuraks1991@star.gmobb.jp"
+    msg["To"] = "sugiuraks1991@star.gmobb.jp,urakawa@spaceguard.or.jp"
     msg["Date"] = formatdate()
     # ---------------------------------------------------------------------------
 
     # ---send e-mail-------------------------------------------------------------
-    pwFileName = "/home/COIASusers/.pw/pwEMail.txt"
-    f = open(pwFileName, "r")
-    pw = f.readline().rstrip("\n")
-    f.close()
-
-    account = "coias@jsga.sakura.ne.jp"
-    host = "mail.jsga.sakura.ne.jp"
-    port = 587
-
-    server = SMTP(host, port)
-    server.starttls()
-    server.login(account, pw)
-    server.send_message(msg)
-    server.quit()
+    send_email_from_sakura.send_email_from_sakura(msg)
     # ---------------------------------------------------------------------------
 
 except FileNotFoundError:
     print("Some previous files are not found in send_mail_to_MPC.py!", flush=True)
     print(traceback.format_exc(), flush=True)
     error = 1
-    errorReason = 94
+    errorReason = 74
 
 except Exception:
     print("Some errors occur in send_mail_to_MPC.py", flush=True)
     print(traceback.format_exc(), flush=True)
     error = 1
-    errorReason = 95
+    errorReason = 75
 
 else:
     error = 0
-    errorReason = 94
+    errorReason = 74
 
 finally:
     errorFile = open("error.txt", "a")

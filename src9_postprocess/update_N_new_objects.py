@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
-#Timestamp: 2022/2/23 12:30 sugiura
+# Timestamp: 2022/2/23 12:30 sugiura
 ################################################################################################################
 # 今回の測定で新たに測定した新発見候補天体数を数え, 今までに測定した新発見候補天体数の合計数を記載した
 # /home/COIASusers/coias/param/N_new_objects.txtを更新する.
@@ -64,26 +64,26 @@ try:
 
 
 except FileNotFoundError:
-    print("Some previous files are not found in update_N_new_objects.py!",flush=True)
-    print(traceback.format_exc(),flush=True)
+    print("Some previous files are not found in update_N_new_objects.py!", flush=True)
+    print(traceback.format_exc(), flush=True)
     error = 1
-    errorReason = 94
+    errorReason = 74
 
 except Exception:
-    print("Some errors occur in send_mail_to_MPC.py",flush=True)
-    print(traceback.format_exc(),flush=True)
+    print("Some errors occur in send_mail_to_MPC.py", flush=True)
+    print(traceback.format_exc(), flush=True)
     error = 1
-    errorReason = 95
+    errorReason = 75
 
 else:
     error = 0
-    errorReason = 94
+    errorReason = 74
 
 finally:
-    errorFile = open("error.txt","a")
-    errorFile.write("{0:d} {1:d} 905 \n".format(error,errorReason))
+    errorFile = open("error.txt", "a")
+    errorFile.write("{0:d} {1:d} 905 \n".format(error, errorReason))
     errorFile.close()
 
-    if error==1:
+    if error == 1:
         print_detailed_log.print_detailed_log(dict(globals()))
 

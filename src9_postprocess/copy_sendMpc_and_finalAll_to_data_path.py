@@ -71,17 +71,17 @@ except FileNotFoundError:
     )
     print(traceback.format_exc(), flush=True)
     error = 1
-    errorReason = 94
+    errorReason = 74
 
 except Exception:
     print("Some errors occur in copy_sendMpc_and_finalAll_to_data_path.py", flush=True)
     print(traceback.format_exc(), flush=True)
     error = 1
-    errorReason = 95
+    errorReason = 75
 
 else:
     error = 0
-    errorReason = 94
+    errorReason = 74
 
 finally:
     errorFile = open("error.txt", "a")
