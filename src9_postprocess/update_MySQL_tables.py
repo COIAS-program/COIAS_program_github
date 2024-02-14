@@ -15,7 +15,9 @@
 ################################################################################################################
 import glob
 import re
+import os
 import traceback
+from datetime import datetime
 import print_detailed_log
 import readparam
 import changempc
@@ -140,6 +142,10 @@ try:
             f"There is more than two prefixed final_all.txt. N={len(finalAllCandidateNames)}"
         )
     prefixedFinalAllFileName = finalAllCandidateNames[0]
+
+    ## get some information
+    strToday = datetime.strftime(datetime.today(), "%Y-%m-%d")
+    currentDirName = os.getcwd()
 
     ## get aparture radius from final_all.txt
     while not finalAllLines[currentLine].startswith("---used parameters"):
