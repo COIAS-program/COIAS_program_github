@@ -200,6 +200,15 @@ try:
             finalAllOneLineInfoObjectList = []
 
         currentLine += 1
+
+    ### findOrbの接続の問題などでfinal_all.txtに"observations"を含む行がなかった場合,
+    ### データがDBに記録されないことが起こる.
+    ### そのような場合でも大丈夫なように, ここで残っているデータをDBに挿入する
+    observationArcLine = ""
+    for obj in finalAllOneLineInfoObjectList:
+        cursor.execute(
+            f"INSERT INTO measure_result (measured_image_id, measurer_uid, final_all_txt_name, measure_date, work_dir, aparture_radius, final_all_one_line, object_name, jd, ra_deg, dec_deg, mag, mag_err, x_pix, y_pix, is_auto, observation_arc) VALUES({obj['measured_image_id']}, '{measurerId}', '{prefixedFinalAllFileName}', '{strToday}', '{currentDirName}', {apartureRadius}, '{obj['final_all_one_line']}', '{obj['object_name']}', {obj['jd']}, {obj['ra_deg']}, {obj['dec_deg']}, {obj['mag']}, {obj['mag_err']}, {obj['x_pix']}, {obj['y_pix']}, {obj['is_auto']}, '{observationArcLine}')"
+        )
     # ------------------------------------------------------------
 
 
