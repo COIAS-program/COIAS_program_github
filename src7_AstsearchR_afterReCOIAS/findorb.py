@@ -277,6 +277,8 @@ except FindOrbError:
         "You do not connect to the internet or failed to fetch result in findorb.py. We try desktop findorb.",
         flush=True,
     )
+    fResult.close()
+    fOrbElem.close()
     completed_process = subprocess.run(
         f"dos_find mpc7.txt -k {PARAM.COIAS_DATA_PATH} | cut -c 2- > result.txt 2>&1 | tee -a log.txt",
         shell=True,
