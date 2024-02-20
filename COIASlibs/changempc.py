@@ -305,22 +305,16 @@ def change_ra_dec_to_MPC_format(raDegreeOrg, decDegreeOrg):
     raSecondStr = raSecondStr.rjust(5, "0")
 
     ##convert dec
-    decDegree = coord.dec.dms[0]
-    decDegreeInt = int(decDegree)
-    decMinit = int(coord.dec.dms[1])
-    decSecond = int(coord.dec.dms[2] * 100.0) / 100.0  # 小数点以下3桁目で切り捨てる
+    decDegree = abs(int(coord.dec.dms[0]))
+    decMinit = abs(int(coord.dec.dms[1]))
+    decSecond = abs(int(coord.dec.dms[2] * 100.0) / 100.0)  # 小数点以下3桁目で切り捨てる
 
     if decDegreeOrg > 0.0:
-        decDegreeStr = "+" + "{:02d}".format(decDegreeInt)
-    elif decDegreeOrg > -1.0 and decDegreeOrg < 0.0:
-        decDegreeStr = "-0" + "{:01d}".format(decDegreeInt)
-        decMinit *= -1
-        decSecond *= -1
+        signChar = "+"
     else:
-        decDegreeStr = "{:03d}".format(decDegreeInt)
-        decMinit *= -1
-        decSecond *= -1
+        signChar = "-"
 
+    decDegreeStr = signChar + "{:02d}".format(decDegree)
     decMinitStr = "{:02d}".format(decMinit)
     decSecondStr = "{:.2f}".format(decSecond).rjust(5, "0")
 
