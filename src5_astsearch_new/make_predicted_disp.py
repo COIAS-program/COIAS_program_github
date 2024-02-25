@@ -29,7 +29,7 @@ PATCH_SIZE_ROUGH_DEGREE = 0.2
 # DBから何patch先の測定まで検索してくるか
 N_SEARCH_PATCHES = 5
 # 線形補間が信用できるのは何patch先までか
-N_INTERPOLATION_VALID_PATCHES = 3
+N_INTERPOLATION_VALID_PATCHES = 2
 # Define thresh jd (40秒に対応する時間をjd単位で設定する)
 DUPLICATE_THRESH_JD = 40.0 / (24 * 60 * 60)
 # 何日先のデータまでなら問答無用で予測円に使用するか
