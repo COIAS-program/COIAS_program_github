@@ -57,14 +57,17 @@ def calcWarpAndObjectJdDiff(AJdMin, AJdMax, BJdMin, BJdMax):
 # 第一引数のjdが, 第2引数のjdのリストに含まれているかどうかを判定する
 # ここで含まれているとは, 差が DUPLICATE_THRESH_JD 以下であることを言う
 # 含まれていたら1を, 含まれていないなら0を返す
+# また含まれていたら第一引数の時刻が第二引数の配列の何番目に該当するかも返す(含まれていなかったら-1を返す)
 def isJdIncluded(thisJd, compareJdList):
     isIncluded = 0
-    for compareJd in compareJdList:
+    matchIndex = -1
+    for index, compareJd in enumerate(compareJdList):
         diffJd = abs(thisJd - compareJd)
         if diffJd < DUPLICATE_THRESH_JD:
             isIncluded = 1
+            matchIndex = index
 
-    return isIncluded
+    return (isIncluded, matchIndex)
 
 
 # ---------------------------------------------------------------------------------
@@ -185,9 +188,18 @@ try:
         decCoef = np.polyfit(jdList, decList, 1)
 
         for imageNum in range(len(warpJdList)):
+            # 測定済みか否かを判断する, 測定済みなら第一引数の時刻が第二引数の配列の何番目に該当するか得る
+            isMeasured, matchIndex = isJdIncluded(warpJdList[imageNum], jdList)
+
             # この天体がこの画像においてどの位置座標にいるのか計算
-            raPre = raCoef[0] * warpJdList[imageNum] + raCoef[1]
-            decPre = decCoef[0] * warpJdList[imageNum] + decCoef[1]
+            # ただし測定済みの場合は, DBに記録の位置をそのまま使う
+            if isMeasured == 0:
+                raPre = raCoef[0] * warpJdList[imageNum] + raCoef[1]
+                decPre = decCoef[0] * warpJdList[imageNum] + decCoef[1]
+            else:
+                raPre = raList[matchIndex]
+                decPre = decList[matchIndex]
+
             xyPixPre = wcs0.wcs_world2pix(raPre, decPre, 0)
 
             # この点が画像内にあるなら出力対象
@@ -197,8 +209,6 @@ try:
                 and xyPixPre[0] < XPixelMax
                 and xyPixPre[1] < YPixelMax
             ):
-                # 測定済みか否かを判断する
-                isMeasured = isJdIncluded(warpJdList[imageNum], jdList)
                 # 書き出し
                 outputFile.write(
                     f"{objectName} {imageNum} {xyPixPre[0]:.2f} {xyPixPre[1]:.2f} {isMeasured}\n"
