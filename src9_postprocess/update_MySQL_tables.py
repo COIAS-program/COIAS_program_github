@@ -70,7 +70,7 @@ try:
     for imageName in imageNameList:
         ## check this image is already analyzed or not
         cursor.execute(
-            f"SELECT is_auto_measured,image_id,direct_parent_dir_id,measurer_uid FROM image_info WHERE image_name='{imageName}'"
+            f"SELECT is_auto_measured,is_manual_measured,image_id,direct_parent_dir_id,measurer_uid FROM image_info WHERE image_name='{imageName}'"
         )
         result = cursor.fetchall()
         if len(result) != 1:
@@ -78,6 +78,7 @@ try:
                 f"something wrong! image_info table has no or multiple records with image name {imageName}. N records = {len(result)}"
             )
         isAlreadyMeasuredImage = result[0]["is_auto_measured"] == 1
+        isAlreadyManualMeasuredImage = result[0]["is_manual_measured"] == 1
         imageIdList.append(result[0]["image_id"])
         directParentDirId = result[0]["direct_parent_dir_id"]
         previousMeasurerUidStr = result[0]["measurer_uid"]
@@ -103,34 +104,46 @@ try:
         )
 
         ## update n_measured_images field of dir_structure table
-        if not isAlreadyMeasuredImage:
-            parentDirId = directParentDirId
-            while True:
-                cursor.execute(
-                    f"SELECT n_measured_images,n_total_images,this_dir_id,parent_dir_id,level FROM dir_structure WHERE this_dir_id={parentDirId}"
+        parentDirId = directParentDirId
+        while True:
+            cursor.execute(
+                f"SELECT n_measured_images,n_manual_measured_images,n_total_images,this_dir_id,parent_dir_id,level FROM dir_structure WHERE this_dir_id={parentDirId}"
+            )
+            result = cursor.fetchall()
+            if len(result) != 1:
+                raise Exception(
+                    f"something wrong! dir_structure table has no or multiple records with this_dir_is={parentDirId}. N records = {len(result)}"
                 )
-                result = cursor.fetchall()
-                if len(result) != 1:
-                    raise Exception(
-                        f"something wrong! dir_structure table has no or multiple records with this_dir_is={parentDirId}. N records = {len(result)}"
-                    )
-                thisDirId = result[0]["this_dir_id"]
-                level = result[0]["level"]
-                nTotalImages = result[0]["n_total_images"]
-                updatedNMeasuredImages = result[0]["n_measured_images"] + 1
-                if updatedNMeasuredImages > nTotalImages:
-                    raise Exception(
-                        f"something wrong! this directory id = {thisDirId} has more measured images (N={updatedNMeasuredImages}) than total images (N={updatedNMeasuredImages})"
-                    )
+            thisDirId = result[0]["this_dir_id"]
+            level = result[0]["level"]
+            nTotalImages = result[0]["n_total_images"]
 
-                cursor.execute(
-                    f"UPDATE dir_structure SET n_measured_images={updatedNMeasuredImages} WHERE this_dir_id={thisDirId}"
+            ### 自動測定画像数更新
+            updatedNMeasuredImages = result[0]["n_measured_images"]
+            if not isAlreadyMeasuredImage:
+                updatedNMeasuredImages += 1
+            if updatedNMeasuredImages > nTotalImages:
+                raise Exception(
+                    f"something wrong! this directory id = {thisDirId} has more measured images (N={updatedNMeasuredImages}) than total images (N={nTotalImages})"
                 )
 
-                if level == 0:
-                    break
+            ### 手動測定画像数更新
+            updatedNManualMeasuredImages = result[0]["n_manual_measured_images"]
+            if not isAlreadyManualMeasuredImage and isManualMeasured:
+                updatedNManualMeasuredImages += 1
+            if updatedNManualMeasuredImages > nTotalImages:
+                raise Exception(
+                    f"something wrong! this directory id = {thisDirId} has more manually measured images (N={updatedNManualMeasuredImages}) than total images (N={nTotalImages})"
+                )
 
-                parentDirId = result[0]["parent_dir_id"]
+            cursor.execute(
+                f"UPDATE dir_structure SET n_measured_images={updatedNMeasuredImages}, n_manual_measured_images={updatedNManualMeasuredImages} WHERE this_dir_id={thisDirId}"
+            )
+
+            if level == 0:
+                break
+
+            parentDirId = result[0]["parent_dir_id"]
     # -------------------------------------------------------
 
     ## get the name of prefixed final_all.txt
