@@ -1,0 +1,23 @@
+#!/bin/bash
+#Timestamp: 2024/04/09 14:00 sugiura
+#################################################
+# メール送信をする必要がない(=測定行がない)時に事後処理を統括するスクリプト.
+# 1. 測定結果をMySQLデータベースに反映させる. 
+#    自動測定によって解析済みになった旨だけ反映する
+# 2. カレントディレクトリにある容量の大きいファイルを削除する
+#################################################
+
+set -o pipefail
+echo blank_postprocess begins 2>&1 | tee -a log.txt
+echo $? 75 901 > error.txt
+
+update_MySQL_tables.py | tee -a log.txt
+
+delete_large_files 2>&1 | tee -a log.txt
+echo $? 75 904 >> error.txt
+
+echo blank_postprocess ends 2>&1 | tee -a log.txt
+error_handling.py | tee -a log.txt
+
+# 最後は必ず正常終了を返し, エラーハンドリングしない
+exit 0
