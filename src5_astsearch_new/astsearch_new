@@ -47,14 +47,16 @@ cat numbered_mpc.txt karifugo_mpc.txt unknown_mpc.txt > mpc.txt 2>&1 | tee -a lo
 echo $? 54 507 >> error.txt
 cat numbered_all.txt karifugo_all.txt unknown_all.txt > all.txt 2>&1 | tee -a log.txt
 echo $? 54 508 >> error.txt
-#revised S.U 2021.8.27
-sed 's/r2     /r     /g;' mpc.txt > tmpmpc1.txt 2>&1 | tee -a log.txt
+
+#先頭から71, 72文字目にあるr2もしくはi2の文字を, それぞれrもしくはiに変更する
+#変更前と後で文字数が変わるが, 変更後にちょうど80文字になる
+sed 's/^\(.\{70\}\)r2/\1r/g;' mpc.txt > tmpmpc1.txt 2>&1 | tee -a log.txt
 echo $? 54 509 >> error.txt
-sed 's/i2     /i     /g;' tmpmpc1.txt > tmpmpc2.txt 2>&1 | tee -a log.txt
+sed 's/^\(.\{70\}\)i2/\1i/g;' tmpmpc1.txt > tmpmpc2.txt 2>&1 | tee -a log.txt
 echo $? 54 510 >> error.txt
-sed 's/r2     /r     /g;' all.txt > tmpall1.txt 2>&1 | tee -a log.txt
+sed 's/^\(.\{70\}\)r2/\1r/g;' all.txt > tmpall1.txt 2>&1 | tee -a log.txt
 echo $? 54 511 >> error.txt
-sed 's/i2     /i     /g;' tmpall1.txt > tmpall2.txt 2>&1 | tee -a log.txt
+sed 's/^\(.\{70\}\)i2/\1i/g;' tmpall1.txt > tmpall2.txt 2>&1 | tee -a log.txt
 echo $? 54 512 >> error.txt
 rm tmpmpc1.txt tmpall1.txt 2>&1 | tee -a log.txt
 echo $? 55 513 >> error.txt
