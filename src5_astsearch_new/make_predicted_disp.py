@@ -14,6 +14,7 @@
 # 　　    書式: 天体名 画像番号 Xpixel Ypixel 0or1(予測なら0, 既観測なら1)
 ###################################################################################
 import sys
+import re
 import glob
 import math
 import numpy as np
@@ -23,6 +24,7 @@ import traceback
 import PARAM
 import COIAS_MySQL
 import print_detailed_log
+import readparam
 
 # 大雑把なpatchサイズ(degree)
 PATCH_SIZE_ROUGH_DEGREE = 0.2
@@ -34,6 +36,8 @@ N_INTERPOLATION_VALID_PATCHES = 2
 DUPLICATE_THRESH_JD = 40.0 / (24 * 60 * 60)
 # 何日先のデータまでなら問答無用で予測円に使用するか
 ABSOLUTE_PREDICT_LIMIT_DAY = 2.5
+# arcsec/min を degree/dayに直すための定数
+ARCSECMIN_TO_DEGREEDAY = 60 * 24 / 3600.0
 
 
 class NothingToDo(Exception):
@@ -105,6 +109,11 @@ try:
         scidata = fits.open(fileName)
         jd = scidata[0].header["JD"]
         warpJdList.append(jd)
+
+    # 自動検出にかかる最低速度を取得
+    params = readparam.readparam()
+    VEL_LOWER_THRESH_ARCSECMIN = params["vl"]
+    VEL_LOWER_THRESH_DEGREEDAY = VEL_LOWER_THRESH_ARCSECMIN * ARCSECMIN_TO_DEGREEDAY
     ##############################################################################
 
     ### DB接続及びこの画像の中心から数patch以内のデータを取得 #############################
@@ -115,7 +124,7 @@ try:
 
     connection, cursor = COIAS_MySQL.connect_to_COIAS_database()
     cursor.execute(
-        f"SELECT object_name, jd, ra_deg, dec_deg FROM measure_result WHERE ra_deg > {raMin} AND ra_deg < {raMax} AND dec_deg > {decMin} AND dec_deg < {decMax}"
+        f"SELECT object_name, jd, ra_deg, dec_deg, is_auto FROM measure_result WHERE ra_deg > {raMin} AND ra_deg < {raMax} AND dec_deg > {decMin} AND dec_deg < {decMax}"
     )
     queryResult = cursor.fetchall()
     ##############################################################################
@@ -128,7 +137,10 @@ try:
         jd = aResult["jd"]
         ra = aResult["ra_deg"]
         dec = aResult["dec_deg"]
-        objectInfo[aResult["object_name"]].append({"jd": jd, "ra": ra, "dec": dec})
+        is_auto = aResult["is_auto"]
+        objectInfo[aResult["object_name"]].append(
+            {"jd": jd, "ra": ra, "dec": dec, "is_auto": is_auto}
+        )
     ##############################################################################
 
     ### 1データしか引っかからなかった天体は無視する #######################################
@@ -145,13 +157,31 @@ try:
             deleteObjectNames.append(objectName)
             continue
 
-        # その天体の移動速度見積もり
+        # その天体の情報処理
         objectJdMinInfo = min(objectInfo[objectName], key=lambda info: info["jd"])
         objectJdMaxInfo = max(objectInfo[objectName], key=lambda info: info["jd"])
+        includeAuto = 1 in [info["is_auto"] for info in objectInfo[objectName]]
         raDiff = objectJdMaxInfo["ra"] - objectJdMinInfo["ra"]
         decDiff = objectJdMaxInfo["dec"] - objectJdMinInfo["dec"]
         jdDiff = objectJdMaxInfo["jd"] - objectJdMinInfo["jd"]
+
+        # 非常に例外的だが, 時間差がない測定が2個だけ残る場合があるので, その場合は問答無用で消す
+        if jdDiff == 0.0:
+            deleteObjectNames.append(objectName)
+            continue
+
+        # その天体の移動速度見積もり
         speed = math.sqrt(raDiff * raDiff + decDiff * decDiff) / jdDiff
+
+        # 未知天体であり, かつ速度が自動検出下限値以下であり, かつ自動検出天体を含むものは問答無用で消す
+        # 2023年8月の改修以降はそのような測定はないはずなので, そのような測定は高確率で運用初期のノイズである
+        if (
+            includeAuto
+            and speed < VEL_LOWER_THRESH_DEGREEDAY
+            and re.search(r"^H......", objectName) is not None
+        ):
+            deleteObjectNames.append(objectName)
+            continue
 
         # 画像と天体の測定時刻が概ね2日以内のものは問答無用で残す
         warpAndObjectJdDiff = calcWarpAndObjectJdDiff(
