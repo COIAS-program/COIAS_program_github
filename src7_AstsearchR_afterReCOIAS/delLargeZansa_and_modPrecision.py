@@ -20,9 +20,14 @@
 import sys
 import traceback
 import os
+import readparam
 import print_detailed_log
 
 try:
+    # 2点許可モードかどうか取得
+    params = readparam.readparam()
+    TWO_MEASUREMENT_PERMIT_MODE = params["tp"] == 1
+
     argc = len(sys.argv)
     if argc != 2:
         print("please input second argument of 1 or 2")
@@ -66,12 +71,12 @@ try:
                 if obsName == prevObsName:
                     nObs += 1
                 else:
-                    if nObs <= 2:
+                    if nObs <= 2 and not TWO_MEASUREMENT_PERMIT_MODE:
                         for n in reversed(range(nObs)):
                             del outputLines[i + n + 1]
                     nObs = 1
 
-                if i == 0 and nObs <= 2:
+                if i == 0 and nObs <= 2 and not TWO_MEASUREMENT_PERMIT_MODE:
                     for n in reversed(range(nObs)):
                         del outputLines[n]
 

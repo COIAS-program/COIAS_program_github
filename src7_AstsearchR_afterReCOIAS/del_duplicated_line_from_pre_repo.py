@@ -31,6 +31,7 @@ import os
 import glob
 from astropy.io import fits
 from astropy.wcs import wcs
+import readparam
 import print_detailed_log
 import PARAM
 import changempc
@@ -62,6 +63,10 @@ try:
         print("So that we ignore this script for NON WEB COIAS mode.")
         raise NothingToDo
     # ----------------------------------------------------------------------------
+
+    # 2点許可モードかどうか取得
+    params = readparam.readparam()
+    TWO_MEASUREMENT_PERMIT_MODE = params["tp"] == 1
 
     # ---測定している画像の中心のra, decおよびjdの最大・最小値を取得--
     ### 中心座標取得
@@ -182,12 +187,12 @@ try:
             if obsName == prevObsName:
                 nObs += 1
             else:
-                if nObs <= 2:
+                if nObs <= 2 and not TWO_MEASUREMENT_PERMIT_MODE:
                     for n in reversed(range(nObs)):
                         del inputLines[i + n + 1]
                 nObs = 1
 
-            if i == 0 and nObs <= 2:
+            if i == 0 and nObs <= 2 and not TWO_MEASUREMENT_PERMIT_MODE:
                 for n in reversed(range(nObs)):
                     del inputLines[n]
 
