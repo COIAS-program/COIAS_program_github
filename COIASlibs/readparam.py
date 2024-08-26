@@ -27,6 +27,7 @@ def is_num(s):
     else:
         return True
 
+
 def is_uuid(s):
     try:
         UUID(s, version=4)
@@ -57,6 +58,7 @@ def readparam():
                 or content[0] == "ar"
                 or content[0] == "dm"
                 or content[0] == "sn"
+                or content[0] == "tp"
             ):
                 params[content[0]] = int(content[1])
             elif content[0] == "vt" or content[0] == "vl":
@@ -80,7 +82,7 @@ def write_used_param(paramKey, paramValue):
         for line in lines:
             contents = line.split()
             key = contents[0]
-            if key == "nd" or key == "ar" or key == "dm" or key == "sn":
+            if key == "nd" or key == "ar" or key == "dm" or key == "sn" or key == "tp":
                 value = int(contents[1])
             elif key == "vt" or key == "vl":
                 value = float(contents[1])
@@ -94,7 +96,7 @@ def write_used_param(paramKey, paramValue):
     existParamDict[paramKey] = paramValue
     f = open("used_param.txt", "w")
     for k in existParamDict:
-        if k == "nd" or k == "ar" or k == "dm" or k == "sn":
+        if k == "nd" or k == "ar" or k == "dm" or k == "sn" or k == "tp":
             f.write(k + " " + "{0:d} \n".format(existParamDict[k]))
         elif k == "vt" or k == "vl":
             f.write(k + " " + "{0:.1f} \n".format(existParamDict[k]))

@@ -18,6 +18,7 @@ vl="0.3" # default value for velocity lower threshold to detect moving objects
 dm="6" #default value for DETECT_MINAREA, i.e., minimum area for detecting sources at SExtractor
 sn="500" #default value for mean source number detected by SExtractor
 id="-1" #default value for user id for webCOIAS
+tp="0" #default value for Two measurement Permit mode
 
 for arg in "$@"; do
   case $arg in
@@ -28,6 +29,7 @@ for arg in "$@"; do
 	  dm=*) dm=${arg#???}                 ;;
 	  sn=*) sn=${arg#???}                 ;;
 	  id=*) id=${arg#???}                 ;;
+    tp=*) tp=${arg#???}                 ;;
        *) echo "Invalid option" 1>&2    ;;
   esac
 done
@@ -39,3 +41,4 @@ echo vl $vl >> param.txt
 echo dm $dm >> param.txt
 echo sn $sn >> param.txt
 echo id $id >> param.txt
+echo tp $tp >> param.txt
