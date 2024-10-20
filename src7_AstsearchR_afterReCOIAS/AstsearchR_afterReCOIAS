@@ -33,6 +33,9 @@
 #      過去にMPCに報告したデータとほとんど同じjd, ra, decを持つデータを再度報告すると怒られる.
 #      これを防ぐため過去の報告データが~/.coias/past_pre_repo_data/以下に保存されているため,
 #      それらとカレントにある報告データの照合を行って一致するデータを削除する.
+# 9.2. del_duplicated_line_with_other_programs.py
+#      COIASではないがSSP PDRの画像を使った測定との重複を弾く.
+#      つまり, T09だがプログラムコードが4ではないものとの重複も弾く.
 # 10. modify_preRepo_as_H_sequential.py
 #      前述の削除の影響で新天体の番号に欠番が生じ連番ではなくなるので,
 #      また連番になるように補正する.
@@ -77,6 +80,8 @@ delLargeZansa_and_modPrecision.py 1 2>&1 | tee -a log.txt
 reject_bright_known_asteroids_from_report.py 2>&1 | tee -a log.txt
 
 del_duplicated_line_from_pre_repo.py 2>&1 | tee -a log.txt
+
+del_duplicated_line_with_other_programs.py 2>&1 | tee -a log.txt
 
 modify_preRepo_as_H_sequential.py 2>&1 | tee -a log.txt
 
