@@ -44,7 +44,10 @@ flowchart TD
 	W --- b[[del_duplicated_line_from_pre_repo.py]]
 	c[/measure_resultテーブル/] --- b
 	b --> d[/pre_repo2.txt/]
-    d --- Y[[modify_preRepo_as_H_sequential.py]]
+    d --- Y2[[del_duplicated_line_with_other_programs.py]]
+    c2[/ObservationAPIの情報\n~/.coias/param/itf_T09_except4.txt/] --- Y2
+    Y2 --> d2[/pre_repo2_2.txt/]
+    d2 --- Y[[modify_preRepo_as_H_sequential.py]]
     r[/"~/.coias/param/max_H_number.txt"/] --> Y
     s[/start_H_number.txt/] --> Y
     Y --> Z[/pre_repo3.txt/]
