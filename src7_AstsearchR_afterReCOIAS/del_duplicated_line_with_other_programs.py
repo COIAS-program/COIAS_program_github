@@ -41,7 +41,7 @@ try:
         lines = f.readlines()
         for line in lines:
             objectName = line[0:12].strip()
-            if not re.match("^H......") and objectName not in MPC80LinesObj:
+            if not re.match("^H......", objectName) and objectName not in MPC80LinesObj:
                 MPC80LinesObj[objectName] = []
 
     ### Observations APIを用いて既知天体の既報告済みMPC80行の一覧を取得する
@@ -68,13 +68,23 @@ try:
     for l in reversed(range(len(inputLines))):
         inputLine = inputLines[l].rstrip("\n")
         objectName = inputLine[0:12].strip()
-        keyObjectName = objectName if not re.match(objectName, "^H......") else "itf"
+        keyObjectName = objectName if not re.match("^H......", objectName) else "itf"
         inputLineInfo = changempc.parse_MPC80_and_get_jd_ra_dec(inputLine)
 
         for compareLine in MPC80LinesObj[keyObjectName]:
-            compareLineInfo = changempc.parse_MPC80_and_get_jd_ra_dec(
-                compareLine, permitNonCLine=True
-            )
+            # 比較相手には14文字目がCではないものがあるが, ライブラリ的にそれは困るので強制置換する
+            listCompareLine = list(compareLine)
+            listCompareLine[14] = "C"
+            compareLineWithC = "".join(listCompareLine)
+
+            # 比較相手にたまにパース不可能なものがあるが, 無視する
+            try:
+                compareLineInfo = changempc.parse_MPC80_and_get_jd_ra_dec(
+                    compareLineWithC
+                )
+            except Exception:
+                print(f"compare line is not parsable. omit. line = {compareLine}")
+                continue
 
             # 比較・削除
             raDiff = abs(inputLineInfo["raDegree"] - compareLineInfo["raDegree"])
