@@ -12,7 +12,7 @@
 # 通常そのような番号は今回の測定で指定したH暗号の開始値よりも若いので,
 # そのような若い番号は今回の付け替えの対象としない.
 #
-# 入力: pre_repo2.txt
+# 入力: pre_repo2_2.txt
 # 　　  H_conversion_list_automanual2.txt
 # 　　  start_H_number.txt 今回の測定で指定されたH番号の開始値と, AstsearchR_between_COIAS_and_ReCOIASの実行時に第二引数が指定されたかどうかを知るために使用.
 # 　　  max_H_number.txt 今現在の全ユーザーに測定された新天体のうちH番号の最大値を知るために使用.
@@ -32,13 +32,13 @@ import PARAM
 
 try:
     completed_process = subprocess.run(
-        "sort -n -o pre_repo2.txt pre_repo2.txt", shell=True
+        "sort -n -o pre_repo2_2.txt pre_repo2_2.txt", shell=True
     )
     if completed_process.returncode != 0:
         raise Exception
 
     # ---get H conversion list from pre repo-----------------------
-    filePreRepo = open("pre_repo2.txt", "r")
+    filePreRepo = open("pre_repo2_2.txt", "r")
     lines = filePreRepo.readlines()
     filePreRepo.close()
 
@@ -105,7 +105,7 @@ try:
     # -------------------------------------------------------------
 
     # ---modify pre_repo.txt as H numbers become sequential--------
-    filePreRepo = open("pre_repo2.txt", "r")
+    filePreRepo = open("pre_repo2_2.txt", "r")
     lines = filePreRepo.readlines()
     filePreRepo.close()
 
