@@ -20,6 +20,7 @@
 ################################################################################################
 
 import requests
+import time
 import traceback
 import shutil
 import re
@@ -46,11 +47,21 @@ try:
 
     ### Observations APIを用いて既知天体の既報告済みMPC80行の一覧を取得する
     for objectName in MPC80LinesObj:
-        response = requests.get(
-            MPC_OBSERVATIONS_API_URL,
-            json={"desigs": [objectName], "output_format": ["OBS80"]},
-        )
-        MPC80LinesObj[objectName] = response.json()[0]["OBS80"].rstrip("\n").split("\n")
+        while True:
+            try:
+                response = requests.get(
+                    MPC_OBSERVATIONS_API_URL,
+                    json={"desigs": [objectName], "output_format": ["OBS80"]},
+                )
+                MPC80LinesObj[objectName] = response.json()[0]["OBS80"].rstrip("\n").split(
+                    "\n"
+                )
+                time.sleep(0.1)
+                break
+            except Exception:
+                time.sleep(0.1)
+                continue
+
 
     ### ~/coias/param/itf_T09_except4.txtから未知天体の既報告済みMPC80行の一覧を取得する
     itfFileName = COIAS_PARAM_PATH + "/itf_T09_except4.txt"
