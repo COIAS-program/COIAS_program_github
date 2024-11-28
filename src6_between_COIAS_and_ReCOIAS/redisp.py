@@ -2,13 +2,13 @@
 # -*- coding: UTF-8 -*
 # Timestamp: 2022/08/05 21:00 sugiura
 ############################################################################################
-# mpc3.txtのある行の15-80カラム目(つまり観測日, ra, dec, 等級, フィルター, 観測所まで)と
+# mpc2.txtのある行の15-80カラム目(つまり観測日, ra, dec, 等級, フィルター, 観測所まで)と
 # all.txtのある行の15-80カラム目と完全に一致するような行を見つけ出し,
-# mpc3.txtのその行の0-14カラム目(名前部分)とall.txtのその行の15カラム目以降(その他情報)を結合させ,
+# mpc2.txtのその行の0-14カラム目(名前部分)とall.txtのその行の15カラム目以降(その他情報)を結合させ,
 # newall.txtに書き出す.
-# 要は, mpc3.txtに記載の天体のみの情報をall.txtから抽出してnewall.txtに書き出す.
+# 要は, mpc2.txtに記載の天体のみの情報をall.txtから抽出してnewall.txtに書き出す.
 # また, newall.txtのうち 天体名 画像番号 等級 等級誤差 Xpixel Ypixel のみをpredisp.txtに書き出す.
-# 入力: mpc3.txt
+# 入力: mpc2.txt
 # 　　  all.txt
 # 出力: newall.txt
 # 　　  predisp.txt
@@ -22,67 +22,67 @@ import numpy as np
 import print_detailed_log
 
 try:
-    # detect list
-    tmp1 = "all.txt"
-    tmp2 = "mpc3.txt"
-    tmp3 = "newall.txt"
-    tmp4 = "predisp.txt"
+    # ファイル名定義
+    allFileName = "all.txt"
+    mpc2FileName = "mpc2.txt"
+    newallFileName = "newall.txt"
+    predispFileName = "predisp.txt"
 
-    if os.stat("mpc3.txt").st_size == 0:
+    if os.stat("mpc2.txt").st_size == 0:
         empty = []
-        np.savetxt(tmp3, empty, fmt="%s")
-        np.savetxt(tmp4, empty, fmt="%s")
+        np.savetxt(newallFileName, empty, fmt="%s")
+        np.savetxt(predispFileName, empty, fmt="%s")
 
     else:
-        data1 = open(tmp1, "r")
-        data2 = open(tmp2, "r")
-        data3 = open(tmp3, "w")
-        data4 = open(tmp4, "w")
-        lines = data1.readlines()
-        lines2 = data2.readlines()
+        # データ読み出し ########################
+        fAll = open(allFileName, "r")
+        allLines = fAll.readlines()
+        fAll.close()
 
-        list = []
-        for i in range(len(lines)):
-            # tmp = lines[i].strip()
-            tmp1 = lines[i]
-            # print(tmp[15:80])
-            tmp1b = tmp1[15:80]
-            for j in range(len(lines2)):
-                tmp2 = lines2[j]
-                # print(tmp2[15:80])
-                tmp2b = tmp2[15:80]
-                if tmp1b == tmp2b:
-                    tmp3 = tmp2[0:15] + tmp1[15:124]
-                    # print(tmp3,i,j)
-                    list.append(tmp3)
-        # delete daburi
-        list2 = sorted(list, reverse=True)
-        list3 = []
-        list4 = []
-        for i in range(len(list2) - 1):
-            tmp4 = list2[i]
-            stock1 = tmp4[15:80]
-            tmp5 = list2[i + 1]
-            stock2 = tmp5[15:80]
+        fmpc2 = open(mpc2FileName, "r")
+        mpc2Lines = fmpc2.readlines()
+        fmpc2.close()
+        #######################################
+
+        # mpc2.txt に記載の行に該当する all.txt の行のみを残す #####
+        remainAllLines = []
+        for allLine in allLines:
+            allLineDataPart = allLine[15:80]
+            for mpc2Line in mpc2Lines:
+                mpc2LineDataPart = mpc2Line[15:80]
+                if allLineDataPart == mpc2LineDataPart:
+                    remainAllLines.append(allLine)
+        ######################################################
+
+        # ソートした上で, データ行が全く同じ隣り合う行が存在した場合, #
+        # 前者の行を残さない ####################################
+        remainAllLines = sorted(remainAllLines)
+        newAllLines = []
+        predispLines = []
+        for i in range(len(remainAllLines) - 1):
+            stock1 = remainAllLines[i][15:80]
+            stock2 = remainAllLines[i + 1][15:80]
             if not stock1 == stock2:
-                tmp6 = list2[i]
-                tmp7 = list2[i][0:14] + list2[i][81:124]
-                list3.append(tmp6)
-                list4.append(tmp7)
-        list3.append(list2[len(list2) - 1])
-        list4.append(list2[len(list2) - 1][0:14] + list2[len(list2) - 1][81:124])
-        for x in list3:
-            tmp8 = x.strip("\n")
-            data3.write(str(tmp8) + "\n")
+                newAllLine = remainAllLines[i]
+                newAllLines.append(newAllLine)
+                predispLine = remainAllLines[i][0:14] + remainAllLines[i][81:124]
+                predispLines.append(predispLine)
+        newAllLines.append(remainAllLines[len(remainAllLines) - 1])
+        predispLines.append(
+            remainAllLines[len(remainAllLines) - 1][0:14]
+            + remainAllLines[len(remainAllLines) - 1][81:124]
+        )
+        ######################################################
 
-        for x in list4:
-            tmp9 = x.strip("\n")
-            data4.write(str(tmp9) + "\n")
+        # データ書き出し ########################
+        fNewAll = open(newallFileName, "w")
+        fNewAll.writelines(newAllLines)
+        fNewAll.close()
 
-        data1.close()
-        data2.close()
-        data3.close()
-        data4.close()
+        fPredisp = open(predispFileName, "w")
+        fPredisp.writelines(predispLines)
+        fPredisp.close()
+        #######################################
 
 except FileNotFoundError:
     print("Some previous files are not found in redisp.py!", flush=True)
