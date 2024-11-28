@@ -5,16 +5,8 @@ flowchart TD
     A[/memo.txt/] --- B[[prempedit2.py]]
     C[/mpc.txt/] --- B
     B --> D[/mpc2.txt/]
-    D --- E[[makeHlist]]
-    E --> F[/Hlist.txt/]
-    D --- G[[prempedit3.py]]
-    F --- G
-	T[/"(第二引数が省略された場合)<br>~/.coias/param/max_H_number.txt"/] --> G
-    G --> H[/mpc3.txt/]
-    G --> I[/H_conversion_list.txt/]
-    G --> U[/start_H_number.txt/]
-    H --- J[[redisp.py]]
-    H --> K[/mpc4.txt/]
+    D --- K[/mpc4.txt/]
+    D --- J[[redisp.py]]
     L[/all.txt/] --- J
     J --> M[/newall.txt/]
     J --> N[/predisp.txt/]

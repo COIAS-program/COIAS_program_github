@@ -25,10 +25,10 @@
    4. prempsearchC-after [フローチャート](flowcharts/flowchart3-prempsearchC-after.md) [各スクリプトの処理内容](COIASdocs/src4-core-program.md)
    5. astsearch_new [フローチャート](flowcharts/flowchart4-astsearch_new.md) [各スクリプトの処理内容](COIASdocs/src5-core-program.md)
 3. `COIAS.py` と打ち込んで、searchモードにてGUIで移動天体を目視で確認する。COIAS.py を実行すると画面が1つ開くが、まずはその画面のCOIAS mode欄の「search」ラジオボタンを選ぶ。お好みに応じてマスクあり画像かマスクなし画像かを「image preference」ラジオボタンから選べる。選んだら「Load img」ボタンを押すとメインGUI画面が開くので。画像をブリンクさせ、移動天体だと思う天体の四角をクリックして、その四角を赤くする。一通り選び終えたら右上の「Output」ボタンを押して memo.txt を出力させる。[詳しい COIAS.py の操作方法はこちら](COIASdocs/READMECOIAS.md)
-4. `AstsearchR_between_COIAS_and_ReCOIAS` [新天体の通し番号] と打ち込む。第二引数に今まで自分が見つけた新天体の番号のうち一番大きいもの+1を指定する。指定しない場合は ~/.coias/param/max_H_number.txt に記載の今までに測定してきた新天体の番号の最大値+1が自動的に使用される. この作業で、新天体と同定したもののデータをMPCフォーマットに再整形、名前の付け替え、ReCOIAS を再表示する準備をする。
+4. `AstsearchR_between_COIAS_and_ReCOIAS`と打ち込む。この作業で、新天体と同定したもののデータをMPCフォーマットに再整形、名前の付け替え、ReCOIAS を再表示する準備をする。
    - [フローチャート](flowcharts/flowchart5-AstsearchR_between_COIAS_and_ReCOIAS.md)
    - [各スクリプトの処理内容](COIASdocs/src6-core-program.md)
-5. `COIAS.py` と打ち込んで、manual measureモードにて自動検出できなかった天体を測定する。詳しい使い方は[こちら](COIASdocs/READMECOIAS.md)に記載するが、自動検出されていないが移動天体だと思う光源をクリックし、拡大画面で3点をクリックし四角形アパーチャーを設置する。またこのモードでは自動検出天体のうちノイズを巻き込んで検出しているものの排除も行える。一通り選び終えたら右上の「Output」ボタンを押して memo_manual.txt を出力させる。
+5. `COIAS.py` と打ち込んで、manual measureモードにて、自動検出できなかった天体を測定する。詳しい使い方は[こちら](COIASdocs/READMECOIAS.md)に記載するが、自動検出されていないが移動天体だと思う光源をクリックし、拡大画面で3点をクリックし四角形アパーチャーを設置する。またこのモードでは自動検出天体のうちノイズを巻き込んで検出しているものの排除も行える。一通り選び終えたら右上の「Output」ボタンを押して memo_manual.txt を出力させる。
 6. `AstsearchR_after_manual` と打ち込んで、手動測定天体の測光および既知天体との照合を行う。[フローチャート](flowcharts/flowchart6-AstsearchR_after_manual.md)
 7. `COIAS.py` と打ち込んで、reconfirm/modify nameモードにて選択・測定した天体が本当に移動天体であるかどうか目視で再確認する。他、自動検出である移動天体の光源をいくつか検出し損ねていた時、その検出漏れした光源を手動測定で測定しても天体番号が自動検出のものと変わってしまうので、同じ移動天体とみなさせるために新天体の名前を任意に変更できる。詳しい使い方は[こちら](COIASdocs/READMECOIAS.md)。結果が良さそうなら特段の操作は不要で、画面を閉じて良い。
 8. `AstsearchR_afterReCOIAS` と打ち込んで同スクリプトを使用し、重複行の削除、findOrbを用いた軌道測定、誤差が大きいデータの削除、新天体に米印をつける、などを実行する。[フローチャート](flowcharts/flowchart7-AstsearchR_afterReCOIAS.md)
