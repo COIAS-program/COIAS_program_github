@@ -11,16 +11,16 @@ flowchart TD
     E --> H[/nomatch_manual.txt/]
     G --- I[[change_data_to_mpc_format_manual.py]]
     H --- I
-    I --> J[/numbered_all_m.txt\nnumbered_mpc_m.txt\nnumbered_disp_m.txt/]
-    I --> K[/karifugo_all_m.txt\nkarifugo_mpc_m.txt\nkarifugo_disp_m.txt/]
-    I --> L[/unknown_all_m.txt\nunknown_mpc_m.txt\nunknown_disp_m.txt/]
+    I --> J[/numbered_all_m.txt<br>numbered_mpc_m.txt<br>numbered_disp_m.txt/]
+    I --> K[/karifugo_all_m.txt<br>karifugo_mpc_m.txt<br>karifugo_disp_m.txt/]
+    I --> L[/unknown_all_m.txt<br>unknown_mpc_m.txt<br>unknown_disp_m.txt/]
     J --- M[[いくつかの処理とcatコマンドによる連結]]
     K --- M
     L --- M
     M --> N[/all_m.txt/]
     M --> O[/mpc_m.txt/]
     M --> P[/disp_m.txt/]
-	c[/"(redisp.txtが空の場合)\n~/.coias/param/max_H_number.txt"/] --- Q[[make_mpc4_newall_and_redisp_manual.py]]
+	c[/"(redisp.txtが空の場合)<br>~/.coias/param/max_H_number.txt"/] --- Q[[make_mpc4_newall_and_redisp_manual.py]]
     N --- Q
     O --- Q
     P --- Q
@@ -35,7 +35,9 @@ flowchart TD
     X --> a[/redisp2.txt/]
     X --> b[/manual_delete_list2.txt/]
     a --> V
+``````
 
+<!--
     click B "https://github.com/COIAS-program/COIAS_program_github/blob/main/src8_astsearch_manual/photometry_manual_objects.py"
     click E "https://github.com/COIAS-program/COIAS_program_github/blob/main/src8_astsearch_manual/match2E.py"
     click I "https://github.com/COIAS-program/COIAS_program_github/blob/main/src8_astsearch_manual/change_data_to_mpc_format_manual.py"
@@ -63,4 +65,4 @@ flowchart TD
     click Z "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample5/H_conversion_list.txt"
     click a "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample6/redisp2.txt"
     click b "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample6/manual_delete_list2.txt"
-``````
+-->
