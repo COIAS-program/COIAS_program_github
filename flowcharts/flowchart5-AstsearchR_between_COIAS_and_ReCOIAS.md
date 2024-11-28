@@ -19,12 +19,6 @@ flowchart TD
     J --> M[/newall.txt/]
     J --> N[/predisp.txt/]
     N --> O[/redisp.txt/]
-
-    subgraph correct
-        P[/"(先にmanual measureモードを実行していたら)"<br>manual_delete_list2.txt/] --- Q[[correct_manual_delete_list.py]]
-        R[/H_conversion_list.txt/] --- Q
-        Q --> S[/manual_delete_list.txt/]
-    end
 ``````
 
 <!--
