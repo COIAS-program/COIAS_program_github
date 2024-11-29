@@ -17,17 +17,9 @@ flowchart TD
     J --- M[[いくつかの処理とcatコマンドによる連結]]
     K --- M
     L --- M
-    M --> N[/all_m.txt/]
-    M --> O[/mpc_m.txt/]
-    M --> P[/disp_m.txt/]
-	c[/"(redisp.txtが空の場合)<br>~/.coias/param/max_H_number.txt"/] --- Q[[make_mpc4_newall_and_redisp_manual.py]]
-    N --- Q
-    O --- Q
-    P --- Q
-    Q --> R[/newall_m.txt/]
-    Q --> S[/mpc4_m.txt/]
-    Q --> T[/redisp_manual.txt/]
-    Q --> U[/H_conversion_list_manual.txt/]
+    M --> R[/newall_m.txt/]
+    M --> S[/mpc4_m.txt/]
+    M --> T[/redisp_manual.txt/]
     T --> V[/reredisp.txt/]
     W[/redisp.txt/] --- X[[apply_manual_delete_to_redisp.py]]
     Y[/manual_delete_list.txt/] --- X
