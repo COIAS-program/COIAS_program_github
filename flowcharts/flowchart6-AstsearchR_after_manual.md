@@ -23,9 +23,7 @@ flowchart TD
     T --> V[/reredisp.txt/]
     W[/redisp.txt/] --- X[[apply_manual_delete_to_redisp.py]]
     Y[/manual_delete_list.txt/] --- X
-    Z[/H_conversion_list.txt/] --- X
     X --> a[/redisp2.txt/]
-    X --> b[/manual_delete_list2.txt/]
     a --> V
 ``````
 
