@@ -16,12 +16,6 @@ flowchart TD
     B --> G[/newall_automanual.txt/]
     B --> H[/redisp_automanual.txt/]
     B --> I[/H_conversion_list_automanual.txt/]
-
-    subgraph adjust
-        A1[/redisp.txt<br>redisp_manual.txtを使用/] --- B1[[adjust_newH_manual.py]]
-        B1 --> C1[/H_conversion_list_manual.txt, mpc4_m.txt,<br>newall_m.txt,redisp_manual.txtを修正/]
-    end
-
     l[/manual_name_modify_list.txt/] --- J
     F --- J[[apply_manual_name_modify.py]]
     G --- J
