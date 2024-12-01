@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
-# Timestamp: 2022/08/06 20:30 sugiura
+# Timestamp: 2024/12/01 14:00 sugiura
 ###########################################################################################
-# modify_preRepo_as_H_sequential.pyにてH番号が連番になるようにpre_repo2.txtのH番号を付け替えたので,
+# modify_preRepo_as_H_sequential.pyにてH番号が連番になるようにpre_repo2_2.txtのH番号を付け替えたので,
 # その付け替えをnewall_automanual2.txtにも適用してfinal_all.txtを作成し, 最終的なdisp系ファイルも作成する.
 # その際pre_repo3.txt(誤差が大きいデータや重複を弾いたり名前の付け替えを全て終えた報告ファイル)に記載の
 # 行の情報のみ, newall_automanual2.txtから探してきてfinal_all.txtおよびfinal_disp.txtを作成する.
 # さらに, 初期の画像ファイルの名前, 新天体の数, ウェブ版findorbで得られた軌道やサイズなどの情報
 # などもfinal_all.txtに追記する.
-# またH番号の最大値を~/.coias/param/max_H_number.txtに書き出す. その際若返りを起こさないようにする.
 #
-# 入力: H_conversion_list_automanual3.txt 名前付け替えの履歴のリスト
+# 入力: H_conversion_list_simple.txt 名前付け替えの履歴のリスト
 # 　　  newall_automanual2.txt 出力するall系データの検索に使用
 # 　　  orbital_elements_summary_web.txt 出力する軌道情報の検索に使用
 # 　　  pre_repo3.txt データを弾いたり名前の付け替えを終えた後の報告ファイル
@@ -106,27 +105,15 @@ try:
     )
     # -----------------------------------------------------------
 
-    # ---output HNMax to ~/.coias/param/max_H_number.txt---------
-    maxHFileName = PARAM.COIAS_DATA_PATH + "/param/max_H_number.txt"
-    f = open(maxHFileName, "r")
-    line = f.readline()
-    f.close()
-    HNMaxInFile = int(line.split()[0])
-    if HNMax + 1 > HNMaxInFile:
-        f = open(maxHFileName, "w", newline="\n")
-        f.write(str(HNMax + 1) + " " + os.getcwd() + "\n")
-        f.close()
-    # -----------------------------------------------------------
-
     # ---get H conversion list-----------------------------------
-    HConversionListFile = open("H_conversion_list_automanual3.txt", "r")
+    HConversionListFile = open("H_conversion_list_simple.txt", "r")
     lines = HConversionListFile.readlines()
     HOld = []
     HNew = []
     for l in range(len(lines)):
-        lineList = lines[l].split()
-        HOld.append(lineList[2])
-        HNew.append(lineList[3])
+        lineContents = lines[l].split()
+        HOld.append(lineContents[0])
+        HNew.append(lineContents[1])
     HConversionListFile.close()
     # -----------------------------------------------------------
 

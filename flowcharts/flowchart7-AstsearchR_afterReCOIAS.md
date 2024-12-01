@@ -41,9 +41,10 @@ flowchart TD
     Y2 --> d2[/pre_repo2_2.txt/]
     d2 --- Y[[modify_preRepo_as_H_sequential.py]]
     r[/"~/.coias/param/max_H_number.txt"/] --> Y
-    s[/start_H_number.txt/] --> Y
+    M --> Y
     Y --> Z[/pre_repo3.txt/]
-    Y --> a[/H_conversion_list_automanual3.txt/]
+    Y --> a[/H_conversion_list_simple.txt/]
+    Y --> t[/"~/.coias/param/max_H_number.txt"/]
     Z --- e[[komejirushi.py]]
     e --> f[/send_mpc.txt/]
     Z --- g[[store_pre_repo3.py<br>未使用]]
@@ -54,7 +55,6 @@ flowchart TD
     L --- i
     i --> j[/final_all.txt/]
     i --> k[/final_disp.txt/]
-    i --> t[/"~/.coias/param/max_H_number.txt"/]
     S --- i
     j --- u[[make_prefixed_sendMpc_and_finalAll.py]]
     f --- u
