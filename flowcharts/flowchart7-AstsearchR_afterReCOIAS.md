@@ -23,7 +23,6 @@ flowchart TD
     J --> K[/mpc4_automanual2.txt/]
     J --> L[/newall_automanual2.txt/]
     J --> M[/redisp_automanual2.txt/]
-    J --> N[/H_conversion_list_automanual2.txt/]
     K --- O[[deldaburi4.py]]
     O --> P[/mpc7.txt/]
     P --- Q[[findorb.py]]
@@ -45,7 +44,6 @@ flowchart TD
     s[/start_H_number.txt/] --> Y
     Y --> Z[/pre_repo3.txt/]
     Y --> a[/H_conversion_list_automanual3.txt/]
-    N --- Y
     Z --- e[[komejirushi.py]]
     e --> f[/send_mpc.txt/]
     Z --- g[[store_pre_repo3.py<br>未使用]]
