@@ -13,44 +13,35 @@ import traceback
 import print_detailed_log
 
 try:
-    # detect list
-    tmp1 = "pre_repo3.txt"
-    tmp2 = "send_mpc.txt"
-    data1 = open(tmp1, "r")
+    ### pre_repo3.txtからMPC80行を読み込む ###############
+    fPreRepo = open("pre_repo3.txt", "r")
+    lines = fPreRepo.readlines()
+    fPreRepo.close()
+    ###################################################
 
-    # all object
-    lines = data1.readlines()
-    # identified object
-
-    # list of moving object
-    new_list1 = []
+    ### H番号の新天体の1行目にアスタリスクを付与する ##########
+    newLines = []
     for i in range(len(lines) - 1):
-        # if lines[i][0:12] != lines[i+1][0:12] and lines[i+1][5] == 'H':
-        # print(lines[i])
-        # ---K. S. modify 2021/6/17--------------------------------------------------------------------------------------
         if i == 0:
             if lines[i][5:6] == "H":
                 mylist = [word for word in lines[i]]
                 mylist[12] = "*"
                 newlist = "".join(mylist)
-                new_list1.append(newlist)
+                newLines.append(newlist)
             else:
-                new_list1.append(lines[i])
+                newLines.append(lines[i])
 
         if lines[i][0:12] != lines[i + 1][0:12] and lines[i + 1][5:6] == "H":
-            # if lines[i][0:12] != lines[i+1][0:12] and lines[i+1][5:9] == 'H002':
-
-            # lines[i+1][13].replace(' ','*')
             mylist = [word for word in lines[i + 1]]
             mylist[12] = "*"
             newlist = "".join(mylist)
-            new_list1.append(newlist)
+            newLines.append(newlist)
         else:
-            new_list1.append(lines[i + 1])
-            # print(lines[i])
-        # ---------------------------------------------------------------------------------------------------------------
-    with open(tmp2, "wt") as f:
-        f.writelines(new_list1)
+            newLines.append(lines[i + 1])
+    ###################################################
+
+    with open("send_mpc.txt", "wt") as f:
+        f.writelines(newLines)
 
 except FileNotFoundError:
     print("Some previous files are not found in komejirushi.py!", flush=True)
