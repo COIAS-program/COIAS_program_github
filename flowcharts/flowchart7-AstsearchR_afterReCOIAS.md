@@ -5,13 +5,14 @@ flowchart TD
     n[/mpc4.txt/] --- o[[apply_manual_delete_to_report.py]]
     p[/newall.txt/] --- o
     q[/redisp.txt/] --- o
+    E[/manual_delete_list.txt/] --- o
     o --> A
     o --> C
     o --> D
     A[/mpc4_2.txt<br>mpc4_m.txt/] --- B[[merge_manual]]
     C[/newall_2.txt<br>newall_m.txt/] --- B
     D[/redisp_2.txt<br>redisp_manual.txt/] --- B
-    E[/H_conversion_list.txt<br>H_conversion_list_manual.txt/] --- B
+
     B --> F[/mpc4_automanual.txt/]
     B --> G[/newall_automanual.txt/]
     B --> H[/redisp_automanual.txt/]
