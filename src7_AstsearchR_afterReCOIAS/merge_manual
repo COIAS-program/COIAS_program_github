@@ -1,5 +1,5 @@
 #!/bin/bash
-#Timestamp: 2022/08/06 19:30 sugiura
+#Timestamp: 2024/12/01 12:00 sugiura
 ###########################################################################################
 # 自動検出天体と手動測定天体の情報をマージしてまとめたファイルを作成する.
 # ただし手動測定は行われないことがあるので, 手動測定で出力されるファイルがなければ
@@ -9,7 +9,6 @@
 # mpc4_2.txt + mpc4_m.txt => mpc4_automanual.txt
 # newall_2.txt + newall_m.txt => newall_automanual.txt
 # redisp_2.txt + redisp_manual.txt => redisp_automanual.txt
-# H_conversion_list.txt + H_conversion_list_manual.txt => H_conversion_list_automanual.txt
 ###########################################################################################
 
 error=0
@@ -47,18 +46,6 @@ else
     cat redisp_2.txt | sort -k 1,1 -k 2n,2 > redisp_automanual.txt
     if [ $? -ne 0 ]; then
 	error=1
-    fi
-fi
-
-if [ -e "H_conversion_list_manual.txt" ]; then
-    cat	H_conversion_list.txt H_conversion_list_manual.txt > H_conversion_list_automanual.txt
-    if [ $? -ne 0 ]; then
-	error=1
-    fi
-else
-    cat	H_conversion_list.txt > H_conversion_list_automanual.txt
-    if [ $? -ne 0 ]; then
-        error=1
     fi
 fi
 

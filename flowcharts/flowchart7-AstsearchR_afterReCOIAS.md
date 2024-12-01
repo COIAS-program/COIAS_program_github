@@ -16,12 +16,10 @@ flowchart TD
     B --> F[/mpc4_automanual.txt/]
     B --> G[/newall_automanual.txt/]
     B --> H[/redisp_automanual.txt/]
-    B --> I[/H_conversion_list_automanual.txt/]
     l[/manual_name_modify_list.txt/] --- J
     F --- J[[apply_manual_name_modify.py]]
     G --- J
     H --- J
-    I --- J
     J --> K[/mpc4_automanual2.txt/]
     J --> L[/newall_automanual2.txt/]
     J --> M[/redisp_automanual2.txt/]
