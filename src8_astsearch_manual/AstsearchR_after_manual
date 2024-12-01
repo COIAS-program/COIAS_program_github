@@ -1,6 +1,6 @@
 #!/bin/bash
 #S.U made on 2021/7/14
-#Timestamp: 2022/08/05 22:00 sugiura
+#Timestamp: 2024/12/01 12:00 sugiura
 ##############################################################################################
 # COIAS.pyのmanual measureモードでの手動測定を元にして,
 # 1. photometry_manual_objects.py 測光する
