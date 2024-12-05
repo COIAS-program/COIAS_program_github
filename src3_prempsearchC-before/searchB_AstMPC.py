@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
-# Timestamp: 2022/08/04 14:30 sugiura
+# Timestamp: 2024/12/05 23:30 sugiura
 ##############################################################################
 # ~/.coias/param/AstMPC.edbに記載の明るい既知小惑星の一覧から,
-# 視野内(tract中心から±1.8度以内, cf.HSCの視野直径1.5度)にあるものを探してくる.
+# 視野内(tract中心から±2.5度以内, cf.HSCの視野直径1.5度)にあるものを探してくる.
 #
 # 入力: ~/.coias/param/AstMPC.edb
 # 　　  warp01_bin.fits (jd, ra, decを取得するのに使用)
@@ -24,6 +24,8 @@ import print_detailed_log
 
 # multiprocessing
 import multiprocessing
+
+CAND_SEARCH_RADIUS_DEGREE = 2.5
 
 # ---function-------------------------------------------------------------------
 # mp.ra value is radian
@@ -70,10 +72,10 @@ try:
         ra = scidata1[0].header["CRVAL1"]
         dec = scidata1[0].header["CRVAL2"]
         # search region
-        ra_min = ra - 1.8
-        ra_max = ra + 1.8
-        dec_min = dec - 1.8
-        dec_max = dec + 1.8
+        ra_min = ra - CAND_SEARCH_RADIUS_DEGREE
+        ra_max = ra + CAND_SEARCH_RADIUS_DEGREE
+        dec_min = dec - CAND_SEARCH_RADIUS_DEGREE
+        dec_max = dec + CAND_SEARCH_RADIUS_DEGREE
 
         dt = julian.from_jd(float(jd1), fmt="jd")
         d = ephem.Date(dt)
