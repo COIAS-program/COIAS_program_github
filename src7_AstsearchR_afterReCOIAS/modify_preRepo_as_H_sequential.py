@@ -83,7 +83,7 @@ try:
             for l in range(len(HOldNameList)):
                 if originalHName == HOldNameList[l]:
                     newName = HNewNameList[l]
-        f.write(originalHName + " " + newName + "\n")
+            f.write(originalHName + " " + newName + "\n")
     # -------------------------------------------------------------
 
     # ---modify pre_repo.txt as H numbers become sequential--------
