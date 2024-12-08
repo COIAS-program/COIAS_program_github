@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Timestamp: 2024/12/01 12:00 sugiura
+# Timestamp: 2024/12/01 12:00 sugiura
 ##############################################################################################
 # manual measureモードで削除した自動測定天体の情報をredisp.txtから削除する.
 #
@@ -14,10 +14,13 @@
 ##############################################################################################
 import traceback
 import os
+import shutil
 import print_detailed_log
 
 try:
-    if os.path.isfile("manual_delete_list.txt"):
+    if not os.path.isfile("manual_delete_list.txt"):
+        shutil.copy2("redisp.txt", "redisp2.txt")
+    else:
         # ---remove data in manual_delete_list.txt from redisp.txt and produce redisp2.txt------
         f = open("redisp.txt", "r")
         redispLines = f.readlines()
