@@ -77,7 +77,7 @@ try:
             ):
                 originalHList.append(objectName)
 
-    with open("H_conversion_list_simple.txt", "r") as f:
+    with open("H_conversion_list_simple.txt", "w") as f:
         for originalHName in originalHList:
             newName = "rejected"
             for l in range(len(HOldNameList)):
