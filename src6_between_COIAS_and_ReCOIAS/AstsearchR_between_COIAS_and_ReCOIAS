@@ -1,5 +1,5 @@
 #!/bin/bash
-#Timestamp: 2022/08/05 19:30 sugiura
+#Timestamp: 2024/12/01 12:00 sugiura
 ########################################################################################
 # COIAS.pyのsearchモードで選択した新天体の番号を連番になるように付け替える.
 # さらに既知天体とsearchモードで選択した新天体のみを残す.
@@ -23,12 +23,7 @@ echo $? 65 601 > error.txt
 
 prempedit2.py 2>&1 | tee -a log.txt
 
-makeHlist 2>&1 | tee -a log.txt
-echo $? 64 603 >> error.txt
-
-prempedit3.py $1 2>&1 | tee -a log.txt
-
-sort -n mpc3.txt |uniq  >  mpc4.txt 2>&1 | tee -a log.txt
+sort -n mpc2.txt |uniq  >  mpc4.txt 2>&1 | tee -a log.txt
 echo $? 64 605 >> error.txt
 
 redisp.py 2>&1 | tee -a log.txt
@@ -38,8 +33,6 @@ sort -n -o newall.txt newall.txt 2>&1 | tee -a log.txt
 echo $? 64 607 >> error.txt
 
 cat redisp.txt > reredisp.txt
-
-correct_manual_delete_list.py 2>&1 | tee -a log.txt
 
 if [ -e "manual_name_modify_list.txt" ]; then
 	rm manual_name_modify_list.txt

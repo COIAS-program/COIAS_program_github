@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*
-# Timestamp: 2022/08/06 19:30 sugiura
+# Timestamp: 2024/12/01 12:00 sugiura
 ###########################################################################################
 # COIAS.pyのmodify nameモードで設定した名前の付け替えを適用する.
 # manual_name_modify_list.txtには, 全ての自動検出天体と手動測定天体に対して,
@@ -9,8 +9,6 @@
 # このスクリプトではmanual_name_modify_list.txtに記載された名前の付け替えを必要なファイルに適用する.
 #
 # 入力: manual_name_modify_list.txt
-# 入力 => 出力 (名前変更リストの3列目に今回の変更後の名前を追記)
-# H_conversion_list_automanual.txt => H_conversion_list_automanual2.txt
 # 入力 => 出力 (名前の付け替えを実行する)
 # mpc4_automanual.txt => mpc4_automanual2.txt
 # newall_automanual.txt => newall_automanual2.txt
@@ -33,14 +31,6 @@ try:
         os.stat("manual_name_modify_list.txt").st_size == 0
     ):
         ## if not, we just copy them
-        f = open("H_conversion_list_automanual.txt", "r")
-        lines = f.readlines()
-        f.close()
-        f = open("H_conversion_list_automanual2.txt", "w", newline="\n")
-        for line in lines:
-            f.write(line.rstrip("\n") + " " + line.split()[1] + "\n")
-        f.close()
-
         completed_process = subprocess.run(
             "cp mpc4_automanual.txt mpc4_automanual2.txt", shell=True
         )
@@ -72,22 +62,6 @@ try:
             if re.search(r"^H......", line.split()[0]) != None:
                 beforeNameList.append(line.split()[0])
                 afterNameList.append(line.split()[1])
-    # --------------------------------------------------------------
-
-    # ---modify H conversion list-----------------------------------
-    fileHConversionList = open("H_conversion_list_automanual.txt", "r")
-    lines = fileHConversionList.readlines()
-    fileHConversionList.close()
-
-    fileHConversionList2 = open("H_conversion_list_automanual2.txt", "w", newline="\n")
-    for line in lines:
-        for l in range(len(beforeNameList)):
-            if line.split()[1] == beforeNameList[l]:
-                fileHConversionList2.write(
-                    line.rstrip("\n") + " " + afterNameList[l] + "\n"
-                )
-                break
-    fileHConversionList2.close()
     # --------------------------------------------------------------
 
     # ---modify mpc4_automanual.txt, newall_automanual.txt, and redisp_automanual.txt

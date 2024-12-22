@@ -1,6 +1,6 @@
 #!/bin/bash
 #S.U made on 2021/7/14
-#Timestamp: 2022/08/05 22:00 sugiura
+#Timestamp: 2024/12/01 12:00 sugiura
 ##############################################################################################
 # COIAS.pyのmanual measureモードでの手動測定を元にして,
 # 1. photometry_manual_objects.py 測光する
@@ -19,7 +19,9 @@ photometry_manual_objects.py 2>&1 | tee -a log.txt
 match2E.py 2>&1 | tee -a log.txt
 change_data_to_mpc_format_manual.py 2>&1 | tee -a log.txt
 
-cat numbered_disp_m.txt karifugo_disp_m.txt unknown_disp_m.txt > disp_m.txt 2>&1 | tee -a log.txt
+#dispは前後の空白を除く仕様である
+cat numbered_disp_m.txt karifugo_disp_m.txt unknown_disp_m.txt | sed 's/^[[:blank:]]*//' > redisp_manual.txt 2>&1 | tee -a log.txt
+
 cat numbered_mpc_m.txt karifugo_mpc_m.txt unknown_mpc_m.txt > mpc_m.txt     2>&1 | tee -a log.txt
 cat numbered_all_m.txt karifugo_all_m.txt unknown_all_m.txt > all_m.txt     2>&1 | tee -a log.txt
 echo $? 84 805 >> error.txt
@@ -33,11 +35,9 @@ sed 's/^\(.\{70\}\)i2/\1i/g;' tmpall1_m.txt > tmpall2.txt 2>&1 | tee -a log.txt
 echo $? 84 806 >> error.txt
 
 rm tmpmpc1_m.txt tmpall1_m.txt 2>&1 | tee -a log.txt
-cat tmpmpc2.txt > mpc_m.txt      2>&1 | tee -a log.txt
-cat tmpall2.txt > all_m.txt      2>&1 | tee -a log.txt
+cat tmpmpc2.txt > mpc4_m.txt        2>&1 | tee -a log.txt
+cat tmpall2.txt > newall_m.txt      2>&1 | tee -a log.txt
 echo $? 84 807 >> error.txt
-
-make_mpc4_newall_and_redisp_manual.py 2>&1 | tee -a log.txt
 
 apply_manual_delete_to_redisp.py 2>&1 | tee -a log.txt
 

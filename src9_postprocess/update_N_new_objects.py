@@ -4,10 +4,7 @@
 ################################################################################################################
 # 今回の測定で新たに測定した新発見候補天体数を数え, 今までに測定した新発見候補天体数の合計数を記載した
 # /home/COIASusers/coias/param/N_new_objects.txtを更新する.
-# ここで今回の測定で新たに測定した新発見候補天体数は, send_mpc.txtに記載されたH〇〇〇〇〇〇の天体のうち,
-# start_H_number.txtに記載の番号よりもH番号が大きいものを, 名前の重複がないように数えた数である.
-# (start_H_number.txtは基本的に今まで発見してきたH番号の最大値.
-#  名前修正などで過去のH番号と同じ番号をつける可能性があるが, そのような天体は新たに測定した新発見候補天体に数えるべきではない)
+# ここで今回の測定で新たに測定した新発見候補天体数は, send_mpc.txtに記載されたH〇〇〇〇〇〇の天体を名前の重複がないように数えた数である.
 #
 # N_new_objects.txtから今回の測定前の新発見候補天体数を読み出し, 今回の測定で得られた新発見候補天体数を足しあげ,
 # その数をすぐにN_new_objects.txtに書き込む.
@@ -22,15 +19,8 @@ import print_detailed_log
 
 try:
     # --- count number of new objects obtained from this measurement ----------
-    if not os.path.isfile("start_H_number.txt"):
-        raise FileNotFoundError("start_H_number.txt is not found!")
-    f = open("start_H_number.txt", "r")
-    line = f.readline()
-    startHNumber = int(line.split()[0])
-    f.close()
-
     if not os.path.isfile("send_mpc.txt"):
-        raise FileNotFoundError("start_H_number.txt is not found!")
+        raise FileNotFoundError("send_mpc.txt is not found!")
     f = open("send_mpc.txt")
     lines = f.readlines()
     f.close()
@@ -40,7 +30,7 @@ try:
         thisName = line.split()[0].rstrip("*")
         if re.fullmatch(r"H......", thisName):
             thisHNumber = int(thisName.lstrip("H"))
-            if thisHNumber >= startHNumber and thisName not in newObjectNames:
+            if thisName not in newObjectNames:
                 newObjectNames.append(thisName)
 
     NNewObjects = len(newObjectNames)

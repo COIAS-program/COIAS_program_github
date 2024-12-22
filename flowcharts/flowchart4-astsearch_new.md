@@ -2,10 +2,10 @@
 
 ```mermaid
 flowchart TD
-    A[/"~"/.coias/orbit_data/以下の\n画像枚数分のsearch_astB.txtたち/] --- B[[make_gathered_search_astB.py]]
-    C[/"~"/.coias/orbit_data/以下の\nbright_asteroid_MPC_names_in_the_field.txt/] --- B
+    A[/"~"/.coias/orbit_data/以下の<br>画像枚数分のsearch_astB.txtたち/] --- B[[make_gathered_search_astB.py]]
+    C[/"~"/.coias/orbit_data/以下の<br>bright_asteroid_MPC_names_in_the_field.txt/] --- B
     B --> D[/search_astB.txt/]
-    B --> E[/bright_asteroid_MPC_names_in_the_field.txt\nカレントディレクトリにコピー/]
+    B --> E[/bright_asteroid_MPC_names_in_the_field.txt<br>カレントディレクトリにコピー/]
     D --- F[[match2D.py]]
     G[/warp*_bin.dat/] --- H[[astsearch1M2_optimized.py]]
     H --> I[/listb2.txt/]
@@ -14,9 +14,9 @@ flowchart TD
     F --> K[/nomatch.txt/]
     J --- L[[change_data_to_mpc_format.py]]
     K --- L
-    L --> M[/numbered_all.txt\nnumbered_mpc.txt\nnumbered_disp.txt/]
-    L --> N[/karifugo_all.txt\nkarifugo_mpc.txt\nkarifugo_disp.txt/]
-    L --> O[/unknown_all.txt\nunknown_mpc.txt\nunknown_disp.txt/]
+    L --> M[/numbered_all.txt<br>numbered_mpc.txt<br>numbered_disp.txt/]
+    L --> N[/karifugo_all.txt<br>karifugo_mpc.txt<br>karifugo_disp.txt/]
+    L --> O[/unknown_all.txt<br>unknown_mpc.txt<br>unknown_disp.txt/]
     M --> P[[いくつかの処理とcatコマンドによる連結]]
     N --> P
     O --> P
@@ -28,7 +28,9 @@ flowchart TD
         A1[MySQLのmeasure_resultテーブル] --- B1[[make_predicted_disp.py]]
         B1 --> C1[/predicted_disp.txt/]
     end
+``````
 
+<!--
     click B "https://github.com/COIAS-program/COIAS_program_github/blob/main/src5_astsearch_new/make_gathered_search_astB.py"
     click F "https://github.com/COIAS-program/COIAS_program_github/blob/main/src5_astsearch_new/match2D.py"
     click H "https://github.com/COIAS-program/COIAS_program_github/blob/main/src5_astsearch_new/astsearch1M2_optimized.py"
@@ -50,4 +52,4 @@ flowchart TD
     click S "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample4/disp.txt"
     click A1 "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample7/coefficients_for_predict.txt"
     click C1 "https://github.com/COIAS-program/COIAS_program_github/blob/main/flowcharts/sample4/predicted_disp.txt"
-``````
+-->
