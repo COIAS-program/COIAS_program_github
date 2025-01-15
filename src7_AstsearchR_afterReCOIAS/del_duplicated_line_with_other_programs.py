@@ -4,7 +4,7 @@
 ################################################################################################
 # COIASの測定でなくてもSSP PDRの画像を使った報告が他の人によって既に送信されていた場合,
 # 我々が同じ報告を再度送信すると怒られてしまう.
-# そのため既送信のうちT09でプログラムコードが4ではないものと比較し,
+# そのため既送信のうちすばる望遠鏡の他のプログラムで測定されたものと比較し,
 # near duplicatesになるものはこのスクリプトで弾いておく.
 #
 # 2023/10/25 たとえ同時に複数枚測定をしていてある天体名の測定が十分にあったとしても,
@@ -13,21 +13,18 @@
 #            そのため, 1 object / 1 night になるような測定もここで弾く.
 #
 # 入力: pre_repo2.txt
-# 　　  Observations APIから取得する既知天体のMPC80行の情報
-# 　　  ~/coias/param/itf_T09_except4.txt itfのうちT09かつプログラムコードが4ではないもののMPC80行情報をまとめたもの
+# 　　  ~/coias/param/itf_Subaru_other_programs.txt itfのうちすばる望遠鏡だがCOIASではないもののMPC80行情報をまとめたもの
+# 　　  ~/coias/param/NumObs_Subaru_other_programs.txt 確定番号の測定のうちすばる望遠鏡だがCOIASではないもののMPC80行情報をまとめたもの
+# 　　  ~/coias/param/UnnObs_Subaru_other_programs.txt 仮符号の測定のうちすばる望遠鏡だがCOIASではないもののMPC80行情報をまとめたもの
 # 出力: pre_repo2_2.txt
 # 　　  pre_repo2.txtから他プログラムコードの測定を除去したもの
 ################################################################################################
 
-import requests
-import time
 import traceback
 import shutil
-import re
 import PARAM
 import changempc
 
-MPC_OBSERVATIONS_API_URL = "https://data.minorplanetcenter.net/api/get-obs"
 COIAS_PARAM_PATH = PARAM.COIAS_DATA_PATH + "/param"
 # Define thresh degree (6.0秒角に対応する角度をdegree単位で設定する)
 DUPLICATE_THRESH_DEGREE = 6.0 / 3600.0
@@ -35,41 +32,22 @@ DUPLICATE_THRESH_DEGREE = 6.0 / 3600.0
 DUPLICATE_THRESH_JD = 40.0 / (24 * 60 * 60)
 
 try:
-    ### pre_repo2.txtからpackedのままで良いので既知天体の仮符号及び確定番号の一覧を取得する
-    # キーがpackedな天体名, valueがMPC80行の配列
+    ### 3つのファイルからから比較すべき既報告済みMPC80行の一覧を取得する
+    ### キーが観測日時"yyyy mm dd", valueがMPC80行の配列
+    fileNames = [
+        COIAS_PARAM_PATH + "/itf_Subaru_other_programs.txt",
+        COIAS_PARAM_PATH + "/NumObs_Subaru_other_programs.txt",
+        COIAS_PARAM_PATH + "/UnnObs_Subaru_other_programs.txt",
+    ]
     MPC80LinesObj = {}
-    with open("pre_repo2.txt", "r") as f:
-        lines = f.readlines()
-        for line in lines:
-            objectName = line[0:12].strip()
-            if not re.match("^H......", objectName) and objectName not in MPC80LinesObj:
-                MPC80LinesObj[objectName] = []
-
-    ### Observations APIを用いて既知天体の既報告済みMPC80行の一覧を取得する
-    for objectName in MPC80LinesObj:
-        while True:
-            try:
-                response = requests.get(
-                    MPC_OBSERVATIONS_API_URL,
-                    json={"desigs": [objectName], "output_format": ["OBS80"]},
-                )
-                MPC80LinesObj[objectName] = response.json()[0]["OBS80"].rstrip("\n").split(
-                    "\n"
-                )
-                time.sleep(0.1)
-                break
-            except Exception:
-                time.sleep(0.1)
-                continue
-
-
-    ### ~/coias/param/itf_T09_except4.txtから未知天体の既報告済みMPC80行の一覧を取得する
-    itfFileName = COIAS_PARAM_PATH + "/itf_T09_except4.txt"
-    MPC80LinesObj["itf"] = []
-    with open(itfFileName, "r") as f:
-        lines = f.readlines()
-        for line in lines:
-            MPC80LinesObj["itf"].append(line.rstrip("\n"))
+    for fileName in fileNames:
+        with open(fileName, "r") as f:
+            lines = f.readlines()
+            for line in lines:
+                dateStr = line[15:25]
+                if dateStr not in MPC80LinesObj:
+                    MPC80LinesObj[dateStr] = []
+                MPC80LinesObj[dateStr].append(line)
 
     ### pre_repo2.txtのMPC80行と, 上記のMPC80行の一覧を比較し, near duplicatesになるものを削除する
     f = open("pre_repo2.txt", "r")
@@ -78,13 +56,15 @@ try:
 
     for l in reversed(range(len(inputLines))):
         inputLine = inputLines[l].rstrip("\n")
-        objectName = inputLine[0:12].strip()
-        keyObjectName = objectName if not re.match("^H......", objectName) else "itf"
+        inputLineDateStr = inputLines[l][15:25]
         inputLineInfo = changempc.parse_MPC80_and_get_jd_ra_dec(inputLine)
 
-        for compareLine in MPC80LinesObj[keyObjectName]:
+        if inputLineDateStr not in MPC80LinesObj:
+            continue
+
+        for compareLine in MPC80LinesObj[inputLineDateStr]:
             # 比較相手には14文字目がCではないものがあるが, ライブラリ的にそれは困るので強制置換する
-            listCompareLine = list(compareLine)
+            listCompareLine = list(compareLine.rstrip("\n"))
             listCompareLine[14] = "C"
             compareLineWithC = "".join(listCompareLine)
 
