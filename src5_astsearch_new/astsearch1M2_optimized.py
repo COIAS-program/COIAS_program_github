@@ -53,11 +53,12 @@ import readparam
 import print_progress
 import print_detailed_log
 
-from photutils import CircularAperture
-from photutils import CircularAnnulus
+#S.U modified 25.3.9 photutils => photutils.aperture
+from photutils.aperture import CircularAperture,CircularAnnulus,aperture_photometry
+#from photutils.aperture import CircularAnnulus
 
 from astropy import units as u
-from photutils import aperture_photometry
+#from photutils import aperture_photometry
 #S.U modified
 from scipy.stats import sigmaclip
 
