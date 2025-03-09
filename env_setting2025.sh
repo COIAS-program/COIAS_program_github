@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ## This script is to set the environment to run COIAS programs ##
-## Last modified: 2022.1.12 N.Maeda
+## Last modified: 2022.1.12 N.Maeda=> 2025.3.9  S.Urakawa
 
 ## Usage 
 ## (Prepare) Install Anaconda on your environment
@@ -10,26 +10,26 @@
 
 ## create a virtual environment
 echo "create a virtual environment for COIAS"
-conda create -n coias python=3.11
+conda create -n coias25py311 python=3.11
 conda activate coias
 
 ## install the packages for coias
-conda install -y astropy==4.3.1
-conda install -y matplotlib==3.4.3
-conda install -y scipy==1.7.1
+conda install -y astropy
+conda install -y matplotlib
+conda install -y scipy
 #conda install -y -c astropy astroquery==0.4.4
-conda install -y -c astropy photutils==1.0.1
-conda install -y ephem==4.0.0.2
-conda install -y cython==0.29.24
-conda install -y pandas==1.3.4
-conda install -y bokeh==2.4.1
-conda install -y -c conda-forge astromatic-source-extractor==2.25.0
-conda install -c anaconda beautifulsoup4==4.11.1
-conda install -c anaconda lxml==4.8.0
+conda install -y -c astropy photutils
+conda install -y ephem
+conda install -y cython
+conda install -y pandas
+conda install -y bokeh
+conda install -y -c conda-forge astromatic-source-extractor
+conda install -c anaconda beautifulsoup4
+conda install -c anaconda lxml
 
 pip install --upgrade pip
-pip install  julian==0.14
-pip install  astroquery==0.4.4
+pip install  julian
+pip install  astroquery
 
 ## COIAS Download
 Install_Location=`pwd`
@@ -93,4 +93,4 @@ echo "Finished."
 
 echo "Virtual environment of COIAS is active."
 echo "When you run COIAS on another terminal, perform this command initially."
-echo "$ source activate coias"
+echo "$ conda activate coias25py311"
