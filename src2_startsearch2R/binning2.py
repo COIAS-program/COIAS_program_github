@@ -1,6 +1,7 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # Timestamp: 2023/4/13 19:00 sugiura
+# Timestamp: 2025/10/14 0:42 urakawa shebang (top line) change from python3 => python
 ##########################################################
 # 元画像のビニング・0フラックスでの等級・ヘッダの移し替えを行う.
 # (元画像が小惑星検出にはオーバースペックなため容量を減らす)
@@ -26,6 +27,7 @@
 # 　　     出力なし
 #
 # sys.exitによる出力: 2か4のビニング値
+# 2025/10/14  VarianceデータもHDUListに追加。測光誤差を求めるため。
 ##########################################################
 import glob
 import sys
@@ -136,6 +138,7 @@ try:
             ypix = hdu1[1].header["NAXIS2"]
             scidata = hdu1[1].data  # science-image
             maskdata = hdu1[2].data  # mask-image
+            variancedata = hdu1[3].data # variance-image (追加)
 
             # bining
             # mean(?) ? is axis number.-1 means horizontal. 1 means vertical.
@@ -146,7 +149,13 @@ try:
                 .mean(-1)
                 .mean(1)
             )
-
+            # variance画像のビニング (追加)
+            # 分散のビニングは、平均/ピクセル数
+            variancedata_bin = (
+                variancedata.reshape(binnedYPix, nbin, binnedXPix, nbin)
+                .mean(-1)
+                .mean(1)
+            ) / (nbin * nbin)
             maskdata_bin_temp = maskdata.reshape(binnedYPix, nbin, binnedXPix, nbin)
             maskdata_bin = np.zeros((binnedYPix, binnedXPix), dtype="int16")
             for ny in range(binnedYPix):
@@ -188,7 +197,8 @@ try:
                 )
 
             zerop1 = 2.5 * np.log10(FLUXMAG0)
-
+            hdu1[0].header["FLUXMAG0"] = (FLUXMAG0, "Magnitude zero point in nJy")
+                                          
             hdu1[0].header["Z_P"] = zerop1
             # hdu1[0].header['EQUINOX'] = hdu1[1].header['EQUINOX']
             hdu1[0].header["RADESYS"] = hdu1[1].header["RADESYS"]
@@ -227,7 +237,8 @@ try:
             h1head = hdu1[0].header
             hdunew = fits.PrimaryHDU(scidata_bin, h1head)
             hdunew2 = fits.ImageHDU(maskdata_bin, h1head)
-            hdul = fits.HDUList([hdunew, hdunew2])
+            hdunew3 = fits.ImageHDU(variancedata_bin, h1head) # (追加)
+            hdul = fits.HDUList([hdunew, hdunew2,hdunew3])
             hdul.writeto(
                 img_list[i].replace("warp-", "warpbin-"), overwrite=True
             )  # S.U modify 2021/12/9
